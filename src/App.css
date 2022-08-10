@@ -50,6 +50,57 @@ body {
   transform: rotate(calc(var(--i) * -30deg));
 }
 
+.arrows {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  right: 1px;
+}
+
+.arrows .arrow {
+  border: 1px solid #c6c6c6;
+  background-color: #c6c6c6;
+  border-radius: 1px;
+  z-index: 100;
+  width: 0px;
+  position: absolute;
+  transform: rotate(calc(var(--rotation) * 1deg));
+  height: 305px;
+  margin-left: 5px;
+}
+
+.arrows .arrow.main {
+  border: 2px solid;
+  background: #000;
+  border-radius: 2px;
+}
+
+.roller-container {
+  width: 260px;
+  height: 260px;
+  background: white;
+  z-index: 1002;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.roll {
+  position: relative;
+  width: 50%;
+  height: 50%;
+  background: white;
+  top: 0;
+  right: 0;
+  transform: translate(50%, 50%);
+  border-radius: 50%;
+  border: 2px dotted #e7e7e7;
+  box-shadow: 0 0 20px #cfc9c9, inset 0 0 5px #e7e7e7;
+}
+
 .App {
   text-align: center;
 }
