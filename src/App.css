@@ -6,9 +6,9 @@
 
 body {
   background: linear-gradient(
-    to right,
-    hsl(200, 100%, 50%),
-    hsl(175, 100%, 50%)
+    120deg,
+    hsl(200, 100%, 50%) 20%,
+    hsl(175, 100%, 50%) 80%
   );
   overflow: hidden;
   display: flex;
@@ -43,11 +43,23 @@ body {
   transform: rotate(calc(var(--i) * 30deg));
   font-size: 20px;
   font-family: fantasy;
+  z-index: 110;
 }
 
 .clock .number p {
   display: inline-block;
   transform: rotate(calc(var(--i) * -30deg));
+}
+
+.clock .number.number0 p::after {
+  content: "";
+  display: inline-block;
+  width: 22px;
+  height: 35px;
+  position: absolute;
+  box-shadow: inset 0 0 2px 2px #e7e7e7, 0 0 0 0 transparent;
+  left: -5px;
+  top: -12px;
 }
 
 .arrows {
@@ -59,6 +71,7 @@ body {
   position: absolute;
   top: 0px;
   right: 1px;
+  z-index: 102;
 }
 
 .arrows .arrow {
@@ -83,9 +96,9 @@ body {
   width: 260px;
   height: 260px;
   background: white;
-  z-index: 1002;
   border-radius: 50%;
   position: absolute;
+  z-index: 110;
 }
 
 .roll {
@@ -99,6 +112,58 @@ body {
   border-radius: 50%;
   border: 2px dotted #e7e7e7;
   box-shadow: 0 0 20px #cfc9c9, inset 0 0 5px #e7e7e7;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  z-index: 103;
+}
+
+.roll .left-side,
+.roll .right-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  color: black;
+  border: 0px;
+}
+
+.roll .left-side {
+  width: 50%;
+  height: 100%;
+  background: aliceblue;
+  border-radius: 50% 0 0 50%;
+  float: left;
+  border-right: 1px solid #e7e7e7;
+}
+
+.roll .right-side {
+  width: 50%;
+  height: 100%;
+  background: aliceblue;
+  border-radius: 0% 50% 50% 0;
+  float: left;
+  border-left: 1px solid #e7e7e7;
+}
+
+.roll .right-side:hover,
+.roll .left-side:hover {
+  background-color: rgba(0, 0, 0, 0.092);
+  color: #c8c8c8;
+}
+
+.different-color {
+  width: 77%;
+  height: 77%;
+  position: absolute;
+  border-radius: 50%;
+  background-color: #00f1ee;
+  z-index: 102;
+  opacity: 0.4;
+  background-image: linear-gradient(270deg, transparent 50%, white 50%),
+    linear-gradient(90deg, transparent 50%, white 50%);
 }
 
 .App {
