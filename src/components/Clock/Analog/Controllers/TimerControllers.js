@@ -1,15 +1,19 @@
 import React, { useEffect, useState, lazy, Suspense } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { finishPeriod } from "../../../../actions/timer";
 
 const StartButton = lazy(() => import("./Roll/StartRoll"));
 const Edit = lazy(() => import("./Roll/EditRoll"));
 const ClearButton = lazy(() => import("./Roll/ClearButton"));
 const PauseButton = lazy(() => import("./Roll/PauseButton"));
 
-const TimerControllers = ({ onClick, period, setPeriod, savedPeriod }) => {
+const TimerControllers = ({ onClick, activePeriod, setPeriod, savedPeriod }) => {
     const [location, setLocation] = useState('/');
     const [started, setStarted] = useState(false);
     const [stoped, setStoped] = useState(-1);
-    let realPeriod = period;
+    const { active, period, long, short } = useSelector(state => state.timer);
+    let realPeriod = activePeriod;
+    const dispatch = useDispatch();
 
     // eslint-disable-next-line
     useEffect(() => {
@@ -21,7 +25,11 @@ const TimerControllers = ({ onClick, period, setPeriod, savedPeriod }) => {
         let timeId = null;
 
         timeId = setInterval(() => {
-            if ((started && stoped - (1 / 60) !== realPeriod) && realPeriod - (1 / 60) > stoped && realPeriod - (1 / 60) >= 0) {
+            if (
+                (started && stoped - (1 / 60) !== realPeriod) &&
+                realPeriod - (1 / 60) > stoped &&
+                realPeriod - (1 / 60) >= 0
+            ) {
                 setPeriod((p) => p - (1 / 60));
                 // eslint-disable-next-line
                 realPeriod = realPeriod - (1 / 60);
@@ -31,8 +39,9 @@ const TimerControllers = ({ onClick, period, setPeriod, savedPeriod }) => {
                     setPeriod(realPeriod);
                     alert("stoped");
                 } else if (realPeriod - (1 / 60) <= 0) {
-                    setPeriod(savedPeriod);
-                    console.log(savedPeriod, period);
+                    if (active === 'period') {
+                        dispatch(finishPeriod());
+                    }
                     setStarted(false);
                     alert("take break now!");
                 }
@@ -45,6 +54,17 @@ const TimerControllers = ({ onClick, period, setPeriod, savedPeriod }) => {
         return () => clearInterval(timeId);
     }, [started, stoped]);
 
+    useEffect(() => {
+        if (active === 'period') {
+            setPeriod(period);
+        } else if (active === "long") {
+            setPeriod(long);
+        } else {
+            setPeriod(short);
+        }
+        // eslint-disable-next-line
+    }, [active]);
+
     return (
         <>
             <div
@@ -52,11 +72,11 @@ const TimerControllers = ({ onClick, period, setPeriod, savedPeriod }) => {
                 style={{
                     backgroundImage: `
                     linear-gradient(
-                        ${period <= 30 ? 270 : (period - 30) * 6 + 90}deg, 
+                        ${activePeriod <= 30 ? 270 : (activePeriod - 30) * 6 + 90}deg, 
                         transparent 50%, 
-                        ${period <= 30 ? "white" : "#ff002f"} 50%), 
+                        ${activePeriod <= 30 ? "white" : "#ff002f"} 50%), 
                     linear-gradient(
-                        ${(period > 0 && period <= 30) ? period * 6 + 90 : period > 30 ? "270" : "90"}deg, 
+                        ${(activePeriod > 0 && activePeriod <= 30) ? activePeriod * 6 + 90 : activePeriod > 30 ? "270" : "90"}deg, 
                         transparent 50%, 
                         white 50%)
                     `
@@ -67,12 +87,12 @@ const TimerControllers = ({ onClick, period, setPeriod, savedPeriod }) => {
                 style={{
                     backgroundImage: `
                     linear-gradient(
-                        ${period <= 30 ? 270 : (period - 30) * 6 + 90}deg, 
+                        ${activePeriod <= 30 ? 270 : (activePeriod - 30) * 6 + 90}deg, 
                         transparent 50%, 
-                        ${period <= 30 ? "white" : "#ff002f"} 50%
+                        ${activePeriod <= 30 ? "white" : "#ff002f"} 50%
                     ), 
                     linear-gradient(
-                        ${(period > 0 && period <= 30) ? period * 6 + 90 : period > 30 ? "270" : "90"}deg, 
+                        ${(activePeriod > 0 && activePeriod <= 30) ? activePeriod * 6 + 90 : activePeriod > 30 ? "270" : "90"}deg, 
                         #ff002f 50%, 
                         white 50%
                     )`
@@ -89,14 +109,14 @@ const TimerControllers = ({ onClick, period, setPeriod, savedPeriod }) => {
                         <>
                             {started ? (
                                 <>
-                                    {started && stoped !== -1 ? (
+                                    {started && stoped !== -1 && (active === "period") ? (
                                         <>
                                             <Suspense fallback={<div>Loading...</div>}>
                                                 <StartButton
                                                     type={"continue"}
                                                     setStarted={setStarted}
                                                     setStoped={setStoped}
-                                                    period={period}
+                                                    period={activePeriod}
                                                     ariaLabel={"continue button on roll"}
                                                     className={"up-side"}
                                                     id={"up-side"}
@@ -105,7 +125,7 @@ const TimerControllers = ({ onClick, period, setPeriod, savedPeriod }) => {
                                                     setStarted={setStarted}
                                                     setStoped={setStoped}
                                                     setPeriod={setPeriod}
-                                                    savedPeriod={savedPeriod}
+                                                    savedPeriod={period}
                                                 />
                                             </Suspense>
                                         </>
@@ -121,7 +141,7 @@ const TimerControllers = ({ onClick, period, setPeriod, savedPeriod }) => {
                                         type={"start"}
                                         setStarted={setStarted}
                                         setStoped={setStoped}
-                                        period={period}
+                                        period={activePeriod}
                                         ariaLabel={"start on roll"}
                                         className={"start-side"}
                                         id={"start-side"}
