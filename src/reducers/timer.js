@@ -9,8 +9,9 @@ import {
 // eslint-disable-next-line
 export default (state = {
   active: PERIOD,
-  periodNum: 4,
+  periodNum: 0,
   type: "digital",
+  periodInterval: 4,
   activites: {
     [PERIOD]: {
       name: PERIOD,
@@ -28,12 +29,18 @@ export default (state = {
 }, action) => {
   switch (action.type) {
     case CHANGE_ACTIVE:
-      return { ...state, active: action.payload }
+      let active, periodNum = state.periodNum;
+      if(state.active === PERIOD) {
+        periodNum++;
+        active = periodNum % state.periodInterval === 0 ? LONG : SHORT;
+      }else {
+        active = PERIOD;
+      }
+      return { ...state, active, periodNum };
     case INCREASE_PERIOD:
-      const selectActive = state.periodNum + 1 % 4 === 0 ? "long" : "short";
-      return { ...state, periodNum: state.periodNum + 1, active: selectActive };
+      return { ...state, periodNum: state.periodNum + 1 };
     case START_PERIOD:
-      return { ...state, active: "period" };
+      return { ...state, active: PERIOD };
     default:
       return state;
   }

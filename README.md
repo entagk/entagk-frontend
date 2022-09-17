@@ -45,9 +45,10 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
 - [ ] Make sec and min and the user can choose any of them.
 - [ ] Make the option of the value for increament. 
 - [ ] Make the ability of share templete of the tasks
+- [ ] Make the setting of the templete different of the personal setting.
 - [ ] Make the abitity of repeting the tesk and repeting the templete.
 - [ ] Make the ability of saving the break between tasks and templete repeting. 
-- [ ] 
+- [ ] Make the feature of choiesing any music that the user need to listen in working period, short break, and long break and at the starting, pausing, ending the work period.
 - [ ]  
 - [ ]  
 

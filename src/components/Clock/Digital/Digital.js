@@ -1,49 +1,47 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { changeActive } from "../../../actions/timer";
 
 import { formatTime } from "../../../Utils/helper";
+const worker = new window.Worker('worker.js');
 
-const DigitalTimer = ({ activePeriod }) => {
-  const timeId = useRef(null);
-  const realTime = activePeriod * 60;
-  const [time, setTime] = useState(realTime);
+const DigitalTimer = () => {
+  const { active, activites } = useSelector((state) => state.timer);
+  const activePeriod = activites[active].time;
+  const [time, setTime] = useState(activePeriod * 60);
   const [started, setStarted] = useState(false);
-
-  const clear = () => {
-    clearInterval(timeId.current);
-    timeId.current = null;
-  }
-
-  const count = useCallback(() => {
-    if (time > 0) {
-      setTime(time - 1);
-    }
-
-    if (time <= 1) {
-      setStarted(false);
-      clear();
-    }
-    // eslint-disable-next-line
-  }, [time]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (started) {
-      timeId.current = setInterval(count, 1000);
-    } else {
-      clear();
-    }
-
-    return clear;
-  }, [count, started]);
+    // setActivePeriod();
+    console.log(active);
+    setTime(activites[active].time * 60)
+    // eslint-disable-next-line
+}, [active]);
 
   const toggleStart = useCallback(() => {
     setStarted(s => !s);
-  }, []);
-
-
+    if(started) {
+      worker.postMessage('stop');
+    } else {
+      worker.postMessage({started: !started, count: time });
+    }
+    // eslint-disable-next-line
+  }, [started]);
+  
+  worker.onmessage = (event) => {
+    if(event.data !== 'stop') {
+      setTime(event.data);
+    } else {
+      setStarted(false);
+      dispatch(changeActive());
+    }
+  }
+  
   return (
     <div>
-      <h1 style={{ fontSize: 100 }}>{formatTime(time)}</h1>
-      <button onClick={toggleStart}>{started ? "Pause" : "start"}</button>
+      <h1 style={{ fontSize: 100 }} id="digital">{formatTime(time)}</h1>
+      <button onClick={toggleStart}>{started ? "Pause" : "Start"}</button>
     </div>
   )
 }
