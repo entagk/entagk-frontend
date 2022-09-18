@@ -1,15 +1,7 @@
 import React from "react";
 import { MdRestartAlt } from "react-icons/md";
 
-const PausedRoll = ({ setStarted, setStoped, setPeriod, savedPeriod }) => {
-
-  const handleClear = () => {
-    setStarted(false);
-    setStoped(-1);
-    setPeriod(savedPeriod);
-    console.log("timer cleared.");
-  }
-
+const ClearButton = ({ handleClear }) => {
   return (
     <>
       <button
@@ -23,4 +15,4 @@ const PausedRoll = ({ setStarted, setStoped, setPeriod, savedPeriod }) => {
   )
 }
 
-export default PausedRoll;
+export default ClearButton;

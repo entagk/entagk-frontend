@@ -1,18 +1,11 @@
 import React from "react";
 import { TbPlayerPlay } from "react-icons/tb";
 
-const StartButton = ({ setStarted, setStoped, type, period, ariaLabel, className, id }) => {
-  const handleStart = () => {
-    if (type === "start") {
-      setStarted(true);
-    } else {
-      setStoped(-1);
-    }
-  }
+const StartButton = ({ handleClick, ariaLabel, className, time, id }) => {
   return (
     <button aria-label={ariaLabel} //"start on roll"
-      className={className} id={id} disabled={period === 0}
-      onClick={handleStart}
+      className={className} id={id} disabled={time === 0}
+      onClick={handleClick}
     >
       <TbPlayerPlay />
     </button>

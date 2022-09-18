@@ -1,19 +1,20 @@
-import React, { useEffect, useState, lazy, Suspense } from "react";
+import React, { useEffect, useState, lazy, Suspense, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { finishPeriod } from "../../../../actions/timer";
+import { changeActive, PERIOD } from "../../../../actions/timer";
 
 const StartButton = lazy(() => import("./Roll/StartRoll"));
 const Edit = lazy(() => import("./Roll/EditRoll"));
 const ClearButton = lazy(() => import("./Roll/ClearButton"));
 const PauseButton = lazy(() => import("./Roll/PauseButton"));
 
-const TimerControllers = ({ onClick, activePeriod, setPeriod, savedPeriod }) => {
-    const [location, setLocation] = useState('/');
+const worker = new window.Worker('worker.js');
+
+const TimerControllers = ({ onClick, setTime, time }) => {
+    const { active, activites } = useSelector((state) => state.timer);
+    const activePeriod = activites[active].time * 60;
     const [started, setStarted] = useState(false);
-    const [stoped, setStoped] = useState(-1);
-    const { active, period, long, short } = useSelector(state => state.timer);
-    let realPeriod = activePeriod;
     const dispatch = useDispatch();
+    const [location, setLocation] = useState('/');
 
     // eslint-disable-next-line
     useEffect(() => {
@@ -21,47 +22,32 @@ const TimerControllers = ({ onClick, activePeriod, setPeriod, savedPeriod }) => 
         setLocation(winLocation.pathname);
     });
 
-    useEffect(() => {
-        let timeId = null;
-
-        timeId = setInterval(() => {
-            if (
-                (started && stoped - (1 / 60) !== realPeriod) &&
-                realPeriod - (1 / 60) > stoped &&
-                realPeriod - (1 / 60) >= 0
-            ) {
-                setPeriod((p) => p - (1 / 60));
-                // eslint-disable-next-line
-                realPeriod = realPeriod - (1 / 60);
-            } else {
-                console.log("stoped");
-                if (stoped - (1 / 60) === realPeriod) {
-                    setPeriod(realPeriod);
-                    alert("stoped");
-                } else if (realPeriod - (1 / 60) <= 0) {
-                    if (active === 'period') {
-                        dispatch(finishPeriod());
-                    }
-                    setStarted(false);
-                    alert("take break now!");
-                }
-                clearInterval(timeId);
-            }
-            console.log(started, stoped, savedPeriod, period, realPeriod);
-        }, 1000);
-
-        // eslint-disable-next-line
-        return () => clearInterval(timeId);
-    }, [started, stoped]);
-
-    useEffect(() => {
-        if (active === 'period') {
-            setPeriod(period);
-        } else if (active === "long") {
-            setPeriod(long);
+    worker.onmessage = (event) => {
+        if (event.data !== 'stop') {
+            setTime(event.data);
         } else {
-            setPeriod(short);
+            setStarted(false);
+            dispatch(changeActive());
+            alert("the timer is ended"); // remove it and make it use notification and sounds
         }
+    }
+
+    const toggleStart = useCallback(() => {
+        setStarted(s => !s);
+        if (started) {
+            worker.postMessage("stop");
+        } else {
+            worker.postMessage({ started: !started, count: time });
+        }
+    }, [started, time]);
+
+    const handleReset = () => {
+        setTime(activePeriod);
+    }
+
+    useEffect(() => {
+        console.log(active);
+        setTime(activites[active].time * 60)
         // eslint-disable-next-line
     }, [active]);
 
@@ -72,11 +58,11 @@ const TimerControllers = ({ onClick, activePeriod, setPeriod, savedPeriod }) => 
                 style={{
                     backgroundImage: `
                     linear-gradient(
-                        ${activePeriod <= 30 ? 270 : (activePeriod - 30) * 6 + 90}deg, 
+                        ${time / 60 <= 30 ? 270 : (time / 60 - 30) * 6 + 90}deg, 
                         transparent 50%, 
-                        ${activePeriod <= 30 ? "white" : "#ff002f"} 50%), 
+                        ${time / 60 <= 30 ? "white" : "#ff002f"} 50%), 
                     linear-gradient(
-                        ${(activePeriod > 0 && activePeriod <= 30) ? activePeriod * 6 + 90 : activePeriod > 30 ? "270" : "90"}deg, 
+                        ${(time / 60 > 0 && time / 60 <= 30) ? (time / 60) * 6 + 90 : (time / 60) > 30 ? "270" : "90"}deg, 
                         transparent 50%, 
                         white 50%)
                     `
@@ -87,12 +73,12 @@ const TimerControllers = ({ onClick, activePeriod, setPeriod, savedPeriod }) => 
                 style={{
                     backgroundImage: `
                     linear-gradient(
-                        ${activePeriod <= 30 ? 270 : (activePeriod - 30) * 6 + 90}deg, 
+                        ${time / 60 <= 30 ? 270 : (time / 60 - 30) * 6 + 90}deg, 
                         transparent 50%, 
-                        ${activePeriod <= 30 ? "white" : "#ff002f"} 50%
+                        ${time / 60 <= 30 ? "white" : "#ff002f"} 50%
                     ), 
                     linear-gradient(
-                        ${(activePeriod > 0 && activePeriod <= 30) ? activePeriod * 6 + 90 : activePeriod > 30 ? "270" : "90"}deg, 
+                        ${(time / 60 > 0 && time / 60 <= 30) ? (time / 60) * 6 + 90 : time / 60 > 30 ? "270" : "90"}deg, 
                         #ff002f 50%, 
                         white 50%
                     )`
@@ -109,44 +95,43 @@ const TimerControllers = ({ onClick, activePeriod, setPeriod, savedPeriod }) => 
                         <>
                             {started ? (
                                 <>
-                                    {started && stoped !== -1 && (active === "period") ? (
-                                        <>
-                                            <Suspense fallback={<div>Loading...</div>}>
-                                                <StartButton
-                                                    type={"continue"}
-                                                    setStarted={setStarted}
-                                                    setStoped={setStoped}
-                                                    period={activePeriod}
-                                                    ariaLabel={"continue button on roll"}
-                                                    className={"up-side"}
-                                                    id={"up-side"}
-                                                />
-                                                <ClearButton
-                                                    setStarted={setStarted}
-                                                    setStoped={setStoped}
-                                                    setPeriod={setPeriod}
-                                                    savedPeriod={period}
-                                                />
-                                            </Suspense>
-                                        </>
-                                    ) : (
-                                        <Suspense fallback={<div>Loading...</div>}>
-                                            <PauseButton setStoped={setStoped} realPeriod={realPeriod} />
-                                        </Suspense>
-                                    )}
+                                    <PauseButton
+                                        handleClick={toggleStart}
+                                    />
+                                    {/* <Suspense fallback={<div>Loading...</div>}>
+                                    </Suspense> */}
                                 </>
                             ) : (
-                                <Suspense fallback={<div>Loading...</div>}>
-                                    <StartButton
-                                        type={"start"}
-                                        setStarted={setStarted}
-                                        setStoped={setStoped}
-                                        period={activePeriod}
-                                        ariaLabel={"start on roll"}
-                                        className={"start-side"}
-                                        id={"start-side"}
-                                    />
-                                </Suspense>
+                                <>
+                                    {!started && time !== activePeriod && active === PERIOD ? (
+                                        <>
+                                            <StartButton
+                                                handleClick={toggleStart}
+                                                time={time}
+                                                ariaLabel={"continue button on roll"}
+                                                className={"up-side"}
+                                                id={"up-side"}
+                                            />
+                                            <ClearButton
+                                                handleClear={handleReset}
+                                            />
+                                            {/* <Suspense fallback={<div>Loading...</div>}>
+                                            </Suspense> */}
+                                        </>
+                                    ) : (
+                                        <>
+                                            <StartButton
+                                                handleClick={toggleStart}
+                                                time={time}
+                                                ariaLabel={"start on roll"}
+                                                className={"start-side"}
+                                                id={"start-side"}
+                                            />
+                                            {/* <Suspense fallback={<div>Loading...</div>}>
+                                        </Suspense> */}
+                                        </>
+                                    )}
+                                </>
                             )}
                         </>
                     ))}

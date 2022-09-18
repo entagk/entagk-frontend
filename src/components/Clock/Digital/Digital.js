@@ -29,7 +29,7 @@ const DigitalTimer = () => {
     } else {
       setStarted(false);
       dispatch(changeActive());
-      alert("the timer is ended");
+      alert("the timer is ended"); // remove it and make it use notification and sounds
     }
   }
 

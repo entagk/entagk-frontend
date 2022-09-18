@@ -1,6 +1,6 @@
 import React from "react";
 
-const Arrows = ({ nums, onClick, period }) => {
+const Arrows = ({ nums, onClick, time }) => {
     const arrows = [1, 2, 3, 4, 5].concat(...Array.from({ length: 5 }, () => [1, 2, 3, 4, 5]));
     let roteNum = 0;
 
@@ -15,7 +15,7 @@ const Arrows = ({ nums, onClick, period }) => {
             {nums.map((item, index) => (
                 <div 
                     style={{ "--i": `${index}` }} 
-                    className={`number number${index}${period === item && " active"}`} 
+                    className={`number number${index}${time === item && " active"}`} 
                     id={index} key={item}
                 >
                     <p id={index} onClick={onClick}>

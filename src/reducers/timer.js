@@ -10,7 +10,7 @@ import {
 export default (state = {
   active: PERIOD,
   periodNum: 0,
-  type: "digital",
+  type: "analog",
   periodInterval: 2,
   activites: {
     [PERIOD]: {
