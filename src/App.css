@@ -269,3 +269,34 @@ button:disabled {
   background-image: linear-gradient(270deg, transparent 50%, white 50%),
     linear-gradient(90deg, transparent 50%, white 50%);
 }
+
+.digital-controlers {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  margin-block: 20px;
+}
+
+.digital-controlers .start-digital, 
+.digital-controlers .reset-digital {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  background: #e7e7e7;
+  border-radius: 50%;
+  font-size: 25px;
+  margin-inline: 10px;
+  box-shadow: 0px 0px 5px #7a7a7a;
+}
+
+.digital-controlers .start-digital:hover, 
+.digital-controlers .reset-digital:hover {
+  box-shadow: 0 0 10px #7a7a7a;
+}
+
+.digital-controlers .start-digital {
+  background: #ff002f;
+  color: #fff;
+}

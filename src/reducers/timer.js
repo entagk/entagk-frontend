@@ -11,7 +11,7 @@ export default (state = {
   active: PERIOD,
   periodNum: 0,
   type: "digital",
-  periodInterval: 4,
+  periodInterval: 2,
   activites: {
     [PERIOD]: {
       name: PERIOD,
