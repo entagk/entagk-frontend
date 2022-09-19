@@ -47,7 +47,9 @@ const TimerControllers = ({ onClick, setTime, time }) => {
 
     useEffect(() => {
         console.log(active);
-        setTime(activites[active].time * 60)
+        setTime(activites[active].time * 60);
+        document.body.style.backgroundColor = activites[active].color;
+        // document.querySelector(".clock-container").style.backgroundColor = 
         // eslint-disable-next-line
     }, [active]);
 
@@ -60,12 +62,13 @@ const TimerControllers = ({ onClick, setTime, time }) => {
                     linear-gradient(
                         ${time / 60 <= 30 ? 270 : (time / 60 - 30) * 6 + 90}deg, 
                         transparent 50%, 
-                        ${time / 60 <= 30 ? "white" : "#ff002f"} 50%), 
+                        ${time / 60 <= 30 ? "white" : activites[active].color} 50%), 
                     linear-gradient(
                         ${(time / 60 > 0 && time / 60 <= 30) ? (time / 60) * 6 + 90 : (time / 60) > 30 ? "270" : "90"}deg, 
                         transparent 50%, 
                         white 50%)
-                    `
+                    `,
+                    backgroundColor: activites[active].color
                 }}
             ></div>
             <div
@@ -75,11 +78,11 @@ const TimerControllers = ({ onClick, setTime, time }) => {
                     linear-gradient(
                         ${time / 60 <= 30 ? 270 : (time / 60 - 30) * 6 + 90}deg, 
                         transparent 50%, 
-                        ${time / 60 <= 30 ? "white" : "#ff002f"} 50%
+                        ${time / 60 <= 30 ? "white" : activites[active].color} 50%
                     ), 
                     linear-gradient(
                         ${(time / 60 > 0 && time / 60 <= 30) ? (time / 60) * 6 + 90 : time / 60 > 30 ? "270" : "90"}deg, 
-                        #ff002f 50%, 
+                        ${activites[active].color} 50%, 
                         white 50%
                     )`
                 }}
@@ -105,30 +108,30 @@ const TimerControllers = ({ onClick, setTime, time }) => {
                                 <>
                                     {!started && time !== activePeriod && active === PERIOD ? (
                                         <>
-                                            <StartButton
-                                                handleClick={toggleStart}
-                                                time={time}
-                                                ariaLabel={"continue button on roll"}
-                                                className={"up-side"}
-                                                id={"up-side"}
-                                            />
-                                            <ClearButton
-                                                handleClear={handleReset}
-                                            />
-                                            {/* <Suspense fallback={<div>Loading...</div>}>
-                                            </Suspense> */}
+                                            <Suspense fallback={<div>Loading...</div>}>
+                                                <StartButton
+                                                    handleClick={toggleStart}
+                                                    time={time}
+                                                    ariaLabel={"continue button on roll"}
+                                                    className={"up-side"}
+                                                    id={"up-side"}
+                                                />
+                                                <ClearButton
+                                                    handleClear={handleReset}
+                                                />
+                                            </Suspense>
                                         </>
                                     ) : (
                                         <>
-                                            <StartButton
-                                                handleClick={toggleStart}
-                                                time={time}
-                                                ariaLabel={"start on roll"}
-                                                className={"start-side"}
-                                                id={"start-side"}
-                                            />
-                                            {/* <Suspense fallback={<div>Loading...</div>}>
-                                        </Suspense> */}
+                                            <Suspense fallback={<div>Loading...</div>}>
+                                                <StartButton
+                                                    handleClick={toggleStart}
+                                                    time={time}
+                                                    ariaLabel={"start on roll"}
+                                                    className={"start-side"}
+                                                    id={"start-side"}
+                                                />
+                                            </Suspense>
                                         </>
                                     )}
                                 </>

@@ -15,15 +15,21 @@ export default (state = {
   activites: {
     [PERIOD]: {
       name: PERIOD,
-      time: 25
+      time: 2,
+      color: "#ff002f",
+      timerBorder: "#b40021"
     },
     [SHORT]: {
       name: SHORT,
-      time: 5
+      time: 1,
+      color: "#00e3ff",
+      timerBorder: "#16a9bb"
     },
     [LONG]: {
       name: LONG,
-      time: 15
+      time: 3,
+      color: "#36a7ff",
+      timerBorder: "#3185c7"
     }
   }
 }, action) => {
