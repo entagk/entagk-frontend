@@ -27,7 +27,7 @@ const TimerControllers = ({ onClick, setTime, time }) => {
             setTime(event.data);
         } else {
             setStarted(false);
-            dispatch(changeActive());
+            dispatch(changeActive(active));
             alert("the timer is ended"); // remove it and make it use notification and sounds
         }
     }

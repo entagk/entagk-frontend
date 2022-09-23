@@ -29,7 +29,7 @@ const Navigation = ({ user }) => {
           }
         </button>
         {open && (
-          <div className="profile-menu">
+          <div className="menu-content">
             <div className="row">
               <button>
                 {user ? (

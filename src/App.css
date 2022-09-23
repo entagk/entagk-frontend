@@ -6,7 +6,7 @@
 }
 
 body {
-  overflow: hidden;
+  /* overflow: hidden; */
   background-color: #ff002f;
   height: 100%;
   margin: 20px;
@@ -18,10 +18,35 @@ button {
   background: none;
   border: none;
   cursor: pointer;
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button:disabled {
   cursor: no-drop;
+  background-color: -internal-light-dark(
+    rgba(239, 239, 239, 0.3),
+    rgba(19, 1, 1, 0.3)
+  );
+  color: -internal-light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3));
+  border-color: -internal-light-dark(
+    rgba(118, 118, 118, 0.3),
+    rgba(195, 195, 195, 0.3)
+  );
+}
+
+input,
+textarea {
+  outline: none;
+  background: none;
+  border: none;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
 }
 
 #root {
@@ -35,83 +60,11 @@ button:disabled {
   flex-direction: column;
 }
 
-/* start make */
-.navigation {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  color: white;
-  border-bottom: 1px solid;
-  padding-bottom: 12px;
-}
+/* end basics */
 
-.navigation h1 {
-  text-shadow: 0px 0px 5px #7a7a7a;
-}
+@import url("./components/Tasks/style.css");
 
-.navigation button.toggle-menu {
-  outline: none;
-  border: 0;
-  background: none;
-  color: white;
-  background: #bfbebe;
-  padding: 10px;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  font-size: 25px;
-  box-shadow: 0px 0px 5px #7a7a7a;
-}
-
-.navigation button.toggle-menu:hover {
-  box-shadow: 0px 0px 10px #7a7a7a;
-}
-
-.profile-menu {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  right: 0;
-  background: #fff;
-  box-shadow: 0px 0px 5px #7a7a7a;
-  margin-block: 10px 20px;
-  border-radius: 5px;
-  padding-block: 12px;
-  width: max-content;
-}
-
-.profile-menu .row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 100%;
-  font-size: 30px;
-}
-
-.profile-menu .row:not(:last-child) {
-  border-bottom: 1px solid #e7e7e7;
-}
-
-.profile-menu .row button {
-  padding: 10px 18px;
-  font-size: 16px;
-  font-size: 20px;
-  padding: 10px 16px;
-  font-weight: 100;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-}
-
-.profile-menu .row button:hover {
-  background: rgba(0, 0, 0, 0.092);
-}
-/* */
+@import url("./components/Navigation/style.css");
 
 .app {
   margin-block: 30px;
@@ -278,7 +231,7 @@ button:disabled {
   margin-block: 20px;
 }
 
-.digital-controlers .start-digital, 
+.digital-controlers .start-digital,
 .digital-controlers .reset-digital {
   display: flex;
   align-items: center;
@@ -291,7 +244,7 @@ button:disabled {
   box-shadow: 0px 0px 5px #7a7a7a;
 }
 
-.digital-controlers .start-digital:hover, 
+.digital-controlers .start-digital:hover,
 .digital-controlers .reset-digital:hover {
   box-shadow: 0 0 10px #7a7a7a;
 }
@@ -300,3 +253,5 @@ button:disabled {
   background: #ff002f;
   color: #fff;
 }
+
+/* End the timer */

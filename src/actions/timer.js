@@ -9,9 +9,9 @@ export const LONG = "LONG";
 
 export const INCREASE_ROUND = "INCREASE_ROUND";
 
-export const changeActive = () => async dispatch => {
+export const changeActive = (active) => async dispatch => {
   try {
-    await dispatch({ type: CHANGE_ACTIVE });
+    dispatch({ type: CHANGE_ACTIVE, data: active });
   } catch (error) {
     console.error(error)
   }
@@ -19,7 +19,7 @@ export const changeActive = () => async dispatch => {
 
 export const incrementRound = () => dispatch => {
   try {
-    dispatch({type: INCREASE_ROUND });
+    dispatch({ type: INCREASE_ROUND });
   } catch (error) {
     console.log(error);
   }

@@ -1,0 +1,372 @@
+/* Start the tasks */
+.tasks {
+  width: 100%;
+  padding-inline: 20px;
+  color: rgb(255, 255, 255);
+  margin-bottom: 20px;
+}
+
+.active-task {
+  margin-block: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.tasks .header {
+  border-bottom: 1px solid;
+  padding-bottom: 13px;
+  border-radius: 58px;
+  padding-inline: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  font-size: 25px;
+  color: #fff;
+  box-shadow: 0px 5px 5px -5px #121212;
+}
+
+.tasks .header .menu {
+  position: relative;
+}
+
+.tasks .header button.toggle-menu {
+  font-size: 25px;
+  color: rgb(255, 255, 255);
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.tasks .header button.toggle-menu:hover {
+  background-color: #2c282842;
+}
+
+.tasks .tasks-container {
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.tasks .tasks-container button.add-task-button {
+  width: 100%;
+  margin: 20px 0 20px;
+  padding: 20px;
+  background: #00000036;
+  border-radius: 10px;
+  font-size: 20px;
+  color: #fff;
+  border: 2px dashed #adadad;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tasks-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+/* start task */
+
+.task {
+  background-color: #fff;
+  color: #383838;
+  width: 100%;
+  margin-block: 20px;
+  border-radius: 10px;
+  box-shadow: rgb(0 0 0 / 20%) 0px 5px 5px;
+  padding: 15px 20px;
+  text-align: left;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-left: 10px solid transparent;
+  position: relative;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.task:hover {
+  border-left: 10px solid #c8c7c7; /* #000*/
+}
+
+.task.active {
+  background-color: #e7e7e7;
+  box-shadow: none;
+  border-left: 10px solid #000;
+}
+
+.task-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  text-align: center;
+  font-size: 25px;
+}
+
+.task .overflow {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  right: 0px;
+  top: 0px;
+  background: #ffffffad;
+  z-index: 101;
+  border-radius: 10px;
+  visibility: hidden;
+}
+
+.task:hover .overflow {
+  visibility: visible;
+}
+
+.task .buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.task .buttons button {
+  font-size: 18px;
+  margin-inline: 5px;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  border-radius: 50%;
+  color: #e7e7e7;
+  box-shadow: #dedede 0px 0px 4px 2px;
+}
+
+.task p {
+  margin-left: 10px;
+}
+
+.task p.act-est {
+  position: absolute;
+  right: 0;
+  margin: 18px;
+  text-align: center;
+  justify-content: center;
+}
+
+.task p.act-est span {
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.task .task-notes {
+  background: #fff3e4b0;
+  margin: 15px 0 15px 10px;
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+}
+/* end task */
+
+/* start task form */
+.task-form {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: rgb(0 0 0 / 15%) 0px 10px 15px, rgb(0 0 0 / 12%) 0px 3px 6px;
+  color: rgb(0, 0, 0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 15px;
+  overflow: hidden;
+}
+
+.task-form .form-container {
+  padding: 10px 20px;
+  padding-bottom: 0;
+  width: 100%;
+}
+
+.task-form .form-inner-container {
+  width: 100%;
+  padding-block: 12px;
+}
+
+.task-form .block {
+  width: 100%;
+  padding-block: 12px;
+}
+
+.task-form input {
+  width: 100%;
+  font-size: 15px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.task-form input.name {
+  background: none;
+  outline: none;
+  border: none;
+  font-size: 25px;
+  padding: 8px;
+}
+
+.task-form input.name::placeholder {
+  font-style: italic;
+  padding-left: 3px;
+}
+
+.task-form p {
+  text-transform: capitalize;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.task-form .pomodoros {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  flex-direction: row;
+}
+
+.pomodoros input {
+  width: 75px;
+}
+
+.pomodoros .input-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.pomodoros .arrows {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 10px;
+  flex-direction: column-reverse;
+  background: #d7d6d6;
+  border-radius: 0 6px 6px 0;
+  height: 100%;
+  width: 16px;
+  padding: 2px;
+}
+
+.block input,
+.notes textarea {
+  background-color: #9f9f9f33;
+  margin-right: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.notes textarea {
+  line-height: 1.4em;
+  height: 200px;
+}
+
+.pomodoros input.est:last-of-type {
+  margin-left: 10px;
+}
+
+.block .notes,
+.block .project {
+  margin-block: 10px;
+}
+
+.add-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.add-buttons button {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.add-buttons button:last-of-type {
+  margin-left: 10px;
+}
+
+.task-footer {
+  background: #e7e7e7;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+}
+
+.task-footer button {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 15px;
+  color: #4e696a;
+  margin-block: 10px;
+}
+
+.task-footer button.save {
+  margin-left: 10px;
+  background-color: #000;
+  color: #e7e7e7;
+  border-radius: 5px;
+  box-shadow: 0 0 8px 0px rgb(78 78 78);
+}
+
+/* end task form */
+
+/* start tasks footer */
+.tasks .footer-container {
+  padding: 15px 0;
+}
+
+.tasks .footer {
+  color: #e7e7e7;
+  border-top: 2px solid #fff;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: capitalize;
+  padding: 20px;
+  font-size: 18px;
+
+  border-radius: 84px;
+  box-shadow: 0px -5px 5px -5px #121212;
+  margin: 20px 0;
+}
+
+.tasks .footer p {
+  margin-right: 20px;
+}
+
+.tasks .footer p span {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+/* end tasks footer */
+/* end tasks */
