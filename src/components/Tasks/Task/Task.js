@@ -11,7 +11,7 @@ const NewForm = lazy(() => import("../NewForm/NewForm"));
 
 const Task = (props) => {
   const dispatch = useDispatch();
-  const {activeId} = useSelector(state => state.tasks)
+  const { activeId } = useSelector(state => state.tasks)
   const [error, setError] = useState("");
   const [openEdit, setOpenEdit] = useState(false);
 
@@ -24,10 +24,10 @@ const Task = (props) => {
   }
 
   const handleActive = () => {
-    dispatch({ type: CHANGE_ACTIVE_TASK, data: {id: props.id, name: props.name} });
+    dispatch({ type: CHANGE_ACTIVE_TASK, data: { id: props.id, name: props.name } });
   }
 
-  if(openEdit) {
+  if (openEdit) {
     return (
       <Suspense fallback={<p>Loading...</p>}>
         <NewForm oldData={props} setOpen={setOpenEdit} />
@@ -40,28 +40,31 @@ const Task = (props) => {
       <div className={`task ${activeId === props.id && "active"}`} onClick={handleActive}>
         <div className="overflow">
           <div className="buttons">
-            <button onClick={handleCheck}>
+            <button aria-label="check button" onClick={handleCheck}>
               {props.check ? (
                 <BsCheckCircleFill />
               ) : (
                 <MdRadioButtonUnchecked />
               )}
             </button>
-            <button onClick={() => setOpenEdit(oe => !oe)}><FiEdit3 /></button>
-            <button onClick={handleDelete}><MdDelete /></button>
+            <button aria-label="edit button" onClick={() => setOpenEdit(oe => !oe)}><FiEdit3 /></button>
+            <button aria-label="delet button" onClick={handleDelete}><MdDelete /></button>
           </div>
         </div>
         <div style={{
           display: "flex",
           alignItems: "center",
-          width: "100%"
+          width: "100%",
+          justifyContent: "space-between"
         }}>
           <div className="task-inner">
-            {props.check ? (
-              <BsCheckCircleFill />
-            ) : (
-              <MdRadioButtonUnchecked />
-            )}
+            <div className="icon-container">
+              {props.check ? (
+                <BsCheckCircleFill className="task-uncheck" />
+              ) : (
+                <MdRadioButtonUnchecked className="task-check" />
+              )}
+            </div>
             <p style={{ textDecoration: props.check && "line-through" }}>{props.name}</p>
           </div>
           <p className="act-est"><span>{props.act}</span> / <span>{props.est}</span></p>

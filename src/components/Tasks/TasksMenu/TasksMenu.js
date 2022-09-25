@@ -14,17 +14,17 @@ const Menu = () => {
 
   return (
     <div className="menu">
-      <button className="toggle-menu" onClick={() => setOpenMenu(om => !om)} style={{ fontSize: 25, color: "#fff" }} disabled={tasks?.length === 0}>
+      <button aria-label="toggle the task list menu" className="toggle-menu" onClick={() => setOpenMenu(om => !om)} style={{ fontSize: 25, color: "#fff" }} disabled={tasks?.length === 0}>
         <HiMenu />
       </button>
       {openMenu && (
         <div className="menu-content">
           <div className="row">
-            <button><MdDelete /> <p>clear finished tasks</p></button>
-            <button><BsCheckLg /> <p>clear act pomodoros</p></button>
-            <button><FiSave /> <p>save as templete</p></button>
-            <button><AiOutlinePlus /> <p>add from templetes</p></button>
-            <button><MdDelete /> <p>clear all tasks</p></button>
+            <button aria-label="delete all finished tasks"><MdDelete /> <p>clear finished tasks</p></button>
+            <button aria-label="clear all act pomodoros tasks"><BsCheckLg /> <p>clear act pomodoros</p></button>
+            <button aria-label="save the task list as templete"><FiSave /> <p>save as templete</p></button>
+            <button aria-label="add task from templets"><AiOutlinePlus /> <p>add from templetes</p></button>
+            <button aria-label="clear all tasks"><MdDelete /> <p>clear all tasks</p></button>
           </div>
         </div>
       )}

@@ -9,13 +9,14 @@ const ActiveTask = () => {
     <div className="active-task" style={{ marginBlock: 20 }}>
       <span style={{
         fontSize: "16px",
-        color: "rgb(182 181 181)", 
+        color: "rgb(255 255 255)", 
         textShadow: "0 0 2px #878787"
       }}>#{periodNum + 1}</span>
       <span style={{ 
-        color: "#e7e7e7",
-        fontWeight: 600 
-      }}>{activeId === null ? "Please Focus on your work" : activeName}</span>
+        color: "rgb(237 237 237)",
+        fontWeight: 600,
+        textTransform: "capitalize"
+      }}>{activeId === null ? "please focus on what you are doing now" : activeName}</span>
     </div>
   )
 }

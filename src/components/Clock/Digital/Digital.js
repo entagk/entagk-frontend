@@ -26,6 +26,12 @@ const DigitalTimer = () => {
     // eslint-disable-next-line
   }, [active]);
 
+  useEffect(() => {
+    console.log(active);
+    document.body.style.backgroundColor = activites[active].color;
+    // eslint-disable-next-line
+  }, [active]);
+
   worker.onmessage = (event) => {
     if (event.data !== 'stop') {
       setTime(event.data);
@@ -48,7 +54,6 @@ const DigitalTimer = () => {
       }
 
       dispatch(changeActive());
-      alert("the timer is ended"); // remove it and make it use notification and sounds
     }
   }
 
@@ -82,10 +87,10 @@ const DigitalTimer = () => {
 
   return (
     <div>
-      <h1 style={{ fontSize: 100 }} id="digital">{formatTime(time)}</h1>
+      <h1 id="digital-number" className="digital-number">{formatTime(time)}</h1>
       <div className="digital-controlers">
         <button aria-label="start-pause-button" //"start on roll"
-          className="start-digital" id="start-digital" disabled={time === 0}
+          className="start-digital" id="start-digital" style={{background: activites[active].color}} disabled={time === 0}
           onClick={toggleStart}
         >
           {started ? (

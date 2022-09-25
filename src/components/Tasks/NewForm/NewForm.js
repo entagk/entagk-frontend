@@ -87,9 +87,9 @@ const NewForm = ({ oldData, setOpen }) => {
         </div>
       </div>
       <div className="task-footer">
-        <button type="button" onClick={() => setOpen(o => !o)}>cancel</button>
+        <button aria-label="cancel form button" type="button" onClick={() => setOpen(o => !o)}>cancel</button>
         <div>
-          <button type="sumbit" className="save" disabled={!data.name || !data.est}>save</button>
+          <button aria-label="submit form button" type="submit" className="save" disabled={!data.name || !data.est}>save</button>
         </div>
       </div>
     </form>

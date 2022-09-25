@@ -15,7 +15,7 @@ const Navigation = ({ user }) => {
     <div className="navigation">
       <h1>Entagk</h1>
       <div style={{ position: "relative" }}>
-        <button className="toggle-menu" onClick={taggleMenu}>
+        <button aria-label="toggle menu button" className="toggle-menu" onClick={taggleMenu}>
           {user?.avatar ?
             (
               <>
@@ -31,7 +31,7 @@ const Navigation = ({ user }) => {
         {open && (
           <div className="menu-content">
             <div className="row">
-              <button>
+              <button aria-label="user button in menu">
                 {user ? (
                   <HiUser />
                 ) : (<MdLogin />)}
@@ -40,27 +40,27 @@ const Navigation = ({ user }) => {
                 </p>
               </button>
               {user && (
-                <button>
+                <button aria-label="subsecription button in menu">
                   <FaMoneyCheck />
                   <p style={{ marginLeft: 10 }}>
                     Subsecription
                   </p>
                 </button>
               )}
-              <button>
+              <button aria-label="setting button in menu">
                 <AiOutlineSetting />
                 <p style={{ marginLeft: 10 }}>
                   Setting
                 </p>
               </button>
-              <button>
+              <button aria-label="report button in menu">
                 <HiOutlineDocumentReport />
                 <p style={{ marginLeft: 10 }}>
                   Report
                 </p>
               </button>
               {user && (
-                <button>
+                <button aria-label="logout button in menu">
                   <MdLogout />
                   <p style={{ marginLeft: 10 }}>
                     Logout
@@ -70,7 +70,7 @@ const Navigation = ({ user }) => {
             </div>
             {user && (
               <div className="row">
-                <button>
+                <button aria-label="delete account button">
                   <MdDelete />
                   <p style={{ marginLeft: 10 }}>Delete Account</p>
                 </button>
