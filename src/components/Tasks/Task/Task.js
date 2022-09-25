@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 
 import { BsCheckCircleFill } from 'react-icons/bs';
 
@@ -6,7 +6,8 @@ import { FiEdit3 } from 'react-icons/fi';
 import { MdDelete, MdRadioButtonUnchecked } from 'react-icons/md';
 import { useDispatch, useSelector } from "react-redux";
 import { checkTask, deleteTask, CHANGE_ACTIVE_TASK } from "../../../actions/tasks";
-import NewForm from "../NewForm/NewForm";
+
+const NewForm = lazy(() => import("../NewForm/NewForm"));
 
 const Task = (props) => {
   const dispatch = useDispatch();
@@ -28,7 +29,9 @@ const Task = (props) => {
 
   if(openEdit) {
     return (
-      <NewForm oldData={props} setOpen={setOpenEdit} />
+      <Suspense fallback={<p>Loading...</p>}>
+        <NewForm oldData={props} setOpen={setOpenEdit} />
+      </Suspense>
     )
   }
 

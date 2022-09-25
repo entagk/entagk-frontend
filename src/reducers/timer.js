@@ -11,22 +11,24 @@ export default (state = {
   periodNum: 0,
   type: "analog",
   periodInterval: 4,
+  notificationInterval: 60,
+  unit: "min",
   activites: {
     [PERIOD]: {
       name: PERIOD,
-      time: 1,
+      time: 25,
       color: "#ff002f",
       timerBorder: "#b40021"
     },
     [SHORT]: {
       name: SHORT,
-      time: 1,
+      time: 5,
       color: "#00e3ff",
       timerBorder: "#16a9bb"
     },
     [LONG]: {
       name: LONG,
-      time: 3,
+      time: 15,
       color: "#36a7ff",
       timerBorder: "#3185c7"
     }

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
+import { useSelector } from "react-redux";
+
 import { AiOutlinePlus } from 'react-icons/ai';
 import { HiMenu } from "react-icons/hi";
 import { MdDelete } from 'react-icons/md';
 import { BsCheckLg } from 'react-icons/bs';
 import { FiSave } from "react-icons/fi";
-
-import { useSelector } from "react-redux";
 
 const Menu = () => {
   const { tasks } = useSelector(state => state.tasks);

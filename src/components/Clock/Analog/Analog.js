@@ -1,16 +1,25 @@
-import React, { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const TimerControllers = lazy(() => import("../Analog/Controllers/TimerControllers"));
 const Arrows = lazy(() => import("../Analog/Arrows"));
 
 const AnalogTimer = () => {
-  // const [activePeriod, setActivePeriod] = useState();  
-  const { active, activites } = useSelector((state) => state.timer);
-  const activePeriod = activites[active].time * 60;
+  const { active, activites, unit } = useSelector((state) => state.timer);
+  const activePeriod = unit === 'sec' ? activites[active].time : activites[active].time * 60;
   const [time, setTime] = useState(activePeriod);
   const nums = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
   const increamentVal = 1;
+
+  useEffect(() => {
+    console.log(active);
+    if(unit === 'sec') {
+      setTime(activites[active].time)
+    } else {
+      setTime(activites[active].time * 60)
+    }
+    // eslint-disable-next-line
+  }, [active]);
 
   const onClick = (type) => {
     if (type === "right") {

@@ -6,28 +6,47 @@ import { MdRestartAlt } from "react-icons/md";
 
 import { changeActive, PERIOD } from "../../../actions/timer";
 
-import { formatTime } from "../../../Utils/helper";
+import { formatTime, pushNotification } from "../../../Utils/helper";
 const worker = new window.Worker('worker.js');
 
 const DigitalTimer = () => {
-  const { active, activites } = useSelector((state) => state.timer);
-  const activePeriod = activites[active].time * 60;
+  const { active, activites, notificationInterval, unit } = useSelector((state) => state.timer);
+  const activePeriod = unit === 'sec' ? activites[active].time : activites[active].time * 60;
   const [time, setTime] = useState(activePeriod);
   const [started, setStarted] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log(active);
-    setTime(activites[active].time * 60)
+    if (unit === 'sec') {
+      setTime(activites[active].time)
+    } else {
+      setTime(activites[active].time * 60)
+    }
     // eslint-disable-next-line
   }, [active]);
-
 
   worker.onmessage = (event) => {
     if (event.data !== 'stop') {
       setTime(event.data);
+      if (Notification.permission === 'granted') {
+        if (time !== 0) {
+          if (time % notificationInterval === 0 && time !== activePeriod) {
+            pushNotification(`${time / notificationInterval} minutes left!`);
+          }
+        }
+      }
     } else {
       setStarted(false);
+
+      if (Notification.permission === 'granted') {
+        if (active === PERIOD) {
+          pushNotification("It's time to take a break");
+        } else {
+          pushNotification("It's time to focus!");
+        }
+      }
+
       dispatch(changeActive());
       alert("the timer is ended"); // remove it and make it use notification and sounds
     }
@@ -39,8 +58,22 @@ const DigitalTimer = () => {
       worker.postMessage('stop');
     } else {
       worker.postMessage({ started: !started, count: time });
+      if (Notification.permission === 'granted') {
+        if (time === 0) {
+          if (active === PERIOD) {
+            pushNotification("It's time to take a break");
+          } else {
+            pushNotification("It's time to focus!");
+          }
+        } else {
+          if (time % notificationInterval === 0) {
+            pushNotification(``)
+          }
+        }
+      }
     }
 
+    // eslint-disable-next-line
   }, [started, time]);
 
   const handleReset = () => {

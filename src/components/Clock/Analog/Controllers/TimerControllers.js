@@ -2,6 +2,8 @@ import React, { useEffect, useState, lazy, Suspense, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeActive, PERIOD } from "../../../../actions/timer";
 
+import { pushNotification } from "../../../../Utils/helper";
+
 const StartButton = lazy(() => import("./Roll/StartRoll"));
 const Edit = lazy(() => import("./Roll/EditRoll"));
 const ClearButton = lazy(() => import("./Roll/ClearButton"));
@@ -10,8 +12,8 @@ const PauseButton = lazy(() => import("./Roll/PauseButton"));
 const worker = new window.Worker('worker.js');
 
 const TimerControllers = ({ onClick, setTime, time }) => {
-    const { active, activites } = useSelector((state) => state.timer);
-    const activePeriod = activites[active].time * 60;
+    const { active, activites, unit, notificationInterval } = useSelector((state) => state.timer);
+    const activePeriod = unit === 'sec' ? activites[active].time : activites[active].time * 60;
     const [started, setStarted] = useState(false);
     const dispatch = useDispatch();
     const [location, setLocation] = useState('/');
@@ -25,10 +27,24 @@ const TimerControllers = ({ onClick, setTime, time }) => {
     worker.onmessage = (event) => {
         if (event.data !== 'stop') {
             setTime(event.data);
+            if (Notification.permission === 'granted') {
+                if (time !== 0) {
+                    if (time % notificationInterval === 0 && time !== activePeriod) {
+                        pushNotification(`${time / notificationInterval} minutes left!`);
+                    }
+                }
+            }
         } else {
             setStarted(false);
+            if (Notification.permission === 'granted') {
+                if (active === PERIOD) {
+                    pushNotification("It's time to take a break");
+                } else {
+                    pushNotification("It's time to focus!");
+                }
+            }
             dispatch(changeActive(active));
-            alert("the timer is ended"); // remove it and make it use notification and sounds
+            // alert("the timer is ended"); // remove it and make it use notification and sounds
         }
     }
 
@@ -47,18 +63,17 @@ const TimerControllers = ({ onClick, setTime, time }) => {
 
     useEffect(() => {
         console.log(active);
-        setTime(activites[active].time * 60);
         document.body.style.backgroundColor = activites[active].color;
-        // document.querySelector(".clock-container").style.backgroundColor = 
         // eslint-disable-next-line
     }, [active]);
 
     return (
         <>
-            <div
-                className="different-color"
-                style={{
-                    backgroundImage: `
+            <Suspense fallback={<div>Loading...</div>}>
+                <div
+                    className="different-color"
+                    style={{
+                        backgroundImage: `
                     linear-gradient(
                         ${time / 60 <= 30 ? 270 : (time / 60 - 30) * 6 + 90}deg, 
                         transparent 50%, 
@@ -68,13 +83,13 @@ const TimerControllers = ({ onClick, setTime, time }) => {
                         transparent 50%, 
                         white 50%)
                     `,
-                    backgroundColor: activites[active].color
-                }}
-            ></div>
-            <div
-                className="roller-container"
-                style={{
-                    backgroundImage: `
+                        backgroundColor: activites[active].color
+                    }}
+                ></div>
+                <div
+                    className="roller-container"
+                    style={{
+                        backgroundImage: `
                     linear-gradient(
                         ${time / 60 <= 30 ? 270 : (time / 60 - 30) * 6 + 90}deg, 
                         transparent 50%, 
@@ -85,30 +100,25 @@ const TimerControllers = ({ onClick, setTime, time }) => {
                         ${activites[active].color} 50%, 
                         white 50%
                     )`
-                }}
-            >
-                <div className="roll" style={{ flexDirection: `${location !== '/edit' && "column"}` }}>
-                    {(location === '/edit' ? (
-                        <>
-                            <Suspense fallback={<div>Loading...</div>}>
+                    }}
+                >
+                    <div className="roll" style={{ flexDirection: `${location !== '/edit' && "column"}` }}>
+                        {(location === '/edit' ? (
+                            <>
                                 <Edit onClick={onClick} />
-                            </Suspense>
-                        </>
-                    ) : location === '/' && (
-                        <>
-                            {started ? (
-                                <>
-                                    <PauseButton
-                                        handleClick={toggleStart}
-                                    />
-                                    {/* <Suspense fallback={<div>Loading...</div>}>
-                                    </Suspense> */}
-                                </>
-                            ) : (
-                                <>
-                                    {!started && time !== activePeriod && active === PERIOD ? (
-                                        <>
-                                            <Suspense fallback={<div>Loading...</div>}>
+                            </>
+                        ) : location === '/' && (
+                            <>
+                                {started ? (
+                                    <>
+                                        <PauseButton
+                                            handleClick={toggleStart}
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        {!started && time !== activePeriod && active === PERIOD ? (
+                                            <>
                                                 <StartButton
                                                     handleClick={toggleStart}
                                                     time={time}
@@ -119,11 +129,9 @@ const TimerControllers = ({ onClick, setTime, time }) => {
                                                 <ClearButton
                                                     handleClear={handleReset}
                                                 />
-                                            </Suspense>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Suspense fallback={<div>Loading...</div>}>
+                                            </>
+                                        ) : (
+                                            <>
                                                 <StartButton
                                                     handleClick={toggleStart}
                                                     time={time}
@@ -131,15 +139,15 @@ const TimerControllers = ({ onClick, setTime, time }) => {
                                                     className={"start-side"}
                                                     id={"start-side"}
                                                 />
-                                            </Suspense>
-                                        </>
-                                    )}
-                                </>
-                            )}
-                        </>
-                    ))}
+                                            </>
+                                        )}
+                                    </>
+                                )}
+                            </>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            </Suspense>
         </>
     )
 }

@@ -44,7 +44,7 @@ export default (state = { activeId: null, tasks: null, act: 0, est: 0, finishing
           localStorage.setItem("tasks", JSON.stringify(state.tasks));
         }
 
-      return { ...state, tasks: state.tasks, act: action.data === PERIOD ? state.act + 1 : state.act };
+      return { ...state, tasks: state.tasks, act: realAct };
     case NEW_TASK:
       newEst = state.est + action.data.est;
 
