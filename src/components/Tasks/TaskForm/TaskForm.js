@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import { useDispatch } from "react-redux";
 import { addNewTask, modifyTask } from "../../../actions/tasks";
+import Message from "../../../Utils/Message";
 
 const initialData = {
   name: "",
@@ -10,7 +11,7 @@ const initialData = {
   project: ""
 }
 
-const NewForm = ({ oldData, setOpen }) => {
+const TaskForm = ({ oldData, setOpen }) => {
   const dispatch = useDispatch();
   const [data, setData] = useState(oldData === null ? initialData : oldData);
   const [openNotes, setOpenNotes] = useState(data.notes === "" ? false : true);
@@ -33,7 +34,7 @@ const NewForm = ({ oldData, setOpen }) => {
       setError("Error at name or est");
     }
 
-    if(!oldData) {
+    if (!oldData) {
       dispatch(addNewTask(data, setError));
     } else {
       dispatch(modifyTask(data, setError));
@@ -41,11 +42,17 @@ const NewForm = ({ oldData, setOpen }) => {
   }
 
   return (
-    <form className="task-form" style={{margin: oldData !== null && "20px 0 20px"}} onSubmit={handleSave}>
+    <form className="task-form" style={{ margin: oldData !== null && "20px 0 20px" }} onSubmit={handleSave}>
+      {error && (
+        <Message message={error} type="error" setMessage={setError} />
+      )}
       <div className="form-container">
         <div className="form-inner-container">
-          <div className="block">
-            <input className="name" required name="name" type="text" value={data.name} placeholder="What are you working on?" onChange={handleChange} />
+          <div className="block" style={{position: "relative"}}>
+            <input autoFocus className="name" maxLength="50" required name="name" type="text" value={data.name} placeholder="What are you working on?" onChange={handleChange} />
+            <div className="text-counter" style={{ color: `${50 - data.name.length > 10 ? "#4caf50" : "#ff002f"}` }}>
+              <p style={{ fontSize: "16px", fontWeight: "500" }}>{50 - data.name.length}</p>
+            </div>
           </div>
           <div className="block">
             <p>
@@ -55,19 +62,22 @@ const NewForm = ({ oldData, setOpen }) => {
             <div className="pomodoros">
               {data.act >= 0 && (
                 <div className="input-number">
-                  <input name="act" className="act" type="number" min='0' inputMode="numeric" pattern="\d*" value={data.act} onChange={handleChange} />
+                  <input name="act" className="act" type="number" min='0' max="1000" inputMode="numeric" pattern="\d*" value={data.act} onChange={handleChange} />
                 </div>
               )}
               {data.act >= 0 && (<>/</>)}
               <div>
-                <input name="est" required className="est" type="number" min='1' inputMode="numeric" pattern="\d*" value={data.est} onChange={handleChange} />
+                <input name="est" required className="est" type="number" min='1' max="1000" inputMode="numeric" pattern="\d*" value={data.est} onChange={handleChange} />
               </div>
             </div>
           </div>
           <div className="block">
             {openNotes && (
               <div className="notes">
-                <textarea name="notes" type='text' onChange={handleChange} value={data.notes}></textarea>
+                <textarea name="notes" type='text' maxLength="500" onChange={handleChange} value={data.notes}></textarea>
+                <div className="text-counter" style={{ color: `${500 - data.notes.length > 100 ? "#4caf50" : "#ff002f"}` }}>
+                  <p style={{ fontSize: "16px", fontWeight: "500" }}>{500 - data.notes.length}</p>
+                </div>
               </div>
             )}
             {(openProject) && (
@@ -96,4 +106,4 @@ const NewForm = ({ oldData, setOpen }) => {
   )
 }
 
-export default NewForm;
+export default TaskForm;

@@ -15,7 +15,7 @@ const Arrows = ({ nums, onClick, time }) => {
             {nums.map((item, index) => (
                 <div 
                     style={{ "--i": `${index}` }} 
-                    className={`number number${index}${time === item && " active"}`} 
+                    className={`number number${index}`}
                     id={index} key={item}
                 >
                     <p id={index} onClick={onClick}>

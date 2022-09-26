@@ -4,6 +4,8 @@ import { changeActive, PERIOD } from "../../../../actions/timer";
 
 import { pushNotification } from "../../../../Utils/helper";
 
+import Loading from "../../../../Utils/Loading";
+
 const StartButton = lazy(() => import("./Roll/StartRoll"));
 const Edit = lazy(() => import("./Roll/EditRoll"));
 const ClearButton = lazy(() => import("./Roll/ClearButton"));
@@ -69,7 +71,7 @@ const TimerControllers = ({ onClick, setTime, time }) => {
 
     return (
         <>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loading color={activites[active].color} />}>
                 <div
                     className="different-color"
                     style={{

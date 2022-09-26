@@ -1,0 +1,114 @@
+/* Start message */
+
+.message-container {
+  position: fixed;
+  top: 14%;
+  z-index: 1000;
+  background: #ee3535;
+  padding: 12px;
+  border-radius: 8px;
+  left: 10px;
+  box-shadow: 0 0 5px #454545;
+  font-size: 18px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: row;
+}
+
+.message-container div,
+.message-container button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-container div {
+  margin-right: 10px;
+}
+
+.message-container button {
+  font-size: 20px;
+  color: #fff;
+}
+/* End message */
+
+/* start loading circle */
+
+.loading {
+  position: relative;
+  height: 100%;
+}
+
+.loading .circle-container {
+  left: 50% !important;
+  margin-left: -100px;
+  position: fixed !important;
+  top: 50% !important;
+  margin-top: -100px;
+  width: 45px;
+  z-index: 9000 !important;
+}
+
+.loading .circle svg {
+  -webkit-animation: rotate 2s linear infinite;
+  animation: rotate 2s linear infinite;
+  height: 100%;
+  -webkit-transform-origin: center center;
+  -ms-transform-origin: center center;
+  transform-origin: center center;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: auto;
+}
+
+.loading .circle {
+  animation: scrollSvg 1.4s ease-in-out infinite;
+}
+
+.loading .circle {
+  position: relative;
+  margin: 0px auto;
+  width: 200px;
+  height: 200px;
+}
+
+.loading .circle::before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+@keyframes scrollSvg {
+  0% {
+    transform: rotate(0deg);
+  }
+  
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loading .circle svg circle {
+  animation: loading 1.5s ease-in-out infinite;
+}
+
+@keyframes loading {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124;
+  }
+}
+
+/* end loading circle */

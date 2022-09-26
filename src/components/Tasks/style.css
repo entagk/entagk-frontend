@@ -230,11 +230,10 @@
 }
 
 .task-form input.name {
-  background: none;
   outline: none;
   border: none;
   font-size: 25px;
-  padding: 8px;
+  padding: 10px;
 }
 
 .task-form input.name::placeholder {
@@ -291,9 +290,25 @@
   font-size: 16px;
 }
 
+.notes {
+  position: relative;
+}
+
 .notes textarea {
   line-height: 1.4em;
   height: 200px;
+}
+
+.block .text-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: #ff002f;
+  font-size: 20px;
+  font-weight: 100;
 }
 
 .pomodoros input.est:last-of-type {
@@ -462,6 +477,10 @@
   }
 
   .task p.act-est span {
+    font-size: 20px;
+  }
+
+  .task-form input.name {
     font-size: 20px;
   }
 }

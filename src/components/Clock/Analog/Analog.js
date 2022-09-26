@@ -1,5 +1,6 @@
 import React, { lazy, Suspense, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import Loading from "../../../Utils/Loading";
 
 const TimerControllers = lazy(() => import("../Analog/Controllers/TimerControllers"));
 const Arrows = lazy(() => import("../Analog/Arrows"));
@@ -39,7 +40,7 @@ const AnalogTimer = () => {
 
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading color={activites[active].color} />}>
         <Arrows
           nums={nums}
           onClick={onClick}

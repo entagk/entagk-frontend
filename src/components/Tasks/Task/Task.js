@@ -6,13 +6,16 @@ import { FiEdit3 } from 'react-icons/fi';
 import { MdDelete, MdRadioButtonUnchecked } from 'react-icons/md';
 import { useDispatch, useSelector } from "react-redux";
 import { checkTask, deleteTask, CHANGE_ACTIVE_TASK } from "../../../actions/tasks";
+import Message from "../../../Utils/Message";
+import Loading from "../../../Utils/Loading";
 
-const NewForm = lazy(() => import("../NewForm/NewForm"));
+const TaskForm = lazy(() => import("../TaskForm/TaskForm"));
 
 const Task = (props) => {
   const dispatch = useDispatch();
-  const { activeId } = useSelector(state => state.tasks)
-  const [error, setError] = useState("");
+  const { activeId } = useSelector(state => state.tasks);
+  const {active, activites} = useSelector(state => state.timer);
+  const [error, setError] = useState();
   const [openEdit, setOpenEdit] = useState(false);
 
   const handleCheck = () => {
@@ -29,14 +32,17 @@ const Task = (props) => {
 
   if (openEdit) {
     return (
-      <Suspense fallback={<p>Loading...</p>}>
-        <NewForm oldData={props} setOpen={setOpenEdit} />
+      <Suspense fallback={<Loading color={activites[active].color} background="#fff" />}>
+        <TaskForm oldData={props} setOpen={setOpenEdit} />
       </Suspense>
     )
   }
 
   return (
     <div>
+      {error && (
+        <Message message={`error: ${error} at task ${props.name}`} type="error" setMessage={setError} />
+      )}
       <div className={`task ${activeId === props.id && "active"}`} onClick={handleActive}>
         <div className="overflow">
           <div className="buttons">

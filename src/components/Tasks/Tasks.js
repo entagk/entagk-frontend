@@ -3,8 +3,9 @@ import React, { lazy, Suspense, useEffect, useState } from "react";
 import { AiOutlinePlus } from 'react-icons/ai';
 import { useDispatch, useSelector } from "react-redux";
 import { getTasks } from "../../actions/tasks";
+import Loading from "../../Utils/Loading";
 
-const NewForm = lazy(() => import("./NewForm/NewForm"));
+const TaskForm = lazy(() => import("./TaskForm/TaskForm"));
 const Footer = lazy(() => import("./TaskFooter/TaskFooter"));
 const Menu = lazy(() => import("./TasksMenu/TasksMenu"));
 const Task = lazy(() => import("./Task/Task"));
@@ -13,6 +14,7 @@ const Tasks = () => {
   const dispatch = useDispatch();
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const { tasks } = useSelector(state => state.tasks);
+  const {active, activites} = useSelector(state => state.timer);
 
   useEffect(() => {
     if (!tasks) {
@@ -22,7 +24,7 @@ const Tasks = () => {
   }, [tasks])
 
   return (
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense fallback={<Loading color={activites[active].color} />}>
       <div className="tasks">
         <div className="header">
           <h2>
@@ -46,8 +48,8 @@ const Tasks = () => {
               </p>
             </button>
           ) : (
-            <Suspense fallback={<div>Loading...</div>}>
-              <NewForm setOpen={setOpenFormForNew} oldData={null} />
+            <Suspense fallback={<Loading color={activites[active].color} />}>
+              <TaskForm setOpen={setOpenFormForNew} oldData={null} />
             </Suspense>
           )}
         </div>
