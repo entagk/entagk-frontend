@@ -11,6 +11,7 @@ export default (state = {
   periodNum: 0,
   type: "analog",
   periodInterval: 4,
+  timeFormat: "24-hour",
   notificationInterval: 60,
   unit: "min",
   activites: {

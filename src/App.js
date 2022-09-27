@@ -1,6 +1,6 @@
 import React, { lazy } from 'react';
 import './App.css';
-import Loading from './Utils/Loading';
+import Loading from './utils/Loading';
 
 const ActiveTask = lazy(() => import('./components/ActiveTask/ActiveTask'));
 const Timer = React.lazy(() => import('./components/Clock/Timer'));
@@ -10,7 +10,7 @@ const Tasks = React.lazy(() => import("./components/Tasks/Tasks"));
 
 function App() {
   return (
-    <React.Suspense fallback={<Loading color="#ffffff" />}>
+    <React.Suspense fallback={<Loading backgroud="transparent" width="200" height="200" cx="50" cy="50" r="20" strokeWidth="2.5" color="#ffffff" containerHeight="500px" />}>
       <div className='container'>
         <Navigation />
         <div className="app">

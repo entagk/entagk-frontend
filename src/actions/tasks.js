@@ -3,9 +3,11 @@ export const NEW_TASK = "NEW_TASK";
 export const CHECK_TASK = "CHECK_TASK";
 export const MODIFY_TASK = "MODIFY_TASK";
 export const DELETE_TASK = "DELETE_TASK";
-
 export const CHANGE_ACTIVE_TASK = "CHANGE_ACTIVE_TASK";
 
+export const CLEAR_FINISHED_TASKS = "CLEAR_FINISHED_TASKS";
+export const CLEAR_ACT_FROM_TASKS = "CLEAR_ACT_FROM_TASKS";
+export const CLEAR_ALL_TASKS = "CLEAR_ALL_TASKS";
 
 export const getTasks = () => dispatch => {
   try {
@@ -15,7 +17,7 @@ export const getTasks = () => dispatch => {
       
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 }
 
@@ -86,6 +88,42 @@ export const modifyTask = (data, setError) => dispatch => {
     }
   } catch (error) {
     setError(error.message);
+    console.error(error);
+  }
+}
+
+export const clearFinishedTasks = () => dispatch => {
+  try {
+    if(!localStorage.getItem("token")) {
+      dispatch({ type: CLEAR_FINISHED_TASKS });
+    } else {
+
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const clearAct = () => dispatch => {
+  try {
+    if(!localStorage.getItem("token")) {
+      dispatch({ type: CLEAR_ACT_FROM_TASKS });
+    } else {
+
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const clearAllTasks = () => dispatch => {
+  try {
+    if(!localStorage.getItem("token")) {
+      dispatch({ type: CLEAR_ALL_TASKS });
+    } else {
+
+    }
+  } catch (error) {
     console.error(error);
   }
 }

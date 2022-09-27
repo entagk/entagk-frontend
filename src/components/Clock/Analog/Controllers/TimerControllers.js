@@ -1,10 +1,8 @@
-import React, { useEffect, useState, lazy, Suspense, useCallback } from "react";
+import React, { useEffect, useState, lazy, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeActive, PERIOD } from "../../../../actions/timer";
 
-import { pushNotification } from "../../../../Utils/helper";
-
-import Loading from "../../../../Utils/Loading";
+import { pushNotification } from "../../../../utils/helper";
 
 const StartButton = lazy(() => import("./Roll/StartRoll"));
 const Edit = lazy(() => import("./Roll/EditRoll"));
@@ -64,18 +62,17 @@ const TimerControllers = ({ onClick, setTime, time }) => {
     }
 
     useEffect(() => {
-        console.log(active);
+        // console.log(active);
         document.body.style.backgroundColor = activites[active].color;
         // eslint-disable-next-line
     }, [active]);
 
     return (
         <>
-            <Suspense fallback={<Loading color={activites[active].color} />}>
-                <div
-                    className="different-color"
-                    style={{
-                        backgroundImage: `
+            <div
+                className="different-color"
+                style={{
+                    backgroundImage: `
                     linear-gradient(
                         ${time / 60 <= 30 ? 270 : (time / 60 - 30) * 6 + 90}deg, 
                         transparent 50%, 
@@ -85,13 +82,13 @@ const TimerControllers = ({ onClick, setTime, time }) => {
                         transparent 50%, 
                         white 50%)
                     `,
-                        backgroundColor: activites[active].color
-                    }}
-                ></div>
-                <div
-                    className="roller-container"
-                    style={{
-                        backgroundImage: `
+                    backgroundColor: activites[active].color
+                }}
+            ></div>
+            <div
+                className="roller-container"
+                style={{
+                    backgroundImage: `
                     linear-gradient(
                         ${time / 60 <= 30 ? 270 : (time / 60 - 30) * 6 + 90}deg, 
                         transparent 50%, 
@@ -102,54 +99,53 @@ const TimerControllers = ({ onClick, setTime, time }) => {
                         ${activites[active].color} 50%, 
                         white 50%
                     )`
-                    }}
-                >
-                    <div className="roll" style={{ flexDirection: `${location !== '/edit' && "column"}` }}>
-                        {(location === '/edit' ? (
-                            <>
-                                <Edit onClick={onClick} />
-                            </>
-                        ) : location === '/' && (
-                            <>
-                                {started ? (
-                                    <>
-                                        <PauseButton
-                                            handleClick={toggleStart}
-                                        />
-                                    </>
-                                ) : (
-                                    <>
-                                        {!started && time !== activePeriod && active === PERIOD ? (
-                                            <>
-                                                <StartButton
-                                                    handleClick={toggleStart}
-                                                    time={time}
-                                                    ariaLabel={"continue button on roll"}
-                                                    className={"up-side"}
-                                                    id={"up-side"}
-                                                />
-                                                <ClearButton
-                                                    handleClear={handleReset}
-                                                />
-                                            </>
-                                        ) : (
-                                            <>
-                                                <StartButton
-                                                    handleClick={toggleStart}
-                                                    time={time}
-                                                    ariaLabel={"start on roll"}
-                                                    className={"start-side"}
-                                                    id={"start-side"}
-                                                />
-                                            </>
-                                        )}
-                                    </>
-                                )}
-                            </>
-                        ))}
-                    </div>
+                }}
+            >
+                <div className="roll" style={{ flexDirection: `${location !== '/edit' && "column"}` }}>
+                    {(location === '/edit' ? (
+                        <>
+                            <Edit onClick={onClick} />
+                        </>
+                    ) : location === '/' && (
+                        <>
+                            {started ? (
+                                <>
+                                    <PauseButton
+                                        handleClick={toggleStart}
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    {!started && time !== activePeriod && active === PERIOD ? (
+                                        <>
+                                            <StartButton
+                                                handleClick={toggleStart}
+                                                time={time}
+                                                ariaLabel={"continue button on roll"}
+                                                className={"up-side"}
+                                                id={"up-side"}
+                                            />
+                                            <ClearButton
+                                                handleClear={handleReset}
+                                            />
+                                        </>
+                                    ) : (
+                                        <>
+                                            <StartButton
+                                                handleClick={toggleStart}
+                                                time={time}
+                                                ariaLabel={"start on roll"}
+                                                className={"start-side"}
+                                                id={"start-side"}
+                                            />
+                                        </>
+                                    )}
+                                </>
+                            )}
+                        </>
+                    ))}
                 </div>
-            </Suspense>
+            </div>
         </>
     )
 }
