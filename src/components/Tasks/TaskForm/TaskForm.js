@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { useDispatch } from "react-redux";
 import { addNewTask, modifyTask } from "../../../actions/tasks";
-import Message from "../../../Utils/Message";
+import Message from "../../../utils/Message";
 
 const initialData = {
   name: "",
@@ -28,7 +28,7 @@ const TaskForm = ({ oldData, setOpen }) => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    console.log(data);
+    // console.log(data);
     setOpen(ot => !ot);
     if (!data.name || !data.est) {
       setError("Error at name or est");
@@ -51,7 +51,7 @@ const TaskForm = ({ oldData, setOpen }) => {
           <div className="block" style={{position: "relative"}}>
             <input autoFocus className="name" maxLength="50" required name="name" type="text" value={data.name} placeholder="What are you working on?" onChange={handleChange} />
             <div className="text-counter" style={{ color: `${50 - data.name.length > 10 ? "#4caf50" : "#ff002f"}` }}>
-              <p style={{ fontSize: "16px", fontWeight: "500" }}>{50 - data.name.length}</p>
+              <p style={{ fontSize: "16px", fontWeight: "500", marginBottom: "15px" }}>{50 - data.name.length}</p>
             </div>
           </div>
           <div className="block">

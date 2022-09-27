@@ -6,15 +6,15 @@ import { FiEdit3 } from 'react-icons/fi';
 import { MdDelete, MdRadioButtonUnchecked } from 'react-icons/md';
 import { useDispatch, useSelector } from "react-redux";
 import { checkTask, deleteTask, CHANGE_ACTIVE_TASK } from "../../../actions/tasks";
-import Message from "../../../Utils/Message";
-import Loading from "../../../Utils/Loading";
+import Message from "../../../utils/Message";
+// import Loading from "../../../utils/Loading";
 
 const TaskForm = lazy(() => import("../TaskForm/TaskForm"));
 
 const Task = (props) => {
   const dispatch = useDispatch();
   const { activeId } = useSelector(state => state.tasks);
-  const {active, activites} = useSelector(state => state.timer);
+  // const {active, activites} = useSelector(state => state.timer);
   const [error, setError] = useState();
   const [openEdit, setOpenEdit] = useState(false);
 
@@ -32,7 +32,7 @@ const Task = (props) => {
 
   if (openEdit) {
     return (
-      <Suspense fallback={<Loading color={activites[active].color} background="#fff" />}>
+      <Suspense fallback={<div>loading...</div>}>
         <TaskForm oldData={props} setOpen={setOpenEdit} />
       </Suspense>
     )
@@ -80,7 +80,6 @@ const Task = (props) => {
             <p>{props.notes}</p>
           </div>
         )}
-        {/* <div><FiEdit3 /></div> */}
       </div>
     </div>
   )

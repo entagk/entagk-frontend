@@ -45,10 +45,10 @@
 .loading .circle-container {
   left: 50% !important;
   margin-left: -100px;
-  position: fixed !important;
+  position: absolute;/* fixed !important */
   top: 50% !important;
   margin-top: -100px;
-  width: 45px;
+  /* width: 45px; /* 45px */ 
   z-index: 9000 !important;
 }
 
@@ -73,8 +73,8 @@
 .loading .circle {
   position: relative;
   margin: 0px auto;
-  width: 200px;
-  height: 200px;
+  width: 200px; /* 200 */
+  height: 200px; /* 200 */
 }
 
 .loading .circle::before {

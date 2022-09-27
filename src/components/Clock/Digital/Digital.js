@@ -6,7 +6,7 @@ import { MdRestartAlt } from "react-icons/md";
 
 import { changeActive, PERIOD } from "../../../actions/timer";
 
-import { formatTime, pushNotification } from "../../../Utils/helper";
+import { formatTime, pushNotification } from "../../../utils/helper";
 const worker = new window.Worker('worker.js');
 
 const DigitalTimer = () => {
@@ -17,7 +17,7 @@ const DigitalTimer = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(active);
+    // console.log(active);
     if (unit === 'sec') {
       setTime(activites[active].time)
     } else {
@@ -27,7 +27,7 @@ const DigitalTimer = () => {
   }, [active]);
 
   useEffect(() => {
-    console.log(active);
+    // console.log(active);
     document.body.style.backgroundColor = activites[active].color;
     // eslint-disable-next-line
   }, [active]);
