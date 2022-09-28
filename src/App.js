@@ -1,6 +1,6 @@
 import React, { lazy } from 'react';
 import './App.css';
-import Loading from './utils/Loading';
+import Loading from '../src/utils/Loading';
 
 const ActiveTask = lazy(() => import('./components/ActiveTask/ActiveTask'));
 const Timer = React.lazy(() => import('./components/Clock/Timer'));
