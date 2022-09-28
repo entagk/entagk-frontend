@@ -1,7 +1,6 @@
 import React from "react";
 
 const Loading = ({ color, backgroud, width, height, strokeWidth, containerHeight }) => {
-  console.log(color, backgroud, width, height, strokeWidth)
   return (
     <div style={{ position: "relative" }}>
       <div
