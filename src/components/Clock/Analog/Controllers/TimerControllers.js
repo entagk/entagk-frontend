@@ -1,8 +1,9 @@
-import React, { useEffect, useState, lazy, useCallback } from "react";
+import React, { useEffect, useState, lazy, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeActive, PERIOD } from "../../../../actions/timer";
 
 import { pushNotification } from "../../../../utils/helper";
+import useAudio from "../../../../utils/useAudio";
 
 const StartButton = lazy(() => import("./Roll/StartRoll"));
 const Edit = lazy(() => import("./Roll/EditRoll"));
@@ -18,11 +19,20 @@ const TimerControllers = ({ onClick, setTime, time }) => {
     const dispatch = useDispatch();
     const [location, setLocation] = useState('/');
 
+    const trickingSound = useRef(useAudio({ src: "sounds/clock-ticking-1.mp3", volume: 0.5, loop: true }));
+    const alarmSound = useRef(useAudio({ src: "sounds/alarm-clock-01.mp3", volume: 0.5 }));
+    const clickSound = useRef(useAudio({ src: "sounds/mixkit-arcade-game-jump-coin-216.wav", volume: 0.7 }));
+
     // eslint-disable-next-line
     useEffect(() => {
         const winLocation = window.location;
         setLocation(winLocation.pathname);
     });
+
+    useEffect(() => {
+        document.body.style.backgroundColor = activites[active].color;
+        // eslint-disable-next-line
+    }, [active]);
 
     worker.onmessage = (event) => {
         if (event.data !== 'stop') {
@@ -36,6 +46,8 @@ const TimerControllers = ({ onClick, setTime, time }) => {
             }
         } else {
             setStarted(false);
+            alarmSound.current.handlePlay();
+            trickingSound.current.handleStop();
             if (Notification.permission === 'granted') {
                 if (active === PERIOD) {
                     pushNotification("It's time to take a break");
@@ -44,28 +56,27 @@ const TimerControllers = ({ onClick, setTime, time }) => {
                 }
             }
             dispatch(changeActive(active));
-            // alert("the timer is ended"); // remove it and make it use notification and sounds
         }
     }
 
     const toggleStart = useCallback(() => {
         setStarted(s => !s);
+        clickSound.current.handlePlay();
         if (started) {
             worker.postMessage("stop");
+            trickingSound.current.handleStop();
         } else {
+            trickingSound.current.handlePlay();
             worker.postMessage({ started: !started, count: time });
         }
+
+        // eslint-disable-next-line
     }, [started, time]);
 
     const handleReset = () => {
         setTime(activePeriod);
+        clickSound.current.handlePlay();
     }
-
-    useEffect(() => {
-        // console.log(active);
-        document.body.style.backgroundColor = activites[active].color;
-        // eslint-disable-next-line
-    }, [active]);
 
     return (
         <>
