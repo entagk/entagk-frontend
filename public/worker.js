@@ -12,7 +12,7 @@ onmessage = (event) => {
   
   if (event.data.started === true) {
     count = event.data.count;
-    // console.log(event.data.started, event.data.count);
+    console.log(event.data.started, event.data.count);
     timerId = setInterval(counting, 1000);
   } 
 
