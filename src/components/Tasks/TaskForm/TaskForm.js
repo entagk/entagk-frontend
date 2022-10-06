@@ -87,10 +87,10 @@ const TaskForm = ({ oldData, setOpen }) => {
             )}
             <div className="add-buttons">
               {!openNotes && (
-                <button aria-label="add notes button" onClick={() => setOpenNotes(on => !on)}>+ add notes</button>
+                <button aria-label="add notes button" type="button" onClick={() => setOpenNotes(on => !on)}>+ add notes</button>
               )}
               {(!openProject) && (
-                <button aria-label="add project button" onClick={() => setOpenProject(on => !on)}>+ add project</button>
+                <button aria-label="add project button" type="button" onClick={() => setOpenProject(on => !on)}>+ add project</button>
               )}
             </div>
           </div>

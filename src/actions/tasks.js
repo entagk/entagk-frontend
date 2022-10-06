@@ -9,15 +9,20 @@ export const CLEAR_FINISHED_TASKS = "CLEAR_FINISHED_TASKS";
 export const CLEAR_ACT_FROM_TASKS = "CLEAR_ACT_FROM_TASKS";
 export const CLEAR_ALL_TASKS = "CLEAR_ALL_TASKS";
 
-export const getTasks = () => dispatch => {
+export const getTasks = (setError) => dispatch => {
   try {
     if (!localStorage.getItem('token')) {
-      dispatch({ type: GET_TASKS });
+      const all = JSON.parse(localStorage.getItem("tasks")) || [];
+      const est = Number(localStorage.getItem("est"));
+      const act = Number(localStorage.getItem("act"));
+
+      dispatch({ type: GET_TASKS, data: { all, est, act } });
     } else {
-      
+
     }
   } catch (err) {
     console.error(err);
+    setError(err.message)
   }
 }
 
@@ -94,7 +99,7 @@ export const modifyTask = (data, setError) => dispatch => {
 
 export const clearFinishedTasks = () => dispatch => {
   try {
-    if(!localStorage.getItem("token")) {
+    if (!localStorage.getItem("token")) {
       dispatch({ type: CLEAR_FINISHED_TASKS });
     } else {
 
@@ -106,7 +111,7 @@ export const clearFinishedTasks = () => dispatch => {
 
 export const clearAct = () => dispatch => {
   try {
-    if(!localStorage.getItem("token")) {
+    if (!localStorage.getItem("token")) {
       dispatch({ type: CLEAR_ACT_FROM_TASKS });
     } else {
 
@@ -118,7 +123,7 @@ export const clearAct = () => dispatch => {
 
 export const clearAllTasks = () => dispatch => {
   try {
-    if(!localStorage.getItem("token")) {
+    if (!localStorage.getItem("token")) {
       dispatch({ type: CLEAR_ALL_TASKS });
     } else {
 

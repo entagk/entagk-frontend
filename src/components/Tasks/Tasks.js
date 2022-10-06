@@ -1,8 +1,7 @@
-import React, { lazy, Suspense, useEffect, useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 
 import { AiOutlinePlus } from 'react-icons/ai';
-import { useDispatch, useSelector } from "react-redux";
-import { getTasks } from "../../actions/tasks";
+import { useSelector } from "react-redux";
 import Loading from "../../utils/Loading";
 
 const TaskForm = lazy(() => import("./TaskForm/TaskForm"));
@@ -11,17 +10,9 @@ const Menu = lazy(() => import("./TasksMenu/TasksMenu"));
 const Task = lazy(() => import("./Task/Task"));
 
 const Tasks = () => {
-  const dispatch = useDispatch();
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const { tasks } = useSelector(state => state.tasks);
   const { active, activites } = useSelector(state => state.timer);
-
-  useEffect(() => {
-    if (!tasks) {
-      dispatch(getTasks());
-    }
-    // eslint-disable-next-line
-  }, [tasks])
 
   return (
     <>

@@ -49,6 +49,11 @@ textarea {
   padding: 10px;
 }
 
+a {
+  text-decoration: auto;
+  color: #000;
+}
+
 #root {
   width: 100%;
 }
@@ -85,10 +90,12 @@ textarea {
 
 /* end basics */
 
-@import url("./components/Navigation/style.css");
+@import url("./components/NavBar/style.css");
 
 @import url("./components/Clock/style.css");
 
 @import url("./components/Tasks/style.css");
 
-@import url('./utils/style.css');
+@import url("./utils/style.css");
+
+@import url('./components/Setting/style.css');

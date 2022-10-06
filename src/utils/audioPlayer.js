@@ -1,4 +1,4 @@
-const useAudio = ({ src, volume = 0.5, loop = false}) => {
+const audioPlayer = ({ src, volume = 0.5, loop = false}) => {
   const audio = new Audio();
   audio.src = src;
   audio.volume = volume;
@@ -21,12 +21,17 @@ const useAudio = ({ src, volume = 0.5, loop = false}) => {
     audio.src = src;
   }
 
+  const changeLoop = (loop) => {
+    audio.loop = loop;
+  }
+
   return {
     handlePlay, 
     handleStop,
     chengeVolume,
     changeFile,
+    changeLoop
   }
 }
 
-export default useAudio;
+export default audioPlayer;

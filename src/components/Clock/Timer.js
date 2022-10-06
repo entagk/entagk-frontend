@@ -1,29 +1,163 @@
-import React, { lazy, Suspense, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { lazy, Suspense, useEffect, useState, useCallback, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux"; // 2
+
+import { changeActive, PERIOD, START_TIMER, STOP_TIMER } from "../../actions/timer";
+
+import { pushNotification } from "../../utils/helper";
+import audioPlayer from "../../utils/audioPlayer";
+
 import Loading from "../../utils/Loading";
 
-const AnalogTimer= lazy(() => import("./Analog/Analog"));
+const AnalogTimer = lazy(() => import("./Analog/Analog"));
 const DigitalTimer = lazy(() => import("./Digital/Digital"));
 
+const worker = new window.Worker('worker.js');
 const Timer = () => {
-    const { type, active, activites } = useSelector((state) => state.timer);
+    const [time, setTime] = useState(0);
+    const { active, activites, setting, started, periodNum } = useSelector((state) => state.timer);
+
+    const activePeriod = setting.time[active];
+    const dispatch = useDispatch();
+
+    /** All sounds that we use it in timer.*/
+    const tickingSound = useRef(setting.tickingType.name !== "none" ? audioPlayer({ src: setting.tickingType.src, volume: setting.tickingVolume / 100, loop: true }) : null);
+    const alarmSound = useRef(audioPlayer({ src: setting.alarmType.src, volume: setting.alarmVolume / 100 }));
+    const clickSound = useRef(setting.clickType.name !== "none" ? audioPlayer({ src: setting.clickType.src, volume: setting.clickVolume / 100 }) : null);
 
     useEffect(() => {
-        if(Notification.permission === 'default') {
+        if (Notification.permission === 'default') {
             Notification.requestPermission();
         }
     });
 
+    useEffect(() => {
+        document.body.style.backgroundColor = activites[active].color;
+
+        if (setting.time !== undefined) {
+            setTime(setting?.time[active]);
+        }
+        // eslint-disable-next-line
+    }, [active, setting.time]);
+
+    useEffect(() => {
+        if (setting.tickingType.name !== 'none') {
+            tickingSound.current.chengeVolume(setting.tickingVolume);
+            tickingSound.current.changeFile(setting.tickingType.src);
+        }
+
+        alarmSound.current.chengeVolume(setting.alarmVolume);
+        alarmSound.current.changeFile(setting.alarmType.src);
+
+        if (setting.clickType.name !== 'none') {
+            clickSound.current.chengeVolume(setting.clickVolume);
+            clickSound.current.changeFile(setting.clickType.src);
+        }
+        console.log("setting changing")
+    }, [setting]);
+
+    useEffect(() => {
+        if ((active !== PERIOD && setting.autoBreaks) || (active === PERIOD && setting.autoPomodors && periodNum !== 0)) {
+            if (setting.tickingType.name !== "none") {
+                tickingSound.current.handlePlay();
+            }
+            worker.postMessage({ started: !started, count: setting.time[active] });
+            dispatch({ type: START_TIMER });
+        }
+        // eslint-disable-next-line
+    }, [active, setting.autoBreaks, setting.autoPomodors]);
+
+    useEffect(() => {
+        if (started) {
+            document.body.onbeforeunload = () => {
+                return () => {
+                    return "Hello, world!"
+                }
+            }
+        } else {
+            document.body.onbeforeunload = null;
+        }
+    }, [started]);
+
+    worker.onmessage = (event) => {
+        if (event.data !== 'stop') {
+            setTime(event.data);
+            if (Notification.permission === 'granted') {
+                if (time !== 0) {
+                    if (time % (setting.notificationInterval * 60) === 0 && time !== activePeriod) {
+                        pushNotification(`${time / (setting.notificationInterval * 60)} minutes left!`);
+                    }
+                }
+            }
+        } else {
+            dispatch({ type: STOP_TIMER });
+
+            alarmSound.current.handlePlay();
+            if (setting.tickingType.name !== "none") {
+                tickingSound.current.handleStop();
+            }
+
+            if (Notification.permission === 'granted') {
+                if (active === PERIOD) {
+                    pushNotification("It's time to take a break");
+                } else {
+                    pushNotification("It's time to focus!");
+                }
+            }
+
+            dispatch(changeActive(active));
+        }
+    }
+
+
+    const toggleStart = useCallback(() => {
+        console.log("toggle start")
+        if (setting.clickType.name !== "none") {
+            clickSound.current.handlePlay();
+        }
+        alarmSound.current.handleStop();
+
+        if (started) {
+            worker.postMessage("stop");
+            if (setting.tickingType.name !== "none") {
+                tickingSound.current.handleStop();
+            }
+            dispatch({ type: STOP_TIMER });
+        } else {
+            if (setting.tickingType.name !== "none") {
+                tickingSound.current.handlePlay();
+            }
+            worker.postMessage({ started: !started, count: time });
+            dispatch({ type: START_TIMER });
+        }
+
+        // eslint-disable-next-line
+    }, [started, time]);
+
+    const handleReset = () => {
+        setTime(activePeriod);
+        if (setting.clickType.name !== "none") {
+            clickSound.current.handlePlay();
+        }
+    }
+
     return (
-        <div className="clock-container" style={{background: `${activites[active].timerBorder}`}}>
-            <div className="clock">
-                <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" width="200" height="200" cx="50" cy="50" r="20" strokeWidth="2.5" />}>
-                    {type === "digital" ? (<DigitalTimer />) : (
-                        <AnalogTimer />
-                    )}
-                </Suspense>
+        <>
+            <div className="clock-container" style={{ background: `${activites[active].timerBorder}` }}>
+                <div className="clock">
+                    <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" width="200" height="200" cx="50" cy="50" r="20" strokeWidth="2.5" />}>
+                        {setting.format === "digital" ? (
+                            <>
+                                <DigitalTimer handleReset={handleReset} toggleStart={toggleStart} setTime={setTime} time={time} />
+                            </>
+                        ) : (
+                            <>
+                                <AnalogTimer handleReset={handleReset} toggleStart={toggleStart} setTime={setTime} time={time} />
+                            </>
+                        )}
+                    </Suspense>
+                </div>
             </div>
-        </div>
+        </>
     )
 }
 

@@ -7,13 +7,14 @@ import { MdDelete, MdRadioButtonUnchecked } from 'react-icons/md';
 import { useDispatch, useSelector } from "react-redux";
 import { checkTask, deleteTask, CHANGE_ACTIVE_TASK } from "../../../actions/tasks";
 import Message from "../../../utils/Message";
-// import Loading from "../../../utils/Loading";
+// import Loading from "../../../Utils/Loading";
 
 const TaskForm = lazy(() => import("../TaskForm/TaskForm"));
 
 const Task = (props) => {
   const dispatch = useDispatch();
   const { activeId } = useSelector(state => state.tasks);
+  const { setting } = useSelector(state => state.timer);
   // const {active, activites} = useSelector(state => state.timer);
   const [error, setError] = useState();
   const [openEdit, setOpenEdit] = useState(false);
@@ -27,7 +28,9 @@ const Task = (props) => {
   }
 
   const handleActive = () => {
-    dispatch({ type: CHANGE_ACTIVE_TASK, data: { id: props.id, name: props.name } });
+    if((!props.check && setting.autoStartNextTask) || (!setting.autoStartNextTask && props.act !== props.est)) {
+      dispatch({ type: CHANGE_ACTIVE_TASK, data: { id: props.id, name: props.name } });
+    }
   }
 
   if (openEdit) {
@@ -46,13 +49,15 @@ const Task = (props) => {
       <div className={`task ${activeId === props.id && "active"}`} onClick={handleActive}>
         <div className="overflow">
           <div className="buttons">
-            <button aria-label="check button" onClick={handleCheck}>
-              {props.check ? (
-                <BsCheckCircleFill />
-              ) : (
-                <MdRadioButtonUnchecked />
-              )}
-            </button>
+            {!setting.autoStartNextTask && (
+              <button aria-label="check button" onClick={handleCheck}>
+                {props.check ? (
+                  <BsCheckCircleFill />
+                ) : (
+                  <MdRadioButtonUnchecked />
+                )}
+              </button>
+            )}
             <button aria-label="edit button" onClick={() => setOpenEdit(oe => !oe)}><FiEdit3 /></button>
             <button aria-label="delet button" onClick={handleDelete}><MdDelete /></button>
           </div>

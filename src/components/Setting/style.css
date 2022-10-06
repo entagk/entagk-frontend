@@ -1,0 +1,194 @@
+/* Start the setting */
+.setting {
+  margin-block: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 10px;
+  /* padding: 20px; */
+  box-shadow: 1px 1px 10px 0px #858585;
+}
+
+.setting-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 20px;
+  padding-top: 30px;
+  /* font-size: 30px; */
+  align-content: center;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  border-bottom: 2px solid #e7e7e7;
+}
+
+.setting-header a {
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.setting-header h1 {
+  width: calc(100% - 30px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+.setting .block:not(:last-of-type) {
+  padding: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  border-bottom: 2px solid #e7e7e7;
+}
+
+.setting .block h2,
+.setting .block div,
+.setting .block h3 {
+  width: 100%;
+}
+
+.setting .time-inputs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* margin-top: 10px; */
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.setting .block input {
+  width: 75px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.alarm-details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.alarm-type {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+
+.select-menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
+  width: 200px;
+}
+
+.select-menu .row button {
+  font-size: 16px;
+  width: 200px;
+}
+
+.select-menu button.open-menu {
+  border-radius: 6px;
+  font-size: 16px;
+  padding: 10px 16px;
+  background: #ececec;
+  width: 200px;
+  justify-content: space-between;
+}
+
+.select-menu button.open-menu .arrow {
+  margin-left: 10px;
+}
+
+.select-menu button.active {
+  background-color: rgb(0, 0, 0, 0.092);
+}
+
+.alarm-details input {
+  margin-right: 0;
+}
+.range-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.range-container input[type="range"] {
+  width: 80%;
+  padding: 0;
+  appearance: none;
+  background-color: #d3d3d3;
+  height: 10px;
+}
+
+.range {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 15px;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+.range:hover {
+  opacity: 1;
+}
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  background: #ffffff;
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0px 0px 4px rgb(50, 50, 50);
+}
+
+.range::-moz-range-thumb {
+  width: 30px;
+  height: 30px;
+  background: #ffffff;
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0px 0px 4px rgb(50, 50, 50);
+}
+
+.setting .footer {
+  margin-top: 10px;
+  padding-block: 20px 30px;
+  background: #ececec;
+  width: 100%;
+  padding-inline: 30px;
+  border-radius: 0 0 10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.setting .footer button {
+  font-size: 20px;
+  padding: 10px 15px;
+  background-color: #858585;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #989898;
+  color: #e7e7e7;
+}
+
+.setting .footer button.save {
+  background-color: #000;
+}
+
+/* End the setting */

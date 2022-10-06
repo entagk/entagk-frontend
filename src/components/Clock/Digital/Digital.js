@@ -1,91 +1,49 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
+import React/*, { useCallback, useEffect, useRef }*/ from "react"; // 1
+import { 
+  // useDispatch, 
+  useSelector } from "react-redux"; // 2
+/** icons */
 import { TbPlayerPlay, TbPlayerPause } from "react-icons/tb";
 import { MdRestartAlt } from "react-icons/md";
+/* some attachments for redux action */
+import { 
+  // changeActive, 
+  PERIOD, 
+  // START_TIMER, 
+  // STOP_TIMER 
+} from "../../../actions/timer";
+/** 
+ * formatTime ===>> for make the time in this 'mm:ss'
+ * pushNotification ===>> for make push notifications
+ */
+import { 
+  formatTime, 
+  // pushNotification 
+} from "../../../utils/helper";
+/**
+ * useAudio ===> for make 'audio' HTMLElement
+ */
+// import audioPlayer from "../../../Utils/audioPlayer";
+/**
+ * worker ===> for make the timer work in the 
+ */
+// const worker = new window.Worker('worker.js');
 
-import { changeActive, PERIOD } from "../../../actions/timer";
+const DigitalTimer = ({ time, toggleStart, handleReset }) => {
+  const { 
+    active, 
+    activites, 
+    setting, 
+    started, 
+    // periodNum 
+  } = useSelector((state) => state.timer);
+  const activePeriod = setting.time[active];
+  // const dispatch = useDispatch();
 
-import { formatTime, pushNotification } from "../../../utils/helper";
-
-import useAudio from "../../../utils/useAudio";
-
-const worker = new window.Worker('worker.js');
-
-const DigitalTimer = () => {
-  const { active, activites, notificationInterval, unit } = useSelector((state) => state.timer);
-  const activePeriod = unit === 'sec' ? activites[active].time : activites[active].time * 60;
-  const [time, setTime] = useState(activePeriod);
-  const [started, setStarted] = useState(false);
-  const dispatch = useDispatch();
-
-  const trickingSound = useRef(useAudio({ src: "sounds/clock-ticking-1.mp3", volume: 0.5, loop: true }));
-  const alarmSound = useRef(useAudio({ src: "sounds/alarm-clock-01.mp3", volume: 0.5 }));
-  const clickSound = useRef(useAudio({ src: "sounds/mixkit-arcade-game-jump-coin-216.wav", volume: 0.7 }));
-
-  useEffect(() => {
-    // console.log(active);
-    if (unit === 'sec') {
-      setTime(activites[active].time)
-    } else {
-      setTime(activites[active].time * 60)
-    }
-    // eslint-disable-next-line
-  }, [active]);
-
-  useEffect(() => {
-    // console.log(active);
-    document.body.style.backgroundColor = activites[active].color;
-    // eslint-disable-next-line
-  }, [active]);
-
-  worker.onmessage = (event) => {
-    if (event.data !== 'stop') {
-      setTime(event.data);
-      if (Notification.permission === 'granted') {
-        if (time !== 0) {
-          if (time % notificationInterval === 0 && time !== activePeriod) {
-            pushNotification(`${time / notificationInterval} minutes left!`);
-          }
-        }
-      }
-    } else {
-      setStarted(false);
-
-      alarmSound.current.handlePlay();
-      trickingSound.current.handleStop();
-
-      if (Notification.permission === 'granted') {
-        if (active === PERIOD) {
-          pushNotification("It's time to take a break");
-        } else {
-          pushNotification("It's time to focus!");
-        }
-      }
-
-      dispatch(changeActive());
-    }
-  }
-
-  const toggleStart = useCallback(() => {
-    setStarted(s => !s);
-    clickSound.current.handlePlay();
-    alarmSound.current.handleStop();
-    if (started) {
-      worker.postMessage('stop');
-      trickingSound.current.handleStop();
-    } else {
-      trickingSound.current.handlePlay();
-      worker.postMessage({ started: !started, count: time });
-    }
-
-    // eslint-disable-next-line
-  }, [started, time]);
-
-  const handleReset = () => {
-    setTime(activePeriod);
-    clickSound.current.handlePlay();
-  }
+  /** All sounds that we use it in timer.*/
+  // const tickingSound = useRef(setting.tickingType.name !== "none" ? audioPlayer({ src: setting.tickingType.src, volume: setting.tickingVolume / 100, loop: true }) : null);
+  // const alarmSound = useRef(audioPlayer({ src: setting.alarmType.src, volume: setting.alarmVolume / 100 }));
+  // const clickSound = useRef(setting.clickType.name !== "none" ? audioPlayer({ src: setting.clickType.src, volume: setting.clickVolume / 100 }) : null);
 
   return (
     <div>

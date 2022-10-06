@@ -234,6 +234,8 @@
   border: none;
   font-size: 25px;
   padding: 10px;
+  width: 100%;
+  background: none;
 }
 
 .task-form input.name::placeholder {
@@ -257,7 +259,7 @@
   flex-direction: row;
 }
 
-.pomodoros input {
+.block input {
   width: 75px;
 }
 
