@@ -20,9 +20,9 @@ const Timer = () => {
     const dispatch = useDispatch();
 
     /** All sounds that we use it in timer.*/
-    const tickingSound = useRef(setting.tickingType.name !== "none" ? audioPlayer({ src: setting.tickingType.src, volume: setting.tickingVolume / 100, loop: true }) : null);
-    const alarmSound = useRef(audioPlayer({ src: setting.alarmType.src, volume: setting.alarmVolume / 100 }));
-    const clickSound = useRef(setting.clickType.name !== "none" ? audioPlayer({ src: setting.clickType.src, volume: setting.clickVolume / 100 }) : null);
+    const tickingSound = useRef(setting.tickingType.name !== "none" ? audioPlayer({ src: setting.tickingType.src, volume: setting.tickingVolume, loop: true }) : null);
+    const alarmSound = useRef(audioPlayer({ src: setting.alarmType.src, volume: setting.alarmVolume }));
+    const clickSound = useRef(setting.clickType.name !== "none" ? audioPlayer({ src: setting.clickType.src, volume: setting.clickVolume }) : null);
 
     useEffect(() => {
         if (Notification.permission === 'default') {

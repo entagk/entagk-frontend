@@ -1,33 +1,13 @@
-import React/*, { useCallback, useEffect, useRef }*/ from "react"; // 1
-import { 
-  // useDispatch, 
-  useSelector } from "react-redux"; // 2
-/** icons */
+import React from "react";
+import { useSelector } from "react-redux"; 
+
 import { TbPlayerPlay, TbPlayerPause } from "react-icons/tb";
 import { MdRestartAlt } from "react-icons/md";
+
 /* some attachments for redux action */
-import { 
-  // changeActive, 
-  PERIOD, 
-  // START_TIMER, 
-  // STOP_TIMER 
-} from "../../../actions/timer";
-/** 
- * formatTime ===>> for make the time in this 'mm:ss'
- * pushNotification ===>> for make push notifications
- */
-import { 
-  formatTime, 
-  // pushNotification 
-} from "../../../utils/helper";
-/**
- * useAudio ===> for make 'audio' HTMLElement
- */
-// import audioPlayer from "../../../Utils/audioPlayer";
-/**
- * worker ===> for make the timer work in the 
- */
-// const worker = new window.Worker('worker.js');
+import { PERIOD } from "../../../actions/timer";
+
+import { formatTime } from "../../../utils/helper";
 
 const DigitalTimer = ({ time, toggleStart, handleReset }) => {
   const { 
@@ -35,15 +15,8 @@ const DigitalTimer = ({ time, toggleStart, handleReset }) => {
     activites, 
     setting, 
     started, 
-    // periodNum 
   } = useSelector((state) => state.timer);
   const activePeriod = setting.time[active];
-  // const dispatch = useDispatch();
-
-  /** All sounds that we use it in timer.*/
-  // const tickingSound = useRef(setting.tickingType.name !== "none" ? audioPlayer({ src: setting.tickingType.src, volume: setting.tickingVolume / 100, loop: true }) : null);
-  // const alarmSound = useRef(audioPlayer({ src: setting.alarmType.src, volume: setting.alarmVolume / 100 }));
-  // const clickSound = useRef(setting.clickType.name !== "none" ? audioPlayer({ src: setting.clickType.src, volume: setting.clickVolume / 100 }) : null);
 
   return (
     <div>

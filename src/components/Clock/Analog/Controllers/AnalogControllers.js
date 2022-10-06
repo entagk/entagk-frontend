@@ -1,51 +1,21 @@
 import React, { lazy } from "react";
-import { 
-  // useDispatch, 
-  useSelector 
-} from "react-redux";
+import { useSelector } from "react-redux";
+
 /* some attachments for redux action */
-import { 
-  // changeActive, 
-  PERIOD, 
-  // START_TIMER, 
-  // STOP_TIMER 
-} from "../../../../actions/timer";
-/** 
- * pushNotification ===>> for make push notifications
- */
-// import { pushNotification } from "../../../../Utils/helper";
-/**
- * useAudio ===> for make 'audio' HTMLElement
- */
-// import audioPlayer from "../../../../Utils/audioPlayer";
+import { PERIOD } from "../../../../actions/timer";
 
 const StartButton = lazy(() => import("./Roll/StartRoll"));
 const ClearButton = lazy(() => import("./Roll/ClearButton"));
 const PauseButton = lazy(() => import("./Roll/PauseButton"));
-/**
- * worker ===> for make the timer work in the 
- */
-// const worker = new window.Worker('worker.js');
 
 const AnalogControllers = ({ time, toggleStart, handleReset }) => {
-  const { 
-    active, 
-    activites, 
-    setting, 
-    started, 
-    // periodNum 
+  const {
+    active,
+    activites,
+    setting,
+    started,
   } = useSelector((state) => state.timer);
   const activePeriod = setting.time[active];
-  // const dispatch = useDispatch();
-
-  // /** All sounds that we use it in timer. */
-  // const tickingSound = useRef(setting.tickingType.name !== "none" ? audioPlayer({ src: setting.tickingType.src, volume: setting.tickingVolume / 100, loop: true }) : null);
-  // const alarmSound = useRef(audioPlayer({ src: setting.alarmType.src, volume: setting.alarmVolume / 100 }));
-  // const clickSound = useRef(setting.clickType.name !== "none" ? audioPlayer({ src: setting.clickType.src, volume: setting.clickVolume / 100 }) : null);
-
- 
-
- 
 
   return (
     <>

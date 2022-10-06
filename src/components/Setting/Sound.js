@@ -1,12 +1,26 @@
-import React, { lazy } from 'react';
+import React, { lazy, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 
 import { alarmSounds, tickingSounds, clickSounds } from "../../actions/timer";
+
+import audioPlayer from '../../utils/audioPlayer';
 
 const Select = lazy(() => import("./Select"));
 const ToggleButton = lazy(() => import("./ToggleButton"));
 
 function Sound({ handleChange, type, data, setData }) {
   const sounds = type === 'alarm' ? alarmSounds : type === 'ticking' ? tickingSounds : clickSounds;
+  const audioChanging = useRef(audioPlayer({ src: data[`${type}Type`].src, volume: data[`${type}Volume`] }));
+  const { setting } = useSelector(state => state.timer);
+
+  useEffect(() => {
+    if ((setting[`${type}Type`] !== data[`${type}Type`] || setting[`${type}Volume`] !== [`${type}Volume`]) && data[`${type}Type`].name !== 'none') {
+      audioChanging.current.changeFile(data[`${type}Type`].src);
+      audioChanging.current.chengeVolume(data[`${type}Volume`]);
+      audioChanging.current.handlePlay();
+    }
+    // eslint-disable-next-line
+  }, [data[`${type}Type`], data[`${type}Volume`]]);
 
   return (
     <div className='alarm-details'>

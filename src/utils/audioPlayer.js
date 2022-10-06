@@ -1,7 +1,7 @@
-const audioPlayer = ({ src, volume = 0.5, loop = false}) => {
+const audioPlayer = ({ src, volume, loop = false}) => {
   const audio = new Audio();
   audio.src = src;
-  audio.volume = volume;
+  audio.volume = volume / 100;
 
   audio.loop = loop;
 
