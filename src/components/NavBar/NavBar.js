@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 
 const NavBar = ({ user }) => {
   const [open, setOpen] = useState(false);
-  const { started } = useSelector(state => state.timer);
+  const { started, setting } = useSelector(state => state.timer);
 
   const toggleMenu = useCallback(() => {
     if (open) {
@@ -26,7 +26,7 @@ const NavBar = ({ user }) => {
         <h1 style={{ color: "#fff" }}>Entagk</h1>
       </Link>
       <div>
-        <button aria-label="toggle menu button" className="toggle-menu" onClick={toggleMenu} disabled={started}>
+        <button aria-label="toggle menu button" style={{display: (setting.focusMode && started) && "none" }} className="toggle-menu" onClick={toggleMenu} disabled={started}>
           <HiMenu />
         </button>
       </div>

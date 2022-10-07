@@ -1,4 +1,4 @@
-const audioPlayer = ({ src, volume, loop = false}) => {
+const audioPlayer = ({ src, volume = 50, loop = false}) => {
   const audio = new Audio();
   audio.src = src;
   audio.volume = volume / 100;
@@ -18,6 +18,7 @@ const audioPlayer = ({ src, volume, loop = false}) => {
   const chengeVolume = (value) => (audio.volume = value / 100);
 
   const changeFile = (src) => {
+    audio.pause();
     audio.src = src;
   }
 

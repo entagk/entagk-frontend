@@ -1,5 +1,4 @@
-import React, { lazy, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import React, { lazy, useEffect, useRef, useState } from 'react';
 
 import { alarmSounds, tickingSounds, clickSounds } from "../../actions/timer";
 
@@ -8,19 +7,27 @@ import audioPlayer from '../../utils/audioPlayer';
 const Select = lazy(() => import("./Select"));
 const ToggleButton = lazy(() => import("./ToggleButton"));
 
-function Sound({ handleChange, type, data, setData }) {
+function Sound({ type, data, setData }) {
   const sounds = type === 'alarm' ? alarmSounds : type === 'ticking' ? tickingSounds : clickSounds;
   const audioChanging = useRef(audioPlayer({ src: data[`${type}Type`].src, volume: data[`${type}Volume`] }));
-  const { setting } = useSelector(state => state.timer);
+  const [change, setChange] = useState(null);
 
   useEffect(() => {
-    if ((setting[`${type}Type`] !== data[`${type}Type`] || setting[`${type}Volume`] !== [`${type}Volume`]) && data[`${type}Type`].name !== 'none') {
+    if (change !== null && data[`${type}Type`].name !== 'none') {
       audioChanging.current.changeFile(data[`${type}Type`].src);
       audioChanging.current.chengeVolume(data[`${type}Volume`]);
       audioChanging.current.handlePlay();
+      console.log(type)
     }
+    // setChange(false);
+    console.log(change);
     // eslint-disable-next-line
-  }, [data[`${type}Type`], data[`${type}Volume`]]);
+  }, [change]);
+
+  const handleChange = (e) => {
+    setData({ ...data, [e.target.name]: Number(e.target.value) });
+    setChange(!change);
+  }
 
   return (
     <div className='alarm-details'>
@@ -33,6 +40,7 @@ function Sound({ handleChange, type, data, setData }) {
           options={sounds}
           setData={setData}
           type={`${type}Type`}
+          setChange={setChange}
         />
       </div>
       {data[`${type}Type`].name !== "none" && (

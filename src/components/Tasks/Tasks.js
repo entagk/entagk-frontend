@@ -12,14 +12,14 @@ const Task = lazy(() => import("./Task/Task"));
 const Tasks = () => {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const { tasks } = useSelector(state => state.tasks);
-  const { active, activites } = useSelector(state => state.timer);
+  const { active, activites, setting, started } = useSelector(state => state.timer);
 
   return (
     <>
       <Suspense fallback={
         <Loading backgroud="transparent" width="100" height="100" cx="25" cy="25" r="20" strokeWidth="1" color={activites[active].color} />
       }>
-        <div className="tasks">
+        <div className="tasks" style={{display: (setting.focusMode && started) && "none" }}>
           <div className="header">
             <h2>
               Tasks

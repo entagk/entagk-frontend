@@ -87,6 +87,7 @@ function Setting() {
             type="format"
             data={data}
             setData={setData}
+            setChange={() => {}}
           />
         </div>
         <div className='block'>
@@ -185,7 +186,7 @@ function Setting() {
             alignItems: "center",
             justifyContent: "flex-end"
           }}>
-            <Select options={["every", "last"]} data={data} type="notificationType" setData={setData} />
+            <Select options={["every", "last"]} data={data} type="notificationType" setData={setData} setChange={() => {}} />
             <input
               style={{ marginInline: "10px 0" }}
               type="number"

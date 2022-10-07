@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 
 import { RiArrowUpSLine, RiArrowDownSLine } from 'react-icons/ri';
 
-function Select({ options, type, data, setData }) {
+function Select({ options, setChange, type, data, setData }) {
   const [open, setOpen] = useState(false);
   const realOptions = typeof options[0] === "object" ? options.map((op) => op.name) : options;
 
   const handleChange = (e) => {
     setData({ ...data, [type]: options[Number(e.target.value)] });
+    setChange(true);
   }
 
   return (

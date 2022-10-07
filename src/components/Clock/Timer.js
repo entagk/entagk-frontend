@@ -13,15 +13,15 @@ const DigitalTimer = lazy(() => import("./Digital/Digital"));
 
 const worker = new window.Worker('worker.js');
 const Timer = () => {
-    const [time, setTime] = useState(0);
-    const { active, activites, setting, started, periodNum } = useSelector((state) => state.timer);
+    const { active, activites, setting, started, periodNum, restOfTime } = useSelector((state) => state.timer);
+    const [time, setTime] = useState(restOfTime === null ? 0 : restOfTime);
 
     const activePeriod = setting.time[active];
     const dispatch = useDispatch();
 
     /** All sounds that we use it in timer.*/
     const tickingSound = useRef(setting.tickingType.name !== "none" ? audioPlayer({ src: setting.tickingType.src, volume: setting.tickingVolume, loop: true }) : null);
-    const alarmSound = useRef(audioPlayer({ src: setting.alarmType.src, volume: setting.alarmVolume }));
+    const alarmSound = useRef(audioPlayer({ src: setting.alarmType.src, volume: setting.alarmVolume, loop: setting.alarmRepet }));
     const clickSound = useRef(setting.clickType.name !== "none" ? audioPlayer({ src: setting.clickType.src, volume: setting.clickVolume }) : null);
 
     useEffect(() => {
@@ -34,7 +34,11 @@ const Timer = () => {
         document.body.style.backgroundColor = activites[active].color;
 
         if (setting.time !== undefined) {
-            setTime(setting?.time[active]);
+            if(restOfTime !== setting?.time[active] && restOfTime !== null) {
+                setTime(restOfTime);
+            } else {
+                setTime(setting?.time[active]);
+            }
         }
         // eslint-disable-next-line
     }, [active, setting.time]);
@@ -47,21 +51,24 @@ const Timer = () => {
 
         alarmSound.current.chengeVolume(setting.alarmVolume);
         alarmSound.current.changeFile(setting.alarmType.src);
+        alarmSound.current.changeLoop(setting.alarmRepet);
 
         if (setting.clickType.name !== 'none') {
             clickSound.current.chengeVolume(setting.clickVolume);
             clickSound.current.changeFile(setting.clickType.src);
         }
-        console.log("setting changing")
     }, [setting]);
 
     useEffect(() => {
         if ((active !== PERIOD && setting.autoBreaks) || (active === PERIOD && setting.autoPomodors && periodNum !== 0)) {
-            if (setting.tickingType.name !== "none") {
-                tickingSound.current.handlePlay();
-            }
-            worker.postMessage({ started: !started, count: setting.time[active] });
-            dispatch({ type: START_TIMER });
+            setTimeout(() => {
+                alarmSound.current.handleStop();
+                if (setting.tickingType.name !== "none") {
+                    tickingSound.current.handlePlay();
+                }
+                worker.postMessage({ started: !started, count: setting.time[active] });
+                dispatch({ type: START_TIMER, data: { time: setting.time[active] } });
+            }, 10000)
         }
         // eslint-disable-next-line
     }, [active, setting.autoBreaks, setting.autoPomodors]);
@@ -73,9 +80,19 @@ const Timer = () => {
                     return "Hello, world!"
                 }
             }
+
+            if (setting.focusMode) {
+                document.body.style.backgroundColor = "rgb(30 30 30)";
+                document.body.style.overflow = "hidden";
+            }
         } else {
             document.body.onbeforeunload = null;
+            if (setting.focusMode) {
+                document.body.style.backgroundColor = activites[active].color;
+                document.body.style.overflow = "auto";
+            }
         }
+        // eslint-disable-next-line
     }, [started]);
 
     worker.onmessage = (event) => {
@@ -83,13 +100,19 @@ const Timer = () => {
             setTime(event.data);
             if (Notification.permission === 'granted') {
                 if (time !== 0) {
-                    if (time % (setting.notificationInterval * 60) === 0 && time !== activePeriod) {
-                        pushNotification(`${time / (setting.notificationInterval * 60)} minutes left!`);
+                    if (setting.notificationType === 'every') {
+                        if (time % (setting.notificationInterval * 60) === 0 && time !== activePeriod) {
+                            pushNotification(`${time / (setting.notificationInterval * 60)} minutes left!`);
+                        }
+                    } else {
+                        if (time - (setting.notificationInterval * 60) === 0) {
+                            pushNotification(`${time / (setting.notificationInterval * 60)} minutes left!`);
+                        }
                     }
                 }
             }
         } else {
-            dispatch({ type: STOP_TIMER });
+            dispatch({ type: STOP_TIMER, data: { time: 0 } });
 
             alarmSound.current.handlePlay();
             if (setting.tickingType.name !== "none") {
@@ -121,13 +144,13 @@ const Timer = () => {
             if (setting.tickingType.name !== "none") {
                 tickingSound.current.handleStop();
             }
-            dispatch({ type: STOP_TIMER });
+            dispatch({ type: STOP_TIMER, data: { time: time } });
         } else {
             if (setting.tickingType.name !== "none") {
                 tickingSound.current.handlePlay();
             }
             worker.postMessage({ started: !started, count: time });
-            dispatch({ type: START_TIMER });
+            dispatch({ type: START_TIMER, data: { time: time } });
         }
 
         // eslint-disable-next-line

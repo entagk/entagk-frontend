@@ -32,7 +32,7 @@ export default (
   },
   action
 ) => {
-  let newEst, all;
+  let all;
   switch (action.type) {
     case GET_TASKS:
       if (!localStorage.getItem("token")) {
@@ -60,10 +60,10 @@ export default (
           ...state,
           autoStartNextTask: action.data.autoStartNextTask,
           activeId: action?.data?.autoStartNextTask
-            ? state.tasks.filter((t) => !t.check)[0]?.id
+            ? state?.tasks?.filter((t) => !t.check)[0]?.id
             : state.activeId,
-          activeName: action.data.autoStartNextTask
-            ? state.tasks.filter((t) => !t.check)[0]?.name
+          activeName: action?.data?.autoStartNextTask
+            ? state?.tasks?.filter((t) => !t.check)[0]?.name
             : state.activeName,
         };
       } else {
@@ -79,6 +79,7 @@ export default (
 
     case CHANGE_ACTIVE:
       let realAct = state.act,
+        newEst = state.est,
         newActive =
           state.activeId
             ? state.tasks.find((t) => t.id === state.activeId)
@@ -93,10 +94,12 @@ export default (
           state.tasks.find((t) => t.id === state.activeId).act++;
           if (state.tasks[taskIndex].act === state.tasks[taskIndex].est) {
             state.tasks.find((t) => t.id === state.activeId).check = true;
+            newEst = state.est - state.tasks[taskIndex].est;
           }
 
           realAct = realAct + 1;
           localStorage.setItem("act", realAct);
+          localStorage.setItem("est", newEst);
           localStorage.setItem("tasks", JSON.stringify(state.tasks));
           console.log(realAct, state.tasks);
 
@@ -110,6 +113,7 @@ export default (
           ...state,
           tasks: state.tasks,
           act: realAct,
+          est: newEst,
           activeId: newActive?.id,
           activeName: newActive?.name,
         };
@@ -118,8 +122,6 @@ export default (
       }
 
     case NEW_TASK:
-      newEst = state.est + action.data.est;
-
       if (!localStorage.getItem("token")) {
         let all = state.tasks;
         const newTask = Object.assign(
@@ -130,14 +132,14 @@ export default (
         all.push(newTask);
 
         localStorage.setItem("tasks", JSON.stringify(all));
-        localStorage.setItem("est", newEst);
+        localStorage.setItem("est", state.est + action.data.est);
 
         return {
           ...state,
           tasks: all,
-          est: newEst,
-          activeId: all.filter(t => !t.check)[0]?.id,
-          activeName: all.filter(t => !t.check)[0].name
+          est: state.est + action.data.est,
+          activeId: state.autoStartNextTask ? all.filter(t => !t.check)[0]?.id : state.activeId,
+          activeName: state.autoStartNextTask ? all.filter(t => !t.check)[0]?.name : state.activeName
         };
       } else {
         return { ...state, tasks: all, est: newEst };
@@ -182,8 +184,8 @@ export default (
         // the est is updated to equal to (totalEst - task.est)
         // so we don't need to minus the task est from totalEst
 
-        let newEst = !task.check ? oldEst - task.est : oldEst;
-        let newAct = state.act - task.act;
+        const newEst = !task.check ? oldEst - task.est : oldEst,
+          newAct = state.act - task.act;
 
         if (state.tasks.length === 0) {
           localStorage.removeItem("est");
