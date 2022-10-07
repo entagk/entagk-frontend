@@ -34,11 +34,7 @@ const Timer = () => {
         document.body.style.backgroundColor = activites[active].color;
 
         if (setting.time !== undefined) {
-            if(restOfTime !== setting?.time[active] && restOfTime !== null) {
-                setTime(restOfTime);
-            } else {
-                setTime(setting?.time[active]);
-            }
+            setTime(setting?.time[active] - restOfTime);
         }
         // eslint-disable-next-line
     }, [active, setting.time]);
@@ -67,7 +63,7 @@ const Timer = () => {
                     tickingSound.current.handlePlay();
                 }
                 worker.postMessage({ started: !started, count: setting.time[active] });
-                dispatch({ type: START_TIMER, data: { time: setting.time[active] } });
+                dispatch({ type: START_TIMER, data: 0 });
             }, 10000)
         }
         // eslint-disable-next-line
@@ -102,17 +98,17 @@ const Timer = () => {
                 if (time !== 0) {
                     if (setting.notificationType === 'every') {
                         if (time % (setting.notificationInterval * 60) === 0 && time !== activePeriod) {
-                            pushNotification(`${time / (setting.notificationInterval * 60)} minutes left!`);
+                            pushNotification(`${time / 60} minutes left!`);
                         }
                     } else {
-                        if (time - (setting.notificationInterval * 60) === 0) {
-                            pushNotification(`${time / (setting.notificationInterval * 60)} minutes left!`);
+                        if (time - (setting.notificationInterval * 60) === 0 && time !== activePeriod) {
+                            pushNotification(`${time / 60} minutes left!`);
                         }
                     }
                 }
             }
         } else {
-            dispatch({ type: STOP_TIMER, data: { time: 0 } });
+            dispatch({ type: STOP_TIMER, data: 0 });
 
             alarmSound.current.handlePlay();
             if (setting.tickingType.name !== "none") {
@@ -144,13 +140,13 @@ const Timer = () => {
             if (setting.tickingType.name !== "none") {
                 tickingSound.current.handleStop();
             }
-            dispatch({ type: STOP_TIMER, data: { time: time } });
+            dispatch({ type: STOP_TIMER, data: setting.time[active] - time });
         } else {
             if (setting.tickingType.name !== "none") {
                 tickingSound.current.handlePlay();
             }
             worker.postMessage({ started: !started, count: time });
-            dispatch({ type: START_TIMER, data: { time: time } });
+            dispatch({ type: START_TIMER, data: 0 });
         }
 
         // eslint-disable-next-line

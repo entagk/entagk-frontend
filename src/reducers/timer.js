@@ -32,7 +32,7 @@ export default (state = {
       timerBorder: "#3185c7"
     }
   },
-  restOfTime: null,
+  restOfTime: 0,
 }, action) => {
   switch (action.type) {
     case GET_SETTING:
@@ -42,9 +42,9 @@ export default (state = {
         return { ...state, }
       }
     case START_TIMER:
-      return { ...state, started: true, restOfTime: action.data.time };
+      return { ...state, started: true, restOfTime: action.data };
     case STOP_TIMER:
-      return { ...state, started: false, restOfTime: action.data.time };
+      return { ...state, started: false, restOfTime: action.data };
     case CHANGE_ACTIVE:
       let active, periodNum = state.periodNum;
       if (state.active === PERIOD) {
