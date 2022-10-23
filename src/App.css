@@ -88,14 +88,17 @@ a {
 
 /* end scrollbar */
 
+.block input[type="number"] {
+  width: 75px;
+}
+
+.block input,
+.notes textarea {
+  background-color: #9f9f9f33;
+  margin-right: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+}
 /* end basics */
 
-@import url("./components/NavBar/style.css");
-
-@import url("./components/Clock/style.css");
-
-@import url("./components/Tasks/style.css");
-
 @import url("./utils/style.css");
-
-@import url('./components/Setting/style.css');

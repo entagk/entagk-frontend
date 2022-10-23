@@ -37,9 +37,11 @@ export default (
     case GET_TASKS:
       if (!localStorage.getItem("token")) {
         const setting = JSON.parse(localStorage?.getItem("setting")) || {};
+        const finishedTasks = action.data.all.filter(t => t.check);
+        const unfinishedTasks = action.data.all.filter(t => !t.check);
         return {
           ...state,
-          tasks: action.data.all,
+          tasks: unfinishedTasks.concat(finishedTasks),
           est: action.data.est,
           act: action.data.act,
           autoStartNextTask: setting?.autoStartNextTask,
@@ -124,19 +126,19 @@ export default (
     case NEW_TASK:
       if (!localStorage.getItem("token")) {
         let all = state.tasks;
+        const finishedTasks = all.filter(t => t.check);
+        const unfinishedTasks = all.filter(t => !t.check);
         const newTask = Object.assign(
           { id: nanoid(), ...initialData },
           action.data
         );
 
-        all.push(newTask);
-
-        localStorage.setItem("tasks", JSON.stringify(all));
+        localStorage.setItem("tasks", JSON.stringify([...unfinishedTasks, newTask, ...finishedTasks]));
         localStorage.setItem("est", state.est + action.data.est);
 
         return {
           ...state,
-          tasks: all,
+          tasks: [...unfinishedTasks, newTask, ...finishedTasks],
           est: state.est + action.data.est,
           activeId: state.autoStartNextTask ? all.filter(t => !t.check)[0]?.id : state.activeId,
           activeName: state.autoStartNextTask ? all.filter(t => !t.check)[0]?.name : state.activeName

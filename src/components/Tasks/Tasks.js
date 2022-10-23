@@ -4,6 +4,8 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { useSelector } from "react-redux";
 import Loading from "../../utils/Loading";
 
+import "./style.css";
+
 const TaskForm = lazy(() => import("./TaskForm/TaskForm"));
 const Footer = lazy(() => import("./TaskFooter/TaskFooter"));
 const Menu = lazy(() => import("./TasksMenu/TasksMenu"));

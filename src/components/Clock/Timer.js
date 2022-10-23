@@ -8,6 +8,8 @@ import audioPlayer from "../../utils/audioPlayer";
 
 import Loading from "../../utils/Loading";
 
+import "./style.css";
+
 const AnalogTimer = lazy(() => import("./Analog/Analog"));
 const DigitalTimer = lazy(() => import("./Digital/Digital"));
 
@@ -25,10 +27,13 @@ const Timer = () => {
     const clickSound = useRef(setting.clickType.name !== "none" ? audioPlayer({ src: setting.clickType.src, volume: setting.clickVolume }) : null);
 
     useEffect(() => {
-        if (Notification.permission === 'default') {
-            Notification.requestPermission();
+        // eslint-disable-next-line
+        if (typeof Notification != undefined) {
+            if (Notification?.permission === 'default') {
+                Notification?.requestPermission();
+            }
         }
-    });
+    }, []);
 
     useEffect(() => {
         document.body.style.backgroundColor = activites[active].color;
@@ -94,7 +99,7 @@ const Timer = () => {
     worker.onmessage = (event) => {
         if (event.data !== 'stop') {
             setTime(event.data);
-            if (Notification.permission === 'granted') {
+            if (Notification?.permission === 'granted') {
                 if (time !== 0) {
                     if (setting.notificationType === 'every') {
                         if (time % (setting.notificationInterval * 60) === 0 && time !== activePeriod) {

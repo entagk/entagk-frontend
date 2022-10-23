@@ -1,0 +1,138 @@
+.auth-page {
+  width: 100%;
+  height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-block: 34px;
+  background: #fff;
+  box-shadow: 0px 0px 5px #4c4c4c;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.auth-page .form-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
+  -webkit-transition: all 0.6s ease-in-out;
+  -moz-transition: all 0.6s ease-in-out;
+  -ms-transition: all 0.6s ease-in-out;
+  -o-transition: all 0.6s ease-in-out;
+}
+
+.form-container.sign-in,
+.form-container.sign-up {
+  width: 60%;
+  opacity: 1;
+  z-index: 1;
+}
+
+.form-container.sign-up {
+  left: 40%;
+}
+
+.form-container.sign-in {
+  left: 0;
+}
+
+.form-container form {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-page .overlay-container {
+  position: absolute;
+  top: 0;
+  left: 60%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 0.6s ease-in-out;
+  z-index: 100;
+  width: 40%;
+  color: #fff;
+}
+
+.auth-page .overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.auth-page .overlay .overlay-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+  text-align: center;
+}
+
+.auth-page.right-panel-active .overlay-container {
+  left: 40%;
+  transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  animation-name: moving;
+  animation-delay: 0s;
+  animation-duration: 2s;
+}
+
+@keyframes moving {
+  0% {
+    left: 60%;
+    width: 60%;
+  }
+  
+  100% {
+    left: 40%;
+    width: 40%;
+  }
+}
+
+.auth-page.right-panel-active .overlay-left {
+  transform: translateX(0);
+}
+
+.overlay-left {
+  transform: translateX(-20%);
+}
+
+.auth-page .overlay-panel.overlay-right {
+  right: 0;
+}
+
+.auth-page .overlay-panel.overlay-left {
+  left: 0;
+}
+
+.auth-page .overlay p,
+.auth-page .overlay h1 {
+  width: 100%;
+  margin-block: 10px;
+}
+
+.auth-page .overlay button {
+  margin: 20px;
+  background: #00000031;
+  color: #fff;
+  padding: 10px 30px;
+  font-size: 16px;
+  border-radius: 20px;
+  box-shadow: 0 0 5px #615f60;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* .auth-page .overlay {
+  color: #fff;
+  width: 40%;
+} */

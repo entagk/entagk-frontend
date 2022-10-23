@@ -6,10 +6,13 @@ export const formatTime = (t) => {
 };
 
 export const pushNotification = (message) => {
-  new Notification(message, {
-    icon: 'favicon.ico',
-    tag: "mohamed ali",
-    requireInteraction: true,
-    renotify: true
-  });
+  // eslint-disable-next-line
+  if (typeof Notification !== undefined) {
+    new Notification(message, {
+      icon: 'favicon.ico',
+      tag: "mohamed ali",
+      requireInteraction: true,
+      renotify: true
+    });
+  }
 };

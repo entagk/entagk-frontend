@@ -6,6 +6,8 @@ import { LONG, PERIOD, SHORT, getSetting, modifySetting } from '../../actions/ti
 import Loading from '../../utils/Loading';
 import Message from '../../utils/Message';
 
+import "./style.css";
+
 const NavBar = lazy(() => import('../NavBar/NavBar'));
 const Header = lazy(() => import('./header'));
 const Sound = lazy(() => import('./Sound'));
@@ -87,7 +89,7 @@ function Setting() {
             type="format"
             data={data}
             setData={setData}
-            setChange={() => {}}
+            setChange={() => { }}
           />
         </div>
         <div className='block'>
@@ -186,7 +188,7 @@ function Setting() {
             alignItems: "center",
             justifyContent: "flex-end"
           }}>
-            <Select options={["every", "last"]} data={data} type="notificationType" setData={setData} setChange={() => {}} />
+            <Select options={["every", "last"]} data={data} type="notificationType" setData={setData} setChange={() => { }} />
             <input
               style={{ marginInline: "10px 0" }}
               type="number"

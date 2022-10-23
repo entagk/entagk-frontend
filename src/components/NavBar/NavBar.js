@@ -6,6 +6,8 @@ import { MdLogout, MdLogin, MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+import "./style.css";
+
 const NavBar = ({ user }) => {
   const [open, setOpen] = useState(false);
   const { started, setting } = useSelector(state => state.timer);
