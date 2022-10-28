@@ -16,6 +16,7 @@ function TimeInputs({ name, data, setData }) {
         setData({ ...data, time: { ...data.time, [name]: realValue } });
         setMin(e.target.value);
       }
+      console.log(name, realValue);
     } else {
       const realValue = Number(e.target.value) + (min * 60);
       if (realValue > 60 * 60) {
@@ -31,7 +32,9 @@ function TimeInputs({ name, data, setData }) {
         }
         setData({...data, time: {...data.time, [name]: realValue}});
       }
+      console.log(name, realValue);
     }
+
   }
 
   return (
@@ -45,9 +48,9 @@ function TimeInputs({ name, data, setData }) {
         type="number"
         min="0"
         max="60"
-        // disabled={active === }
         placeholder='min'
         className={`${name}-min`}
+        defaultValue={min}
         value={min}
         onChange={onChange}
       />
@@ -55,9 +58,11 @@ function TimeInputs({ name, data, setData }) {
       <input
         name='sec'
         type="number"
-        min="0"
+        min="1"
+        max="60"
         placeholder="sec"
         className={`${name}-sec`}
+        defaultValue={sec}
         value={sec}
         onChange={onChange}
       />

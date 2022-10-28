@@ -1,12 +1,12 @@
 .auth-page {
   width: 100%;
-  height: 85vh;
+  height: 76vh;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-block: 34px;
   background: #fff;
-  box-shadow: 0px 0px 5px #4c4c4c;
+  box-shadow: 0px 0px 10px #4c4c4c;
   border-radius: 10px;
   overflow: hidden;
   position: relative;
@@ -21,6 +21,100 @@
   -moz-transition: all 0.6s ease-in-out;
   -ms-transition: all 0.6s ease-in-out;
   -o-transition: all 0.6s ease-in-out;
+}
+
+.auth-page .form-container form {
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-container form h1 {
+  width: 100%;
+  text-align: center;
+  margin-block: 10px;
+  text-transform: capitalize;
+  font-size: 50px;
+}
+
+.auth-page .form-container .block {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.auth-page .form-container .block input {
+  width: 100%;
+  margin: 12px 10px;
+}
+
+.auth-page .form-container .block input::placeholder {
+  text-transform: capitalize;
+}
+
+.auth-page .password {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px 10px;
+  position: relative;
+}
+
+.auth-page .block .password input {
+  margin: 0;
+}
+
+.auth-page .block .password button.icon {
+  position: absolute;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: inherit;
+  padding: 0;
+  box-shadow: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  right: 0;
+}
+
+.auth-page .block .password button.icon:hover {
+  background: #0000002b;
+}
+
+.auth-page button {
+  margin: 20px;
+  color: #fff;
+  padding: 10px 30px;
+  font-size: 16px;
+  border-radius: 20px;
+  box-shadow: 0 0 5px #615f60;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.auth-page .forget-password {
+  color: #6f6f6f;
+  font-size: 16px;
+  box-shadow: none;
+  text-transform: capitalize;
+  text-decoration: underline;
+  width: 100%;
+  text-align: left;
+  justify-content: flex-start;
+  padding: 0;
+}
+
+.auth-page button[type="submit"]:not(:disabled) {
+  background-color: var(--main-color);
 }
 
 .form-container.sign-in,
@@ -38,13 +132,6 @@
   left: 0;
 }
 
-.form-container form {
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .auth-page .overlay-container {
   position: absolute;
   top: 0;
@@ -56,6 +143,11 @@
   z-index: 100;
   width: 40%;
   color: #fff;
+  transition: all 0.6s ease-in-out;
+  -webkit-transition: all 0.6s ease-in-out;
+  -moz-transition: all 0.6s ease-in-out;
+  -ms-transition: all 0.6s ease-in-out;
+  -o-transition: all 0.6s ease-in-out;
 }
 
 .auth-page .overlay {
@@ -81,21 +173,6 @@
   -moz-transform: translateX(-100%);
   -ms-transform: translateX(-100%);
   -o-transform: translateX(-100%);
-  animation-name: moving;
-  animation-delay: 0s;
-  animation-duration: 2s;
-}
-
-@keyframes moving {
-  0% {
-    left: 60%;
-    width: 60%;
-  }
-  
-  100% {
-    left: 40%;
-    width: 40%;
-  }
 }
 
 .auth-page.right-panel-active .overlay-left {
@@ -120,19 +197,29 @@
   margin-block: 10px;
 }
 
-.auth-page .overlay button {
-  margin: 20px;
-  background: #00000031;
-  color: #fff;
-  padding: 10px 30px;
-  font-size: 16px;
-  border-radius: 20px;
-  box-shadow: 0 0 5px #615f60;
-  text-transform: uppercase;
-  font-weight: 600;
-}
+@media (max-width: 768px) {
+  .auth-page {
+    flex-direction: column;
+  }
 
-/* .auth-page .overlay {
-  color: #fff;
-  width: 40%;
-} */
+  .auth-page .form-container {
+    width: 100%;
+    bottom: 30%;
+    height: 70%;
+    left: 0;
+  }
+
+  .auth-page .overlay-container,
+  .auth-page.right-panel-active .overlay-container {
+    width: 100%;
+    top: 70%;
+    height: 30%;
+  }
+
+  .auth-page .overlay-container {
+    left: 0;
+  }
+  .auth-page.right-panel-active .overlay-container {
+    left: 100%;
+  }
+}

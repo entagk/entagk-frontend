@@ -53,6 +53,8 @@ export default (state = {
       } else {
         active = PERIOD;
       }
+      document.documentElement.style.setProperty('--main-color', state.activites[active].color);
+      document.documentElement.style.setProperty('--secondary-color', state.activites[active].timerBorder);
       return { ...state, active, periodNum };
     case MODITY_SETTING:
       if (!localStorage.getItem("token")) {

@@ -160,7 +160,7 @@ function Setting() {
               type="number"
               min="1"
               max="100"
-              value={data.longInterval}
+              defaultValue={data.longInterval}
               onChange={handleChange}
             />
           </div>
@@ -192,7 +192,7 @@ function Setting() {
             <input
               style={{ marginInline: "10px 0" }}
               type="number"
-              value={data.notificationInterval}
+              defaultValue={data.notificationInterval}
               name="notificationInterval"
               onChange={handleChange} />
             <p style={{ marginLeft: 10 }}>Min</p>

@@ -62,12 +62,12 @@ const TaskForm = ({ oldData, setOpen }) => {
             <div className="pomodoros">
               {data.act >= 0 && (
                 <div className="input-number">
-                  <input name="act" className="act" type="number" min='0' max="1000" inputMode="numeric" pattern="\d*" value={data.act} onChange={handleChange} />
+                  <input name="act" className="act" type="number" min='0' max="1000" defaultValue={data.act} onChange={handleChange} />
                 </div>
               )}
               {data.act >= 0 && (<>/</>)}
               <div>
-                <input name="est" required className="est" type="number" min='1' max="1000" inputMode="numeric" pattern="\d*" value={data.est} onChange={handleChange} />
+                <input name="est" required className="est" type="number" min='1' max="1000" defaultValue={data.est} onChange={handleChange} />
               </div>
             </div>
           </div>

@@ -28,9 +28,9 @@ const Timer = () => {
 
     useEffect(() => {
         // eslint-disable-next-line
-        if (typeof Notification != undefined) {
-            if (Notification?.permission === 'default') {
-                Notification?.requestPermission();
+        if (typeof window?.Notification != undefined) {
+            if (window?.Notification?.permission === 'default') {
+                window?.Notification?.requestPermission();
             }
         }
     }, []);
@@ -99,15 +99,18 @@ const Timer = () => {
     worker.onmessage = (event) => {
         if (event.data !== 'stop') {
             setTime(event.data);
-            if (Notification?.permission === 'granted') {
-                if (time !== 0) {
-                    if (setting.notificationType === 'every') {
-                        if (time % (setting.notificationInterval * 60) === 0 && time !== activePeriod) {
-                            pushNotification(`${time / 60} minutes left!`);
-                        }
-                    } else {
-                        if (time - (setting.notificationInterval * 60) === 0 && time !== activePeriod) {
-                            pushNotification(`${time / 60} minutes left!`);
+            // eslint-disable-next-line
+            if (typeof window?.Notification != undefined) {
+                if (window?.Notification?.permission === 'granted') {
+                    if (time !== 0) {
+                        if (setting.notificationType === 'every') {
+                            if (time % (setting.notificationInterval * 60) === 0 && time !== activePeriod) {
+                                pushNotification(`${time / 60} minutes left!`);
+                            }
+                        } else {
+                            if (time - (setting.notificationInterval * 60) === 0 && time !== activePeriod) {
+                                pushNotification(`${time / 60} minutes left!`);
+                            }
                         }
                     }
                 }
@@ -120,11 +123,14 @@ const Timer = () => {
                 tickingSound.current.handleStop();
             }
 
-            if (Notification.permission === 'granted') {
-                if (active === PERIOD) {
-                    pushNotification("It's time to take a break");
-                } else {
-                    pushNotification("It's time to focus!");
+            // eslint-disable-next-line
+            if (typeof window?.Notification != undefined) {
+                if (window?.Notification.permission === 'granted') {
+                    if (active === PERIOD) {
+                        pushNotification("It's time to take a break");
+                    } else {
+                        pushNotification("It's time to focus!");
+                    }
                 }
             }
 
@@ -166,7 +172,7 @@ const Timer = () => {
 
     return (
         <>
-            <div className="clock-container" style={{ background: `${activites[active].timerBorder}` }}>
+            <div className="clock-container">
                 <div className="clock">
                     <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" width="200" height="200" cx="50" cy="50" r="20" strokeWidth="2.5" />}>
                         {setting.format === "digital" ? (

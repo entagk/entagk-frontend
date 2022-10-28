@@ -191,4 +191,11 @@
   background-color: #000;
 }
 
+.setting .footer button.save:disabled {
+  cursor: no-drop;
+  background-color: rgba(0, 0, 0, 0.12);
+  box-shadow: none;
+  color: rgba(0, 0, 0, 0.26);
+}
+
 /* End the setting */
