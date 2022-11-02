@@ -1,3 +1,4 @@
+import { LOGOUT, START_LOADING, END_LOADING, DELETE_USER } from "../actions/auth";
 import {
   CHANGE_ACTIVE,
   PERIOD,
@@ -6,14 +7,15 @@ import {
   GET_SETTING,
   MODITY_SETTING,
   START_TIMER,
-  STOP_TIMER
+  STOP_TIMER,
+  initialSetting
 } from "../actions/timer";
 
 // eslint-disable-next-line
 export default (state = {
   active: PERIOD,
   periodNum: 0,
-  setting: {},
+  setting: undefined,
   started: false,
   activites: {
     [PERIOD]: {
@@ -33,19 +35,21 @@ export default (state = {
     }
   },
   restOfTime: 0,
+  isLoading: false
 }, action) => {
   switch (action.type) {
+    case START_LOADING:
+      return { ...state, isLoading: action.data === 'setting' ? true : state.isLoading }
+    case END_LOADING:
+      return { ...state, isLoading: action.data === 'setting' ? false : state.isLoading }
     case GET_SETTING:
-      if (!localStorage.getItem("")) {
-        return { ...state, setting: action.data };
-      } else {
-        return { ...state, }
-      }
+      return { ...state, setting: action.data };
     case START_TIMER:
       return { ...state, started: true, restOfTime: action.data };
     case STOP_TIMER:
       return { ...state, started: false, restOfTime: action.data };
     case CHANGE_ACTIVE:
+      alert('change active from ', action.data);
       let active, periodNum = state.periodNum;
       if (state.active === PERIOD) {
         periodNum++;
@@ -55,6 +59,7 @@ export default (state = {
       }
       document.documentElement.style.setProperty('--main-color', state.activites[active].color);
       document.documentElement.style.setProperty('--secondary-color', state.activites[active].timerBorder);
+      alert('change active to ', active);
       return { ...state, active, periodNum };
     case MODITY_SETTING:
       if (!localStorage.getItem("token")) {
@@ -65,6 +70,10 @@ export default (state = {
       } else {
         return { ...state, }
       }
+
+    case LOGOUT:
+    case DELETE_USER:
+      return { ...state, setting: initialSetting };
     default:
       return state;
   }

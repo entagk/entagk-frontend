@@ -4,13 +4,27 @@ import { HiMenu, HiUser, HiOutlineDocumentReport } from "react-icons/hi";
 import { FaMoneyCheck } from "react-icons/fa";
 import { MdLogout, MdLogin, MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import "./style.css";
+import { useEffect } from "react";
+import { getUserData, LOGOUT, deleteUser } from "../../actions/auth";
+import Message from "../../utils/Message";
 
-const NavBar = ({ user }) => {
+const NavBar = () => {
   const [open, setOpen] = useState(false);
   const { started, setting } = useSelector(state => state.timer);
+  const { user } = useSelector(state => state.auth);
+  const [message, setMessage] = useState({ message: '', type: '' });
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (localStorage.getItem('token') && user === undefined) {
+      dispatch(getUserData(setMessage));
+    }
+    // eslint-disable-next-line
+  }, [])
 
   const toggleMenu = useCallback(() => {
     if (open) {
@@ -22,13 +36,18 @@ const NavBar = ({ user }) => {
     // eslint-disable-next-line
   }, [open]);
 
+  const logout = () => { dispatch({ type: LOGOUT }); toggleMenu(); };
+
+  const delete_user = () => { dispatch(deleteUser(setMessage)); toggleMenu() }
+
   return (
     <div className="nav-bar">
+      {message.message && (<Message {...message} setMessage={setMessage} />)}
       <Link to="/">
         <h1 style={{ color: "#fff" }}>Entagk</h1>
       </Link>
       <div>
-        <button aria-label="toggle menu button" style={{display: (setting.focusMode && started) && "none" }} className="toggle-menu" onClick={toggleMenu} disabled={started}>
+        <button aria-label="toggle menu button" style={{ display: (setting?.focusMode && started) && "none" }} className="toggle-menu" onClick={toggleMenu} disabled={started}>
           <HiMenu />
         </button>
       </div>
@@ -45,7 +64,7 @@ const NavBar = ({ user }) => {
               </button>
             </div>
             {user && (
-              <div className="user-data">
+              <div className="user-data" style={{ marginBottom: user && '15px' }}>
                 <div className="user-avatar">
                   {user?.avatar ?
                     (
@@ -58,8 +77,10 @@ const NavBar = ({ user }) => {
                 <p>{user?.name}</p>
               </div>
             )}
-            <div className="row">
-              <Link to={`${user ? "/profile" : "/auth"}`} onClick={toggleMenu} aria-label="user button in menu">
+            <div className="row" style={{
+              paddingBottom: "15px"
+            }}>
+              <Link style={{ padding: user && '10px 16px 10px 30px' }} to={`${user ? "/profile" : "/auth"}`} onClick={toggleMenu} aria-label="user button in menu">
                 {user ? (
                   <HiUser />
                 ) : (<MdLogin />)}
@@ -68,27 +89,27 @@ const NavBar = ({ user }) => {
                 </p>
               </Link>
               {user && (
-                <Link to="/subsecription" onClick={toggleMenu} aria-label="subsecription button in menu">
+                <Link to="/subsecription" style={{ padding: user && '10px 16px 10px 30px' }} onClick={toggleMenu} aria-label="subsecription button in menu">
                   <FaMoneyCheck />
                   <p style={{ marginLeft: 10 }}>
                     Subsecription
                   </p>
                 </Link>
               )}
-              <Link to="/setting" onClick={toggleMenu} aria-label="setting button in menu">
+              <Link to="/setting" style={{ padding: user && '10px 16px 10px 30px' }} onClick={toggleMenu} aria-label="setting button in menu">
                 <AiOutlineSetting />
                 <p style={{ marginLeft: 10 }}>
                   Setting
                 </p>
               </Link>
-              <Link to="/report" onClick={toggleMenu} aria-label="report button in menu">
+              <Link to="/report" style={{ padding: user && '10px 16px 10px 30px' }} onClick={toggleMenu} aria-label="report button in menu">
                 <HiOutlineDocumentReport />
                 <p style={{ marginLeft: 10 }}>
                   Report
                 </p>
               </Link>
               {user && (
-                <button onClick={toggleMenu} aria-label="logout button in menu">
+                <button onClick={logout} style={{ padding: user && '10px 16px 10px 30px' }} aria-label="logout button in menu">
                   <MdLogout />
                   <p style={{ marginLeft: 10 }}>
                     Logout
@@ -97,8 +118,8 @@ const NavBar = ({ user }) => {
               )}
             </div>
             {user && (
-              <div className="row">
-                <button aria-label="delete account button">
+              <div className="row" style={{ marginTop: user && '20px' }}>
+                <button aria-label="delete account button" onClick={delete_user} style={{ padding: user && '10px 16px 10px 30px' }}>
                   <MdDelete />
                   <p style={{ marginLeft: 10 }}>Delete Account</p>
                 </button>
@@ -110,8 +131,9 @@ const NavBar = ({ user }) => {
             width: "100%"
           }}></div>
         </div>
-      )}
-    </div>
+      )
+      }
+    </div >
   )
 }
 

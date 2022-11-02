@@ -18,13 +18,13 @@ const Timer = () => {
     const { active, activites, setting, started, periodNum, restOfTime } = useSelector((state) => state.timer);
     const [time, setTime] = useState(restOfTime === null ? 0 : restOfTime);
 
-    const activePeriod = setting.time[active];
+    const activePeriod = setting?.time[active];
     const dispatch = useDispatch();
 
     /** All sounds that we use it in timer.*/
-    const tickingSound = useRef(setting.tickingType.name !== "none" ? audioPlayer({ src: setting.tickingType.src, volume: setting.tickingVolume, loop: true }) : null);
-    const alarmSound = useRef(audioPlayer({ src: setting.alarmType.src, volume: setting.alarmVolume, loop: setting.alarmRepet }));
-    const clickSound = useRef(setting.clickType.name !== "none" ? audioPlayer({ src: setting.clickType.src, volume: setting.clickVolume }) : null);
+    const tickingSound = useRef(setting?.tickingType?.name !== "none" ? audioPlayer({ src: setting?.tickingType?.src, volume: setting?.tickingVolume, loop: true }) : null);
+    const alarmSound = useRef(audioPlayer({ src: setting?.alarmType?.src, volume: setting?.alarmVolume, loop: setting?.alarmRepet }));
+    const clickSound = useRef(setting?.clickType?.name !== "none" ? audioPlayer({ src: setting?.clickType?.src, volume: setting?.clickVolume }) : null);
 
     useEffect(() => {
         // eslint-disable-next-line
@@ -45,14 +45,14 @@ const Timer = () => {
     }, [active, setting.time]);
 
     useEffect(() => {
-        if (setting.tickingType.name !== 'none') {
-            tickingSound.current.chengeVolume(setting.tickingVolume);
-            tickingSound.current.changeFile(setting.tickingType.src);
+        if (setting?.tickingType.name !== 'none') {
+            tickingSound.current.chengeVolume(setting?.tickingVolume);
+            tickingSound.current.changeFile(setting?.tickingType.src);
         }
 
-        alarmSound.current.chengeVolume(setting.alarmVolume);
-        alarmSound.current.changeFile(setting.alarmType.src);
-        alarmSound.current.changeLoop(setting.alarmRepet);
+        alarmSound.current.chengeVolume(setting?.alarmVolume);
+        alarmSound.current.changeFile(setting?.alarmType.src);
+        alarmSound.current.changeLoop(setting?.alarmRepet);
 
         if (setting.clickType.name !== 'none') {
             clickSound.current.chengeVolume(setting.clickVolume);
@@ -174,7 +174,7 @@ const Timer = () => {
         <>
             <div className="clock-container">
                 <div className="clock">
-                    <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" width="200" height="200" cx="50" cy="50" r="20" strokeWidth="2.5" />}>
+                    <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" size="200" height="200" cx="50" cy="50" r="20" strokeWidth="2.5" />}>
                         {setting.format === "digital" ? (
                             <>
                                 <DigitalTimer handleReset={handleReset} toggleStart={toggleStart} setTime={setTime} time={time} />

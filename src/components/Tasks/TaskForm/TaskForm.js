@@ -16,7 +16,7 @@ const TaskForm = ({ oldData, setOpen }) => {
   const [data, setData] = useState(oldData === null ? initialData : oldData);
   const [openNotes, setOpenNotes] = useState(data.notes === "" ? false : true);
   const [openProject, setOpenProject] = useState(data.project === "" ? false : true);
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState({type: "", message: ""});
 
   const handleChange = (e) => {
     if (e.target.name === 'est' || e.target.name === 'act') {
@@ -31,24 +31,24 @@ const TaskForm = ({ oldData, setOpen }) => {
     // console.log(data);
     setOpen(ot => !ot);
     if (!data.name || !data.est) {
-      setError("Error at name or est");
+      setMessage("Error at name or est");
     }
 
     if (!oldData) {
-      dispatch(addNewTask(data, setError));
+      dispatch(addNewTask(data, setMessage));
     } else {
-      dispatch(modifyTask(data, setError));
+      dispatch(modifyTask(data, setMessage));
     }
   }
 
   return (
     <form className="task-form" style={{ margin: oldData !== null && "20px 0 20px" }} onSubmit={handleSave}>
-      {error && (
-        <Message message={error} type="error" setMessage={setError} />
+      {message.message && (
+        <Message message={message.message} type={message.type} setMessage={setMessage} />
       )}
       <div className="form-container">
         <div className="form-inner-container">
-          <div className="block" style={{position: "relative"}}>
+          <div className="block" style={{ position: "relative" }}>
             <input autoFocus className="name" maxLength="50" required name="name" type="text" value={data.name} placeholder="What are you working on?" onChange={handleChange} />
             <div className="text-counter" style={{ color: `${50 - data.name.length > 10 ? "#4caf50" : "#ff002f"}` }}>
               <p style={{ fontSize: "16px", fontWeight: "500", marginBottom: "15px" }}>{50 - data.name.length}</p>

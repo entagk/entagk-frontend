@@ -1,6 +1,11 @@
 import React, { lazy, Suspense, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { authForm, LOGOUT } from "../../actions/auth";
 import Loading from "../../utils/Loading";
+import Message from '../../utils/Message';
+
+import GoogleLogin from './GoogleLogin'
 
 import "./Auth.css";
 import Password from "./Password";
@@ -14,13 +19,49 @@ const initialFormData = {
 };
 
 const Auth = () => {
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector(state => state.auth);
+  const navigate = useNavigate();
   const { activites, active } = useSelector(state => state.timer);
   const [isSignUp, setIsSignUp] = useState(false);
+  const [message, setMessage] = useState({ type: '', message: '' })
   const [forgetPassword, setForgetPassword] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
   const [passowordShow, setPasswordShow] = useState({
     password: false, confirmPassword: false
-  })
+  });
+
+  const logout = () => {
+    dispatch({ type: LOGOUT })
+  }
+
+  if (localStorage.getItem('token')) {
+    return (
+      <div>
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          color: "#fff"
+        }}>
+          <h1>You are log in.</h1>
+          <div>
+            <button aria-label="logout button" onClick={logout} style={{
+              background: "rgb(0 0 0 / 19%)",
+              padding: "10px 20px",
+              marginTop: "20px",
+              borderRadius: "4px",
+              fontSize: "20px",
+              fontWeight: "600",
+              boxShadow: "0 0 10px 5px #bdbdbd61",
+              color: "#fff",
+            }}>Log out</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -35,32 +76,69 @@ const Auth = () => {
     setPasswordShow({ ...passowordShow, [type]: !passowordShow[type] });
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+    await e.preventDefault();
     console.log(formData);
+
+    if (isSignUp) {
+      if (!formData.email || !formData.name || formData.confirmPassword !== formData.password) {
+        setMessage({ type: 'error', message: 'Please complete all form data' });
+      } else {
+        dispatch(authForm(formData, 'sign up', setMessage, navigate));
+      }
+    } else if (forgetPassword) {
+      if (!formData.email) {
+        setMessage({ type: 'error', message: 'Please complete all form data' });
+      } else {
+        dispatch(authForm({ password: formData.password }, 'forget password', setMessage, navigate));
+      }
+    } else {
+      if (!formData.email || !formData.password) {
+        setMessage({ type: 'error', message: 'Please complete all form data' });
+      } else {
+        dispatch(authForm({ password: formData.password, email: formData.email }, 'sign in', setMessage, navigate));
+      }
+    }
   }
 
   return (
     <Suspense fallback={
       <Loading
-        backgroud="transparent"
-        width="200"
-        height="200"
-        cx="50"
-        cy="50"
-        r="20"
-        strokeWidth="2.5"
+        size="200"
+        strokeWidth="5"
         color="#ffffff"
-        containerHeight="500px"
+        backgroud="transperent"
       />
     }>
+      {isLoading && (
+        <div className="loading-container" style={{
+          position: 'fixed',
+          top: '0',
+          right: '0',
+          background: '#ffffff73',
+          width: '100%',
+          height: '100%',
+          zIndex: '1000',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <Loading
+            size="200"
+            strokeWidth="5"
+            color={activites[active].color}
+            backgroud="transperent"
+          />
+        </div>
+      )}
       <div>
         <div className="container">
           <NavBar />
+          {message.message !== '' && (<Message message={message.message} type={message.type} setMessage={setMessage} />)}
           <div className={`auth-page ${isSignUp ? "right-panel-active" : "left-panel-active"}`}>
             <div className={`form-container ${isSignUp ? 'sign-up' : 'sign-in'}`}>
               <form onSubmit={handleSubmit}>
-                <h1>{isSignUp ? "create account" : "sing in"}</h1>
+                <h1>{isSignUp ? "create account" : forgetPassword ? "foget password" : "sing in"}</h1>
                 <div className="block">
                   {isSignUp && (
                     <input
@@ -82,15 +160,29 @@ const Auth = () => {
                     className={(!formData.email || (validateEmail.test(formData.email) === false)) ? 'error' : undefined}
                     onChange={handleChange}
                   />
-                  <Password
-                    passowordShow={passowordShow}
-                    formData={formData}
-                    type="password"
-                    handleChange={handleChange}
-                    onClick={handlePasswordShowing}
-                  />
+                  {!forgetPassword && (
+                    <Password
+                      passowordShow={passowordShow}
+                      formData={formData}
+                      type="password"
+                      handleChange={handleChange}
+                      onClick={handlePasswordShowing}
+                    />
+                  )}
                   {!isSignUp && (
-                    <button aria-label="forget password button" className="forget-password">forget password</button>
+                    <div style={{
+                      width: '100%',
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flex-start"
+                    }}>
+                      <button
+                        aria-label="forget password button"
+                        className="forget-password"
+                        type="button"
+                        onClick={() => setForgetPassword(fp => !fp)}
+                      >forget password</button>
+                    </div>
                   )}
                   {isSignUp && (
                     <Password
@@ -103,12 +195,15 @@ const Auth = () => {
                   )}
                 </div>
                 <div className="block">
+                  <GoogleLogin setMessage={setMessage} navigate={navigate} />
+                </div>
+                <div className="block">
                   <button
                     type="submit"
                     disabled={isSignUp ?
                       (!formData.name || !formData.email || !formData.password || (formData.password !== formData.confirmPassword)) :
-                      (!formData.email || !formData.password)
-                    }>{isSignUp ? "sign up" : 'sign in'}</button>
+                      forgetPassword ? (!formData.email) : (!formData.email || !formData.password)
+                    }>{isLoading ? "loading..." : isSignUp ? "sign up" : forgetPassword ? 'send mail' : 'sign in'}</button>
                 </div>
               </form>
             </div>
@@ -127,12 +222,13 @@ const Auth = () => {
                         "To keep connected with us please login with your personal info"
                       }
                     </p>
+                    <h3>{isSignUp ? "Already have account" : "Don't have account ?"}</h3>
                   </div>
                   <button
                     type="button"
                     style={{ backgroundColor: "#00000031" }}
                     aria-label="form toggole button"
-                    onClick={() => setIsSignUp((p) => !p)}
+                    onClick={() => { setIsSignUp((p) => !p); setForgetPassword(false); }}
                   >
                     {isSignUp ? "sign in" : "sign up"}
                   </button>

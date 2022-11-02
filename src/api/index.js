@@ -31,6 +31,8 @@ export const signIn = (formData) => API.post('/user/signin', formData);
 
 export const signUp = (formData) => API.post('/user/signup', formData);
 
+export const googleLogin = (token) => API.post('/user/google_login/', token);
+
 export const getUserData = () => API.get("/user/user_info");
 
 export const forgetPassword = (formData) => API.post("/user/forgot_password", formData);
@@ -50,6 +52,16 @@ export const addTask = (taskData) => API.post("/task/add/", taskData);
 export const updateTask = (taskData, id) => API.patch(`/task/update/${id}`, taskData);
 
 export const deleteTask = (id) => API.delete(`/task/delete/${id}`);
+
+export const checkTask = (id) => API.post(`/task/check/${id}`);
+
+export const clearAllTasks = () => API.delete("/task/clear_all");
+
+export const clearActTasks = () => API.delete("/task/clear_act/");
+
+export const clearFinishedTasks = () => API.delete("/task/clear_finished/");
+
+export const increaseAct = (id) => API.post(`/task/increase_act/${id}`);
 /* End the task api */
 
 /* start the setting api */

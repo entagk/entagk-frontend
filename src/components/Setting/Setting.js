@@ -16,33 +16,28 @@ const TimeInputs = lazy(() => import('./timeInputs'));
 const ToggleButton = lazy(() => import('./ToggleButton'));
 
 function Setting() {
-  const { setting } = useSelector(state => state.timer);
+  const { setting, isLoading } = useSelector(state => state.timer);
 
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState({ type: '', message: "" });
   const [data, setData] = useState(setting);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (setting.format === undefined) {
-      dispatch(getSetting(setError));
+    if (setting === undefined && !isLoading) {
+      dispatch(getSetting(setMessage));
     }
     setData(setting);
     // eslint-disable-next-line
-  }, [setting.format]);
+  }, [setting, isLoading]);
 
-  if (setting.format === undefined) {
+  if (setting === undefined) {
     return (
       <Loading
-        backgroud="transparent"
-        width="200"
-        height="200"
-        cx="50"
-        cy="50"
-        r="20"
+        size="200"
         strokeWidth="2.5"
         color="#ffffff"
-        containerHeight="500px"
+        backgroud="transperent"
       />
     )
   }
@@ -54,7 +49,7 @@ function Setting() {
   const handleSubmit = async (e) => {
     await e.preventDefault();
     if (data !== setting) {
-      await dispatch(modifySetting(data, setError));
+      await dispatch(modifySetting(data, setMessage));
     }
     navigate("/");
   }
@@ -62,19 +57,14 @@ function Setting() {
   return (
     <React.Suspense fallback={
       <Loading
-        backgroud="transparent"
-        width="200"
-        height="200"
-        cx="50"
-        cy="50"
-        r="20"
-        strokeWidth="2.5"
+        size="200"
+        strokeWidth="5px"
         color="#ffffff"
-        containerHeight="500px"
+        backgroud="transperent"
       />
     }>
-      {error && (
-        <Message message={error} type="error" setMessage={setError} />
+      {message.message && (
+        <Message message={message.message} type={message.type} setMessage={setMessage} />
       )}
       <NavBar />
       <form className='setting' onSubmit={handleSubmit}>
@@ -160,7 +150,7 @@ function Setting() {
               type="number"
               min="1"
               max="100"
-              defaultValue={data.longInterval}
+              defaultValue={data?.longInterval}
               onChange={handleChange}
             />
           </div>
@@ -192,7 +182,7 @@ function Setting() {
             <input
               style={{ marginInline: "10px 0" }}
               type="number"
-              defaultValue={data.notificationInterval}
+              defaultValue={data?.notificationInterval}
               name="notificationInterval"
               onChange={handleChange} />
             <p style={{ marginLeft: 10 }}>Min</p>

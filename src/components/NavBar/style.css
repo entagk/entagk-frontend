@@ -32,7 +32,7 @@
 }
 
 .nav-bar .menu-overflow {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   height: 100%;
@@ -119,8 +119,6 @@
 
 .menu-content .row button,
 .menu-content .row a {
-  padding: 10px 18px;
-  font-size: 16px;
   font-size: 20px;
   padding: 10px 16px;
   font-weight: 400;

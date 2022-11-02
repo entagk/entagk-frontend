@@ -50,7 +50,7 @@ function TimeInputs({ name, data, setData }) {
         max="60"
         placeholder='min'
         className={`${name}-min`}
-        defaultValue={min}
+        // defaultValue={min}
         value={min}
         onChange={onChange}
       />
@@ -62,7 +62,7 @@ function TimeInputs({ name, data, setData }) {
         max="60"
         placeholder="sec"
         className={`${name}-sec`}
-        defaultValue={sec}
+        // defaultValue={sec}
         value={sec}
         onChange={onChange}
       />

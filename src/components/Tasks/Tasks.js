@@ -1,8 +1,10 @@
-import React, { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 
 import { AiOutlinePlus } from 'react-icons/ai';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getTasks } from "../../actions/tasks";
 import Loading from "../../utils/Loading";
+import Message from "../../utils/Message";
 
 import "./style.css";
 
@@ -15,13 +17,41 @@ const Tasks = () => {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const { tasks } = useSelector(state => state.tasks);
   const { active, activites, setting, started } = useSelector(state => state.timer);
+  const dispatch = useDispatch();
+  const [message, setMessage] = useState({ type: '', message: "" });
+
+  useEffect(() => {
+    if (tasks === undefined) {
+      dispatch(getTasks(setMessage));
+    }
+    // eslint-disable-next-line
+  }, [tasks]);
+
+  if (tasks === undefined) {
+    return (
+      <Loading
+        size="200"
+        strokeWidth="1"
+        backgroud="white"
+        color={activites[active].color}
+      />
+    )
+  }
 
   return (
     <>
+      {message.message && (
+        <Message {...message} setMessage={setMessage} />
+      )}
       <Suspense fallback={
-        <Loading backgroud="transparent" width="100" height="100" cx="25" cy="25" r="20" strokeWidth="1" color={activites[active].color} />
+        <Loading
+          size="200"
+          strokeWidth="1"
+          backgroud="white"
+          color={activites[active].color}
+        />
       }>
-        <div className="tasks" style={{display: (setting.focusMode && started) && "none" }}>
+        <div className="tasks" style={{ display: (setting?.focusMode && started) && "none" }}>
           <div className="header">
             <h2>
               Tasks

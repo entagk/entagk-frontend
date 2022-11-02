@@ -16,19 +16,19 @@ const Task = (props) => {
   const { activeId } = useSelector(state => state.tasks);
   const { setting } = useSelector(state => state.timer);
   // const {active, activites} = useSelector(state => state.timer);
-  const [error, setError] = useState();
+  const [message, setMessage] = useState({type: "", message: ""});
   const [openEdit, setOpenEdit] = useState(false);
 
   const handleCheck = () => {
-    dispatch(checkTask(props.id, setError));
+    dispatch(checkTask(props.id, setMessage));
   }
 
   const handleDelete = () => {
-    dispatch(deleteTask(props.id, setError));
+    dispatch(deleteTask(props.id, setMessage));
   }
 
   const handleActive = () => {
-    if((!props.check && setting.autoStartNextTask) || (!setting.autoStartNextTask && props.act !== props.est)) {
+    if ((!props.check && setting.autoStartNextTask) || (!setting.autoStartNextTask && props.act !== props.est)) {
       dispatch({ type: CHANGE_ACTIVE_TASK, data: { id: props.id, name: props.name } });
     }
   }
@@ -43,9 +43,11 @@ const Task = (props) => {
 
   return (
     <div>
-      {error && (
-        <Message message={`error: ${error} at task ${props.name}`} type="error" setMessage={setError} />
-      )}
+      <>
+        {message.message && (
+          <Message message={message.message} type={message.type} setMessage={setMessage} />
+        )}
+      </>
       <div className={`task ${activeId === props.id && "active"}`} onClick={handleActive}>
         <div className="overflow">
           <div className="buttons">

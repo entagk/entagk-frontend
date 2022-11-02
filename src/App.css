@@ -49,6 +49,10 @@ input.error {
   border: 1px solid #f00;
 }
 
+input:focus {
+  background-color: #dddddd3d;
+}
+
 textarea {
   width: 100%;
   padding: 10px;
@@ -68,6 +72,9 @@ a {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin-inline: auto;
+  padding-inline: 15px;
+  max-width: 1200px;
 }
 
 /*start scrollbar */
@@ -108,3 +115,9 @@ a {
 /* end basics */
 
 @import url("./utils/style.css");
+
+@media (max-width: 425px) {
+  body {
+    padding: 0;
+  }
+}

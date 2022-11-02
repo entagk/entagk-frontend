@@ -1,3 +1,6 @@
+import { END_LOADING, START_LOADING } from "./auth";
+import * as api from './../api';
+
 export const CHANGE_ACTIVE = "CHANGE_ACTIVE";
 
 export const START_TIMER = "START_TIMER";
@@ -164,17 +167,20 @@ export const initialSetting = {
   notificationInterval: 1,
 };
 
-export const getSetting = (setError) => async dispatch => {
+export const getSetting = (setMessage) => async dispatch => {
   try {
-
+    dispatch({ type: START_LOADING, data: 'setting' });
     if (!localStorage.getItem('token')) {
       dispatch({ type: GET_SETTING, data: JSON.parse(localStorage.getItem('setting')) || initialSetting });
     } else {
+      const { data } = await api.getAllSetting();
 
+      dispatch({ type: GET_SETTING, data: data });
     }
+    dispatch({ type: END_LOADING, data: 'setting' });
   } catch (error) {
     console.error(error);
-    setError(error.message);
+    setMessage({ message: error.message, type: 'error' });
   }
 }
 
@@ -186,15 +192,15 @@ export const changeActive = (active) => async dispatch => {
   }
 }
 
-export const modifySetting = (data, setError) => async dispatch => {
+export const modifySetting = (data, setMessage) => async dispatch => {
   try {
-    if(!localStorage.getItem("token")) {
+    if (!localStorage.getItem("token")) {
       dispatch({ type: MODITY_SETTING, data });
     } else {
 
     }
   } catch (error) {
     console.error(error);
-    setError(error.message);
+    setMessage({ message: error.message, type: 'error' });
   }
 } 

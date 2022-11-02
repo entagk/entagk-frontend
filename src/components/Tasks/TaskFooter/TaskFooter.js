@@ -5,9 +5,9 @@ const Footer = () => {
   const { est, act } = useSelector(state => state.tasks);
   return (
     <div className="footer">
-      <p>est: <span>{est}</span></p>
+      <p>all: <span>{est}</span></p>
       <p>
-        act: <span>{act}</span>
+        finished: <span>{act}</span>
       </p>
     </div>
   )

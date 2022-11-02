@@ -11,6 +11,7 @@ import {
 } from "../actions/tasks";
 import { CHANGE_ACTIVE, PERIOD, MODITY_SETTING } from "../actions/timer";
 import { nanoid } from "nanoid";
+import { LOGOUT, START_LOADING, END_LOADING, DELETE_USER } from "../actions/auth";
 
 const initialData = {
   name: "",
@@ -21,19 +22,26 @@ const initialData = {
   check: false,
 };
 
+const initialState = {
+  activeId: null,
+  tasks: undefined,
+  act: 0,
+  est: 0,
+  autoStartNextTask: false,
+  isLoading: false,
+}
+
 // eslint-disable-next-line
 export default (
-  state = {
-    activeId: null,
-    tasks: null,
-    act: 0,
-    est: 0,
-    autoStartNextTask: false,
-  },
+  state = initialState,
   action
 ) => {
   let all;
   switch (action.type) {
+    case START_LOADING:
+      return { ...state, isLoading: action.data === 'tasks' ? true : state.isLoading };
+    case END_LOADING:
+      return { ...state, isLoading: action.data === 'tasks' ? false : state.isLoading };
     case GET_TASKS:
       if (!localStorage.getItem("token")) {
         const setting = JSON.parse(localStorage?.getItem("setting")) || {};
@@ -53,7 +61,10 @@ export default (
             : null,
         };
       } else {
-        return { ...state };
+        const est = action.data.length > 0 ? action.data?.tasks?.raduce((total, task) => total + task.est, 0) : 0;
+        const act = action.data.length > 0 ? action.data?.tasks?.raduce((total, task) => total + task.act, 0) : 0;
+
+        return { ...state, tasks: action.data.tasks, est, act };
       }
 
     case MODITY_SETTING:
@@ -319,6 +330,10 @@ export default (
       } else {
         return { ...state };
       }
+
+    case LOGOUT:
+    case DELETE_USER:
+      return { ...initialData };
 
     default:
       return state;
