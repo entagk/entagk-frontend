@@ -1,4 +1,4 @@
-import { END_LOADING, START_LOADING } from "./auth";
+import { END_LOADING, LOGOUT, START_LOADING } from "./auth";
 import * as api from './../api';
 
 export const CHANGE_ACTIVE = "CHANGE_ACTIVE";
@@ -179,28 +179,45 @@ export const getSetting = (setMessage) => async dispatch => {
     }
     dispatch({ type: END_LOADING, data: 'setting' });
   } catch (error) {
+    // const errorMessage = await error.response; 
+    if (error.response.status === 500) {
+      dispatch({ type: LOGOUT });
+      window.location.reload();
+    }
     console.error(error);
-    setMessage({ message: error.message, type: 'error' });
+    setMessage({ message: error?.response?.data?.message || error.message, type: 'error' });
   }
 }
 
-export const changeActive = (active) => async dispatch => {
+export const changeActive = (active, activeId) => async dispatch => {
   try {
-    dispatch({ type: CHANGE_ACTIVE, data: active });
+    if (!localStorage.getItem('token')) {
+      dispatch({ type: CHANGE_ACTIVE, data: active });
+    } else {
+      if (active === PERIOD && activeId) {
+        const { data } = await api.increaseAct(activeId);
+        dispatch({ type: CHANGE_ACTIVE, data: { active, task: data } })
+      }
+    }
   } catch (error) {
     console.error(error)
   }
 }
 
-export const modifySetting = (data, setMessage) => async dispatch => {
+export const modifySetting = (formData, setMessage) => async dispatch => {
   try {
     if (!localStorage.getItem("token")) {
-      dispatch({ type: MODITY_SETTING, data });
+      dispatch({ type: MODITY_SETTING, data: formData });
     } else {
-
+      const { data } = await api.updateSetting(formData);
+      dispatch({ type: MODITY_SETTING, data });
     }
   } catch (error) {
     console.error(error);
-    setMessage({ message: error.message, type: 'error' });
+    setMessage({ message: error.response.data.message || error.message, type: 'error' });
+    if (error.response.status === 500) {
+      dispatch({ type: LOGOUT });
+      window.location.reload();
+    }
   }
 } 

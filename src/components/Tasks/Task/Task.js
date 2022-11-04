@@ -6,37 +6,39 @@ import { FiEdit3 } from 'react-icons/fi';
 import { MdDelete, MdRadioButtonUnchecked } from 'react-icons/md';
 import { useDispatch, useSelector } from "react-redux";
 import { checkTask, deleteTask, CHANGE_ACTIVE_TASK } from "../../../actions/tasks";
+import Loading from "../../../utils/Loading";
 import Message from "../../../utils/Message";
 // import Loading from "../../../Utils/Loading";
 
 const TaskForm = lazy(() => import("../TaskForm/TaskForm"));
 
-const Task = (props) => {
+const Task = ({ isLoading, setIsLoading, ...props }) => {
   const dispatch = useDispatch();
   const { activeId } = useSelector(state => state.tasks);
   const { setting } = useSelector(state => state.timer);
   // const {active, activites} = useSelector(state => state.timer);
-  const [message, setMessage] = useState({type: "", message: ""});
+  const [message, setMessage] = useState({ type: "", message: "" });
   const [openEdit, setOpenEdit] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   const handleCheck = () => {
-    dispatch(checkTask(props.id, setMessage));
+    dispatch(checkTask(props._id, setIsLoading, setMessage));
   }
 
   const handleDelete = () => {
-    dispatch(deleteTask(props.id, setMessage));
+    dispatch(deleteTask(props._id, setIsLoading, setMessage));
   }
 
   const handleActive = () => {
     if ((!props.check && setting.autoStartNextTask) || (!setting.autoStartNextTask && props.act !== props.est)) {
-      dispatch({ type: CHANGE_ACTIVE_TASK, data: { id: props.id, name: props.name } });
+      dispatch({ type: CHANGE_ACTIVE_TASK, data: props });
     }
   }
 
   if (openEdit) {
     return (
-      <Suspense fallback={<div>loading...</div>}>
-        <TaskForm oldData={props} setOpen={setOpenEdit} />
+      <Suspense fallback={<Loading size="40" strokeWidth="3" color={"rgb(197 197 197)"} />}>
+        <TaskForm oldData={props} setOpen={setOpenEdit} isLoading={isLoading} setIsLoading={setIsLoading} />
       </Suspense>
     )
   }
@@ -48,22 +50,36 @@ const Task = (props) => {
           <Message message={message.message} type={message.type} setMessage={setMessage} />
         )}
       </>
-      <div className={`task ${activeId === props.id && "active"}`} onClick={handleActive}>
-        <div className="overflow">
-          <div className="buttons">
-            {!setting.autoStartNextTask && (
-              <button aria-label="check button" onClick={handleCheck}>
-                {props.check ? (
-                  <BsCheckCircleFill />
-                ) : (
-                  <MdRadioButtonUnchecked />
-                )}
-              </button>
-            )}
-            <button aria-label="edit button" onClick={() => setOpenEdit(oe => !oe)}><FiEdit3 /></button>
-            <button aria-label="delet button" onClick={handleDelete}><MdDelete /></button>
+      <div
+        className={`task ${activeId === props._id ? "active" : ''}`}
+        onClick={handleActive}>
+        {isLoading === props._id ? (
+          <div className="loading-container">
+            <Loading size="40" strokeWidth="3" color={"rgb(197 197 197)"} />
           </div>
-        </div>
+        ) : (
+          <div className="overflow">
+            <div className="buttons">
+              {!setting.autoStartNextTask && (
+                <button aria-label="check button" onClick={handleCheck}>
+                  {props.check ? (
+                    <BsCheckCircleFill />
+                  ) : (
+                    <MdRadioButtonUnchecked />
+                  )}
+                </button>
+              )}
+              <button
+                aria-label="edit button"
+                onClick={() => setOpenEdit(oe => !oe)}
+              ><FiEdit3 /></button>
+              <button
+                aria-label="delet button"
+                onClick={handleDelete}
+              ><MdDelete /></button>
+            </div>
+          </div>
+        )}
         <div style={{
           display: "flex",
           alignItems: "center",
@@ -78,9 +94,19 @@ const Task = (props) => {
                 <MdRadioButtonUnchecked className="task-check" />
               )}
             </div>
-            <p style={{ textDecoration: props.check && "line-through" }}>{props.name}</p>
+            <p style={{
+              textDecoration: props.check && "line-through"
+            }}>{props.name}</p>
           </div>
-          <p className="act-est"><span>{props.act}</span> / <span>{props.est}</span></p>
+          <p className="act-est">
+            <span>{props.act}</span>
+            <span style={{
+              fontWeight: "normal",
+              fontSize: "18px",
+              marginInline: "4px"
+            }}>/</span>
+            <span>{props.est}</span>
+          </p>
         </div>
         {props.notes !== '' && (
           <div className="task-notes">

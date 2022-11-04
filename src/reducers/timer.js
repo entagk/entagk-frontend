@@ -42,12 +42,16 @@ export default (state = {
       return { ...state, isLoading: action.data === 'setting' ? true : state.isLoading }
     case END_LOADING:
       return { ...state, isLoading: action.data === 'setting' ? false : state.isLoading }
+
     case GET_SETTING:
       return { ...state, setting: action.data };
+
     case START_TIMER:
       return { ...state, started: true, restOfTime: action.data };
+
     case STOP_TIMER:
       return { ...state, started: false, restOfTime: action.data };
+
     case CHANGE_ACTIVE:
       alert('change active from ', action.data);
       let active, periodNum = state.periodNum;
@@ -61,6 +65,7 @@ export default (state = {
       document.documentElement.style.setProperty('--secondary-color', state.activites[active].timerBorder);
       alert('change active to ', active);
       return { ...state, active, periodNum };
+
     case MODITY_SETTING:
       if (!localStorage.getItem("token")) {
         const oldSetting = state.setting;

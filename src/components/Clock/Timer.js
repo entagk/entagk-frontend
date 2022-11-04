@@ -16,6 +16,7 @@ const DigitalTimer = lazy(() => import("./Digital/Digital"));
 const worker = new window.Worker('worker.js');
 const Timer = () => {
     const { active, activites, setting, started, periodNum, restOfTime } = useSelector((state) => state.timer);
+    const { activeId } = useSelector(state => state.tasks);
     const [time, setTime] = useState(restOfTime === null ? 0 : restOfTime);
 
     const activePeriod = setting?.time[active];
@@ -134,7 +135,7 @@ const Timer = () => {
                 }
             }
 
-            dispatch(changeActive(active));
+            dispatch(changeActive(active, activeId));
         }
     }
 
@@ -172,7 +173,7 @@ const Timer = () => {
 
     return (
         <>
-            <div className="clock-container">
+            <div className="clock-container" style={{ background: activites[active].timerBorder }}>
                 <div className="clock">
                     <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" size="200" height="200" cx="50" cy="50" r="20" strokeWidth="2.5" />}>
                         {setting.format === "digital" ? (

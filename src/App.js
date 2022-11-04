@@ -1,5 +1,8 @@
 import './App.css';
 
+import AOS from 'aos';
+import 'aos/dist/aos.css'; // You can also use <link> for styles
+
 import Auth from './components/Auth/Auth';
 import Profile from './components/Profile/Profile';
 import Subsecription from './components/Subsecription/Subsecription';
@@ -16,6 +19,8 @@ import {
 
 import Home from './components/Home/Home';
 
+
+AOS.init();
 
 const router = createBrowserRouter(
   createRoutesFromElements(

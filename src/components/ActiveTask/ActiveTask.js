@@ -16,7 +16,7 @@ const ActiveTask = () => {
         color: "rgb(237 237 237)",
         fontWeight: 600,
         textTransform: "capitalize"
-      }}>{!activeId  ? "please focus on what you are doing now" : activeName}</span>
+      }}>{!Boolean(activeId)  ? "please focus on what you are doing now" : activeName}</span>
     </div>
   )
 }

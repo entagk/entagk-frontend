@@ -25,12 +25,17 @@ function Home() {
 
   if (setting === undefined) {
     return (
-      <Loading
-        size="200"
-        strokeWidth="2.5"
-        color="#ffffff"
-        backgroud="transperent"
-      />
+      <>
+        {message.message && (
+          <Message message={message.message} type={message.type} setMessage={setMessage} />
+        )}
+        <Loading
+          size="200"
+          strokeWidth="2.5"
+          color="#ffffff"
+          backgroud="transperent"
+        />
+      </>
     )
   }
 

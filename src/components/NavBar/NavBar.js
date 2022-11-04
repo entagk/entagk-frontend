@@ -65,11 +65,9 @@ const NavBar = () => {
             </div>
             {user && (
               <div className="user-data" style={{ marginBottom: user && '15px' }}>
-                <div className="user-avatar">
-                  {user?.avatar ?
+                <div className="user-avatar" style={{ backgroundImage: `url(${user?.avatar})` }}>
+                  {!user?.avatar &&
                     (
-                      <img src={user?.avatar} alt="avatar" />
-                    ) : (
                       <AiOutlineUser />
                     )
                   }

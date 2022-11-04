@@ -1,5 +1,8 @@
-import { START_LOADING, END_LOADING } from "./auth";
+import { START_LOADING, END_LOADING, LOGOUT } from "./auth";
 import * as api from './../api';
+
+// export const START_LOADING_TASK = 'START_LOADING_TASK';
+// export const END_LOADING_TASK = 'END_LOADING_TASK';
 
 export const GET_TASKS = "GET_TASKS";
 export const NEW_TASK = "NEW_TASK";
@@ -17,44 +20,55 @@ export const getTasks = (setMessage) => async dispatch => {
     dispatch({ type: START_LOADING, data: 'tasks' });
     if (!localStorage.getItem('token')) {
       const all = JSON.parse(localStorage.getItem("tasks")) || [];
-      const est = Number(localStorage.getItem("est"));
-      const act = Number(localStorage.getItem("act"));
 
-      dispatch({ type: GET_TASKS, data: { all, est, act } });
+      dispatch({
+        type: GET_TASKS,
+        data: {
+          all,
+          est: Number(localStorage.getItem("est")),
+          act: Number(localStorage.getItem("act"))
+        }
+      });
     } else {
       const { data } = await api.getAllTasks();
 
-      dispatch({ type: GET_TASKS, data });
-      console.log(data)
+      dispatch({
+        type: GET_TASKS, data: {
+          all: data.tasks,
+          est: data.tasks.length > 0 ? data.tasks.reduce((total, task) => total + task.est, 0) : 0,
+          act: data.tasks.length > 0 ? data.tasks.reduce((total, task) => total + task.act, 0) : 0
+        }
+      });
     }
     dispatch({ type: END_LOADING, data: 'tasks' });
   } catch (err) {
     console.error(err);
-    setMessage({ message: err?.response?.data?.message || err.message, type: "error" })
+    setMessage({ message: err.response.data.message || err.message, type: 'error' });
+    if (err.response.data.message && err.response.data.message.toLocaleLowerCase().inculdes('jwt')) {
+      dispatch({ type: LOGOUT });
+      window.location.reload();
+    }
   }
 }
 
 export const addNewTask = (taskData, setIsLoading, setMessage) => async dispatch => {
   try {
-    // dispatch({ type: START_LOADING, data: 'tasks' });
-    setIsLoading(true);
+    setIsLoading('new');
     if (!taskData.name || !taskData.est) {
       setMessage({ message: "Please enter the task name and est", error: 'error' })
     }
 
     if (!localStorage.getItem('token')) {
-      // const newTask = Object.assign({}, { ...data, id: nanoid() })
-
-      dispatch({ type: NEW_TASK, taskData });
+      dispatch({ type: NEW_TASK, data: taskData });
     } else {
       const { data } = await api.addTask(taskData);
 
       dispatch({ type: NEW_TASK, data: data.newTask });
     }
-    setIsLoading(false);
+    setIsLoading(null);
     // dispatch({ type: END_LOADING, data: 'tasks' });
   } catch (err) {
-    setIsLoading(false);
+    setIsLoading(null);
     setMessage({ message: err?.response?.data?.message || err.message, type: "error" })
     console.error(err);
   }
@@ -62,7 +76,7 @@ export const addNewTask = (taskData, setIsLoading, setMessage) => async dispatch
 
 export const checkTask = (id, setIsLoading, setMessage) => async dispatch => {
   try {
-    setIsLoading(true);
+    setIsLoading(id);
     if (!id) {
       setMessage({ message: "invalid id!", type: "error" });
     }
@@ -72,12 +86,12 @@ export const checkTask = (id, setIsLoading, setMessage) => async dispatch => {
     } else {
       const { data } = await api.checkTask(id);
 
-      dispatch({ type: CHECK_TASK, data });
+      dispatch({ type: CHECK_TASK, data: data._id });
     }
 
-    setIsLoading(false);
+    setIsLoading(null);
   } catch (error) {
-    setIsLoading(false);
+    setIsLoading(null);
     setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
   }
@@ -85,7 +99,7 @@ export const checkTask = (id, setIsLoading, setMessage) => async dispatch => {
 
 export const deleteTask = (id, setIsLoading, setMessage) => async dispatch => {
   try {
-    setIsLoading(true);
+    setIsLoading(id);
     if (!id) {
       setMessage({ message: "invalid task", type: "error" })
     }
@@ -97,8 +111,9 @@ export const deleteTask = (id, setIsLoading, setMessage) => async dispatch => {
       setMessage({ message: data.message, type: 'success' })
       dispatch({ type: DELETE_TASK, data: data.deleted_id });
     }
-    setIsLoading(false);
+    setIsLoading(id);
   } catch (error) {
+    setIsLoading(null);
     setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
   }
@@ -106,19 +121,22 @@ export const deleteTask = (id, setIsLoading, setMessage) => async dispatch => {
 
 export const modifyTask = (formData, id, setIsLoading, setMessage) => async dispatch => {
   try {
-    setIsLoading(true);
+    // dispatch({ type: START_LOADING_TASK, data: id});
+    setIsLoading(id);
     if (!formData.name || !formData.est) {
       setMessage({ message: "Please enter the task name and est", type: "error" })
     }
 
     if (!localStorage.getItem('token')) {
-      dispatch({ type: MODIFY_TASK, data: { formData, id } });
+      dispatch({ type: MODIFY_TASK, data: { ...formData, _id: id } });
     } else {
       const { data } = await api.updateTask(formData, id);
-      dispatch({ type: MODIFY_TASK, data });
+      dispatch({ type: MODIFY_TASK, data: data });
     }
-    setIsLoading(false);
+    setIsLoading(null);
+    // dispatch({ type: END_LOADING_TASK, data: id});
   } catch (error) {
+    setIsLoading(null);
     setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
   }
@@ -132,7 +150,9 @@ export const clearFinishedTasks = (setMessage) => async dispatch => {
       setMessage({ type: 'success', message: "Success deleting." })
     } else {
       const { data } = await api.clearFinishedTasks();
+
       dispatch({ type: CLEAR_FINISHED_TASKS });
+
       setMessage({ type: 'success', message: data.message })
     }
     dispatch({ type: END_LOADING, data: 'tasks' })
@@ -148,8 +168,8 @@ export const clearAct = () => async dispatch => {
     if (!localStorage.getItem("token")) {
       dispatch({ type: CLEAR_ACT_FROM_TASKS });
     } else {
-      const {data} = await api.clearActTasks();
-      dispatch({ type: CLEAR_ACT_FROM_TASKS });
+      const { data } = await api.clearActTasks();
+      dispatch({ type: CLEAR_ACT_FROM_TASKS, data });
     }
     dispatch({ type: END_LOADING, data: 'tasks' })
   } catch (error) {
@@ -157,14 +177,21 @@ export const clearAct = () => async dispatch => {
   }
 }
 
-export const clearAllTasks = () => dispatch => {
+export const clearAllTasks = (setMessage) => async dispatch => {
   try {
+    dispatch({ type: START_LOADING, data: 'tasks' })
     if (!localStorage.getItem("token")) {
       dispatch({ type: CLEAR_ALL_TASKS });
     } else {
-
+      const { data } = await api.clearAllTasks();
+      
+      dispatch({ type: CLEAR_ALL_TASKS });
+      
+      setMessage({ type: 'success', message: data.message })
     }
+    dispatch({ type: END_LOADING, data: 'tasks' })
   } catch (error) {
+    setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
   }
 }
