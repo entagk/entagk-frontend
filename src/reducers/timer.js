@@ -53,7 +53,9 @@ export default (state = {
       return { ...state, started: false, restOfTime: action.data };
 
     case CHANGE_ACTIVE:
-      alert('change active from ', action.data);
+      console.log(action.data);
+      alert('change active from ' + JSON.stringify(action.data));
+      console.log(action.data);
       let active, periodNum = state.periodNum;
       if (state.active === PERIOD) {
         periodNum++;
@@ -63,7 +65,7 @@ export default (state = {
       }
       document.documentElement.style.setProperty('--main-color', state.activites[active].color);
       document.documentElement.style.setProperty('--secondary-color', state.activites[active].timerBorder);
-      alert('change active to ', active);
+      alert('change active to ' + active);
       return { ...state, active, periodNum };
 
     case MODITY_SETTING:
@@ -73,7 +75,9 @@ export default (state = {
         localStorage.setItem('setting', JSON.stringify(newSetting));
         return { ...state, setting: newSetting }
       } else {
-        return { ...state, }
+        const oldSetting = state.setting;
+        const newSetting = Object.assign(oldSetting, action.data);
+        return { ...state, setting: newSetting }
       }
 
     case LOGOUT:

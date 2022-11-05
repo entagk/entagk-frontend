@@ -47,9 +47,9 @@ const Tasks = () => {
       <Suspense fallback={
         <Loading
           size="200"
-          strokeWidth="1"
-          backgroud="white"
-          color={activites[active].color}
+          strokeWidth="5"
+          color="white"
+          backgroud="transparent"
         />
       }>
         <div className="tasks" style={{ display: (setting?.focusMode && started) && "none" }}>
@@ -63,7 +63,7 @@ const Tasks = () => {
             <>
               {(tasks.isLoading && tasks.tasks.length > 0) && (
                 <div className="loading-container">
-                  <Loading size="50" strokeWidth="5" backgroud={'transparent'} color="rgb(220 220 220)" />
+                  <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
                 </div>
               )}
             </>
@@ -74,7 +74,7 @@ const Tasks = () => {
                     {tasks.tasks?.filter(t => !t.check)?.map((task, index) => (
                       <Suspense fallback={
                         <div className="loading-container">
-                          <Loading size="40" strokeWidth="3" color={"rgb(197 197 197)"} />
+                          <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
                         </div>
                       } key={task._id}>
                         <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} {...task} />
@@ -82,13 +82,13 @@ const Tasks = () => {
                     ))}
                     {
                       <div className="loading-container">
-                        <Loading size="40" strokeWidth="3" color={"rgb(197 197 197)"} />
+                        <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
                       </div>
                     }
                     {tasks.tasks?.filter(t => t.check)?.map((task, index) => (
                       <Suspense fallback={
                         <div className="loading-container">
-                          <Loading size="40" strokeWidth="3" color={"rgb(197 197 197)"} />
+                          <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
                         </div>
                       } key={task._id}>
                         <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} {...task} />
@@ -100,10 +100,10 @@ const Tasks = () => {
                     {tasks.tasks?.map((task, index) => (
                       <Suspense fallback={
                         <div className="loading-container">
-                          <Loading size="40" strokeWidth="3" color={"rgb(197 197 197)"} />
+                          <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
                         </div>
-                      } key={task._id}>
-                        <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} {...task} />
+                      } key={task?._id}>
+                        <Task key={task?._id} isLoading={isLoading} setIsLoading={setIsLoading} {...task} />
                       </Suspense>
                     ))}
                   </>
@@ -120,7 +120,7 @@ const Tasks = () => {
             ) : (
               <Suspense fallback={
                 <div className="loading-container">
-                  <Loading size="60" strokeWidth="5" color={"#fff"} />
+                  <Loading size="60" strokeWidth="5" color={"#fff"} backgroud="transparent" />
                 </div>
               }>
                 <TaskForm setOpen={setOpenFormForNew} oldData={null} isLoading={isLoading} setIsLoading={setIsLoading} />

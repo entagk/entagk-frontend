@@ -163,7 +163,7 @@ export default (
           realAct = realAct + 1;
 
           newActive =
-            !task.check
+            !task?.check
               ? state.tasks[taskIndex]
               : state.autoStartNextTask ? state.tasks[taskIndex + 1] : { _id: null, name: null };
         }

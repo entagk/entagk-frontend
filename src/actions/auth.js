@@ -23,7 +23,9 @@ export const authForm = (formData, type, setMessage, navigate) => async dispatch
       dispatch(getUserData(setMessage));
       dispatch(getSetting(setMessage));
       dispatch(getTasks(setMessage));
-      navigate('/');
+      setTimeout(() => {
+        navigate(-1);
+      }, 1000);
     } else if (type === 'sign up') {
       const { data } = await api.signUp(formData);
 
@@ -32,16 +34,20 @@ export const authForm = (formData, type, setMessage, navigate) => async dispatch
       dispatch(getUserData(setMessage))
       dispatch(getSetting(setMessage));
       dispatch(getTasks(setMessage));
-      navigate('/');
+      setTimeout(() => {
+        navigate(-1);
+      }, 1000);
     } else if (type === 'google login') {
-      const {data} = await api.googleLogin(formData);
-      
+      const { data } = await api.googleLogin(formData);
+
       setMessage({ type: 'success', message: data.message })
       dispatch({ type: AUTH, data });
       dispatch(getUserData(setMessage))
       dispatch(getSetting(setMessage));
       dispatch(getTasks(setMessage));
-      navigate('/');
+      setTimeout(() => {
+        navigate(-1);
+      }, 1000);
     } else {
       const { data } = await api.forgetPassword(formData);
       setMessage({ type: 'success', message: data.message })
