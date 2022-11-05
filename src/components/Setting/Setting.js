@@ -42,6 +42,7 @@ function Setting() {
     )
   }
 
+
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: Number(e.target.value) })
   }
@@ -64,7 +65,10 @@ function Setting() {
       />
     }>
       {message.message && (
-        <Message message={message.message} type={message.type} setMessage={setMessage} />
+        <Message
+          {...message}
+          setMessage={setMessage}
+        />
       )}
       <NavBar />
       <form className='setting' onSubmit={handleSubmit}>
@@ -89,22 +93,34 @@ function Setting() {
               width: "fit-content",
               marginTop: '10px'
             }}>
-              <p style={{ marginBottom: "10px", fontSize: "18px", fontWeight: 400 }}>Pomodoro</p>
-              <TimeInputs name={PERIOD} data={data} setData={setData} />
+              <p>Pomodoro</p>
+              <TimeInputs
+                name={PERIOD}
+                data={data}
+                setData={setData}
+              />
             </div>
             <div style={{
               width: "fit-content",
               marginTop: '10px'
             }}>
-              <p style={{ marginBottom: "10px", fontSize: "18px", fontWeight: 400 }}>Short break</p>
-              <TimeInputs name={SHORT} data={data} setData={setData} />
+              <p>Short break</p>
+              <TimeInputs
+                name={SHORT}
+                data={data}
+                setData={setData}
+              />
             </div>
             <div style={{
               width: "fit-content",
               marginTop: '10px'
             }}>
-              <p style={{ marginBottom: "10px", fontSize: "18px", fontWeight: 400 }}>Long break</p>
-              <TimeInputs name={LONG} data={data} setData={setData} />
+              <p>Long break</p>
+              <TimeInputs
+                name={LONG}
+                data={data}
+                setData={setData}
+              />
             </div>
           </div>
         </div>
@@ -112,30 +128,45 @@ function Setting() {
           <div style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "space-between",
+            flexWrap: "wrap",
           }}>
-            <h3>Auto start breaks</h3>
-            <ToggleButton type="autoBreaks" data={data} setData={setData} />
+            <h3 style={{ width: 'fit-content' }}>Auto start breaks</h3>
+            <ToggleButton
+              type="autoBreaks"
+              data={data}
+              setData={setData}
+            />
           </div>
         </div>
         <div className='block'>
           <div style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "space-between",
+            flexWrap: "wrap",
           }}>
-            <h3>Auto start pomodoros</h3>
-            <ToggleButton type="autoPomodors" data={data} setData={setData} />
+            <h3 style={{ width: 'fit-content' }}>Auto start pomodoros</h3>
+            <ToggleButton
+              type="autoPomodors"
+              data={data}
+              setData={setData}
+            />
           </div>
         </div>
         <div className='block'>
           <div style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "space-between",
+            flexWrap: "wrap",
           }}>
-            <h3>Auto start next task</h3>
-            <ToggleButton type="autoStartNextTask" data={data} setData={setData} />
+            <h3 style={{ width: 'fit-content' }}>Auto start next task</h3>
+            <ToggleButton
+              type="autoStartNextTask"
+              data={data}
+              setData={setData}
+            />
           </div>
         </div>
         <div className='block' style={{ flexDirection: "row" }}>
@@ -143,9 +174,11 @@ function Setting() {
           <div style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-end"
+            justifyContent: "flex-end",
+            width: 'fit-content'
           }}>
             <input
+              className={data?.longInterval <= 0 ? 'error' : undefined}
               name='longInterval'
               type="number"
               min="1"
@@ -157,40 +190,59 @@ function Setting() {
         </div>
         <div className='block'>
           <h3>Alarm Sound</h3>
-          <Sound type="alarm" handleChange={handleChange} data={data} setData={setData} />
+          <Sound
+            type="alarm"
+            handleChange={handleChange}
+            data={data}
+            setData={setData}
+          />
         </div>
         <div className='block'>
           <h3>Ticking Sound</h3>
-          <Sound type="ticking" handleChange={handleChange} data={data} setData={setData} />
+          <Sound
+            type="ticking"
+            handleChange={handleChange}
+            data={data}
+            setData={setData}
+          />
         </div>
         <div className='block'>
           <h3>Click Sound</h3>
-          <Sound type="click" handleChange={handleChange} data={data} setData={setData} />
+          <Sound
+            type="click"
+            handleChange={handleChange}
+            data={data}
+            setData={setData}
+          />
         </div>
         <div className='block' style={{ flexDirection: "row" }}>
           <h3>Focus Mode When Ranning</h3>
           <ToggleButton type="focusMode" data={data} setData={setData} />
         </div>
-        <div className='block' style={{ flexDirection: "row", border: "none" }}>
+        <div className='block notification' style={{ flexDirection: "row", border: "none" }}>
           <h3>Notification</h3>
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end"
-          }}>
+          <div className='notification-data'>
             <Select options={["every", "last"]} data={data} type="notificationType" setData={setData} setChange={() => { }} />
-            <input
-              style={{ marginInline: "10px 0" }}
-              type="number"
-              defaultValue={data?.notificationInterval}
-              name="notificationInterval"
-              onChange={handleChange} />
-            <p style={{ marginLeft: 10 }}>Min</p>
+            <div className='notification-min'>
+              <input
+                style={{ marginInline: "10px 0" }}
+                className={data?.notificationInterval <= 0 ? 'error' : undefined}
+                type="number"
+                min="1"
+                defaultValue={data?.notificationInterval}
+                name="notificationInterval"
+                onChange={handleChange} />
+              <p style={{ marginLeft: 10 }}>Min</p>
+            </div>
           </div>
         </div>
         <div className='footer'>
           <button type='button' aria-label='cancel form' onClick={() => navigate("/")}>cancel</button>
-          <button className='save' type='submit' aria-label='submit form'>ok</button>
+          <button
+            className='save'
+            type='submit'
+            aria-label='submit form'
+            disabled={!data?.time[PERIOD] || !data?.time[SHORT] || !data?.time[LONG] || data?.notificationInterval <= 0 || data?.longInterval <= 0}>ok</button>
         </div>
       </form>
     </React.Suspense>

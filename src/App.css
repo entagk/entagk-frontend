@@ -121,3 +121,11 @@ a {
     padding: 0;
   }
 }
+
+@media (max-width: 450px) {
+  body {
+    overflow: auto;
+    margin: 10px;
+    padding: 0 10px;
+  }
+}

@@ -199,6 +199,7 @@ const Auth = () => {
                 </div>
                 <div className="block">
                   <button
+                    aria-label="submit auth data"
                     type="submit"
                     disabled={isSignUp ?
                       (!formData.name || !formData.email || !formData.password || (formData.password !== formData.confirmPassword)) :

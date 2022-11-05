@@ -32,9 +32,7 @@ function Sound({ type, data, setData }) {
   return (
     <div className='alarm-details'>
       <div className="alarm-type">
-        <p
-          style={{ width: "inherit", fontSize: 18, fontWeight: 400 }}
-        >Sound type</p>
+        <p style={{width: 'inherit'}}>Sound type</p>
         <Select
           data={data}
           options={sounds}
@@ -45,15 +43,13 @@ function Sound({ type, data, setData }) {
       </div>
       {data[`${type}Type`].name !== "none" && (
         <div className="alarm-type">
-          <p
-            style={{ width: "inherit", fontSize: 18, fontWeight: 400 }}
-          >Sound Volume</p>
+          <p style={{width: 'inherit'}}>Sound Volume</p>
           <div className='range-container'>
-            <p>{data[`${type}Volume`]}</p>
+            <span className='range-value'>{data[`${type}Volume`]}</span>
             <input
               type="range"
               className='range'
-              min="0"
+              min="10"
               max="100"
               value={data[`${type}Volume`]}
               name={`${type}Volume`}
@@ -63,8 +59,10 @@ function Sound({ type, data, setData }) {
         </div>
       )}
       {type === "alarm" && (
-        <div className="alarm-type">
-          <p style={{ width: "inherit", fontSize: 18, fontWeight: 400 }}>Repet</p>
+        <div className="alarm-type" style={{
+          flexDirection: "row"
+        }}>
+          <p style={{width: 'inherit'}}>Repet</p>
           <ToggleButton type="alarmRepet" data={data} setData={setData} />
         </div>
       )}

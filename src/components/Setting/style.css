@@ -45,7 +45,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   flex-direction: column;
   border-bottom: 2px solid #e7e7e7;
 }
@@ -65,6 +65,73 @@
   justify-content: space-between;
 }
 
+.setting .time-inputs p {
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.min-sec-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.setting .block .min-sec-input input {
+  padding-right: 20px;
+  width: 90px;
+}
+
+.min-sec-input div.plus-minus-arrows {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column;
+  position: absolute;
+  right: 10px;
+  height: 100%;
+  width: fit-content;
+}
+
+.min-sec-input .plus-minus-arrows button {
+  font-size: 15px;
+}
+
+.min-sec-input .plus-minus-arrows button.plus-arrow:hover,
+.min-sec-input .plus-minus-arrows button.minus-arrow:hover {
+  background-color: #f2f2f2;
+}
+
+.min-sec-input .plus-minus-arrows button.plus-arrow {
+  padding-inline: 4px;
+  padding-bottom: 2px;
+  background: #e7e7e7;
+  border-radius: 0px 5px 0px 0;
+  border-bottom: 1px solid #dbdbdb;
+  color: #373737;
+}
+
+.min-sec-input .plus-minus-arrows button.minus-arrow {
+  padding-inline: 4px;
+  padding-top: 2px;
+  background: #e7e7e7;
+  border-radius: 0px 0px 5px 0;
+  border-top: 1px solid #dbdbdb;
+  color: #373737;
+}
+/* removing default arrows from input number */
+.time-input input::-webkit-outer-spin-button,
+.time-input input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.time-input input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 .setting .block input {
   width: 75px;
   padding: 10px;
@@ -81,16 +148,29 @@
 .alarm-type {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin-top: 10px;
+}
+
+.alarm-type p {
+  width: fit-content;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+div.select-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: fit-content;
 }
 
 .select-menu {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  flex-direction: column;
   width: 200px;
+  position: relative;
 }
 
 .select-menu .row button {
@@ -103,8 +183,9 @@
   font-size: 16px;
   padding: 10px 16px;
   background: #ececec;
-  width: 200px;
+  width: fit-content;
   justify-content: space-between;
+  width: max-content;
 }
 
 .select-menu button.open-menu .arrow {
@@ -118,10 +199,15 @@
 .alarm-details input {
   margin-right: 0;
 }
-.range-container {
+
+.block div.range-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.range-container .range-value {
+  margin-right: 10px;
 }
 
 .range-container input[type="range"] {
@@ -164,6 +250,48 @@
   cursor: pointer;
   border-radius: 50%;
   box-shadow: 0px 0px 4px rgb(50, 50, 50);
+}
+
+.block.notification .notification-data {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: fit-content;
+}
+
+.notification-data div.notification-min {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: fit-content;
+}
+
+@media (max-width: 450px) {
+  .setting .block.notification {
+    border: none;
+    flex-flow: wrap;
+  }
+
+  .block.notification .notification-data {
+    margin-top: 15px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .alarm-details .alarm-type {
+    flex-direction: column;
+  }
+
+  .alarm-details .alarm-type p:first-of-type {
+    margin-bottom: 10px;
+    width: 100%;
+    font-weight: 500;
+  }
+
+  .alarm-details .alarm-type .select-menu button.open-menu {
+    width: 100%;
+  }
 }
 
 .setting .footer {

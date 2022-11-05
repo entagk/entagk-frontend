@@ -162,7 +162,7 @@ export const clearFinishedTasks = (setMessage) => async dispatch => {
   }
 }
 
-export const clearAct = () => async dispatch => {
+export const clearAct = (setMessage) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'tasks' })
     if (!localStorage.getItem("token")) {
@@ -173,6 +173,7 @@ export const clearAct = () => async dispatch => {
     }
     dispatch({ type: END_LOADING, data: 'tasks' })
   } catch (error) {
+    setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
   }
 }
@@ -184,9 +185,9 @@ export const clearAllTasks = (setMessage) => async dispatch => {
       dispatch({ type: CLEAR_ALL_TASKS });
     } else {
       const { data } = await api.clearAllTasks();
-      
+
       dispatch({ type: CLEAR_ALL_TASKS });
-      
+
       setMessage({ type: 'success', message: data.message })
     }
     dispatch({ type: END_LOADING, data: 'tasks' })

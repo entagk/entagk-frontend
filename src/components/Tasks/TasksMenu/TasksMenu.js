@@ -23,12 +23,12 @@ const Menu = () => {
 
   const handleClearAct = () => {
     setOpenMenu(om => !om);
-    dispatch(clearAct());
+    dispatch(clearAct(setMessage));
   }
 
   const handleClearTasks = () => {
     setOpenMenu(om => !om);
-    dispatch(clearAllTasks());
+    dispatch(clearAllTasks(setMessage));
   }
 
   return (
