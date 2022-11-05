@@ -22,6 +22,10 @@ h1.error-404 {
   letter-spacing: 20px;
 }
 
+.error-page h2 {
+  font-size: 50px;
+}
+
 .error-page .buttons {
   display: flex;
   align-items: center;
@@ -45,4 +49,21 @@ h1.error-404 {
 
 .error-page a:hover {
   box-shadow: 0 0 11px 1px #cecece59;
+}
+
+@media (max-width: 550px) {
+  .error-page h1.error-404 {
+    font-size: 150px;
+  }
+
+  .error-page h2 {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 400px) {
+  .error-page h1.error-404 {
+    font-size: 130px;
+    letter-spacing: 10px;
+  }
 }
