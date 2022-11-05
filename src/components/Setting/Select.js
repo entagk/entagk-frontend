@@ -12,25 +12,19 @@ function Select({ options, setChange, type, data, setData }) {
   }
 
   return (
-    <div style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "flex-end",
-      width: "fit-content"
-    }}>
-      <div className='select-menu menu' style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        flexDirection: "column",
-        position: "relative"
-      }}>
-        <button type='button' aria-label='open menu' className='open-menu' onClick={() => setOpen(!open)}><p>{data[type]?.name || data[type]}</p>{open ? (<RiArrowUpSLine className='arrow' />) : (<RiArrowDownSLine className='arrow' />)}</button>
+    <div className='select-container'>
+      <div className='select-menu menu'>
+        <button type='button' aria-label='open menu' className='open-menu' onClick={() => setOpen(!open)}>
+          <span>{data[type]?.name || data[type]}</span>
+          {open ?
+            (<RiArrowUpSLine className='arrow' />) :
+            (<RiArrowDownSLine className='arrow' />)
+          }</button>
         {open && (
           <div className='menu-content' style={{ width: "max-content", top: 35 }}>
             <div className='row' style={{ width: "100%" }}>
               {realOptions?.map((option, index) => (
-                <button key={index} type='button' onClick={handleChange} value={index} className={data[type].name === option || data[type] === option ? "active" : null}>{option}</button>
+                <button key={index} aria-label={option} type='button' onClick={handleChange} value={index} className={data[type].name === option || data[type] === option ? "active" : null}>{option}</button>
               ))}
             </div>
           </div>

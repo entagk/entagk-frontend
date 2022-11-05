@@ -7,19 +7,19 @@ const Message = ({ message, type, setMessage }) => {
   useEffect(() => {
     if (message) {
       setTimeout(() => {
-        setMessage("");
-      }, 5000);
+        setMessage({ message: "", type: '' });
+      }, 10000);
     }
     // eslint-disable-next-line
   }, [message]);
 
   return (
-    <div className="message-container">
+    <div className="message-container" style={{ background: type === 'success' && '#00ae00' }}>
       <div>
         {type === 'error' ? <BiError /> : <AiFillCheckCircle />}
       </div>
       <div>{message}</div>
-      <button aria-label="Close error" onClick={() => setMessage("")}><AiFillCloseCircle /></button>
+      <button aria-label="Close error" onClick={() => setMessage({ message: "", type: '' })}><AiFillCloseCircle /></button>
     </div>
   )
 };

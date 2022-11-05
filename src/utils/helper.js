@@ -7,8 +7,8 @@ export const formatTime = (t) => {
 
 export const pushNotification = (message) => {
   // eslint-disable-next-line
-  if (typeof Notification !== undefined) {
-    new Notification(message, {
+  if (typeof window?.Notification !== undefined) {
+    new window.Notification(message, {
       icon: 'favicon.ico',
       tag: "mohamed ali",
       requireInteraction: true,

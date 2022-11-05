@@ -116,7 +116,9 @@
   margin-right: 10px;
 }
 
-.task .overflow {
+.task .overflow,
+.task .loading-container,
+.task-form .loading-container {
   position: absolute;
   display: flex;
   align-items: center;
@@ -126,8 +128,17 @@
   right: 0px;
   top: 0px;
   background: #ffffffad;
-  z-index: 101;
   border-radius: 10px;
+}
+
+.task .loading-container,
+.task-form .loading-container {
+  z-index: 102;
+  visibility: visible;
+}
+
+.task .overflow {
+  z-index: 101;
   visibility: hidden;
 }
 
@@ -259,10 +270,6 @@
   flex-direction: row;
 }
 
-.block input {
-  width: 75px;
-}
-
 .pomodoros .input-number {
   display: flex;
   align-items: center;
@@ -366,6 +373,13 @@
   box-shadow: 0 0 8px 0px rgb(78 78 78);
 }
 
+.task-footer button:disabled {
+  cursor: no-drop;
+  background-color: rgba(0, 0, 0, 0.12);
+  box-shadow: none;
+  color: rgba(0, 0, 0, 0.26);
+}
+
 /* end task form */
 
 /* start tasks footer */
@@ -420,6 +434,7 @@
   body.body {
     padding: 0 10px;
   }
+
   .tasks .tasks-container {
     margin: 10px;
   }
@@ -472,6 +487,10 @@
 @media (max-width: 450px) {
   .task {
     font-size: 16px;
+  }
+
+  .task-form .pomodoros {
+    justify-content: space-between;
   }
 
   .task .task-inner p {

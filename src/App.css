@@ -1,4 +1,9 @@
 /* Basics styles */
+:root {
+  --main-color: #ff002f;
+  --secondary-color: #b40021;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -24,17 +29,11 @@ button {
   justify-content: center;
 }
 
-button:disabled {
+button[type="submit"]:disabled {
   cursor: no-drop;
-  background-color: -internal-light-dark(
-    rgba(239, 239, 239, 0.3),
-    rgba(19, 1, 1, 0.3)
-  );
-  color: -internal-light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3));
-  border-color: -internal-light-dark(
-    rgba(118, 118, 118, 0.3),
-    rgba(195, 195, 195, 0.3)
-  );
+  background-color: rgba(0, 0, 0, 0.12);
+  box-shadow: none;
+  color: rgba(0, 0, 0, 0.26);
 }
 
 input,
@@ -42,6 +41,16 @@ textarea {
   outline: none;
   background: none;
   border: none;
+}
+
+input.error {
+  background: #ffa9a9;
+  color: #d81c1c;
+  border: 1px solid #f00;
+}
+
+input:focus {
+  background-color: #dddddd3d;
 }
 
 textarea {
@@ -63,6 +72,9 @@ a {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin-inline: auto;
+  padding-inline: 15px;
+  max-width: 1200px;
 }
 
 /*start scrollbar */
@@ -98,7 +110,22 @@ a {
   margin-right: 10px;
   border-radius: 8px;
   font-size: 16px;
+  padding: 10px;
 }
 /* end basics */
 
 @import url("./utils/style.css");
+
+@media (max-width: 425px) {
+  body {
+    padding: 0;
+  }
+}
+
+@media (max-width: 450px) {
+  body {
+    overflow: auto;
+    margin: 10px;
+    padding: 0 10px;
+  }
+}

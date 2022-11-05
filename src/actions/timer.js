@@ -1,3 +1,6 @@
+import { END_LOADING, LOGOUT, START_LOADING } from "./auth";
+import * as api from './../api';
+
 export const CHANGE_ACTIVE = "CHANGE_ACTIVE";
 
 export const START_TIMER = "START_TIMER";
@@ -164,37 +167,57 @@ export const initialSetting = {
   notificationInterval: 1,
 };
 
-export const getSetting = (setError) => async dispatch => {
+export const getSetting = (setMessage) => async dispatch => {
   try {
-
+    dispatch({ type: START_LOADING, data: 'setting' });
     if (!localStorage.getItem('token')) {
       dispatch({ type: GET_SETTING, data: JSON.parse(localStorage.getItem('setting')) || initialSetting });
     } else {
+      const { data } = await api.getAllSetting();
 
+      dispatch({ type: GET_SETTING, data: data });
     }
+    dispatch({ type: END_LOADING, data: 'setting' });
   } catch (error) {
+    // const errorMessage = await error.response; 
+    if (error.response?.status === 500) {
+      dispatch({ type: LOGOUT });
+      window.location.reload();
+    }
     console.error(error);
-    setError(error.message);
+    setMessage({ message: error?.response?.data?.message || error.message, type: 'error' });
   }
 }
 
-export const changeActive = (active) => async dispatch => {
+export const changeActive = (active, activeId) => async dispatch => {
   try {
-    dispatch({ type: CHANGE_ACTIVE, data: active });
+    if (!localStorage.getItem('token')) {
+      dispatch({ type: CHANGE_ACTIVE, data: active });
+    } else {
+      if (active === PERIOD && activeId) {
+        const { data } = await api.increaseAct(activeId);
+        dispatch({ type: CHANGE_ACTIVE, data: { active, task: data } })
+      }
+    }
   } catch (error) {
     console.error(error)
   }
 }
 
-export const modifySetting = (data, setError) => async dispatch => {
+export const modifySetting = (formData, setMessage) => async dispatch => {
   try {
-    if(!localStorage.getItem("token")) {
-      dispatch({ type: MODITY_SETTING, data });
+    if (!localStorage.getItem("token")) {
+      dispatch({ type: MODITY_SETTING, data: formData });
     } else {
-
+      const { data } = await api.updateSetting(formData);
+      dispatch({ type: MODITY_SETTING, data });
     }
   } catch (error) {
     console.error(error);
-    setError(error.message);
+    setMessage({ message: error.response.data.message || error.message, type: 'error' });
+    if (error.response?.status === 500) {
+      dispatch({ type: LOGOUT });
+      window.location.reload();
+    }
   }
 } 

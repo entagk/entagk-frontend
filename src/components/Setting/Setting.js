@@ -16,36 +16,32 @@ const TimeInputs = lazy(() => import('./timeInputs'));
 const ToggleButton = lazy(() => import('./ToggleButton'));
 
 function Setting() {
-  const { setting } = useSelector(state => state.timer);
+  const { setting, isLoading } = useSelector(state => state.timer);
 
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState({ type: '', message: "" });
   const [data, setData] = useState(setting);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (setting.format === undefined) {
-      dispatch(getSetting(setError));
+    if (setting === undefined && !isLoading) {
+      dispatch(getSetting(setMessage));
     }
     setData(setting);
     // eslint-disable-next-line
-  }, [setting.format]);
+  }, [setting, isLoading]);
 
-  if (setting.format === undefined) {
+  if (setting === undefined) {
     return (
       <Loading
-        backgroud="transparent"
-        width="200"
-        height="200"
-        cx="50"
-        cy="50"
-        r="20"
+        size="200"
         strokeWidth="2.5"
         color="#ffffff"
-        containerHeight="500px"
+        backgroud="transperent"
       />
     )
   }
+
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: Number(e.target.value) })
@@ -54,7 +50,7 @@ function Setting() {
   const handleSubmit = async (e) => {
     await e.preventDefault();
     if (data !== setting) {
-      await dispatch(modifySetting(data, setError));
+      await dispatch(modifySetting(data, setMessage));
     }
     navigate("/");
   }
@@ -62,19 +58,17 @@ function Setting() {
   return (
     <React.Suspense fallback={
       <Loading
-        backgroud="transparent"
-        width="200"
-        height="200"
-        cx="50"
-        cy="50"
-        r="20"
-        strokeWidth="2.5"
+        size="200"
+        strokeWidth="5px"
         color="#ffffff"
-        containerHeight="500px"
+        backgroud="transperent"
       />
     }>
-      {error && (
-        <Message message={error} type="error" setMessage={setError} />
+      {message.message && (
+        <Message
+          {...message}
+          setMessage={setMessage}
+        />
       )}
       <NavBar />
       <form className='setting' onSubmit={handleSubmit}>
@@ -99,22 +93,34 @@ function Setting() {
               width: "fit-content",
               marginTop: '10px'
             }}>
-              <p style={{ marginBottom: "10px", fontSize: "18px", fontWeight: 400 }}>Pomodoro</p>
-              <TimeInputs name={PERIOD} data={data} setData={setData} />
+              <p>Pomodoro</p>
+              <TimeInputs
+                name={PERIOD}
+                data={data}
+                setData={setData}
+              />
             </div>
             <div style={{
               width: "fit-content",
               marginTop: '10px'
             }}>
-              <p style={{ marginBottom: "10px", fontSize: "18px", fontWeight: 400 }}>Short break</p>
-              <TimeInputs name={SHORT} data={data} setData={setData} />
+              <p>Short break</p>
+              <TimeInputs
+                name={SHORT}
+                data={data}
+                setData={setData}
+              />
             </div>
             <div style={{
               width: "fit-content",
               marginTop: '10px'
             }}>
-              <p style={{ marginBottom: "10px", fontSize: "18px", fontWeight: 400 }}>Long break</p>
-              <TimeInputs name={LONG} data={data} setData={setData} />
+              <p>Long break</p>
+              <TimeInputs
+                name={LONG}
+                data={data}
+                setData={setData}
+              />
             </div>
           </div>
         </div>
@@ -122,30 +128,45 @@ function Setting() {
           <div style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "space-between",
+            flexWrap: "wrap",
           }}>
-            <h3>Auto start breaks</h3>
-            <ToggleButton type="autoBreaks" data={data} setData={setData} />
+            <h3 style={{ width: 'fit-content' }}>Auto start breaks</h3>
+            <ToggleButton
+              type="autoBreaks"
+              data={data}
+              setData={setData}
+            />
           </div>
         </div>
         <div className='block'>
           <div style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "space-between",
+            flexWrap: "wrap",
           }}>
-            <h3>Auto start pomodoros</h3>
-            <ToggleButton type="autoPomodors" data={data} setData={setData} />
+            <h3 style={{ width: 'fit-content' }}>Auto start pomodoros</h3>
+            <ToggleButton
+              type="autoPomodors"
+              data={data}
+              setData={setData}
+            />
           </div>
         </div>
         <div className='block'>
           <div style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "space-between",
+            flexWrap: "wrap",
           }}>
-            <h3>Auto start next task</h3>
-            <ToggleButton type="autoStartNextTask" data={data} setData={setData} />
+            <h3 style={{ width: 'fit-content' }}>Auto start next task</h3>
+            <ToggleButton
+              type="autoStartNextTask"
+              data={data}
+              setData={setData}
+            />
           </div>
         </div>
         <div className='block' style={{ flexDirection: "row" }}>
@@ -153,54 +174,75 @@ function Setting() {
           <div style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-end"
+            justifyContent: "flex-end",
+            width: 'fit-content'
           }}>
             <input
+              className={data?.longInterval <= 0 ? 'error' : undefined}
               name='longInterval'
               type="number"
               min="1"
               max="100"
-              value={data.longInterval}
+              defaultValue={data?.longInterval}
               onChange={handleChange}
             />
           </div>
         </div>
         <div className='block'>
           <h3>Alarm Sound</h3>
-          <Sound type="alarm" handleChange={handleChange} data={data} setData={setData} />
+          <Sound
+            type="alarm"
+            handleChange={handleChange}
+            data={data}
+            setData={setData}
+          />
         </div>
         <div className='block'>
           <h3>Ticking Sound</h3>
-          <Sound type="ticking" handleChange={handleChange} data={data} setData={setData} />
+          <Sound
+            type="ticking"
+            handleChange={handleChange}
+            data={data}
+            setData={setData}
+          />
         </div>
         <div className='block'>
           <h3>Click Sound</h3>
-          <Sound type="click" handleChange={handleChange} data={data} setData={setData} />
+          <Sound
+            type="click"
+            handleChange={handleChange}
+            data={data}
+            setData={setData}
+          />
         </div>
         <div className='block' style={{ flexDirection: "row" }}>
           <h3>Focus Mode When Ranning</h3>
           <ToggleButton type="focusMode" data={data} setData={setData} />
         </div>
-        <div className='block' style={{ flexDirection: "row", border: "none" }}>
+        <div className='block notification' style={{ flexDirection: "row", border: "none" }}>
           <h3>Notification</h3>
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end"
-          }}>
+          <div className='notification-data'>
             <Select options={["every", "last"]} data={data} type="notificationType" setData={setData} setChange={() => { }} />
-            <input
-              style={{ marginInline: "10px 0" }}
-              type="number"
-              value={data.notificationInterval}
-              name="notificationInterval"
-              onChange={handleChange} />
-            <p style={{ marginLeft: 10 }}>Min</p>
+            <div className='notification-min'>
+              <input
+                style={{ marginInline: "10px 0" }}
+                className={data?.notificationInterval <= 0 ? 'error' : undefined}
+                type="number"
+                min="1"
+                defaultValue={data?.notificationInterval}
+                name="notificationInterval"
+                onChange={handleChange} />
+              <p style={{ marginLeft: 10 }}>Min</p>
+            </div>
           </div>
         </div>
         <div className='footer'>
           <button type='button' aria-label='cancel form' onClick={() => navigate("/")}>cancel</button>
-          <button className='save' type='submit' aria-label='submit form'>ok</button>
+          <button
+            className='save'
+            type='submit'
+            aria-label='submit form'
+            disabled={!data?.time[PERIOD] || !data?.time[SHORT] || !data?.time[LONG] || data?.notificationInterval <= 0 || data?.longInterval <= 0}>ok</button>
         </div>
       </form>
     </React.Suspense>

@@ -1,82 +1,62 @@
-import React, { lazy, useEffect, useState } from 'react';
 import './App.css';
-import Loading from './utils/Loading';
-import Message from './utils/Message';
-import { useDispatch, useSelector } from 'react-redux';
 
-import { getSetting } from './actions/timer';
-import { getTasks } from './actions/tasks';
+import AOS from 'aos';
+import 'aos/dist/aos.css'; // You can also use <link> for styles
 
-const ActiveTask = lazy(() => import('./components/ActiveTask/ActiveTask'));
-const Timer = React.lazy(() => import('./components/Clock/Timer'));
-const NavBar = React.lazy(() => import('./components/NavBar/NavBar'));
-const Tasks = React.lazy(() => import("./components/Tasks/Tasks"));
+import Auth from './components/Auth/Auth';
+import Profile from './components/Profile/Profile';
+import Subsecription from './components/Subsecription/Subsecription';
+import Setting from './components/Setting/Setting';
+import Report from './components/Report/Report';
+import ErrorPage from './components/ErrorPage/ErrorPage';
+
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider
+} from 'react-router-dom';
+
+import Home from './components/Home/Home';
+
+
+AOS.init();
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path='' errorElement={<ErrorPage />}>
+      <Route
+        path='/'
+        element={<Home />}
+      />
+      <Route
+        path='/auth'
+        element={<Auth />}
+      />
+      <Route
+        path="/profile"
+        element={<Profile />}
+      />
+      <Route
+        path="/subsecription"
+        element={<Subsecription />}
+      />
+      <Route
+        path="/setting"
+        element={<Setting />}
+      />
+      <Route
+        path="/report"
+        element={<Report />}
+      />
+    </Route>
+  )
+)
 
 function App() {
-  const { setting } = useSelector(state => state.timer);
-  const { tasks } = useSelector(state => state.tasks);
-  const [error, setError] = useState("");
-  const dispatch = useDispatch();
-  
-  useEffect(() => {
-    if (!tasks) {
-      dispatch(getTasks(setError));
-    }
-    // eslint-disable-next-line
-  }, [tasks])
-
-  useEffect(() => {
-    if (setting.format === undefined) {
-      dispatch(getSetting(setError));
-    }
-    // eslint-disable-next-line
-  }, [setting.format]);
-
-  if (setting.format === undefined || !tasks) {
-    return (
-      <Loading
-        backgroud="transparent"
-        width="200"
-        height="200"
-        cx="50"
-        cy="50"
-        r="20"
-        strokeWidth="2.5"
-        color="#ffffff"
-        containerHeight="500px"
-      />
-    )
-  }
-
   return (
-    <>
-      {error && (
-        <Message message={error} type="error" setMessage={setError} />
-      )}
-      <React.Suspense fallback={
-        <Loading
-          backgroud="transparent"
-          width="200"
-          height="200"
-          cx="50"
-          cy="50"
-          r="20"
-          strokeWidth="2.5"
-          color="#ffffff"
-          containerHeight="500px"
-        />
-      }>
-        <div className='container'>
-          <NavBar />
-          <div className="app">
-            <Timer />
-            <ActiveTask />
-          </div>
-          <Tasks />
-        </div>
-      </React.Suspense>
-    </>
-  );
+    <RouterProvider router={router} />
+  )
 }
 
 export default App;

@@ -16,21 +16,22 @@ const DigitalTimer = lazy(() => import("./Digital/Digital"));
 const worker = new window.Worker('worker.js');
 const Timer = () => {
     const { active, activites, setting, started, periodNum, restOfTime } = useSelector((state) => state.timer);
+    const { activeId } = useSelector(state => state.tasks);
     const [time, setTime] = useState(restOfTime === null ? 0 : restOfTime);
 
-    const activePeriod = setting.time[active];
+    const activePeriod = setting?.time[active];
     const dispatch = useDispatch();
 
     /** All sounds that we use it in timer.*/
-    const tickingSound = useRef(setting.tickingType.name !== "none" ? audioPlayer({ src: setting.tickingType.src, volume: setting.tickingVolume, loop: true }) : null);
-    const alarmSound = useRef(audioPlayer({ src: setting.alarmType.src, volume: setting.alarmVolume, loop: setting.alarmRepet }));
-    const clickSound = useRef(setting.clickType.name !== "none" ? audioPlayer({ src: setting.clickType.src, volume: setting.clickVolume }) : null);
+    const tickingSound = useRef(setting?.tickingType?.name !== "none" ? audioPlayer({ src: setting?.tickingType?.src, volume: setting?.tickingVolume, loop: true }) : null);
+    const alarmSound = useRef(audioPlayer({ src: setting?.alarmType?.src, volume: setting?.alarmVolume, loop: setting?.alarmRepet }));
+    const clickSound = useRef(setting?.clickType?.name !== "none" ? audioPlayer({ src: setting?.clickType?.src, volume: setting?.clickVolume }) : null);
 
     useEffect(() => {
         // eslint-disable-next-line
-        if (typeof Notification != undefined) {
-            if (Notification?.permission === 'default') {
-                Notification?.requestPermission();
+        if (typeof window?.Notification != undefined) {
+            if (window?.Notification?.permission === 'default') {
+                window?.Notification?.requestPermission();
             }
         }
     }, []);
@@ -45,14 +46,14 @@ const Timer = () => {
     }, [active, setting.time]);
 
     useEffect(() => {
-        if (setting.tickingType.name !== 'none') {
-            tickingSound.current.chengeVolume(setting.tickingVolume);
-            tickingSound.current.changeFile(setting.tickingType.src);
+        if (setting?.tickingType.name !== 'none') {
+            tickingSound.current.chengeVolume(setting?.tickingVolume);
+            tickingSound.current.changeFile(setting?.tickingType.src);
         }
 
-        alarmSound.current.chengeVolume(setting.alarmVolume);
-        alarmSound.current.changeFile(setting.alarmType.src);
-        alarmSound.current.changeLoop(setting.alarmRepet);
+        alarmSound.current.chengeVolume(setting?.alarmVolume);
+        alarmSound.current.changeFile(setting?.alarmType.src);
+        alarmSound.current.changeLoop(setting?.alarmRepet);
 
         if (setting.clickType.name !== 'none') {
             clickSound.current.chengeVolume(setting.clickVolume);
@@ -99,15 +100,18 @@ const Timer = () => {
     worker.onmessage = (event) => {
         if (event.data !== 'stop') {
             setTime(event.data);
-            if (Notification?.permission === 'granted') {
-                if (time !== 0) {
-                    if (setting.notificationType === 'every') {
-                        if (time % (setting.notificationInterval * 60) === 0 && time !== activePeriod) {
-                            pushNotification(`${time / 60} minutes left!`);
-                        }
-                    } else {
-                        if (time - (setting.notificationInterval * 60) === 0 && time !== activePeriod) {
-                            pushNotification(`${time / 60} minutes left!`);
+            // eslint-disable-next-line
+            if (typeof window?.Notification != undefined) {
+                if (window?.Notification?.permission === 'granted') {
+                    if (time !== 0) {
+                        if (setting.notificationType === 'every') {
+                            if (time % (setting.notificationInterval * 60) === 0 && time !== activePeriod) {
+                                pushNotification(`${time / 60} minutes left!`);
+                            }
+                        } else {
+                            if (time - (setting.notificationInterval * 60) === 0 && time !== activePeriod) {
+                                pushNotification(`${time / 60} minutes left!`);
+                            }
                         }
                     }
                 }
@@ -120,15 +124,18 @@ const Timer = () => {
                 tickingSound.current.handleStop();
             }
 
-            if (Notification.permission === 'granted') {
-                if (active === PERIOD) {
-                    pushNotification("It's time to take a break");
-                } else {
-                    pushNotification("It's time to focus!");
+            // eslint-disable-next-line
+            if (typeof window?.Notification != undefined) {
+                if (window?.Notification.permission === 'granted') {
+                    if (active === PERIOD) {
+                        pushNotification("It's time to take a break");
+                    } else {
+                        pushNotification("It's time to focus!");
+                    }
                 }
             }
 
-            dispatch(changeActive(active));
+            dispatch(changeActive(active, activeId));
         }
     }
 
@@ -166,9 +173,9 @@ const Timer = () => {
 
     return (
         <>
-            <div className="clock-container" style={{ background: `${activites[active].timerBorder}` }}>
+            <div className="clock-container" style={{ background: activites[active].timerBorder }}>
                 <div className="clock">
-                    <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" width="200" height="200" cx="50" cy="50" r="20" strokeWidth="2.5" />}>
+                    <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" size="200" height="200" cx="50" cy="50" r="20" strokeWidth="2.5" />}>
                         {setting.format === "digital" ? (
                             <>
                                 <DigitalTimer handleReset={handleReset} toggleStart={toggleStart} setTime={setTime} time={time} />
