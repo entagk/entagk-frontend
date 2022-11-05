@@ -17,10 +17,7 @@ function Sound({ type, data, setData }) {
       audioChanging.current.changeFile(data[`${type}Type`].src);
       audioChanging.current.chengeVolume(data[`${type}Volume`]);
       audioChanging.current.handlePlay();
-      console.log(type)
     }
-    // setChange(false);
-    console.log(change);
     // eslint-disable-next-line
   }, [change]);
 

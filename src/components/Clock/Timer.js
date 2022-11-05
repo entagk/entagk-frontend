@@ -23,9 +23,27 @@ const Timer = () => {
     const dispatch = useDispatch();
 
     /** All sounds that we use it in timer.*/
-    const tickingSound = useRef(setting?.tickingType?.name !== "none" ? audioPlayer({ src: setting?.tickingType?.src, volume: setting?.tickingVolume, loop: true }) : null);
-    const alarmSound = useRef(audioPlayer({ src: setting?.alarmType?.src, volume: setting?.alarmVolume, loop: setting?.alarmRepet }));
-    const clickSound = useRef(setting?.clickType?.name !== "none" ? audioPlayer({ src: setting?.clickType?.src, volume: setting?.clickVolume }) : null);
+    const tickingSound = useRef(setting?.tickingType?.name !== "none" ?
+        audioPlayer({
+            src: setting?.tickingType?.src,
+            volume: setting?.tickingVolume,
+            loop: true
+        }) :
+        null
+    );
+    const alarmSound = useRef(
+        audioPlayer({
+            src: setting?.alarmType?.src,
+            volume: setting?.alarmVolume,
+            loop: setting?.alarmRepet
+        })
+    );
+    const clickSound = useRef(setting?.clickType?.name !== "none" ?
+        audioPlayer({
+            src: setting?.clickType?.src,
+            volume: setting?.clickVolume
+        }) : null
+    );
 
     useEffect(() => {
         // eslint-disable-next-line
@@ -175,7 +193,7 @@ const Timer = () => {
         <>
             <div className="clock-container" style={{ background: activites[active].timerBorder }}>
                 <div className="clock">
-                    <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" size="200" height="200" cx="50" cy="50" r="20" strokeWidth="2.5" />}>
+                    <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" size="200" strokeWidth="2.5" />}>
                         {setting.format === "digital" ? (
                             <>
                                 <DigitalTimer handleReset={handleReset} toggleStart={toggleStart} setTime={setTime} time={time} />

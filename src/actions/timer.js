@@ -197,6 +197,8 @@ export const changeActive = (active, activeId) => async dispatch => {
       if (active === PERIOD && activeId) {
         const { data } = await api.increaseAct(activeId);
         dispatch({ type: CHANGE_ACTIVE, data: { active, task: data } })
+      } else {
+        dispatch({ type: CHANGE_ACTIVE, data: { active } })
       }
     }
   } catch (error) {
@@ -206,12 +208,14 @@ export const changeActive = (active, activeId) => async dispatch => {
 
 export const modifySetting = (formData, setMessage) => async dispatch => {
   try {
+    dispatch({ type: START_LOADING, data: 'setting' });
     if (!localStorage.getItem("token")) {
       dispatch({ type: MODITY_SETTING, data: formData });
     } else {
       const { data } = await api.updateSetting(formData);
       dispatch({ type: MODITY_SETTING, data });
     }
+    dispatch({ type: END_LOADING, data: 'setting' });
   } catch (error) {
     console.error(error);
     setMessage({ message: error.response.data.message || error.message, type: 'error' });

@@ -16,7 +16,7 @@ const TimeInputs = lazy(() => import('./timeInputs'));
 const ToggleButton = lazy(() => import('./ToggleButton'));
 
 function Setting() {
-  const { setting, isLoading } = useSelector(state => state.timer);
+  const { setting, isLoading, activites, active } = useSelector(state => state.timer);
 
   const [message, setMessage] = useState({ type: '', message: "" });
   const [data, setData] = useState(setting);
@@ -49,10 +49,28 @@ function Setting() {
 
   const handleSubmit = async (e) => {
     await e.preventDefault();
+
+    console.log(data);
+
+    if (Object.values(data.time).includes(0)) {
+      setMessage({ message: "Please enter valid time data", type: 'error' });
+    }
+
+    if (!data.longInterval) {
+      setMessage({ message: "Please enter long break interval", type: 'error' });
+    }
+
+    if (!data.notificationInterval) {
+      setMessage({ message: "Please enter long break interval", type: 'error' });
+    }
+
     if (data !== setting) {
       await dispatch(modifySetting(data, setMessage));
     }
-    navigate("/");
+
+    // setTimeout(() => {
+      navigate(-1);
+    // }, 1000);
   }
 
   return (
@@ -69,6 +87,27 @@ function Setting() {
           {...message}
           setMessage={setMessage}
         />
+      )}
+      {(setting && isLoading) && (
+        <div className="loading-container" style={{
+          position: 'fixed',
+          top: '0',
+          right: '0',
+          background: '#ffffff73',
+          width: '100%',
+          height: '100%',
+          zIndex: '1000',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <Loading
+            size="200"
+            strokeWidth="5"
+            color={activites[active].color}
+            backgroud="transperent"
+          />
+        </div>
       )}
       <NavBar />
       <form className='setting' onSubmit={handleSubmit}>
@@ -237,12 +276,12 @@ function Setting() {
           </div>
         </div>
         <div className='footer'>
-          <button type='button' aria-label='cancel form' onClick={() => navigate("/")}>cancel</button>
+          <button type='button' aria-label='cancel form' onClick={() => navigate(-1)}>cancel</button>
           <button
             className='save'
             type='submit'
             aria-label='submit form'
-            disabled={!data?.time[PERIOD] || !data?.time[SHORT] || !data?.time[LONG] || data?.notificationInterval <= 0 || data?.longInterval <= 0}>ok</button>
+            disabled={(data && Object.values(data?.time).includes(0)) || data?.notificationInterval <= 0 || data?.longInterval <= 0}>ok</button>
         </div>
       </form>
     </React.Suspense>

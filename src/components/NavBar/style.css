@@ -27,7 +27,7 @@
   /* box-shadow: 0px 0px 5px #7a7a7a; */
 }
 
-.nav-bar button.toggle-menu:hover {
+.nav-bar button.toggle-menu:hover:not(:disabled) {
   background-color: #2c282842; /*   box-shadow: 0px 0px 10px #7a7a7a; */
 }
 

@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import { BiDownArrow, BiUpArrow } from 'react-icons/bi';
 
 function TimeInputs({ name, data, setData }) {
-  // console.log(typeof value, name);
-  // console.log(name, data);
   const [min, setMin] = useState(Number(data?.time[name]) >= 60 ? Math.floor(Number(data?.time[name]) / 60) : 0);
   const [sec, setSec] = useState(Number(data?.time[name]) % 60);
 
@@ -121,8 +119,8 @@ function TimeInputs({ name, data, setData }) {
         <input
           name='sec'
           type="number"
-          min="1"
-          max="60"
+          min="0"
+          max="59"
           placeholder="sec"
           className={!min && !sec ? `error ${name}-sec` : `${name}-sec`}
           value={sec}
