@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { addNewTask, modifyTask } from "../../../actions/tasks";
-import Message from "../../../utils/Message";
 import Loading from "../../../utils/Loading";
 
 const initialData = {
@@ -12,13 +11,13 @@ const initialData = {
   project: ""
 }
 
-const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading }) => {
+const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage }) => {
   const dispatch = useDispatch();
   const [data, setData] = useState(oldData === null ? initialData : oldData);
   const [openNotes, setOpenNotes] = useState(data.notes === "" ? false : true);
   const [openProject, setOpenProject] = useState(data.project === "" ? false : true);
   // const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState({ type: "", message: "" });
+  // const [message, setMessage] = useState({ type: "", message: "" });
   const { activites, active } = useSelector(state => state.timer);
 
   const handleChange = (e) => {
@@ -46,13 +45,6 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading }) => {
 
   return (
     <>
-      {message.message && (
-        <Message
-          message={message.message}
-          type={message.type}
-          setMessage={setMessage}
-        />
-      )}
       {isLoading === data?._id && (
         <div className="loading-container" style={{
           position: 'fixed',

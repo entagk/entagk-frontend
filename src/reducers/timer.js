@@ -53,9 +53,6 @@ export default (state = {
       return { ...state, started: false, restOfTime: action.data };
 
     case CHANGE_ACTIVE:
-      console.log(action.data);
-      alert('change active from ' + JSON.stringify(action.data));
-      console.log(action.data);
       let active, periodNum = state.periodNum;
       if (state.active === PERIOD) {
         periodNum++;

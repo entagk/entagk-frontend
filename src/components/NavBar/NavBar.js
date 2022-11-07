@@ -11,13 +11,11 @@ import jwt_decode from "jwt-decode";
 import "./style.css";
 import { useEffect } from "react";
 import { getUserData, LOGOUT, deleteUser } from "../../actions/auth";
-import Message from "../../utils/Message";
 
-const NavBar = () => {
+const NavBar = ({ setMessage }) => {
   const [open, setOpen] = useState(false);
   const { started, setting } = useSelector(state => state.timer);
   const { user } = useSelector(state => state.auth);
-  const [message, setMessage] = useState({ message: '', type: '' });
 
   const dispatch = useDispatch();
 
@@ -29,15 +27,17 @@ const NavBar = () => {
   }, []);
 
   useEffect(() => {
-    const decodedToken = jwt_decode(localStorage.getItem('token'));
+    if (user !== undefined) {
+      const decodedToken = jwt_decode(localStorage.getItem('token'));
 
-    if (decodedToken.ext * 1000 < new Date().getTime()) {
-      dispatch({ type: LOGOUT });
-      console.log(decodedToken.ext * 1000 - new Date().getTime())
+      if (decodedToken.ext * 1000 < new Date().getTime()) {
+        dispatch({ type: LOGOUT });
+        console.log(decodedToken.ext * 1000 - new Date().getTime())
+      }
     }
 
     // eslint-disable-next-line
-  }, []);
+  }, [user]);
 
   const toggleMenu = useCallback(() => {
     if (open) {
@@ -55,9 +55,7 @@ const NavBar = () => {
 
   return (
     <>
-
       <div className="nav-bar">
-        {message.message && (<Message {...message} setMessage={setMessage} />)}
         <Link to="/">
           <h1 style={{ color: "#fff" }}>Entagk</h1>
         </Link>

@@ -23,9 +23,8 @@ export const authForm = (formData, type, setMessage, navigate) => async dispatch
       dispatch(getUserData(setMessage));
       dispatch(getSetting(setMessage));
       dispatch(getTasks(setMessage));
-      setTimeout(() => {
-        navigate(-1);
-      }, 1000);
+
+      navigate(-1);
     } else if (type === 'sign up') {
       const { data } = await api.signUp(formData);
 
@@ -34,9 +33,8 @@ export const authForm = (formData, type, setMessage, navigate) => async dispatch
       dispatch(getUserData(setMessage))
       dispatch(getSetting(setMessage));
       dispatch(getTasks(setMessage));
-      setTimeout(() => {
-        navigate(-1);
-      }, 1000);
+
+      navigate(-1);
     } else if (type === 'google login') {
       const { data } = await api.googleLogin(formData);
 
@@ -45,12 +43,11 @@ export const authForm = (formData, type, setMessage, navigate) => async dispatch
       dispatch(getUserData(setMessage))
       dispatch(getSetting(setMessage));
       dispatch(getTasks(setMessage));
-      setTimeout(() => {
-        navigate(-1);
-      }, 1000);
+
+      navigate(-1);
     } else {
       const { data } = await api.forgetPassword(formData);
-      setMessage({ type: 'success', message: data.message })
+      setMessage({ type: 'success', message: data.message });
     }
     dispatch({ type: END_LOADING, data: 'auth' });
   } catch (error) {
@@ -96,13 +93,31 @@ export const updateUser = (formData, setMessage) => async dispatch => {
   }
 }
 
-export const resetPassword = (formData, setMessage) => async dispatch => {
+export const verifyResetToken = async (setMessage, setValidate, setIsLoading) => {
   try {
-    dispatch({ type: START_LOADING, data: 'auth' });
+    setIsLoading(true);
+    const { data } = await api.VerifyResetToken();
+
+    console.log(data);
+
+    setMessage({ message: data?.message, type: 'success' });
+    setIsLoading(false);
+  } catch (error) {
+    setIsLoading(false);
+    setMessage({ message: error?.response?.data?.message || error?.message, type: 'error' });
+    setValidate(false);
+    console.error(error);
+  }
+}
+
+export const resetPassword = async (formData, setMessage, setIsLoading) => {
+  try {
+    setIsLoading(true);
     const { data } = await api.resetPassword(formData);
     setMessage({ message: data.message, type: 'success' });
-    dispatch({ type: END_LOADING, data: 'auth' });
+    setIsLoading(false);
   } catch (error) {
+    setIsLoading(false);
     setMessage({ type: 'error', message: error?.response?.data?.message || error.message })
     console.error(error);
   }

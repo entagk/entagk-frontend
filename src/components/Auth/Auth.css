@@ -23,7 +23,17 @@
   -o-transition: all 0.6s ease-in-out;
 }
 
-.auth-page .form-container form {
+div.form-container.reset-form {
+  width: fit-content;
+  margin: 20px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #8f8f8f;
+}
+
+.auth-page .form-container form,
+.reset-form form {
   height: 100%;
   padding: 20px;
   display: flex;
@@ -40,7 +50,8 @@
   font-size: 50px;
 }
 
-.auth-page .form-container .block {
+.auth-page .form-container .block,
+.reset-form .block {
   width: 100%;
   display: flex;
   align-items: center;
@@ -48,16 +59,18 @@
   flex-direction: column;
 }
 
-.auth-page .form-container .block input {
+.auth-page .form-container .block input,
+.form-container.reset-form .block input {
   width: 100%;
   margin: 12px 10px;
 }
 
-.auth-page .form-container .block input::placeholder {
+.auth-page .form-container .block input::placeholder ,
+.form-container.reset-form .block input::placeholder {
   text-transform: capitalize;
 }
 
-.auth-page .password {
+.form-container .password {
   width: 100%;
   display: flex;
   align-items: center;
@@ -66,11 +79,11 @@
   position: relative;
 }
 
-.auth-page .block .password input {
+.form-container .block .password input {
   margin: 0;
 }
 
-.auth-page .block .password button.icon {
+.form-container .block .password button.icon {
   position: absolute;
   height: 100%;
   display: flex;
@@ -86,11 +99,12 @@
   right: 0;
 }
 
-.auth-page .block .password button.icon:hover {
+.form-container .block .password button.icon:hover {
   background: #0000002b;
 }
 
-.auth-page button {
+.auth-page button,
+.reset-form button {
   margin: 20px;
   color: #fff;
   padding: 10px 30px;
@@ -114,7 +128,7 @@
   padding: 0;
 }
 
-.auth-page button[type="submit"]:not(:disabled) {
+.form-container button[type="submit"]:not(:disabled) {
   background-color: var(--main-color);
 }
 

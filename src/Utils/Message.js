@@ -5,7 +5,7 @@ import { BiError } from "react-icons/bi";
 
 const Message = ({ message, type, setMessage }) => {
   useEffect(() => {
-    if (message) {
+    if (message && !message === 'Network Error') {
       setTimeout(() => {
         setMessage({ message: "", type: '' });
       }, 10000);

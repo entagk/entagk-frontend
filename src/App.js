@@ -4,6 +4,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css'; // You can also use <link> for styles
 
 import Auth from './components/Auth/Auth';
+import Reset from './components/Reset/Reset';
 import Profile from './components/Profile/Profile';
 import Subsecription from './components/Subsecription/Subsecription';
 import Setting from './components/Setting/Setting';
@@ -32,6 +33,10 @@ const router = createBrowserRouter(
       <Route
         path='/auth'
         element={<Auth />}
+      />
+      <Route
+        path='/reset/:tokenId'
+        element={<Reset />}
       />
       <Route
         path="/profile"

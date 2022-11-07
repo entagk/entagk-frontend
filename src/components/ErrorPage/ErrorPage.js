@@ -3,7 +3,7 @@ import { useRouteError, Link } from 'react-router-dom';
 
 import './syle.css'
 
-function ErrorPage(props) {
+function ErrorPage() {
   const error = useRouteError();
   console.error(error);
 
