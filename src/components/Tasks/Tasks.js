@@ -4,7 +4,6 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { useDispatch, useSelector } from "react-redux";
 import { getTasks } from "../../actions/tasks";
 import Loading from "../../utils/Loading";
-import Message from "../../utils/Message";
 
 import "./style.css";
 
@@ -13,12 +12,11 @@ const Footer = lazy(() => import("./TaskFooter/TaskFooter"));
 const Menu = lazy(() => import("./TasksMenu/TasksMenu"));
 const Task = lazy(() => import("./Task/Task"));
 
-const Tasks = () => {
+const Tasks = ({ setMessage }) => {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const tasks = useSelector(state => state.tasks);
   const { active, activites, setting, started } = useSelector(state => state.timer);
   const dispatch = useDispatch();
-  const [message, setMessage] = useState({ type: '', message: "" });
   const [isLoading, setIsLoading] = useState(null);
 
   useEffect(() => {
@@ -41,9 +39,6 @@ const Tasks = () => {
 
   return (
     <>
-      {message.message && (
-        <Message {...message} setMessage={setMessage} />
-      )}
       <Suspense fallback={
         <Loading
           size="200"
@@ -77,7 +72,7 @@ const Tasks = () => {
                           <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
                         </div>
                       } key={task._id}>
-                        <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} {...task} />
+                        <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
                       </Suspense>
                     ))}
                     {
@@ -91,7 +86,7 @@ const Tasks = () => {
                           <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
                         </div>
                       } key={task._id}>
-                        <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} {...task} />
+                        <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
                       </Suspense>
                     ))}
                   </>
@@ -103,7 +98,7 @@ const Tasks = () => {
                           <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
                         </div>
                       } key={task?._id}>
-                        <Task key={task?._id} isLoading={isLoading} setIsLoading={setIsLoading} {...task} />
+                        <Task key={task?._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
                       </Suspense>
                     ))}
                   </>
@@ -123,7 +118,7 @@ const Tasks = () => {
                   <Loading size="60" strokeWidth="5" color={"#fff"} backgroud="transparent" />
                 </div>
               }>
-                <TaskForm setOpen={setOpenFormForNew} oldData={null} isLoading={isLoading} setIsLoading={setIsLoading} />
+                <TaskForm setOpen={setOpenFormForNew} oldData={null} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} />
               </Suspense>
             )}
           </div>

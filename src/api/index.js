@@ -5,8 +5,10 @@ const API = axios.create({ baseURL: "https://entagk-pomodoro.herokuapp.com/api" 
 // Add a request interceptor
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  if (token) {
+  if (token && config.url !== '/user/verify_reset_id') {
     config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    config.headers.Authorization = `Bearer ${localStorage.getItem("reset-token")}`;
   }
 
   return config;
@@ -37,7 +39,9 @@ export const getUserData = () => API.get("/user/user_info");
 
 export const forgetPassword = (formData) => API.post("/user/forgot_password", formData);
 
-export const resetPassword = (formData) => API.post("/user/reset_password", formData);
+export const VerifyResetToken = () => API.post('/user/verify_reset_id');
+
+export const resetPassword = (formData, token) => API.post("/user/reset_password", formData, { headers: { Authorization: `Bearer ${token}` } });
 
 export const updateUser = (formData) => API.patch("/user/update_user", formData);
 

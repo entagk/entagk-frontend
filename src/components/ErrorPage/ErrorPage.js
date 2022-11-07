@@ -3,7 +3,7 @@ import { useRouteError, Link } from 'react-router-dom';
 
 import './syle.css'
 
-function ErrorPage(props) {
+function ErrorPage() {
   const error = useRouteError();
   console.error(error);
 
@@ -21,9 +21,7 @@ function ErrorPage(props) {
         {error.status === 404 && (
           <div>
             <h1 className='error-404'>404</h1>
-            <h2 style={{
-              fontSize: "50px"
-            }}>Not found page</h2>
+            <h2>Not found page</h2>
           </div>
         )}
         {error.status !== 404 && (

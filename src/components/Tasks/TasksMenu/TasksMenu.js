@@ -8,13 +8,12 @@ import { MdDelete } from 'react-icons/md';
 import { BsCheckLg } from 'react-icons/bs';
 import { FiSave } from "react-icons/fi";
 import { clearFinishedTasks, clearAct, clearAllTasks } from "../../../actions/tasks";
-import Message from "../../../utils/Message";
 
-const Menu = () => {
+const Menu = ({ setMessage }) => {
   const { tasks } = useSelector(state => state.tasks);
   const [openMenu, setOpenMenu] = useState(false);
   const dispatch = useDispatch();
-  const [message, setMessage] = useState({ type: '', message: '' })
+  // const [message, setMessage] = useState({ type: '', message: '' })
 
   const handleClearFinishedTasks = () => {
     setOpenMenu(om => !om);
@@ -33,9 +32,6 @@ const Menu = () => {
 
   return (
     <>
-    {message.message && (
-      <Message {...message} setMessage={setMessage} />
-    )}
       <div className="menu">
         <button aria-label="toggle the task list menu" className="toggle-menu" onClick={() => setOpenMenu(om => !om)} style={{ fontSize: 25, color: "#fff" }} disabled={tasks?.length === 0}>
           <HiMenu />

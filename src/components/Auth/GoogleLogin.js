@@ -25,6 +25,7 @@ function GoogleLoginButton({ setMessage, navigate }) {
 
   const loginUsingGoogle = (res) => {
     console.log(res.tokenId);
+    console.log(res.profileObj);
     dispatch(authForm({ token: res.tokenId }, "google login", setMessage, navigate));
   }
 

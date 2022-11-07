@@ -7,19 +7,14 @@ import { MdDelete, MdRadioButtonUnchecked } from 'react-icons/md';
 import { useDispatch, useSelector } from "react-redux";
 import { checkTask, deleteTask, CHANGE_ACTIVE_TASK } from "../../../actions/tasks";
 import Loading from "../../../utils/Loading";
-import Message from "../../../utils/Message";
-// import Loading from "../../../Utils/Loading";
 
 const TaskForm = lazy(() => import("../TaskForm/TaskForm"));
 
-const Task = ({ isLoading, setIsLoading, ...props }) => {
+const Task = ({ isLoading, setIsLoading, setMessage, ...props }) => {
   const dispatch = useDispatch();
   const { activeId } = useSelector(state => state.tasks);
   const { setting } = useSelector(state => state.timer);
-  // const {active, activites} = useSelector(state => state.timer);
-  const [message, setMessage] = useState({ type: "", message: "" });
   const [openEdit, setOpenEdit] = useState(false);
-  // const [isLoading, setIsLoading] = useState(false);
 
   const handleCheck = () => {
     dispatch(checkTask(props._id, setIsLoading, setMessage));
@@ -45,11 +40,6 @@ const Task = ({ isLoading, setIsLoading, ...props }) => {
 
   return (
     <div>
-      <>
-        {message.message && (
-          <Message message={message.message} type={message.type} setMessage={setMessage} />
-        )}
-      </>
       <div
         className={`task ${activeId === props._id ? "active" : ''}`}
         onClick={handleActive}>

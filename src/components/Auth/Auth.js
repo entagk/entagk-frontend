@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { authForm, LOGOUT } from "../../actions/auth";
+import { authForm } from "../../actions/auth";
 import Loading from "../../utils/Loading";
 import Message from '../../utils/Message';
 
@@ -9,6 +9,7 @@ import GoogleLogin from './GoogleLogin'
 
 import "./Auth.css";
 import Password from "./Password";
+import LogoutPage from "./LogoutPage";
 
 const NavBar = lazy(() => import("./../NavBar/NavBar"))
 const initialFormData = {
@@ -20,7 +21,7 @@ const initialFormData = {
 
 const Auth = () => {
   const dispatch = useDispatch();
-  const { isLoading } = useSelector(state => state.auth);
+  const { isLoading, user } = useSelector(state => state.auth);
   const navigate = useNavigate();
   const { activites, active } = useSelector(state => state.timer);
   const [isSignUp, setIsSignUp] = useState(false);
@@ -31,35 +32,9 @@ const Auth = () => {
     password: false, confirmPassword: false
   });
 
-  const logout = () => {
-    dispatch({ type: LOGOUT })
-  }
-
-  if (localStorage.getItem('token')) {
+  if (user) {
     return (
-      <div>
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "column",
-          color: "#fff"
-        }}>
-          <h1>You are log in.</h1>
-          <div>
-            <button aria-label="logout button" onClick={logout} style={{
-              background: "rgb(0 0 0 / 19%)",
-              padding: "10px 20px",
-              marginTop: "20px",
-              borderRadius: "4px",
-              fontSize: "20px",
-              fontWeight: "600",
-              boxShadow: "0 0 10px 5px #bdbdbd61",
-              color: "#fff",
-            }}>Log out</button>
-          </div>
-        </div>
-      </div>
+      <LogoutPage />
     )
   }
 
@@ -90,7 +65,7 @@ const Auth = () => {
       if (!formData.email) {
         setMessage({ type: 'error', message: 'Please complete all form data' });
       } else {
-        dispatch(authForm({ password: formData.password }, 'forget password', setMessage, navigate));
+        dispatch(authForm({ email: formData.email }, 'forget password', setMessage, navigate));
       }
     } else {
       if (!formData.email || !formData.password) {
@@ -99,6 +74,14 @@ const Auth = () => {
         dispatch(authForm({ password: formData.password, email: formData.email }, 'sign in', setMessage, navigate));
       }
     }
+  }
+
+  if (message.message === 'Network Error') {
+    return (
+      <div>
+        <h2>There is no Internet Connection</h2>
+      </div>
+    )
   }
 
   return (
@@ -133,8 +116,13 @@ const Auth = () => {
       )}
       <div>
         <div className="container">
-          <NavBar />
-          {message.message !== '' && (<Message message={message.message} type={message.type} setMessage={setMessage} />)}
+          <NavBar setMessage={setMessage} />
+          {(message.message !== '' &&
+            !message?.message?.includes('Network Error')
+          ) && (
+              <Message {...message} setMessage={setMessage} />
+            )
+          }
           <div className={`auth-page ${isSignUp ? "right-panel-active" : "left-panel-active"}`}>
             <div className={`form-container ${isSignUp ? 'sign-up' : 'sign-in'}`}>
               <form onSubmit={handleSubmit}>

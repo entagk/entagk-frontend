@@ -5,6 +5,7 @@ import Message from '../../utils/Message';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getSetting } from '../../actions/timer';
+import NetworkError from '../NetworkError/NetworkError';
 
 const ActiveTask = lazy(() => import('../../components/ActiveTask/ActiveTask'));
 const Timer = lazy(() => import('../../components/Clock/Timer'));
@@ -29,20 +30,28 @@ function Home() {
         {message.message && (
           <Message message={message.message} type={message.type} setMessage={setMessage} />
         )}
-        <Loading
-          size="200"
-          strokeWidth="2.5"
-          color="#ffffff"
-          backgroud="transperent"
-        />
+        {(!message.message) ?
+          (
+            <>
+              <Loading
+                size="200"
+                strokeWidth="2.5"
+                color="#ffffff"
+                backgroud="transperent"
+              />
+            </>
+          ) : (
+            <NetworkError />
+          )
+        }
       </>
     )
   }
 
   return (
     <>
-      {message.message && (
-        <Message message={message.message} type={message.type} setMessage={setMessage} />
+      {(message.message && !message.message.includes('Network Error')) && (
+        <Message {...message} setMessage={setMessage} />
       )}
       <React.Suspense fallback={
         <Loading
@@ -53,12 +62,12 @@ function Home() {
         />
       }>
         <div className='container'>
-          <NavBar />
+          <NavBar message={message} setMessage={setMessage} />
           <div className="app">
             <Timer />
             <ActiveTask />
           </div>
-          <Tasks />
+          <Tasks message={message} setMessage={setMessage} />
         </div>
       </React.Suspense>
     </>

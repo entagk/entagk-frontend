@@ -109,7 +109,7 @@ function Setting() {
           />
         </div>
       )}
-      <NavBar />
+      <NavBar setMessage={setMessage} />
       <form className='setting' onSubmit={handleSubmit}>
         <Header linkClick={handleSubmit} />
         <div className='block'>
