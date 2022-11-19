@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "https://entagk-pomodoro.herokuapp.com/api" });
+const API = axios.create({ baseURL: "https://pomodoro-backend-6j65.onrender.com/api" });
 
 // Add a request interceptor
 API.interceptors.request.use((config) => {

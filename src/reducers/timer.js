@@ -13,7 +13,7 @@ import {
 
 // eslint-disable-next-line
 export default (state = {
-  active: PERIOD,
+  active: localStorage.getItem("active") || PERIOD,
   periodNum: 0,
   setting: undefined,
   started: false,
@@ -47,9 +47,12 @@ export default (state = {
       return { ...state, setting: action.data };
 
     case START_TIMER:
+      console.log(state.restOfTime, state.active);
+      localStorage.setItem('restOfTime', action.data);
       return { ...state, started: true, restOfTime: action.data };
 
     case STOP_TIMER:
+      localStorage.setItem('restOfTime', action.data);
       return { ...state, started: false, restOfTime: action.data };
 
     case CHANGE_ACTIVE:
@@ -60,9 +63,10 @@ export default (state = {
       } else {
         active = PERIOD;
       }
+      localStorage.setItem('active', active);
       document.documentElement.style.setProperty('--main-color', state.activites[active].color);
       document.documentElement.style.setProperty('--secondary-color', state.activites[active].timerBorder);
-      alert('change active to ' + active);
+      // alert('change active to ' + active);
       return { ...state, active, periodNum };
 
     case MODITY_SETTING:

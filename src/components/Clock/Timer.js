@@ -15,9 +15,9 @@ const DigitalTimer = lazy(() => import("./Digital/Digital"));
 
 const worker = new window.Worker('worker.js');
 const Timer = () => {
-    const { active, activites, setting, started, periodNum, restOfTime } = useSelector((state) => state.timer);
+    const { active, activites, setting, started, periodNum } = useSelector((state) => state.timer);
     const { activeId } = useSelector(state => state.tasks);
-    const [time, setTime] = useState(restOfTime === null ? 0 : restOfTime);
+    const [time, setTime] = useState(localStorage.getItem("restOfTime") === null ? 0 : Number(localStorage.getItem("restOfTime")));
 
     const activePeriod = setting?.time[active];
     const dispatch = useDispatch();
@@ -31,6 +31,7 @@ const Timer = () => {
         }) :
         null
     );
+
     const alarmSound = useRef(
         audioPlayer({
             src: setting?.alarmType?.src,
@@ -38,6 +39,7 @@ const Timer = () => {
             loop: setting?.alarmRepet
         })
     );
+
     const clickSound = useRef(setting?.clickType?.name !== "none" ?
         audioPlayer({
             src: setting?.clickType?.src,
@@ -58,7 +60,12 @@ const Timer = () => {
         document.body.style.backgroundColor = activites[active].color;
 
         if (setting.time !== undefined) {
-            setTime(setting?.time[active] - restOfTime);
+            if (setting?.time[active] - Number(localStorage.getItem('restOfTime')) > 1) {
+                setTime(setting?.time[active] - Number(localStorage.getItem("restOfTime")));
+            } else {
+                dispatch(changeActive(active, activeId));
+                localStorage.setItem('restOfTime', 0);
+            }
         }
         // eslint-disable-next-line
     }, [active, setting.time]);
@@ -80,7 +87,7 @@ const Timer = () => {
     }, [setting]);
 
     useEffect(() => {
-        if ((active !== PERIOD && setting.autoBreaks) || (active === PERIOD && setting.autoPomodors && periodNum !== 0)) {
+        if (((active !== PERIOD && setting.autoPomodors) || (active === PERIOD && setting.autoBreaks)) && periodNum !== 0 && started) {
             setTimeout(() => {
                 alarmSound.current.handleStop();
                 if (setting.tickingType.name !== "none") {
@@ -88,7 +95,9 @@ const Timer = () => {
                 }
                 worker.postMessage({ started: !started, count: setting.time[active] });
                 dispatch({ type: START_TIMER, data: 0 });
-            }, 10000)
+                console.log(time, 0, "autoBreaks autoPomodors");
+            }, 1000)
+            console.log(active);
         }
         // eslint-disable-next-line
     }, [active, setting.autoBreaks, setting.autoPomodors]);
@@ -135,7 +144,7 @@ const Timer = () => {
                 }
             }
         } else {
-            dispatch({ type: STOP_TIMER, data: 0 });
+            console.log(event.data, time, 0, "worker stop");
 
             alarmSound.current.handlePlay();
             if (setting.tickingType.name !== "none") {
@@ -151,6 +160,10 @@ const Timer = () => {
                         pushNotification("It's time to focus!");
                     }
                 }
+            }
+
+            if (((active !== PERIOD && !setting.autoPomodors) || (active === PERIOD && !setting.autoBreaks)) && periodNum !== 0 && !started) {
+                dispatch({ type: STOP_TIMER, data: 0 });
             }
 
             dispatch(changeActive(active, activeId));
@@ -175,7 +188,9 @@ const Timer = () => {
             if (setting.tickingType.name !== "none") {
                 tickingSound.current.handlePlay();
             }
-            worker.postMessage({ started: !started, count: time });
+            if (!started) {
+                worker.postMessage({ started: !started, count: time });
+            }
             dispatch({ type: START_TIMER, data: 0 });
         }
 
@@ -187,6 +202,7 @@ const Timer = () => {
         if (setting.clickType.name !== "none") {
             clickSound.current.handlePlay();
         }
+        localStorage.setItem("restOfTime", 0)
     }
 
     return (

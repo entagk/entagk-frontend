@@ -42,14 +42,19 @@ export default (
   let newEst, newAct, newActive;
   switch (action.type) {
     case START_LOADING:
-      return { ...state, isLoading: action.data === 'tasks' ? true : state.isLoading };
+      return {
+        ...state,
+        isLoading: action.data === 'tasks' ? true : state.isLoading
+      };
+
     case END_LOADING:
       return { ...state, isLoading: action.data === 'tasks' ? false : state.isLoading };
+
     case GET_SETTING:
       return {
         ...state,
         autoStartNextTask: action.data.autoStartNextTask
-      }
+      };
 
     case GET_TASKS:
       finishedTasks = action.data.all.filter(t => t.check);
@@ -81,7 +86,7 @@ export default (
             ? action.data.all.filter((t) => !t.check)[0]?.name
             : null,
         };
-      }
+      };
 
     case MODITY_SETTING:
       unfinishedTasks = state?.tasks?.filter((t) => !t.check);
@@ -105,7 +110,7 @@ export default (
           activeName: !autoStart
             ? state.activeName : unfinishedTasks?.length > 0 ? unfinishedTasks[0]?.name : null,
         };
-      }
+      };
 
     case CHANGE_ACTIVE_TASK:
       return {
@@ -174,7 +179,7 @@ export default (
           activeId: newActive?._id,
           activeName: newActive?.name,
         };
-      }
+      };
 
     case NEW_TASK:
       all = state.tasks;
@@ -209,7 +214,7 @@ export default (
           activeId: state.autoStartNextTask ? all.filter(t => !t.check)[0]?._id : state.activeId,
           activeName: state.autoStartNextTask ? all.filter(t => !t.check)[0]?.name : state.activeName
         };
-      }
+      };
 
     case CHECK_TASK:
       all = state.tasks;
@@ -246,7 +251,7 @@ export default (
           activeId: state.autoStartNextTask ? all.filter(t => !t.check)[0]?._id : state.activeId,
           activeName: state.autoStartNextTask ? all.filter(t => !t.check)[0]?.name : (state.activeName || null)
         };
-      }
+      };
 
     case DELETE_TASK:
       all = state.tasks;
@@ -289,7 +294,7 @@ export default (
           activeId: state.activeId !== task._id ? state.activeId : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0]._id : null,
           activeName: state.activeName !== task.name ? state.activeName : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0].name : null
         };
-      }
+      };
 
     /**
      * Update task data
@@ -375,7 +380,7 @@ export default (
           act: newAct,
           est: newEst,
         };
-      }
+      };
 
     /**
      * filter the tasks from tasks that is checked

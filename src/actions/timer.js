@@ -191,6 +191,7 @@ export const getSetting = (setMessage) => async dispatch => {
 
 export const changeActive = (active, activeId) => async dispatch => {
   try {
+    // setTime()
     if (!localStorage.getItem('token')) {
       dispatch({ type: CHANGE_ACTIVE, data: active });
     } else {

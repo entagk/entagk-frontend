@@ -32,7 +32,7 @@ const Tasks = ({ setMessage }) => {
         size="200"
         strokeWidth="1"
         backgroud="white"
-        color={activites[active].color}
+        color={activites[active]?.color}
       />
     )
   }
