@@ -2,11 +2,11 @@ import React, { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { AiOutlinePlus } from 'react-icons/ai';
+// import { AiOutlinePlus } from 'react-icons/ai';
 import { HiMenu } from "react-icons/hi";
 import { MdDelete } from 'react-icons/md';
 import { BsCheckLg } from 'react-icons/bs';
-import { FiSave } from "react-icons/fi";
+// import { FiSave } from "react-icons/fi";
 import { clearFinishedTasks, clearAct, clearAllTasks } from "../../../actions/tasks";
 
 const Menu = ({ setMessage }) => {
@@ -33,7 +33,12 @@ const Menu = ({ setMessage }) => {
   return (
     <>
       <div className="menu">
-        <button aria-label="toggle the task list menu" className="toggle-menu" onClick={() => setOpenMenu(om => !om)} style={{ fontSize: 25, color: "#fff" }} disabled={tasks?.length === 0}>
+        <button
+          aria-label="toggle the task list menu"
+          className="toggle-menu"
+          onClick={() => setOpenMenu(om => !om)}
+          style={{ fontSize: 25, color: "#fff" }}
+          disabled={tasks?.length === 0}>
           <HiMenu />
         </button>
         {openMenu && (
@@ -49,12 +54,12 @@ const Menu = ({ setMessage }) => {
                 onClick={handleClearAct}
                 disabled={tasks.filter(t => t.act > 0).length === 0}
               ><BsCheckLg /> <p>clear act pomodoros</p></button>
-              <button
+              {/* <button
                 aria-label="save the task list as templete"
               ><FiSave /> <p><mark>save as templete</mark></p></button>
               <button
                 aria-label="add task from templets"
-              ><AiOutlinePlus /> <p><mark>add from templetes</mark></p></button>
+              ><AiOutlinePlus /> <p><mark>add from templetes</mark></p></button> */}
               <button
                 aria-label="clear all tasks"
                 onClick={handleClearTasks}
