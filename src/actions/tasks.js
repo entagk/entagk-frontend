@@ -1,9 +1,6 @@
 import { START_LOADING, END_LOADING, LOGOUT } from "./auth";
 import * as api from './../api';
 
-// export const START_LOADING_TASK = 'START_LOADING_TASK';
-// export const END_LOADING_TASK = 'END_LOADING_TASK';
-
 export const GET_TASKS = "GET_TASKS";
 export const NEW_TASK = "NEW_TASK";
 export const CHECK_TASK = "CHECK_TASK";
