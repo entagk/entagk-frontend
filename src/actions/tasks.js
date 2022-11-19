@@ -63,7 +63,7 @@ export const addNewTask = (taskData, setIsLoading, setMessage) => async dispatch
     } else {
       const { data } = await api.addTask(taskData);
 
-      dispatch({ type: NEW_TASK, data: data.newTask });
+      dispatch({ type: NEW_TASK, data: data });
     }
     setIsLoading(null);
     // dispatch({ type: END_LOADING, data: 'tasks' });

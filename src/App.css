@@ -8,10 +8,10 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  line-break: anywhere;
 }
 
 body {
-  /* overflow: hidden; */
   background-color: #ff002f;
   height: 100%;
   margin: 20px;
