@@ -39,6 +39,7 @@ const Timer = () => {
             loop: setting?.alarmRepet
         })
     );
+
     const clickSound = useRef(setting?.clickType?.name !== "none" ?
         audioPlayer({
             src: setting?.clickType?.src,
@@ -59,8 +60,12 @@ const Timer = () => {
         document.body.style.backgroundColor = activites[active].color;
 
         if (setting.time !== undefined) {
-            setTime(setting?.time[active] - Number(localStorage.getItem("restOfTime")));
-            console.log(setting?.time[active], time, 0, "setting change");
+            if (setting?.time[active] - Number(localStorage.getItem('restOfTime')) > 1) {
+                setTime(setting?.time[active] - Number(localStorage.getItem("restOfTime")));
+            } else {
+                dispatch(changeActive(active, activeId));
+                localStorage.setItem('restOfTime', 0);
+            }
         }
         // eslint-disable-next-line
     }, [active, setting.time]);
@@ -140,12 +145,12 @@ const Timer = () => {
             }
         } else {
             console.log(event.data, time, 0, "worker stop");
-            
+
             alarmSound.current.handlePlay();
             if (setting.tickingType.name !== "none") {
                 tickingSound.current.handleStop();
             }
-            
+
             // eslint-disable-next-line
             if (typeof window?.Notification != undefined) {
                 if (window?.Notification.permission === 'granted') {
@@ -156,7 +161,7 @@ const Timer = () => {
                     }
                 }
             }
-            
+
             if (((active !== PERIOD && !setting.autoPomodors) || (active === PERIOD && !setting.autoBreaks)) && periodNum !== 0 && !started) {
                 dispatch({ type: STOP_TIMER, data: 0 });
             }
