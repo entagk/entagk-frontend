@@ -46,6 +46,14 @@ function Setting() {
     setData({ ...data, [e.target.name]: Number(e.target.value) })
   }
 
+  const goBack = () => {
+    if (window.navigation.canGoBack) {
+      navigate(-1);
+    } else {
+      navigate("/");
+    }
+  }
+
   const handleSubmit = async (e) => {
     await e.preventDefault();
 
@@ -67,11 +75,7 @@ function Setting() {
       await dispatch(modifySetting(data, setMessage));
     }
 
-    if (window.navigation.canGoBack) {
-      navigate(-1);
-    } else {
-      navigate("/");
-    }
+    goBack();
   }
 
   return (
@@ -277,7 +281,7 @@ function Setting() {
           </div>
         </div>
         <div className='footer'>
-          <button type='button' aria-label='cancel form' onClick={() => navigate(-1)}>cancel</button>
+          <button type='button' aria-label='cancel form' onClick={goBack}>cancel</button>
           <button
             className='save'
             type='submit'
