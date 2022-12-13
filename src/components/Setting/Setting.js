@@ -42,7 +42,6 @@ function Setting() {
     )
   }
 
-
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: Number(e.target.value) })
   }
@@ -68,9 +67,11 @@ function Setting() {
       await dispatch(modifySetting(data, setMessage));
     }
 
-    // setTimeout(() => {
+    if (window.navigation.canGoBack) {
       navigate(-1);
-    // }, 1000);
+    } else {
+      navigate("/");
+    }
   }
 
   return (
