@@ -87,7 +87,7 @@ const Timer = () => {
     }, [setting]);
 
     useEffect(() => {
-        if (((active !== PERIOD && setting.autoPomodors) || (active === PERIOD && setting.autoBreaks)) && periodNum !== 0 && started) {
+        if (((active === PERIOD && setting.autoPomodors) || (active !== PERIOD && setting.autoBreaks)) && periodNum !== 0 && started) {
             setTimeout(() => {
                 alarmSound.current.handleStop();
                 if (setting.tickingType.name !== "none") {
@@ -162,14 +162,13 @@ const Timer = () => {
                 }
             }
 
-            if (((active !== PERIOD && !setting.autoPomodors) || (active === PERIOD && !setting.autoBreaks)) && periodNum !== 0 && !started) {
+            if (((active !== PERIOD && !setting.autoPomodors) || (active === PERIOD && !setting.autoBreaks))) {
                 dispatch({ type: STOP_TIMER, data: 0 });
             }
 
             dispatch(changeActive(active, activeId));
         }
     }
-
 
     const toggleStart = useCallback(() => {
         console.log("toggle start")
