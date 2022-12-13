@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { AiOutlineUser, AiOutlineSetting, AiOutlineClose } from "react-icons/ai";
-import { HiMenu, HiUser, HiOutlineDocumentReport } from "react-icons/hi";
-import { FaMoneyCheck } from "react-icons/fa";
+import { HiMenu, HiUser/*, HiOutlineDocumentReport*/ } from "react-icons/hi";
+// import { FaMoneyCheck } from "react-icons/fa";
 import { MdLogout, MdLogin, MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -106,7 +106,7 @@ const NavBar = ({ setMessage }) => {
                     {user ? "Profile" : "Login"}
                   </p>
                 </Link>
-                {user && (
+                {/* {user && (
                   <Link
                     to="/subsecription"
                     style={{ padding: user && '10px 16px 10px 30px' }}
@@ -117,7 +117,7 @@ const NavBar = ({ setMessage }) => {
                       Subsecription
                     </p>
                   </Link>
-                )}
+                )} */}
                 <Link
                   to="/setting"
                   style={{ padding: user && '10px 16px 10px 30px' }}
@@ -128,7 +128,7 @@ const NavBar = ({ setMessage }) => {
                     Setting
                   </p>
                 </Link>
-                <Link
+                {/* <Link
                   to="/report"
                   style={{ padding: user && '10px 16px 10px 30px' }}
                   onClick={toggleMenu}
@@ -137,7 +137,7 @@ const NavBar = ({ setMessage }) => {
                   <p style={{ marginLeft: 10 }}>
                     Report
                   </p>
-                </Link>
+                </Link> */}
                 {user && (
                   <button
                     onClick={logout}

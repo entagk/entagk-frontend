@@ -312,15 +312,15 @@ export default (
         newTask.check = newTask.est === newTask.act;
 
         const all = state.tasks.filter((t) => t._id !== action.data._id);
-        if (state.autoStartNextTask) {
-          if (newTask.check) {
+        // if () {
+          if (newTask.check && state.autoStartNextTask) {
             all.push(newTask);
             newActive._id = all.filter((t) => !t.check)[0]?._id || null;
             newActive.name = all.filter((t) => !t.check)[0]?.name || null;
           } else {
             state.tasks[taskIndex] = newTask;
           }
-        }
+        // }
 
         localStorage.setItem(
           "tasks",
