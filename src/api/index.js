@@ -1,14 +1,26 @@
 import axios from "axios";
+import jwt_decode from 'jwt-decode';
 
 const API = axios.create({ baseURL: "https://pomodoro-backend-6j65.onrender.com/api" });
 
 // Add a request interceptor
 API.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token && config.url !== '/user/verify_reset_id') {
-    config.headers.Authorization = `Bearer ${token}`;
+  let token = localStorage.getItem("token");
+
+  const decodedToken = jwt_decode(token);
+
+  if (decodedToken.exp * 1000 > new Date().getTime()) {
+    if (token && config.url !== '/user/verify_reset_id') {
+      config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      if (localStorage.getItem("rest-token")) {
+        config.headers.Authorization = `Bearer ${localStorage.getItem("reset-token")}`;
+      }
+    }
+    console.log(config);
   } else {
-    config.headers.Authorization = `Bearer ${localStorage.getItem("reset-token")}`;
+    localStorage.clear();
+    window.location.reload();
   }
 
   return config;
@@ -25,6 +37,10 @@ API.interceptors.response.use((response) => {
   return response;
 }, (error) => {
   console.error("Error : " + error);
+  if (error?.response?.status === 401) {
+    localStorage.clear();
+    window.location.reload();
+  }
   return Promise.reject(error);
 });
 

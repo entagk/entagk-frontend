@@ -30,7 +30,7 @@ const NavBar = ({ setMessage }) => {
     if (user !== undefined) {
       const decodedToken = jwt_decode(localStorage.getItem('token'));
 
-      if (decodedToken.ext * 1000 < new Date().getTime()) {
+      if (decodedToken.exp * 1000 < new Date().getTime()) {
         dispatch({ type: LOGOUT });
         console.log(decodedToken.ext * 1000 - new Date().getTime())
       }
