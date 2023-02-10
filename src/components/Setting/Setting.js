@@ -47,7 +47,7 @@ function Setting() {
   }
 
   const goBack = () => {
-    if (window.navigation.canGoBack) {
+    if ("navigation" in window && window.navigation.canGoBack) {
       navigate(-1);
     } else {
       navigate("/");

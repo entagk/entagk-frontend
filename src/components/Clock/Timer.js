@@ -49,7 +49,7 @@ const Timer = () => {
 
     useEffect(() => {
         // eslint-disable-next-line
-        if (typeof window?.Notification != undefined) {
+        if ("Notification" in window) {
             if (window?.Notification?.permission === 'default') {
                 window?.Notification?.requestPermission();
             }
@@ -70,6 +70,7 @@ const Timer = () => {
         // eslint-disable-next-line
     }, [active, setting.time]);
 
+    // For sounds of timer
     useEffect(() => {
         if (setting?.tickingType.name !== 'none') {
             tickingSound.current.chengeVolume(setting?.tickingVolume);
@@ -86,6 +87,7 @@ const Timer = () => {
         }
     }, [setting]);
 
+    // If the option of auto pomodors or auto breaks is active, wait for 5 seconds and then start the next time.
     useEffect(() => {
         if (((active === PERIOD && setting.autoPomodors) || (active !== PERIOD && setting.autoBreaks)) && periodNum !== 0 && started) {
             setTimeout(() => {
@@ -96,12 +98,13 @@ const Timer = () => {
                 worker.postMessage({ started: !started, count: setting.time[active] });
                 dispatch({ type: START_TIMER, data: 0 });
                 console.log(time, 0, "autoBreaks autoPomodors");
-            }, 1000)
+            }, 5000);
             console.log(active);
         }
         // eslint-disable-next-line
     }, [active, setting.autoBreaks, setting.autoPomodors]);
 
+    // This hook will be executed after the timer has been started working through makeing the focus mode if it active.
     useEffect(() => {
         if (started) {
             document.body.onbeforeunload = () => {
@@ -128,7 +131,7 @@ const Timer = () => {
         if (event.data !== 'stop') {
             setTime(event.data);
             // eslint-disable-next-line
-            if (typeof window?.Notification != undefined) {
+            if ("Notification" in window) {
                 if (window?.Notification?.permission === 'granted') {
                     if (time !== 0) {
                         if (setting.notificationType === 'every') {
@@ -146,13 +149,19 @@ const Timer = () => {
         } else {
             console.log(event.data, time, 0, "worker stop");
 
-            alarmSound.current.handlePlay();
             if (setting.tickingType.name !== "none") {
                 tickingSound.current.handleStop();
             }
+            alarmSound.current.handlePlay();
+
+            if (((active !== PERIOD && !setting.autoPomodors) || (active === PERIOD && !setting.autoBreaks))) {
+                dispatch({ type: STOP_TIMER, data: 0 });
+            }
+
+            dispatch(changeActive(active, activeId));
 
             // eslint-disable-next-line
-            if (typeof window?.Notification != undefined) {
+            if ("Notification" in window) {
                 if (window?.Notification.permission === 'granted') {
                     if (active === PERIOD) {
                         pushNotification("It's time to take a break");
@@ -161,12 +170,6 @@ const Timer = () => {
                     }
                 }
             }
-
-            if (((active !== PERIOD && !setting.autoPomodors) || (active === PERIOD && !setting.autoBreaks))) {
-                dispatch({ type: STOP_TIMER, data: 0 });
-            }
-
-            dispatch(changeActive(active, activeId));
         }
     }
 

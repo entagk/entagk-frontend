@@ -5,22 +5,22 @@ const API = axios.create({ baseURL: "https://pomodoro-backend-6j65.onrender.com/
 
 // Add a request interceptor
 API.interceptors.request.use((config) => {
-  let token = localStorage.getItem("token");
-
-  const decodedToken = jwt_decode(token);
-
-  if (decodedToken.exp * 1000 > new Date().getTime()) {
-    if (token && config.url !== '/user/verify_reset_id') {
-      config.headers.Authorization = `Bearer ${token}`;
-    } else {
-      if (localStorage.getItem("rest-token")) {
-        config.headers.Authorization = `Bearer ${localStorage.getItem("reset-token")}`;
-      }
+  const token = localStorage.getItem("token");
+  const decodedToken = token  ? jwt_decode(token) : {};
+  if (token) {
+    if (decodedToken?.exp * 1000 < new Date().getTime()) {
+      localStorage.clear();
+      // console.log(decodedToken.exp * 1000 < new Date().getTime());
+      window.location.reload();
     }
-    console.log(config);
+  }
+
+  if (token && config.url !== '/user/verify_reset_id') {
+    config.headers.Authorization = `Bearer ${token}`;
   } else {
-    localStorage.clear();
-    window.location.reload();
+    if (localStorage.getItem("rest-token")) {
+      config.headers.Authorization = `Bearer ${localStorage.getItem("reset-token")}`;
+    }
   }
 
   return config;

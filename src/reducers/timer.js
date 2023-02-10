@@ -66,7 +66,6 @@ export default (state = {
       localStorage.setItem('active', active);
       document.documentElement.style.setProperty('--main-color', state.activites[active].color);
       document.documentElement.style.setProperty('--secondary-color', state.activites[active].timerBorder);
-      // alert('change active to ' + active);
       return { ...state, active, periodNum };
 
     case MODITY_SETTING:
