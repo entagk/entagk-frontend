@@ -115,8 +115,8 @@ export default (
     case CHANGE_ACTIVE_TASK:
       return {
         ...state,
-        activeId: action.data._id,
-        activeName: action.data.name,
+        activeId: '_id' in action.data ? action.data._id : "",
+        activeName: 'name' in action.data ? action.data.name : "",
       };
 
     case CHANGE_ACTIVE:
@@ -313,13 +313,13 @@ export default (
 
         const all = state.tasks.filter((t) => t._id !== action.data._id);
         // if () {
-          if (newTask.check && state.autoStartNextTask) {
-            all.push(newTask);
-            newActive._id = all.filter((t) => !t.check)[0]?._id || null;
-            newActive.name = all.filter((t) => !t.check)[0]?.name || null;
-          } else {
-            state.tasks[taskIndex] = newTask;
-          }
+        if (newTask.check && state.autoStartNextTask) {
+          all.push(newTask);
+          newActive._id = all.filter((t) => !t.check)[0]?._id || null;
+          newActive.name = all.filter((t) => !t.check)[0]?.name || null;
+        } else {
+          state.tasks[taskIndex] = newTask;
+        }
         // }
 
         localStorage.setItem(

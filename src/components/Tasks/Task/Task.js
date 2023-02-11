@@ -26,7 +26,11 @@ const Task = ({ isLoading, setIsLoading, setMessage, ...props }) => {
 
   const handleActive = () => {
     if ((!props.check && setting.autoStartNextTask) || (!setting.autoStartNextTask && props.act !== props.est)) {
-      dispatch({ type: CHANGE_ACTIVE_TASK, data: props });
+      if (activeId === props._id) {
+        dispatch({ type: CHANGE_ACTIVE_TASK, data: {} });
+      } else if(activeId !== props._id) {
+        dispatch({ type: CHANGE_ACTIVE_TASK, data: props });
+      }
     }
   }
 
