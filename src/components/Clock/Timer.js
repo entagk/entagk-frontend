@@ -14,7 +14,7 @@ const AnalogTimer = lazy(() => import("./Analog/Analog"));
 const DigitalTimer = lazy(() => import("./Digital/Digital"));
 
 const worker = new window.Worker('worker.js');
-const Timer = () => {
+const Timer = ({ setIsLoadingTask, setMessage }) => {
     const { active, activites, setting, started, periodNum } = useSelector((state) => state.timer);
     const { activeId } = useSelector(state => state.tasks);
     const [time, setTime] = useState(localStorage.getItem("restOfTime") === null ? 0 : Number(localStorage.getItem("restOfTime")));
@@ -63,7 +63,7 @@ const Timer = () => {
             if (setting?.time[active] - Number(localStorage.getItem('restOfTime')) > 1) {
                 setTime(setting?.time[active] - Number(localStorage.getItem("restOfTime")));
             } else {
-                dispatch(changeActive(active, activeId));
+                dispatch(changeActive(active, activeId, setIsLoadingTask, setMessage));
                 localStorage.setItem('restOfTime', 0);
             }
         }
@@ -158,7 +158,7 @@ const Timer = () => {
                 dispatch({ type: STOP_TIMER, data: 0 });
             }
 
-            dispatch(changeActive(active, activeId));
+            dispatch(changeActive(active, activeId, setIsLoadingTask, setMessage));
 
             // eslint-disable-next-line
             if ("Notification" in window) {

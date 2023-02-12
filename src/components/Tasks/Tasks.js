@@ -12,12 +12,11 @@ const Footer = lazy(() => import("./TaskFooter/TaskFooter"));
 const Menu = lazy(() => import("./TasksMenu/TasksMenu"));
 const Task = lazy(() => import("./Task/Task"));
 
-const Tasks = ({ setMessage }) => {
+const Tasks = ({ setMessage, isLoading, setIsLoading }) => {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const tasks = useSelector(state => state.tasks);
   const { active, activites, setting, started } = useSelector(state => state.timer);
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(null);
 
   useEffect(() => {
     if (tasks.tasks === undefined) {

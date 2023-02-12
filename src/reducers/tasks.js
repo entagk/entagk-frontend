@@ -9,7 +9,7 @@ import {
   CLEAR_ACT_FROM_TASKS,
   CLEAR_ALL_TASKS,
 } from "../actions/tasks";
-import { CHANGE_ACTIVE, PERIOD, MODITY_SETTING, GET_SETTING } from "../actions/timer";
+import { INCREASE_ACT, PERIOD, MODITY_SETTING, GET_SETTING } from "../actions/timer";
 import { nanoid } from "nanoid";
 import { LOGOUT, START_LOADING, END_LOADING, DELETE_USER } from "../actions/auth";
 
@@ -119,12 +119,12 @@ export default (
         activeName: 'name' in action.data ? action.data.name : "",
       };
 
-    case CHANGE_ACTIVE:
-      let realAct = state.act,
-        newActive =
-          Boolean(state.activeId)
-            ? state.tasks.find((t) => t._id === state.activeId)
-            : { _id: null, name: null };
+    case INCREASE_ACT:
+      let newActive =
+        Boolean(state.activeId)
+          ? state.tasks.find((t) => t._id === state.activeId)
+          : { _id: null, name: null };
+      let realAct = state.act;
       if (!localStorage.getItem("token")) {
         if (Boolean(state.activeId) && action.data === PERIOD) {
           const taskIndex = state.tasks.findIndex(

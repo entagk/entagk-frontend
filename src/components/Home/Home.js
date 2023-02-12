@@ -16,6 +16,7 @@ function Home() {
   const { setting } = useSelector(state => state.timer);
   const [message, setMessage] = useState({ type: '', message: "" });
   const dispatch = useDispatch();
+  const [isLoadingTask, setIsLoadingTask] = useState(null);
 
   useEffect(() => {
     if (setting === undefined) {
@@ -62,12 +63,12 @@ function Home() {
         />
       }>
         <div className='container'>
-          <NavBar message={message} setMessage={setMessage} />
+          <NavBar setMessage={setMessage} />
           <div className="app">
-            <Timer />
+            <Timer setIsLoadingTask={setIsLoadingTask} setMessage={setMessage} />
             <ActiveTask />
           </div>
-          <Tasks message={message} setMessage={setMessage} />
+          <Tasks setMessage={setMessage} isLoading={isLoadingTask} setIsLoading={setIsLoadingTask} />
         </div>
       </React.Suspense>
     </>

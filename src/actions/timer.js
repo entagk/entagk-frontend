@@ -2,6 +2,7 @@ import { END_LOADING, LOGOUT, START_LOADING } from "./auth";
 import * as api from './../api';
 
 export const CHANGE_ACTIVE = "CHANGE_ACTIVE";
+export const INCREASE_ACT = "INCREASE_ACT";
 
 export const START_TIMER = "START_TIMER";
 export const STOP_TIMER = "STOP_TIMER";
@@ -189,21 +190,30 @@ export const getSetting = (setMessage) => async dispatch => {
   }
 }
 
-export const changeActive = (active, activeId) => async dispatch => {
+export const changeActive = (active, activeId, setIsLoading, setMessage) => async dispatch => {
   try {
     // setTime()
+    setIsLoading(activeId);
     if (!localStorage.getItem('token')) {
       dispatch({ type: CHANGE_ACTIVE, data: active });
     } else {
       if (active === PERIOD && activeId) {
+        dispatch({ type: START_LOADING, })
+        dispatch({ type: CHANGE_ACTIVE, data: { active, task: { _id: activeId } } });
         const { data } = await api.increaseAct(activeId);
-        dispatch({ type: CHANGE_ACTIVE, data: { active, task: data } })
+        dispatch({ type: INCREASE_ACT, data: { active, task: data } });
       } else {
         dispatch({ type: CHANGE_ACTIVE, data: { active } })
       }
     }
+    setIsLoading(null);
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    setMessage({ message: error.response.data.message || error.message, type: 'error' });
+    if (error.response?.status === 500) {
+      dispatch({ type: LOGOUT });
+      window.location.reload();
+    }
   }
 }
 
