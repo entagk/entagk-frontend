@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useEffect, useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux"; // 2
 
-import { changeActive, PERIOD, START_TIMER, STOP_TIMER } from "../../actions/timer";
+import { changeActive, PERIOD, START_TIMER, STOP_TIMER, CHANGE_ACTIVE } from "../../actions/timer";
 
 import { pushNotification } from "../../utils/helper";
 import audioPlayer from "../../utils/audioPlayer";
@@ -207,6 +207,10 @@ const Timer = ({ setIsLoadingTask, setMessage }) => {
         localStorage.setItem("restOfTime", 0)
     }
 
+    const handleSkip = () => {
+        dispatch({ type: CHANGE_ACTIVE });
+    }
+
     return (
         <>
             <div className="clock-container" style={{ background: activites[active].timerBorder }}>
@@ -214,11 +218,11 @@ const Timer = ({ setIsLoadingTask, setMessage }) => {
                     <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" size="200" strokeWidth="2.5" />}>
                         {setting.format === "digital" ? (
                             <>
-                                <DigitalTimer handleReset={handleReset} toggleStart={toggleStart} setTime={setTime} time={time} />
+                                <DigitalTimer handleReset={handleReset} toggleStart={toggleStart} setTime={setTime} time={time} handleSkip={handleSkip} />
                             </>
                         ) : (
                             <>
-                                <AnalogTimer handleReset={handleReset} toggleStart={toggleStart} setTime={setTime} time={time} />
+                                <AnalogTimer handleReset={handleReset} toggleStart={toggleStart} setTime={setTime} time={time} handleSkip={handleSkip} />
                             </>
                         )}
                     </Suspense>

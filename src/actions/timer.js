@@ -195,15 +195,14 @@ export const changeActive = (active, activeId, setIsLoading, setMessage) => asyn
     // setTime()
     setIsLoading(activeId);
     if (!localStorage.getItem('token')) {
-      dispatch({ type: CHANGE_ACTIVE, data: active });
+      dispatch({ type: CHANGE_ACTIVE });
     } else {
       if (active === PERIOD && activeId) {
-        dispatch({ type: START_LOADING, })
-        dispatch({ type: CHANGE_ACTIVE, data: { active, task: { _id: activeId } } });
+        dispatch({ type: CHANGE_ACTIVE });
         const { data } = await api.increaseAct(activeId);
         dispatch({ type: INCREASE_ACT, data: { active, task: data } });
       } else {
-        dispatch({ type: CHANGE_ACTIVE, data: { active } })
+        dispatch({ type: CHANGE_ACTIVE })
       }
     }
     setIsLoading(null);
