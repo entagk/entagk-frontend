@@ -9,6 +9,7 @@ import audioPlayer from "../../utils/audioPlayer";
 import Loading from "../../utils/Loading";
 
 import "./style.css";
+import SmallWinBtn from "./SmallWinBtn/SmallWinBtn";
 
 const AnalogTimer = lazy(() => import("./Analog/Analog"));
 const DigitalTimer = lazy(() => import("./Digital/Digital"));
@@ -214,6 +215,7 @@ const Timer = ({ setIsLoadingTask, setMessage }) => {
     return (
         <>
             <div className="clock-container" style={{ background: activites[active].timerBorder }}>
+                <SmallWinBtn />
                 <div className="clock">
                     <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" size="200" strokeWidth="2.5" />}>
                         {setting.format === "digital" ? (

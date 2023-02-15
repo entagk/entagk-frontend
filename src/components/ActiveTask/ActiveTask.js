@@ -21,7 +21,7 @@ const ActiveTask = () => {
       <span className="row2">
         {!Boolean(activeId) ? "please focus on what you are doing now" : activeName}
         {Boolean(activeId) && (
-          <button className="unactive" onClick={unactive}>
+          <button className="unactive" onClick={unactive} aria-label="unactive the task">
             <FiEdit3 />
           </button>
         )}
