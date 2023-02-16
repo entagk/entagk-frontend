@@ -6,7 +6,7 @@ const API = axios.create({ baseURL: "https://pomodoro-backend-6j65.onrender.com/
 // Add a request interceptor
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  const decodedToken = token  ? jwt_decode(token) : {};
+  const decodedToken = token ? jwt_decode(token) : {};
   if (token) {
     if (decodedToken?.exp * 1000 < new Date().getTime()) {
       localStorage.clear();
@@ -39,7 +39,7 @@ API.interceptors.response.use((response) => {
   console.error("Error : " + error);
   if (error?.response?.status === 401) {
     localStorage.clear();
-    window.location.reload();
+    // window.location.reload();
   }
   return Promise.reject(error);
 });
@@ -62,6 +62,8 @@ export const resetPassword = (formData, token) => API.post("/user/reset_password
 export const updateUser = (formData) => API.patch("/user/update_user", formData);
 
 export const deleteUser = () => API.delete("/user/delete_user");
+
+export const getRefreshToken = () => API.get("/user/refresh_token");
 /* End the user api */
 
 /* Start the task api */

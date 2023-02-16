@@ -41,9 +41,8 @@ export const getTasks = (setMessage) => async dispatch => {
   } catch (err) {
     console.error(err);
     setMessage({ message: err.response.data.message || err.message, type: 'error' });
-    if (err.response.data.message && err.response.data.message.toLocaleLowerCase().inculdes('jwt')) {
+    if (err.response?.status === 401 || err.response.status === 500) {
       dispatch({ type: LOGOUT });
-      window.location.reload();
     }
   }
 }
@@ -68,6 +67,9 @@ export const addNewTask = (taskData, setIsLoading, setMessage) => async dispatch
     setIsLoading(null);
     setMessage({ message: err?.response?.data?.message || err.message, type: "error" })
     console.error(err);
+    if (err.response?.status === 401 || err.response.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
   }
 }
 
@@ -91,6 +93,9 @@ export const checkTask = (id, setIsLoading, setMessage) => async dispatch => {
     setIsLoading(null);
     setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
+    if (error.response?.status === 401 || error.response.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
   }
 };
 
@@ -113,6 +118,9 @@ export const deleteTask = (id, setIsLoading, setMessage) => async dispatch => {
     setIsLoading(null);
     setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
+    if (error.response?.status === 401 || error.response.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
   }
 };
 
@@ -136,6 +144,9 @@ export const modifyTask = (formData, id, setIsLoading, setMessage) => async disp
     setIsLoading(null);
     setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
+    if (error.response?.status === 401 || error.response.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
   }
 }
 
@@ -156,6 +167,9 @@ export const clearFinishedTasks = (setMessage) => async dispatch => {
   } catch (error) {
     setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
+    if (error.response?.status === 401 || error.response.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
   }
 }
 
@@ -170,8 +184,11 @@ export const clearAct = (setMessage) => async dispatch => {
     }
     dispatch({ type: END_LOADING, data: 'tasks' })
   } catch (error) {
-    setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
+    setMessage({ message: error?.response?.data?.message || error.message, type: "error" });
     console.error(error);
+    if (error.response?.status === 401 || error.response.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
   }
 }
 
@@ -191,5 +208,8 @@ export const clearAllTasks = (setMessage) => async dispatch => {
   } catch (error) {
     setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
+    if (error.response?.status === 401 || error.response.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
   }
 }

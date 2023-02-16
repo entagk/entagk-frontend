@@ -206,8 +206,7 @@ h1.digital-number {
 
 /* end the digital timer */
 
-.ext-win,
-.int-win {
+.ext-win {
   position: absolute;
   top: 15px;
   right: 15px;
@@ -225,13 +224,15 @@ h1.digital-number {
 .clock-container:hover .ext-win {
   display: block;
 }
-.clock-container .int-win {
-  display: none;
-}
 
 /* End the timer */
 
 /* start the responsive design */
+@media (max-width: 1024px) {
+  .clock-container:hover .ext-win {
+    display: none;
+  }
+}
 
 @media (max-width: 600px) {
   .app {
@@ -301,6 +302,13 @@ h1.digital-number {
   .roller-container {
     width: 182px; /* 260px */
     height: 182px; /* 260px */
+  }
+
+  .roll .up-side,
+  .roll .down-side,
+  .roll .pause-side,
+  .roll .start-side {
+    font-size: 25px;
   }
 }
 

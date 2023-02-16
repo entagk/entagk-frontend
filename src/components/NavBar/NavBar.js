@@ -10,7 +10,7 @@ import jwt_decode from "jwt-decode";
 
 import "./style.css";
 import { useEffect } from "react";
-import { getUserData, LOGOUT, deleteUser } from "../../actions/auth";
+import { getUserData, LOGOUT, deleteUser, refreshToken } from "../../actions/auth";
 
 const NavBar = ({ setMessage }) => {
   const [open, setOpen] = useState(false);
@@ -22,6 +22,7 @@ const NavBar = ({ setMessage }) => {
   useEffect(() => {
     if (localStorage.getItem('token') && user === undefined) {
       dispatch(getUserData(setMessage));
+      dispatch(refreshToken(setMessage));
     }
     // eslint-disable-next-line
   }, []);

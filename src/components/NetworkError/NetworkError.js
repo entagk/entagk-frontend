@@ -2,10 +2,10 @@ import React from 'react';
 
 import './style.css'
 
-function NetworkError(props) {
+function NetworkError() {
   return (
-    <div className='newtwork-error'>
-      <h2>There is no Internet Connection</h2>
+    <div className='network-error'>
+      <h2>There is no Internet Connection, try again later.</h2>
     </div>
   );
 }

@@ -28,7 +28,7 @@ function SmallWinBtn() {
     if ('open' in window) {
       if (window.opener === null || window?.opener?.closed) {
         window.open("/", "popup", "left=100,top=100,height=332,width=356");
-      } else {
+      } /*else {
         if (window.opener !== null) {
           window.opener.postMessage("close", window.origin);
           if (window.name === 'popup') {
@@ -39,7 +39,7 @@ function SmallWinBtn() {
           localStorage.removeItem("opened");
 
         }
-      }
+      }*/
     }
   }
 

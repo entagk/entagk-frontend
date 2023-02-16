@@ -168,7 +168,7 @@ export const initialSetting = {
   notificationInterval: 1,
 };
 
-export const getSetting = (setMessage) => async dispatch => {
+export const getSetting = (setMessage, setError) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'setting' });
     if (!localStorage.getItem('token')) {
@@ -181,9 +181,8 @@ export const getSetting = (setMessage) => async dispatch => {
     dispatch({ type: END_LOADING, data: 'setting' });
   } catch (error) {
     // const errorMessage = await error.response; 
-    if (error.response?.status === 500) {
+    if (error.response?.status === 401 || error.response.status === 500) {
       dispatch({ type: LOGOUT });
-      window.location.reload();
     }
     console.error(error);
     setMessage({ message: error?.response?.data?.message || error.message, type: 'error' });
@@ -209,9 +208,8 @@ export const changeActive = (active, activeId, setIsLoading, setMessage) => asyn
   } catch (error) {
     console.error(error);
     setMessage({ message: error.response.data.message || error.message, type: 'error' });
-    if (error.response?.status === 500) {
+    if (error.response?.status === 401 || error.response.status === 500) {
       dispatch({ type: LOGOUT });
-      window.location.reload();
     }
   }
 }
@@ -229,9 +227,8 @@ export const modifySetting = (formData, setMessage) => async dispatch => {
   } catch (error) {
     console.error(error);
     setMessage({ message: error.response.data.message || error.message, type: 'error' });
-    if (error.response?.status === 500) {
+    if (error.response?.status === 401 || error.response.status === 500) {
       dispatch({ type: LOGOUT });
-      window.location.reload();
     }
   }
 } 
