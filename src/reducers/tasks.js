@@ -65,8 +65,12 @@ export default (
       return { ...state, tasks: tasks };
 
     case GET_TASKS:
-      finishedTasks = action.data.all.filter(t => t?.check);
-      unfinishedTasks = action.data.all.filter(t => !t?.check);
+      const page = action.data?.currentPage;
+      const numberOfPages = action.data?.numberOfPages;
+      const total = action.data?.total;
+      all = page === 1 ? action.data.all : action.data.all.concat(state.tasks);
+      finishedTasks = all.filter(t => t?.check);
+      unfinishedTasks = all.filter(t => !t?.check);
 
       if (!localStorage.getItem("token")) {
         return {
@@ -82,8 +86,16 @@ export default (
             : null,
         };
       } else {
+
+        localStorage.setItem('total', total);
+        localStorage.setItem('currentPage', page);
+        localStorage.setItem('tasksLen', all.length);
+
         return {
           ...state,
+          currentPage: page,
+          numberOfPages: numberOfPages,
+          total: total,
           tasks: unfinishedTasks.concat(finishedTasks),
           est: action.data.est,
           act: action.data.act,

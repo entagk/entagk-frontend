@@ -16,14 +16,44 @@ const Tasks = ({ setMessage, isLoading, setIsLoading }) => {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const tasks = useSelector(state => state.tasks);
   const { active, activites, setting, started } = useSelector(state => state.timer);
+  const [page, setPage] = useState(tasks.currentPage);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (tasks.tasks === undefined) {
-      dispatch(getTasks(setMessage));
+    if (tasks.tasks === undefined && tasks?.total === undefined) {
+      dispatch(getTasks(setMessage, 1));
     }
     // eslint-disable-next-line
   }, [tasks.tasks]);
+
+  useEffect(() => {
+    console.log(page);
+    if(page > tasks.currentPage) {
+      dispatch(getTasks(setMessage, Number(localStorage.getItem('currentPage')) + 1));
+    }
+
+    // eslint-disable-next-line
+  }, [page])
+
+  useEffect(() => {
+    const onScroll = () => {
+      let scrollTop = document.documentElement.scrollTop;
+      let scrollHeight = document.querySelector('.tasks-list').scrollHeight;
+      let clientHeight = document.documentElement.clientHeight;
+
+      if (scrollTop + clientHeight >= scrollHeight && Number(localStorage.getItem('total')) > Number(localStorage.getItem('tasksLen'))) {
+        console.log(clientHeight, scrollTop, scrollHeight);
+        setPage(Number(localStorage.getItem('currentPage')) + 1);
+      }
+    }
+
+    // console.log(tasks.tasks);
+
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+
+    // eslint-disable-next-line
+  }, [tasks.tasks, tasks.total])
 
   if (tasks.tasks === undefined) {
     return (

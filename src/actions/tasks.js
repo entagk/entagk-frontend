@@ -13,7 +13,7 @@ export const CLEAR_FINISHED_TASKS = "CLEAR_FINISHED_TASKS";
 export const CLEAR_ACT_FROM_TASKS = "CLEAR_ACT_FROM_TASKS";
 export const CLEAR_ALL_TASKS = "CLEAR_ALL_TASKS";
 
-export const getTasks = (setMessage) => async dispatch => {
+export const getTasks = (setMessage, page) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'tasks' });
     if (!localStorage.getItem('token')) {
@@ -28,13 +28,16 @@ export const getTasks = (setMessage) => async dispatch => {
         }
       });
     } else {
-      const { data } = await api.getAllTasks();
+      const { data } = await api.getAllTasks(page);
 
       dispatch({
         type: GET_TASKS, data: {
           all: data.tasks,
           est: data.tasks.length > 0 ? data.tasks.reduce((total, task) => total + task.est, 0) : 0,
-          act: data.tasks.length > 0 ? data.tasks.reduce((total, task) => total + task.act, 0) : 0
+          act: data.tasks.length > 0 ? data.tasks.reduce((total, task) => total + task.act, 0) : 0,
+          currentPage: data.currentPage,
+          numberOfPages: data.numberOfPages,
+          total: data.total,
         }
       });
     }

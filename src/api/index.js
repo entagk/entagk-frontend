@@ -67,7 +67,7 @@ export const getRefreshToken = () => API.get("/user/refresh_token");
 /* End the user api */
 
 /* Start the task api */
-export const getAllTasks = () => API.get("/task/");
+export const getAllTasks = (page) => API.get(`/task/?page=${page}`);
 
 export const addTask = (taskData) => API.post("/task/add/", taskData);
 

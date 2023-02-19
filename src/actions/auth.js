@@ -30,10 +30,12 @@ export const authForm = (formData, type, setMessage, navigate) => async dispatch
         dispatch(getSetting(setMessage));
       }
 
-      if (tasks.length >= 0) {
+      if (tasks?.length >= 0) {
         dispatch(addMultipleTasks(tasks, setMessage));
       }
-      dispatch(getTasks(setMessage));
+      if (type !== 'sign up') {
+        dispatch(getTasks(setMessage));
+      }
 
       navigate("/");
     } else {
