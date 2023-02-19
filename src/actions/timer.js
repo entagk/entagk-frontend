@@ -225,6 +225,7 @@ export const modifySetting = (formData, setMessage) => async dispatch => {
     }
     dispatch({ type: END_LOADING, data: 'setting' });
   } catch (error) {
+    dispatch({ type: END_LOADING, data: 'setting' });
     console.error(error);
     setMessage({ message: error.response.data.message || error.message, type: 'error' });
     if (error.response?.status === 401 || error.response.status === 500) {

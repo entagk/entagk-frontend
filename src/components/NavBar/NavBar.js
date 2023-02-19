@@ -22,7 +22,10 @@ const NavBar = ({ setMessage }) => {
   useEffect(() => {
     if (localStorage.getItem('token') && user === undefined) {
       dispatch(getUserData(setMessage));
-      dispatch(refreshToken(setMessage));
+      const decodedToken = jwt_decode(localStorage.getItem('token'));
+      if (localStorage.getItem('token') && decodedToken.exp * 1000 < new Date().getTime() - 1000 * 60 * 60) {
+        dispatch(refreshToken(setMessage));
+      }
     }
     // eslint-disable-next-line
   }, []);

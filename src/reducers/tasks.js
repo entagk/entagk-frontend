@@ -8,6 +8,7 @@ import {
   CLEAR_FINISHED_TASKS,
   CLEAR_ACT_FROM_TASKS,
   CLEAR_ALL_TASKS,
+  ADD_LOCAL_TASKS
 } from "../actions/tasks";
 import { INCREASE_ACT, PERIOD, MODITY_SETTING, GET_SETTING } from "../actions/timer";
 import { nanoid } from "nanoid";
@@ -56,9 +57,16 @@ export default (
         autoStartNextTask: action.data.autoStartNextTask
       };
 
+    case ADD_LOCAL_TASKS:
+      const tasks = action.data;
+      localStorage.removeItem('tasks');
+      localStorage.removeItem('act');
+      localStorage.removeItem('est');
+      return { ...state, tasks: tasks };
+
     case GET_TASKS:
-      finishedTasks = action.data.all.filter(t => t.check);
-      unfinishedTasks = action.data.all.filter(t => !t.check);
+      finishedTasks = action.data.all.filter(t => t?.check);
+      unfinishedTasks = action.data.all.filter(t => !t?.check);
 
       if (!localStorage.getItem("token")) {
         return {

@@ -71,6 +71,8 @@ export const getAllTasks = () => API.get("/task/");
 
 export const addTask = (taskData) => API.post("/task/add/", taskData);
 
+export const addMultipleTasks = (tasksData) => API.post("/task/add_multiple_tasks", tasksData);
+
 export const updateTask = (taskData, id) => API.patch(`/task/update/${id}`, taskData);
 
 export const deleteTask = (id) => API.delete(`/task/delete/${id}`);

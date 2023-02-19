@@ -3,6 +3,7 @@ import * as api from './../api';
 
 export const GET_TASKS = "GET_TASKS";
 export const NEW_TASK = "NEW_TASK";
+export const ADD_LOCAL_TASKS = "ADD_LOCAL_TASKS";
 export const CHECK_TASK = "CHECK_TASK";
 export const MODIFY_TASK = "MODIFY_TASK";
 export const DELETE_TASK = "DELETE_TASK";
@@ -68,6 +69,25 @@ export const addNewTask = (taskData, setIsLoading, setMessage) => async dispatch
     setMessage({ message: err?.response?.data?.message || err.message, type: "error" })
     console.error(err);
     if (err.response?.status === 401 || err.response.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
+  }
+}
+
+export const addMultipleTasks = (tasksData, setMessage) => async dispatch => {
+  try {
+    dispatch({ type: START_LOADING, data: 'tasks' });
+
+    const { data } = await api.addMultipleTasks(tasksData);
+
+    dispatch({ type: ADD_LOCAL_TASKS, data });
+
+    dispatch({ type: END_LOADING, data: 'tasks' });
+  } catch (error) {
+    dispatch({ type: END_LOADING, data: 'tasks' })
+    setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
+    console.error(error);
+    if (error.response?.status === 401 || error.response.status === 500) {
       dispatch({ type: LOGOUT });
     }
   }
