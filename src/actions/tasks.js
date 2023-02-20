@@ -16,6 +16,7 @@ export const CLEAR_ALL_TASKS = "CLEAR_ALL_TASKS";
 export const getTasks = (setMessage, page) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'tasks' });
+    console.log(page);
     if (!localStorage.getItem('token')) {
       const all = JSON.parse(localStorage.getItem("tasks")) || [];
 
@@ -33,8 +34,6 @@ export const getTasks = (setMessage, page) => async dispatch => {
       dispatch({
         type: GET_TASKS, data: {
           all: data.tasks,
-          est: data.tasks.length > 0 ? data.tasks.reduce((total, task) => total + task.est, 0) : 0,
-          act: data.tasks.length > 0 ? data.tasks.reduce((total, task) => total + task.act, 0) : 0,
           currentPage: data.currentPage,
           numberOfPages: data.numberOfPages,
           total: data.total,

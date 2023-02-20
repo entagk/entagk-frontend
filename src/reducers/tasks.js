@@ -68,7 +68,7 @@ export default (
       const page = action.data?.currentPage;
       const numberOfPages = action.data?.numberOfPages;
       const total = action.data?.total;
-      all = page === 1 ? action.data.all : action.data.all.concat(state.tasks);
+      all = Number(page) > 1 ? action.data.all.concat(state.tasks) : action.data.all;
       finishedTasks = all.filter(t => t?.check);
       unfinishedTasks = all.filter(t => !t?.check);
 
@@ -97,8 +97,8 @@ export default (
           numberOfPages: numberOfPages,
           total: total,
           tasks: unfinishedTasks.concat(finishedTasks),
-          est: action.data.est,
-          act: action.data.act,
+          est: all.length > 0 ? all.reduce((total, task) => total + task.est, 0) : 0,
+          act: all.length > 0 ? all.reduce((total, task) => total + task.act, 0) : 0,
           activeId: state?.autoStartNextTask
             ? action.data.all.filter((t) => !t.check)[0]?._id
             : null,
@@ -231,6 +231,7 @@ export default (
           ...state,
           tasks: [...unfinishedTasks, ...finishedTasks],
           est,
+          total: state.total + 1,
           activeId: state.autoStartNextTask ? all.filter(t => !t.check)[0]?._id : state.activeId,
           activeName: state.autoStartNextTask ? all.filter(t => !t.check)[0]?.name : state.activeName
         };
@@ -292,6 +293,8 @@ export default (
           localStorage.setItem("est", newEst);
           localStorage.setItem("act", newAct);
         }
+        console.log(state.activeId !== task._id);
+        console.log(state.activeName !== task.name);
 
         return {
           ...state,
@@ -311,6 +314,7 @@ export default (
           est: newEst,
           act: newAct,
           tasks: newAll,
+          total: state.total - 1,
           activeId: state.activeId !== task._id ? state.activeId : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0]._id : null,
           activeName: state.activeName !== task.name ? state.activeName : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0].name : null
         };
@@ -419,7 +423,7 @@ export default (
         localStorage.setItem('est', newEst)
       }
 
-      return { ...state, act: newAct, est: newEst, tasks: unfinishedTasks };
+      return { ...state, act: newAct, est: newEst, tasks: unfinishedTasks, total: state.total - finishedTasks.length };
 
     /**
      * loop through the tasks to 
@@ -450,10 +454,9 @@ export default (
         localStorage.setItem("tasks", JSON.stringify([]));
         localStorage.setItem("act", 0);
         localStorage.setItem("est", 0);
-
       }
 
-      return { ...initialState, tasks: [] };
+      return { ...initialState, tasks: [], total: 0, act: 0, est: 0 };
 
     case LOGOUT:
     case DELETE_USER:

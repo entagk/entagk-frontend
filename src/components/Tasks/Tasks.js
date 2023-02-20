@@ -16,7 +16,7 @@ const Tasks = ({ setMessage, isLoading, setIsLoading }) => {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const tasks = useSelector(state => state.tasks);
   const { active, activites, setting, started } = useSelector(state => state.timer);
-  const [page, setPage] = useState(tasks.currentPage);
+  const [page, setPage] = useState(1);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const Tasks = ({ setMessage, isLoading, setIsLoading }) => {
 
   useEffect(() => {
     console.log(page);
-    if(page > tasks.currentPage) {
+    if (page > tasks.currentPage) {
       dispatch(getTasks(setMessage, Number(localStorage.getItem('currentPage')) + 1));
     }
 
@@ -38,11 +38,10 @@ const Tasks = ({ setMessage, isLoading, setIsLoading }) => {
   useEffect(() => {
     const onScroll = () => {
       let scrollTop = document.documentElement.scrollTop;
-      let scrollHeight = document.querySelector('.tasks-list').scrollHeight;
+      let scrollHeight = document.querySelector('.tasks-list')?.scrollHeight;
       let clientHeight = document.documentElement.clientHeight;
 
       if (scrollTop + clientHeight >= scrollHeight && Number(localStorage.getItem('total')) > Number(localStorage.getItem('tasksLen'))) {
-        console.log(clientHeight, scrollTop, scrollHeight);
         setPage(Number(localStorage.getItem('currentPage')) + 1);
       }
     }
@@ -81,16 +80,9 @@ const Tasks = ({ setMessage, isLoading, setIsLoading }) => {
             <h2>
               Tasks
             </h2>
-            <Menu />
+            <Menu setMessage={setMessage} />
           </div>
           <div className="tasks-container">
-            <>
-              {(tasks.isLoading && tasks.tasks.length > 0) && (
-                <div className="loading-container">
-                  <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                </div>
-              )}
-            </>
             {tasks.tasks?.length > 0 && (
               <div className="tasks-list">
                 {isLoading === 'new' ? (
@@ -134,6 +126,13 @@ const Tasks = ({ setMessage, isLoading, setIsLoading }) => {
                 )}
               </div>
             )}
+            <> {/* This is for loading while bringing the tasks */}
+              {(tasks.isLoading && tasks.tasks.length > 0) && (
+                <div className="loading-container">
+                  <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
+                </div>
+              )}
+            </>
             {!openFormForNew ? (
               <button aria-label="add task button" className="add-task-button" onClick={() => setOpenFormForNew(p => !p)}>
                 <AiOutlinePlus size="25px" />
