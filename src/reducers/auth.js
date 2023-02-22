@@ -9,7 +9,8 @@ export default (state = { user: undefined, authData: undefined, isLoading: false
       return { ...state, isLoading: action.data === "auth" ? true : state.isLoading }
     case END_LOADING:
       if (action.data === 'auth')
-        document.body.style.overflow = 'auto'
+        document.body.style.overflow = 'auto';
+        document.body.style.overflowX = 'hidden';
       return { ...state, isLoading: action.data === "auth" ? false : state.isLoading }
     case AUTH:
       localStorage.setItem('token', action.data.access_token);

@@ -20,7 +20,7 @@ export const authForm = (formData, type, setMessage, navigate) => async dispatch
     if (type !== 'forget password') {
       const { data } = type === 'sign in' ? await api.signIn(formData) : type === 'sign up' ? await api.signUp(formData) : await api.googleLogin(formData);
       setMessage({ type: 'success', message: data.message })
-      dispatch({ type: AUTH, data });
+      dispatch({ type: AUTH, data: type === 'google login' ? { ...data, access_token: data.token } : { ...data } });
       dispatch(getUserData(setMessage));
       const setting = JSON.parse(localStorage.getItem('setting'));
       const tasks = JSON.parse(localStorage.getItem('tasks'));
@@ -34,7 +34,7 @@ export const authForm = (formData, type, setMessage, navigate) => async dispatch
         dispatch(addMultipleTasks(tasks, setMessage));
       }
       if (type !== 'sign up') {
-        dispatch(getTasks(setMessage));
+        dispatch(getTasks(setMessage, 1));
       }
 
       navigate("/");

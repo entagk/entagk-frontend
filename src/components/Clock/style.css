@@ -222,7 +222,7 @@ h1.digital-number {
 }
 
 .clock-container:hover .ext-win {
-  display: block;
+  display: flex;
 }
 
 /* End the timer */
