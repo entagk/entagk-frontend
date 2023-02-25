@@ -19,7 +19,7 @@ const Message = ({ message, type, setMessage }) => {
         {type === 'error' ? <BiError /> : <AiFillCheckCircle />}
       </div>
       <div>{message}</div>
-      <button aria-label="Close error" onClick={() => setMessage({ message: "", type: '' })}><AiFillCloseCircle /></button>
+      <button aria-label="Close error" type='button' onClick={() => setMessage({ message: "", type: '' })}><AiFillCloseCircle /></button>
     </div>
   )
 };

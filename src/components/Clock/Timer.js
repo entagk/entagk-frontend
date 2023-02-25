@@ -10,15 +10,16 @@ import Loading from "../../utils/Loading";
 
 import "./style.css";
 import SmallWinBtn from "./SmallWinBtn/SmallWinBtn";
+import SettingOpen from "./SettingOpen/SettingOpen";
 
 const AnalogTimer = lazy(() => import("./Analog/Analog"));
 const DigitalTimer = lazy(() => import("./Digital/Digital"));
 
 const worker = new window.Worker('worker.js');
-const Timer = ({ setIsLoadingTask, setMessage }) => {
+const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
     const { active, activites, setting, started, periodNum } = useSelector((state) => state.timer);
     const { activeId } = useSelector(state => state.tasks);
-    const [time, setTime] = useState(localStorage.getItem("restOfTime") === null ? 0 : Number(localStorage.getItem("restOfTime")));
+    const [time, setTime] = useState(localStorage.getItem("restOfTime") === null ? 0 : Number(localStorage.getItem("restOfTime")))
 
     const activePeriod = setting?.time[active];
     const dispatch = useDispatch();
@@ -215,7 +216,12 @@ const Timer = ({ setIsLoadingTask, setMessage }) => {
     return (
         <>
             <div className="clock-container" style={{ background: activites[active].timerBorder }}>
-                <SmallWinBtn />
+                {!started && (
+                    <>
+                        <SmallWinBtn />
+                        <SettingOpen setOpenSetting={setOpenSetting} />
+                    </>
+                )}
                 <div className="clock">
                     <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" size="200" strokeWidth="2.5" />}>
                         {setting.format === "digital" ? (

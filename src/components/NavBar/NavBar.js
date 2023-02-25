@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { AiOutlineUser, AiOutlineSetting, AiOutlineClose } from "react-icons/ai";
+import { AiOutlineUser, AiOutlineClose } from "react-icons/ai";
 import { HiMenu, HiUser/*, HiOutlineDocumentReport*/ } from "react-icons/hi";
 // import { FaMoneyCheck } from "react-icons/fa";
 import { MdLogout, MdLogin, MdDelete } from "react-icons/md";
@@ -122,7 +122,7 @@ const NavBar = ({ setMessage }) => {
                     </p>
                   </Link>
                 )} */}
-                <Link
+                {/* <Link
                   to="/setting"
                   style={{ padding: user && '10px 16px 10px 30px' }}
                   onClick={toggleMenu}
@@ -131,7 +131,7 @@ const NavBar = ({ setMessage }) => {
                   <p style={{ marginLeft: 10 }}>
                     Setting
                   </p>
-                </Link>
+                </Link> */}
                 {/* <Link
                   to="/report"
                   style={{ padding: user && '10px 16px 10px 30px' }}

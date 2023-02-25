@@ -27,7 +27,7 @@ function LogoutPage() {
             justifyContent: 'space-around',
             width: '100%',
           }}>
-            <button aria-label="logout button" onClick={logout} style={{
+            <button aria-label="logout button" onClick={logout} type='button' style={{
               background: "rgb(0 0 0 / 19%)",
               padding: "10px 20px",
               marginTop: "20px",

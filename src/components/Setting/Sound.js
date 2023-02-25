@@ -29,18 +29,19 @@ function Sound({ type, data, setData }) {
   return (
     <div className='alarm-details'>
       <div className="alarm-type">
-        <p style={{width: 'inherit'}}>Sound type</p>
+        <h4>Sound</h4>
         <Select
           data={data}
           options={sounds}
           setData={setData}
           type={`${type}Type`}
           setChange={setChange}
+          width={type === "click" ? "200px" : "150px"}
         />
       </div>
       {data[`${type}Type`].name !== "none" && (
         <div className="alarm-type">
-          <p style={{width: 'inherit'}}>Sound Volume</p>
+          <h4>Volume</h4>
           <div className='range-container'>
             <span className='range-value'>{data[`${type}Volume`]}</span>
             <input
@@ -51,6 +52,7 @@ function Sound({ type, data, setData }) {
               value={data[`${type}Volume`]}
               name={`${type}Volume`}
               onChange={handleChange}
+              style={{ background: `linear-gradient(to right, rgba(0, 255, 141, 0.85) 0%, rgba(0, 255, 141, 0.85) ${data[`${type}Volume`]}%, transparent ${data[`${type}Volume`]}%, transparent 100%)` }}
             />
           </div>
         </div>
@@ -59,7 +61,7 @@ function Sound({ type, data, setData }) {
         <div className="alarm-type" style={{
           flexDirection: "row"
         }}>
-          <p style={{width: 'inherit'}}>Repet</p>
+          <h4>Repeat</h4>
           <ToggleButton type="alarmRepet" data={data} setData={setData} />
         </div>
       )}

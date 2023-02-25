@@ -206,22 +206,27 @@ h1.digital-number {
 
 /* end the digital timer */
 
-.ext-win {
+.timer-button {
   position: absolute;
   top: 15px;
   right: 15px;
   z-index: 120;
-  padding: 10px;
-  background: #000000d9;
   color: #fff;
   border: 1px solid;
-  border-radius: 30%;
   font-size: 20px;
   box-shadow: 0 0 5px #000;
   display: none;
+
+  border-radius: 50%;
+  padding: 8px;
+  background: #000000b8;
 }
 
-.clock-container:hover .ext-win {
+.timer-button.setting-open {
+  right: 70px;
+}
+
+.clock-container:hover .timer-button {
   display: flex;
 }
 
@@ -229,8 +234,13 @@ h1.digital-number {
 
 /* start the responsive design */
 @media (max-width: 1024px) {
-  .clock-container:hover .ext-win {
+  .clock-container:hover .timer-button {
     display: none;
+  }
+
+  .clock-container:hover .timer-button.setting-open {
+    display: flex;
+    right: 15px;
   }
 }
 

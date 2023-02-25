@@ -11,12 +11,14 @@ const ActiveTask = lazy(() => import('../../components/ActiveTask/ActiveTask'));
 const Timer = lazy(() => import('../../components/Clock/Timer'));
 const NavBar = lazy(() => import('../../components/NavBar/NavBar'));
 const Tasks = lazy(() => import("../../components/Tasks/Tasks"));
+const Setting = lazy(() => import("./../Setting/Setting"));
 
 function Home() {
   const { setting } = useSelector(state => state.timer);
   const [message, setMessage] = useState({ type: '', message: "" });
   const dispatch = useDispatch();
   const [isLoadingTask, setIsLoadingTask] = useState(null);
+  const [openSetting, setOpenSetting] = useState(false);
 
   useEffect(() => {
     if (setting === undefined) {
@@ -24,6 +26,14 @@ function Home() {
     }
     // eslint-disable-next-line
   }, [setting]);
+
+  useEffect(() => {
+    if (openSetting) {
+      document.body.style.overflowY = 'hidden';
+    } else {
+      document.body.style.overflowY = 'auto';
+    }
+  }, [openSetting]);
 
   if (setting === undefined) {
     return (
@@ -65,9 +75,14 @@ function Home() {
         <div className='container'>
           <NavBar setMessage={setMessage} />
           <div className="app">
-            <Timer setIsLoadingTask={setIsLoadingTask} setMessage={setMessage} />
+            <Timer setIsLoadingTask={setIsLoadingTask} setMessage={setMessage} setOpenSetting={setOpenSetting} />
             <ActiveTask />
           </div>
+          {openSetting && (
+            <div className="glass-container">
+              <Setting setOpenSetting={setOpenSetting} />
+            </div>
+          )}
           <Tasks setMessage={setMessage} isLoading={isLoadingTask} setIsLoading={setIsLoadingTask} />
         </div>
       </React.Suspense>

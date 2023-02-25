@@ -5,17 +5,20 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: #fff;
+  /* background: #fff; */
   border-radius: 10px;
   /* padding: 20px; */
   box-shadow: 1px 1px 10px 0px #858585;
+  position: absolute;
+  top: 0px;
+  min-width: 512px;
 }
 
 .setting-header {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding: 10px 20px;
   padding-top: 30px;
   /* font-size: 30px; */
@@ -25,29 +28,54 @@
   border-bottom: 2px solid #e7e7e7;
 }
 
-.setting-header a {
-  font-size: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.setting-header .close-setting {
+  font-size: 20px;
+  padding: 7px;
+  color: #f4f4f4;
+  border-radius: 50%;
+  border: 2px solid #f4f4f4;
 }
 
-.setting-header h1 {
-  width: calc(100% - 30px);
+.setting-header h2 {
+  /* width: calc(100% - 30px); */
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 30px;
+  text-transform: capitalize;
+  margin-inline: 20px;
+}
+
+.setting-menu {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.setting-menu button {
+  font-size: 24px;
+  padding: 10px 20px;
+  width: 100%;
+  justify-content: space-between;
+  color: #fff;
+}
+
+.setting-menu button:hover {
+  background: #00000029;
+}
+
+.setting-menu button span.text {
+  margin-left: 10px;
 }
 
 .setting .block:not(:last-of-type) {
-  padding: 20px;
+  padding: 10px 20px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-direction: column;
   border-bottom: 2px solid #e7e7e7;
+  transition: height 2s, height 4s;
 }
 
 .setting .block h2,
@@ -56,25 +84,39 @@
   width: 100%;
 }
 
+.setting .block h3 {
+  margin-right: 20px;
+  width: fit-content;
+}
+
+.setting .block .time {
+  width: fit-content;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
 .setting .time-inputs {
   display: flex;
   align-items: center;
   justify-content: center;
   /* margin-top: 10px; */
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: space-between;
 }
 
-.setting .time-inputs p {
-  margin-bottom: 10px;
+.setting .time-inputs h4 {
   font-size: 18px;
-  font-weight: 400;
+  text-transform: capitalize;
+  margin-right: 20px;
 }
 
 .min-sec-input {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   position: relative;
 }
 
@@ -100,26 +142,28 @@
 
 .min-sec-input .plus-minus-arrows button.plus-arrow:hover,
 .min-sec-input .plus-minus-arrows button.minus-arrow:hover {
-  background-color: #f2f2f2;
+  background-color: #79797994;
+}
+
+.min-sec-input .plus-minus-arrows button.plus-arrow,
+.min-sec-input .plus-minus-arrows button.minus-arrow {
+  padding-inline: 4px;
+  background: #c8c8c8ab;
+  color: #fff;
 }
 
 .min-sec-input .plus-minus-arrows button.plus-arrow {
-  padding-inline: 4px;
   padding-bottom: 2px;
-  background: #e7e7e7;
   border-radius: 0px 5px 0px 0;
   border-bottom: 1px solid #dbdbdb;
-  color: #373737;
 }
 
 .min-sec-input .plus-minus-arrows button.minus-arrow {
-  padding-inline: 4px;
   padding-top: 2px;
-  background: #e7e7e7;
   border-radius: 0px 0px 5px 0;
   border-top: 1px solid #dbdbdb;
-  color: #373737;
 }
+
 /* removing default arrows from input number */
 .time-input input::-webkit-outer-spin-button,
 .time-input input::-webkit-inner-spin-button {
@@ -136,6 +180,34 @@
   width: 75px;
   padding: 10px;
   font-size: 16px;
+  color: #fff;
+  border: 1px solid;
+  background: transparent;
+}
+
+.setting .block div.toggle-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: fit-content;
+}
+
+.setting .block div.toggle-button {
+  width: 60px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: 30px;
+  cursor: pointer;
+  border: 1px solid;
+}
+
+.setting .block div.toggle-point {
+  width: 50%;
+  height: 100%;
+  background: white;
+  border-radius: 50px;
 }
 
 .alarm-details {
@@ -152,16 +224,21 @@
   margin-top: 10px;
 }
 
-.alarm-type p {
+.alarm-type h4 {
   width: fit-content;
   font-size: 18px;
-  font-weight: 400;
+
+  margin-right: 20px;
 }
 
 div.select-container {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  width: fit-content;
+}
+
+.setting .block .select-container {
   width: fit-content;
 }
 
@@ -173,19 +250,34 @@ div.select-container {
   position: relative;
 }
 
-.select-menu .row button {
+.select-menu .menu-content {
+  top: 35px;
+  background: #afafaf8f;
+  backdrop-filter: blur(8px);
+  width: 100%;
+  color: #fff;
+  width: 100%;
+}
+
+.select-menu .menu-content .row button {
   font-size: 16px;
-  width: 200px;
+  /* width: 200px; */
+
+  color: #fff;
 }
 
 .select-menu button.open-menu {
   border-radius: 6px;
   font-size: 16px;
   padding: 10px 16px;
-  background: #ececec;
   width: fit-content;
   justify-content: space-between;
   width: max-content;
+
+  background: transparent;
+  color: #fff;
+  border: 1px solid;
+  width: 100%;
 }
 
 .select-menu button.open-menu .arrow {
@@ -193,7 +285,7 @@ div.select-container {
 }
 
 .select-menu button.active {
-  background-color: rgb(0, 0, 0, 0.092);
+  background-color: rgb(0 0 0 / 26%);
 }
 
 .alarm-details input {
@@ -252,6 +344,10 @@ div.select-container {
   box-shadow: 0px 0px 4px rgb(50, 50, 50);
 }
 
+.setting .block.notification {
+  flex-direction: row;
+}
+
 .block.notification .notification-data {
   display: flex;
   align-items: center;
@@ -266,38 +362,14 @@ div.select-container {
   width: fit-content;
 }
 
-@media (max-width: 450px) {
-  .setting .block.notification {
-    border: none;
-    flex-flow: wrap;
-  }
-
-  .block.notification .notification-data {
-    margin-top: 15px;
-    width: 100%;
-  }
-}
-
-@media (max-width: 400px) {
-  .alarm-details .alarm-type {
-    flex-direction: column;
-  }
-
-  .alarm-details .alarm-type p:first-of-type {
-    margin-bottom: 10px;
-    width: 100%;
-    font-weight: 500;
-  }
-
-  .alarm-details .alarm-type .select-menu button.open-menu {
-    width: 100%;
-  }
+.setting .block.focus {
+  flex-direction: row;
 }
 
 .setting .footer {
   margin-top: 10px;
   padding-block: 20px 30px;
-  background: #ececec;
+  background: #ececec38;
   width: 100%;
   padding-inline: 30px;
   border-radius: 0 0 10px 10px;
@@ -309,14 +381,16 @@ div.select-container {
 .setting .footer button {
   font-size: 20px;
   padding: 10px 15px;
-  background-color: #858585;
   border-radius: 8px;
   box-shadow: 0 0 10px #989898;
-  color: #e7e7e7;
+  color: #fff;
+}
+.setting .footer button:first-child {
+  border: 2px solid;
 }
 
 .setting .footer button.save {
-  background-color: #000;
+  background-color: var(--main-color);
 }
 
 .setting .footer button.save:disabled {
@@ -326,4 +400,160 @@ div.select-container {
   color: rgba(0, 0, 0, 0.26);
 }
 
+@media (max-width: 550px) {
+  .setting {
+    min-width: 450px;
+  }
+}
+
+@media (max-width: 450px) {
+  .setting {
+    min-width: 360px;
+  }
+
+  .setting-header h2 {
+    margin-inline: 10px;
+    font-size: 24px;
+  }
+
+  .setting .block,
+  .setting-header {
+    padding-inline: 12px;
+  }
+
+  .setting .block {
+    border: none;
+    /* flex-flow: wrap; */
+    flex-direction: row;
+    width: min-content;
+  }
+
+  .setting .block h3 {
+    width: max-content;
+  }
+
+  .block.notification .notification-data {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .setting {
+    min-width: 320px;
+  }
+
+  .setting-menu button {
+    font-size: 20px;
+  }
+
+  .setting-header {
+    padding-top: 20px;
+  }
+
+  .setting-header h2 {
+    font-size: 20px;
+  }
+
+  .setting-header .close-setting {
+    font-size: 15px;
+    padding: 5px;
+  }
+
+  .setting .block:not(:last-of-type) {
+    padding-inline: 20px;
+  }
+
+  .setting .block h3 {
+    /* width: 100%; */
+    text-align: inherit;
+    font-size: 18px;
+    margin-right: 0;
+  }
+
+  .setting .time-inputs h4 {
+    font-size: 16px;
+  }
+
+  .setting .block .select-container {
+    margin-top: 10px;
+  }
+
+  .setting .block .notification-data .select-container {
+    margin: 0;
+  }
+
+  .setting .block input[type="number"] {
+    margin-inline: 10px 0px;
+    width: 60px;
+    padding: 8px 10px;
+  }
+
+  .setting .block .min-sec-input input[type="number"] {
+    margin-inline: 10px;
+  }
+
+  .min-sec-input .plus-minus-arrows button.plus-arrow,
+  .min-sec-input .plus-minus-arrows button.minus-arrow {
+    font-size: 12px;
+    padding-top: 3.4px;
+  }
+
+  .select-menu button.open-menu {
+    padding: 8px 10px;
+  }
+
+  .alarm-type h4 {
+    font-size: 16px;
+  }
+
+  .alarm-details .alarm-type p:first-of-type {
+    margin-bottom: 10px;
+    width: 100%;
+    font-weight: 500;
+  }
+
+  .alarm-details .alarm-type .select-menu button.open-menu {
+    width: 100%;
+  }
+
+  .setting .block,
+  .setting .block.notification {
+    flex-flow: wrap;
+  }
+
+  .setting .block.focus {
+    flex-direction: column;
+  }
+
+  .setting .block.focus div.toggle-button-container {
+    margin-top: 10px;
+  }
+
+  .setting .block.notification {
+    flex-direction: column;
+  }
+
+  .setting .block div.toggle-button {
+    width: 50px;
+    height: 28px;
+  }
+
+  .setting .footer {
+    padding-inline: 20px;
+    padding-bottom: 20px;
+  }
+
+  .setting .footer button {
+    font-size: 16px;
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 350px) {
+  .setting {
+    min-width: 300px;
+  }
+}
 /* End the setting */

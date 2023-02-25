@@ -114,6 +114,30 @@ a {
 }
 /* end basics */
 
+.glass-container {
+  position: fixed;
+  height: 100%;
+  top: 0;
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  background: #47474761;
+  overflow: auto;
+}
+
+.glass-effect {
+  /* Frosted glass affect */
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  /* Add box-shadow for more depth */
+  box-shadow: 0px 5px 11px 3px rgb(0 0 0 / 15%);
+  background-color: rgb(224 224 224 / 42%);
+  color: #fff;
+}
+
 @import url("./utils/style.css");
 
 @media (max-width: 425px) {

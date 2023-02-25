@@ -65,7 +65,7 @@ function SmallWinBtn() {
 
   return (
     <>
-      <button aria-label='small external window' className='ext-win' type="button" onClick={handleOpenExtInt}>
+      <button aria-label='small external window' className='timer-button' type="button" onClick={handleOpenExtInt}>
         {(!minWin) ?
           <RiExternalLinkLine />
           : <>

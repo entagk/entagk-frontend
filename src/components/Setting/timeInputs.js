@@ -34,9 +34,7 @@ function TimeInputs({ name, data, setData }) {
       }
       console.log(name, realValue);
     }
-
   }
-
 
   const plus = (btnName) => {
     let realValue = sec + (min * 60);
@@ -80,9 +78,10 @@ function TimeInputs({ name, data, setData }) {
     <div className='time-input' style={{
       display: "flex",
       alignItems: "center",
-      justifyContent: "flex-start"
+      justifyContent: "flex-end",
+      marginRight: "10px"
     }}>
-      <div className='min-sec-input'>
+      <div className='min-sec-input' style={{ width: 'fit-content' }}>
         <input
           name='min'
           type="number"
@@ -114,8 +113,8 @@ function TimeInputs({ name, data, setData }) {
           </button>
         </div>
       </div>
-      <p style={{ marginRight: 10, fontSize: 18 }}>:</p>
-      <div className='min-sec-input'>
+      <p style={{ marginInline: 10, fontSize: 18 }}>:</p>
+      <div className='min-sec-input' style={{ width: 'fit-content' }}>
         <input
           name='sec'
           type="number"
@@ -125,6 +124,9 @@ function TimeInputs({ name, data, setData }) {
           className={!min && !sec ? `error ${name}-sec` : `${name}-sec`}
           value={sec}
           onChange={onChange}
+          style={{
+            marginLeft: '10px'
+          }}
         />
         <div className='plus-minus-arrows'>
           <button
