@@ -1,13 +1,13 @@
 import React from "react";
 
-const Loading = ({ color, backgroud, size, strokeWidth }) => {
+const Loading = ({ color, backgroud, paddingBlock, size, strokeWidth }) => {
   return (
     <div style={{ position: "relative" }}>
       <div
         className="loading"
         style={{
           marginBlock: "auto",
-          paddingBlock: "20px",
+          paddingBlock: `${paddingBlock}px`,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

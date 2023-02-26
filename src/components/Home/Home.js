@@ -12,6 +12,7 @@ const Timer = lazy(() => import('../../components/Clock/Timer'));
 const NavBar = lazy(() => import('../../components/NavBar/NavBar'));
 const Tasks = lazy(() => import("../../components/Tasks/Tasks"));
 const Setting = lazy(() => import("./../Setting/Setting"));
+const Sidebar = lazy(() => import("./../Sidebar/Sidebar"));
 
 function Home() {
   const { setting } = useSelector(state => state.timer);
@@ -19,6 +20,8 @@ function Home() {
   const dispatch = useDispatch();
   const [isLoadingTask, setIsLoadingTask] = useState(null);
   const [openSetting, setOpenSetting] = useState(false);
+  const [openTodo, setOpenTodo] = useState(false);
+  const [openSticky, setOpenSticky] = useState(false);
 
   useEffect(() => {
     if (setting === undefined) {
@@ -74,6 +77,7 @@ function Home() {
       }>
         <div className='container'>
           <NavBar setMessage={setMessage} />
+          <Sidebar setOpenSticky={setOpenSticky} setOpenTodo={setOpenTodo} />
           <div className="app">
             <Timer setIsLoadingTask={setIsLoadingTask} setMessage={setMessage} setOpenSetting={setOpenSetting} />
             <ActiveTask />
@@ -81,6 +85,16 @@ function Home() {
           {openSetting && (
             <div className="glass-container">
               <Setting setOpenSetting={setOpenSetting} />
+            </div>
+          )}
+          {openTodo && (
+            <div className="glass-container">
+              <div className='glass-effect'><h1>Tasks</h1></div>
+            </div>
+          )}
+          {openSticky && (
+            <div className="glass-container">
+              <div className='glass-effect'><h1>sticky</h1></div>
             </div>
           )}
           <Tasks setMessage={setMessage} isLoading={isLoadingTask} setIsLoading={setIsLoadingTask} />

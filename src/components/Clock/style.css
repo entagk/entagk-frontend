@@ -209,7 +209,6 @@ h1.digital-number {
 .timer-button {
   position: absolute;
   top: 15px;
-  right: 15px;
   z-index: 120;
   color: #fff;
   border: 1px solid;
@@ -220,10 +219,17 @@ h1.digital-number {
   border-radius: 50%;
   padding: 8px;
   background: #000000b8;
+
+  transform: rotate(270deg);
+  width: fit-content;
+}
+
+.timer-button:first-of-type {
+  left: 15px;
 }
 
 .timer-button.setting-open {
-  right: 70px;
+  right: 15px;
 }
 
 .clock-container:hover .timer-button {
