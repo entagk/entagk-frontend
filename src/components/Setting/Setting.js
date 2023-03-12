@@ -120,7 +120,7 @@ function Setting({ setOpenSetting }) {
           />
         </div>
       )}
-      <form className='glass-effect setting' onSubmit={handleSubmit}>
+      <form className='glass-effect setting zoom-in' onSubmit={handleSubmit}>
         <Header linkClick={handleSubmit} status={status} setStatus={setStatus} />
         <>
           {status === '' ? (

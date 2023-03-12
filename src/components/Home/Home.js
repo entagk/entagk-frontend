@@ -15,7 +15,7 @@ const Setting = lazy(() => import("./../Setting/Setting"));
 const Sidebar = lazy(() => import("./../Sidebar/Sidebar"));
 
 function Home() {
-  const { setting } = useSelector(state => state.timer);
+  const { setting, started } = useSelector(state => state.timer);
   const [message, setMessage] = useState({ type: '', message: "" });
   const dispatch = useDispatch();
   const [isLoadingTask, setIsLoadingTask] = useState(null);
@@ -31,12 +31,12 @@ function Home() {
   }, [setting]);
 
   useEffect(() => {
-    if (openSetting) {
+    if (openSetting || openTodo || openSticky) {
       document.body.style.overflowY = 'hidden';
     } else {
       document.body.style.overflowY = 'auto';
     }
-  }, [openSetting]);
+  }, [openSetting, openTodo, openSticky]);
 
   if (setting === undefined) {
     return (
@@ -77,7 +77,9 @@ function Home() {
       }>
         <div className='container'>
           <NavBar setMessage={setMessage} />
-          <Sidebar setOpenSticky={setOpenSticky} setOpenTodo={setOpenTodo} />
+          {(setting?.focusMode && started) ? null : (
+            <Sidebar setOpenSticky={setOpenSticky} setOpenTodo={setOpenTodo} />
+          )}
           <div className="app">
             <Timer setIsLoadingTask={setIsLoadingTask} setMessage={setMessage} setOpenSetting={setOpenSetting} />
             <ActiveTask />
@@ -89,7 +91,7 @@ function Home() {
           )}
           {openTodo && (
             <div className="glass-container">
-              <div className='glass-effect'><h1>Tasks</h1></div>
+              <Tasks setMessage={setMessage} isLoading={isLoadingTask} setIsLoading={setIsLoadingTask} setOpenTodo={setOpenTodo} />
             </div>
           )}
           {openSticky && (
@@ -97,7 +99,6 @@ function Home() {
               <div className='glass-effect'><h1>sticky</h1></div>
             </div>
           )}
-          <Tasks setMessage={setMessage} isLoading={isLoadingTask} setIsLoading={setIsLoadingTask} />
         </div>
       </React.Suspense>
     </>

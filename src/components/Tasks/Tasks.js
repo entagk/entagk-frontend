@@ -1,6 +1,7 @@
 import React, { lazy, Suspense, useEffect, useState } from "react";
 
 import { AiOutlinePlus } from 'react-icons/ai';
+import { CgClose } from "react-icons/cg";
 import { useDispatch, useSelector } from "react-redux";
 import { getTasks } from "../../actions/tasks";
 import Loading from "../../utils/Loading";
@@ -12,10 +13,10 @@ const Footer = lazy(() => import("./TaskFooter/TaskFooter"));
 const Menu = lazy(() => import("./TasksMenu/TasksMenu"));
 const Task = lazy(() => import("./Task/Task"));
 
-const Tasks = ({ setMessage, isLoading, setIsLoading }) => {
+const Tasks = ({ setMessage, isLoading, setIsLoading, setOpenTodo }) => {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const tasks = useSelector(state => state.tasks);
-  const { active, activites, setting, started } = useSelector(state => state.timer);
+  const { active, activites } = useSelector(state => state.timer);
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
 
@@ -75,12 +76,19 @@ const Tasks = ({ setMessage, isLoading, setIsLoading }) => {
           backgroud="transparent"
         />
       }>
-        <div className="tasks" style={{ display: (setting?.focusMode && started) && "none" }}>
+        <div className="tasks glass-effect zoom-in">
+          <div className="close-button-container">
+            <button aria-label='close tasks' className="glass-effect close-tasks" type='button' onClick={() => setOpenTodo(false)}>
+              <CgClose />
+            </button>
+          </div>
           <div className="header">
             <h2>
               Tasks
             </h2>
-            <Menu setMessage={setMessage} />
+            <div className="header-buttons">
+              <Menu setMessage={setMessage} />
+            </div>
           </div>
           <div className="tasks-container">
             {tasks.tasks?.length > 0 && (

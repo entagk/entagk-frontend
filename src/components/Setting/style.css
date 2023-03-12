@@ -11,7 +11,6 @@
   box-shadow: 1px 1px 10px 0px #858585;
   position: absolute;
   top: 0px;
-  min-width: 512px;
 }
 
 .setting-header {
@@ -180,9 +179,6 @@
   width: 75px;
   padding: 10px;
   font-size: 16px;
-  color: #fff;
-  border: 1px solid;
-  background: transparent;
 }
 
 .setting .block div.toggle-button-container {
@@ -400,17 +396,7 @@ div.select-container {
   color: rgba(0, 0, 0, 0.26);
 }
 
-@media (max-width: 550px) {
-  .setting {
-    min-width: 450px;
-  }
-}
-
 @media (max-width: 450px) {
-  .setting {
-    min-width: 360px;
-  }
-
   .setting-header h2 {
     margin-inline: 10px;
     font-size: 24px;
@@ -440,10 +426,6 @@ div.select-container {
 }
 
 @media (max-width: 400px) {
-  .setting {
-    min-width: 320px;
-  }
-
   .setting-menu button {
     font-size: 20px;
   }
@@ -551,9 +533,4 @@ div.select-container {
   }
 }
 
-@media (max-width: 350px) {
-  .setting {
-    min-width: 300px;
-  }
-}
 /* End the setting */

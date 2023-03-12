@@ -66,7 +66,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage }) => 
           />
         </div>
       )}
-      <form className="task-form" data-aos="zoom-in" style={{ margin: oldData !== null && "20px 0 20px" }} onSubmit={handleSave}>
+      <form className="task-form zoom-in" style={{ margin: oldData !== null && "20px 0 20px" }} onSubmit={handleSave}>
         <div className="form-container">
           <div className="form-inner-container">
             <div className="block" style={{ position: "relative" }}>
@@ -160,14 +160,12 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage }) => 
             type="button"
             onClick={() => setOpen(o => !o)}
           >cancel</button>
-          <div>
-            <button
-              aria-label="submit form button"
-              type="submit"
-              className="save"
-              disabled={!data.name || !data.est}
-            >save</button>
-          </div>
+          <button
+            aria-label="submit form button"
+            type="submit"
+            className="save"
+            disabled={!data.name || !data.est}
+          >save</button>
         </div>
       </form>
     </>
