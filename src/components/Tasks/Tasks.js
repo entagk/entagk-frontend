@@ -78,17 +78,30 @@ const Tasks = ({ setMessage, isLoading, setIsLoading, setOpenTodo }) => {
       }>
         <div className="tasks glass-effect zoom-in">
           <div className="close-button-container">
-            <button aria-label='close tasks' className="glass-effect close-tasks" type='button' onClick={() => setOpenTodo(false)}>
-              <CgClose />
-            </button>
           </div>
           <div className="header">
-            <h2>
-              Tasks
-            </h2>
-            <div className="header-buttons">
-              <Menu setMessage={setMessage} />
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexWrap: 'nowrap',
+              flexDirection: 'row',
+            }}>
+              <div className="header-buttons">
+                <Menu setMessage={setMessage} />
+              </div>
+              <h2 style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginLeft: "10px",
+              }}>
+                Tasks
+              </h2>
             </div>
+            <button aria-label='close tasks' className="close-tasks" type='button' onClick={() => setOpenTodo(false)}>
+              <CgClose />
+            </button>
           </div>
           <div className="tasks-container">
             {tasks.tasks?.length > 0 && (

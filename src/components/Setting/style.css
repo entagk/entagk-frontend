@@ -5,12 +5,10 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  /* background: #fff; */
-  border-radius: 10px;
-  /* padding: 20px; */
   box-shadow: 1px 1px 10px 0px #858585;
   position: absolute;
   top: 0px;
+  border-radius: 45px 45px 10px 10px;
 }
 
 .setting-header {
@@ -18,21 +16,27 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
-  padding-top: 30px;
-  /* font-size: 30px; */
   align-content: center;
   flex-wrap: nowrap;
   flex-direction: row;
-  border-bottom: 2px solid #e7e7e7;
+  padding: 20px;
+  border: 2px solid;
+  border-radius: 45px;
+  box-shadow: 0 0 4px #5a5a5a;
 }
 
 .setting-header .close-setting {
   font-size: 20px;
-  padding: 7px;
-  color: #f4f4f4;
+  padding: 10px;
   border-radius: 50%;
-  border: 2px solid #f4f4f4;
+  color: #fff;
+  font-size: 20px;
+  min-width: 0;
+  background: red;
+}
+
+.setting-header .close-setting:hover {
+  box-shadow: 0 0 5px #0000008f;
 }
 
 .setting-header h2 {
