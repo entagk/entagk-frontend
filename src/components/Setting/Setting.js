@@ -10,6 +10,7 @@ import { TbFocus } from 'react-icons/tb';
 
 import Loading from '../../utils/Loading';
 import Message from '../../utils/Message';
+import NetworkError from '../NetworkError/NetworkError';
 
 import "./style.css";
 const Header = lazy(() => import('./SettingHeader/header'));
@@ -94,10 +95,13 @@ function Setting({ setOpenSetting }) {
       />
     }>
       {message.message && (
-        <Message
-          {...message}
-          setMessage={setMessage}
-        />
+        <>
+          {(!message.message.includes('Network Error')) ? (
+            <Message {...message} setMessage={setMessage} />
+          ) : (
+            <NetworkError />
+          )}
+        </>
       )}
       {(setting && isLoading) && (
         <div className="loading-container" style={{

@@ -57,7 +57,7 @@ export const refreshToken = (setMessage) => async dispatch => {
     dispatch({ type: REFRESH_TOKEN, data });
   } catch (error) {
     setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
-    if (error.response?.status === 401 || error.response.status === 500) {
+    if (error.response?.status === 401 || error.response?.status === 500) {
       dispatch({ type: LOGOUT });
     }
     console.error(error);
@@ -94,6 +94,7 @@ export const deleteUser = (setMessage) => async dispatch => {
   }
 }
 
+// todo at profile editing page
 export const updateUser = (formData, setMessage) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'auth' })

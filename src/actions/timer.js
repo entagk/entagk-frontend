@@ -232,4 +232,4 @@ export const modifySetting = (formData, setMessage) => async dispatch => {
       dispatch({ type: LOGOUT });
     }
   }
-} 
+}

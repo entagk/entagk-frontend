@@ -109,6 +109,7 @@
 }
 
 .menu-content {
+  color: #000;
   position: absolute;
   display: flex;
   align-items: center;

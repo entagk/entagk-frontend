@@ -5,4 +5,35 @@
   width: 100%;
   height: 100%;
   color: #fff;
+
+  flex-direction: column;
+  font-size: 50px;
+
+  text-align: center;
+  font-size: 30px;
+  position: fixed;
+  z-index: 1001;
+  background: #5d5d5da3;
+  right: 0;
+  top: 0;
+  padding-bottom: 20px;
+  padding-inline: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.network-error h2 {
+  margin-block: 30px;
+}
+
+.network-error button {
+  padding: 10px 15px;
+  /* border: 2px solid; */
+  border-radius: 10px;
+  font-size: 20px;
+  background: #f00;
+  margin-bottom: 25px;
+}
+
+.network-error button:hover {
+  box-shadow: 0 0 5px #000000c4;
 }

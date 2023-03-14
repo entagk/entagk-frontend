@@ -16,8 +16,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage }) => 
   const [data, setData] = useState(oldData === null ? initialData : oldData);
   const [openNotes, setOpenNotes] = useState(data.notes === "" ? false : true);
   const [openProject, setOpenProject] = useState(data.project === "" ? false : true);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [message, setMessage] = useState({ type: "", message: "" });
+
   const { activites, active } = useSelector(state => state.timer);
 
   const handleChange = (e) => {
@@ -81,7 +80,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage }) => 
                 placeholder="What are you working on?"
                 onChange={handleChange}
               />
-              <div className="text-counter" style={{ color: `${50 - data.name.length > 10 ? "#4caf50" : "#ff002f"}` }}>
+              <div className="text-counter" style={{ color: `${50 - data.name.length > 10 ? "#0effe9" : "#ff002f"}` }}>
                 <p
                   style={{ fontSize: "16px", fontWeight: "500", marginBottom: "15px" }}
                 >{50 - data.name.length}</p>
@@ -125,7 +124,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage }) => 
               {openNotes && (
                 <div className="notes">
                   <textarea name="notes" type='text' maxLength="500" onChange={handleChange} value={data.notes}></textarea>
-                  <div className="text-counter" style={{ color: `${500 - data.notes.length > 100 ? "#4caf50" : "#ff002f"}` }}>
+                  <div className="text-counter" style={{ color: `${500 - data.notes.length > 100 ? "#0effe9" : "#ff002f"}` }}>
                     <p style={{ fontSize: "16px", fontWeight: "500" }}>{500 - data.notes.length}</p>
                   </div>
                 </div>

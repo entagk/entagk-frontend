@@ -41,9 +41,6 @@ function Home() {
   if (setting === undefined) {
     return (
       <>
-        {message.message && (
-          <Message message={message.message} type={message.type} setMessage={setMessage} />
-        )}
         {(!message.message) ?
           (
             <>
@@ -55,7 +52,13 @@ function Home() {
               />
             </>
           ) : (
-            <NetworkError />
+            <>
+              {(message.message && !message.message.includes('Network Error')) ? (
+                <Message {...message} setMessage={setMessage} />
+              ) : (
+                <NetworkError />
+              )}
+            </>
           )
         }
       </>
@@ -64,8 +67,14 @@ function Home() {
 
   return (
     <>
-      {(message.message && !message.message.includes('Network Error')) && (
-        <Message {...message} setMessage={setMessage} />
+      {message.message && (
+        <>
+          {(!message.message.includes('Network Error')) ? (
+            <Message {...message} setMessage={setMessage} />
+          ) : (
+            <NetworkError />
+          )}
+        </>
       )}
       <React.Suspense fallback={
         <Loading
@@ -91,7 +100,7 @@ function Home() {
           )}
           {openTodo && (
             <div className="glass-container">
-              <Tasks setMessage={setMessage} isLoading={isLoadingTask} setIsLoading={setIsLoadingTask} setOpenTodo={setOpenTodo} />
+              <Tasks message={message} setMessage={setMessage} isLoading={isLoadingTask} setIsLoading={setIsLoadingTask} setOpenTodo={setOpenTodo} />
             </div>
           )}
           {openSticky && (

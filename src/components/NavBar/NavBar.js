@@ -28,7 +28,8 @@ const NavBar = ({ setMessage }) => {
     if (localStorage.getItem('token') && user === undefined) {
       dispatch(getUserData(setMessage));
       const decodedToken = jwt_decode(localStorage.getItem('token'));
-      if (localStorage.getItem('token') && decodedToken.exp * 1000 < new Date().getTime() - 1000 * 60 * 60) {
+      const tokenExp = ((decodedToken.exp * 1000 - new Date().getTime()) / (1000 * 60 * 60));
+      if (localStorage.getItem('token') && tokenExp < 24) {
         dispatch(refreshToken(setMessage));
       }
     }

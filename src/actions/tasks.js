@@ -42,9 +42,11 @@ export const getTasks = (setMessage, page) => async dispatch => {
     }
     dispatch({ type: END_LOADING, data: 'tasks' });
   } catch (err) {
+    dispatch({ type: END_LOADING, data: 'tasks' });
     console.error(err);
-    setMessage({ message: err.response.data.message || err.message, type: 'error' });
-    if (err.response?.status === 401 || err.response.status === 500) {
+    setMessage({ message: err?.response?.data?.message || err.message, type: 'error' });
+    
+    if (err.response?.status === 401 || err.response?.status === 500) {
       dispatch({ type: LOGOUT });
     }
   }
@@ -89,7 +91,7 @@ export const addMultipleTasks = (tasksData, setMessage) => async dispatch => {
     dispatch({ type: END_LOADING, data: 'tasks' })
     setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
-    if (error.response?.status === 401 || error.response.status === 500) {
+    if (error.response?.status === 401 || error.response?.status === 500) {
       dispatch({ type: LOGOUT });
     }
   }
@@ -115,7 +117,7 @@ export const checkTask = (id, setIsLoading, setMessage) => async dispatch => {
     setIsLoading(null);
     setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
-    if (error.response?.status === 401 || error.response.status === 500) {
+    if (error.response?.status === 401 || error.response?.status === 500) {
       dispatch({ type: LOGOUT });
     }
   }

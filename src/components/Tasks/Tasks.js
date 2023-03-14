@@ -5,6 +5,8 @@ import { CgClose } from "react-icons/cg";
 import { useDispatch, useSelector } from "react-redux";
 import { getTasks } from "../../actions/tasks";
 import Loading from "../../utils/Loading";
+import Message from "../../utils/Message";
+import NetworkError from "../NetworkError/NetworkError";
 
 import "./style.css";
 
@@ -13,7 +15,7 @@ const Footer = lazy(() => import("./TaskFooter/TaskFooter"));
 const Menu = lazy(() => import("./TasksMenu/TasksMenu"));
 const Task = lazy(() => import("./Task/Task"));
 
-const Tasks = ({ setMessage, isLoading, setIsLoading, setOpenTodo }) => {
+const Tasks = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) => {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const tasks = useSelector(state => state.tasks);
   const { active, activites } = useSelector(state => state.timer);
@@ -56,13 +58,30 @@ const Tasks = ({ setMessage, isLoading, setIsLoading, setOpenTodo }) => {
   }, [tasks.tasks, tasks.total])
 
   if (tasks.tasks === undefined) {
+    console.log(message);
     return (
-      <Loading
-        size="200"
-        strokeWidth="1"
-        backgroud="white"
-        color={activites[active]?.color}
-      />
+      <>
+        {(!message.message) ?
+          (
+            <>
+              <Loading
+                size="200"
+                strokeWidth="2"
+                backgroud="white"
+                color={activites[active]?.color}
+              />
+            </>
+          ) : (
+            <>
+              {(message.message && !message.message.includes('Network Error')) ? (
+                <Message {...message} setMessage={setMessage} />
+              ) : (
+                <NetworkError />
+              )}
+            </>
+          )
+        }
+      </>
     )
   }
 
