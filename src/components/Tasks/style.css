@@ -74,6 +74,7 @@
   left: 0;
   background-color: #acacac7a;
   backdrop-filter: blur(10px);
+  color: #fff;
 }
 
 .tasks .tasks-container {
@@ -132,8 +133,8 @@
   color: #fff;
   background-image: linear-gradient(
     to right,
-    rgba(0, 255, 141, 0.8) 0%,
-    rgba(0, 255, 141, 0.8) var(--progress),
+    lime 0%,
+    lime var(--progress),
     transparent var(--progress),
     transparent 100%
   );
@@ -145,8 +146,8 @@
   0% {
     background-image: linear-gradient(
       to right,
-      rgba(0, 255, 141, 0.8) 0%,
-      rgba(0, 255, 141, 0.8) 0,
+      lime 0%,
+      lime 0,
       transparent 0,
       transparent 100%
     );
@@ -155,8 +156,8 @@
   100% {
     background-image: linear-gradient(
       to right,
-      rgba(0, 255, 141, 0.8) 0%,
-      rgba(0, 255, 141, 0.8) var(--progress),
+      lime 0%,
+      lime var(--progress),
       transparent var(--progress),
       transparent 100%
     );

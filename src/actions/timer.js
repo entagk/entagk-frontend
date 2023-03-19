@@ -195,6 +195,7 @@ export const changeActive = (active, activeId, setIsLoading, setMessage) => asyn
     setIsLoading(activeId);
     if (!localStorage.getItem('token')) {
       dispatch({ type: CHANGE_ACTIVE });
+      dispatch({ type: INCREASE_ACT, data: active });
     } else {
       if (active === PERIOD && activeId) {
         dispatch({ type: CHANGE_ACTIVE });

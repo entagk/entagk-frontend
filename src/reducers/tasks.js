@@ -8,7 +8,8 @@ import {
   CLEAR_FINISHED_TASKS,
   CLEAR_ACT_FROM_TASKS,
   CLEAR_ALL_TASKS,
-  ADD_LOCAL_TASKS
+  ADD_LOCAL_TASKS,
+  CLEAR_CONGRATS
 } from "../actions/tasks";
 import { INCREASE_ACT, PERIOD, MODITY_SETTING, GET_SETTING } from "../actions/timer";
 import { nanoid } from "nanoid";
@@ -30,6 +31,7 @@ const initialState = {
   est: 0,
   autoStartNextTask: false,
   isLoading: false,
+  congrats: "",
 }
 
 // eslint-disable-next-line
@@ -145,6 +147,7 @@ export default (
           ? state.tasks.find((t) => t._id === state.activeId)
           : { _id: null, name: null };
       let realAct = state.act;
+      let congrats = '';
       if (!localStorage.getItem("token")) {
         if (Boolean(state.activeId) && action.data === PERIOD) {
           const taskIndex = state.tasks.findIndex(
@@ -155,6 +158,7 @@ export default (
 
           if (state.tasks[taskIndex].act === state.tasks[taskIndex].est) {
             state.tasks[taskIndex].check = true;
+            congrats = state.tasks[taskIndex].name;
           }
 
           realAct = realAct + 1;
@@ -174,6 +178,7 @@ export default (
           act: realAct,
           activeId: newActive?._id,
           activeName: newActive?.name,
+          congrats: congrats
         };
       } else {
         if (Boolean(state.activeId) && action.data.active === PERIOD) {
@@ -184,6 +189,7 @@ export default (
           );
 
           state.tasks[taskIndex] = task;
+          congrats = task.check ? task.name : "";
 
           realAct = realAct + 1;
 
@@ -198,9 +204,12 @@ export default (
           act: realAct,
           activeId: newActive?._id,
           activeName: newActive?.name,
+          congrats: congrats
         };
       };
 
+    case CLEAR_CONGRATS:
+      return { ...state, congrats: "" };
     case NEW_TASK:
       all = state.tasks;
       finishedTasks = all.filter(t => t.check);

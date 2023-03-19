@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getSetting } from '../../actions/timer';
 import NetworkError from '../NetworkError/NetworkError';
+import Congratulation from '../../utils/Congratulation/Congratulation';
 
 const ActiveTask = lazy(() => import('../../components/ActiveTask/ActiveTask'));
 const Timer = lazy(() => import('../../components/Clock/Timer'));
@@ -16,6 +17,7 @@ const Sidebar = lazy(() => import("./../Sidebar/Sidebar"));
 
 function Home() {
   const { setting, started } = useSelector(state => state.timer);
+  const {congrats} = useSelector(state => state.tasks);
   const [message, setMessage] = useState({ type: '', message: "" });
   const dispatch = useDispatch();
   const [isLoadingTask, setIsLoadingTask] = useState(null);
@@ -67,6 +69,9 @@ function Home() {
 
   return (
     <>
+      {congrats && (
+        <Congratulation text={congrats} />
+      )}
       {message.message && (
         <>
           {(!message.message.includes('Network Error')) ? (

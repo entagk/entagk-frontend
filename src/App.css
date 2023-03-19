@@ -44,13 +44,6 @@ textarea {
   border: none;
 }
 
-input.error,
-.task-form input.error {
-  background: #ff646482;
-  color: #d81c1c;
-  border: 1px solid;
-}
-
 input:focus {
   background-color: #dddddd3d;
 }
@@ -112,10 +105,15 @@ a {
   border-radius: 8px;
   font-size: 16px;
   padding: 10px;
+  background: #9f9f9f33;
+  color: #1d1d1d;
+}
 
+.glass-effect .block input,
+.glass-effect .notes textarea {
   color: #fff;
-  border: 1px solid;
   background: transparent;
+  border: 1px solid;
 }
 /* end basics */
 
@@ -141,6 +139,14 @@ a {
   box-shadow: 0px 5px 11px 3px rgb(0 0 0 / 15%);
   background-color: rgb(224 224 224 / 42%);
   color: #fff;
+}
+
+
+input.error,
+.task-form input.error {
+  background: #ff646482;
+  color: #d81c1c;
+  border: 1px solid;
 }
 
 @import url("./utils/style.css");
@@ -194,6 +200,20 @@ a {
 @keyframes zoom-in {
   0% {
     transform: scale(0.5, 0.5);
+  }
+
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+.zoom-out {
+  animation: zoom-out 1s ease-out;
+}
+
+@keyframes zoom-out {
+  0% {
+    transform: scale(2, 2);
   }
 
   100% {

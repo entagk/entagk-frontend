@@ -13,6 +13,8 @@ export const CLEAR_FINISHED_TASKS = "CLEAR_FINISHED_TASKS";
 export const CLEAR_ACT_FROM_TASKS = "CLEAR_ACT_FROM_TASKS";
 export const CLEAR_ALL_TASKS = "CLEAR_ALL_TASKS";
 
+export const CLEAR_CONGRATS = "CLEAR_CONGRATS";
+
 export const getTasks = (setMessage, page) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'tasks' });
