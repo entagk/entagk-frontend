@@ -40,9 +40,9 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) =>
 
   useEffect(() => {
     const onScroll = () => {
-      let scrollTop = document.documentElement.scrollTop;
+      let scrollTop = document.querySelector('.tasks-container')?.scrollTop;
       let scrollHeight = document.querySelector('.tasks-list')?.scrollHeight;
-      let clientHeight = document.documentElement.clientHeight;
+      let clientHeight = document.querySelector('.tasks-container')?.clientHeight;
 
       if (scrollTop + clientHeight >= scrollHeight && Number(localStorage.getItem('total')) > Number(localStorage.getItem('tasksLen'))) {
         setPage(Number(localStorage.getItem('currentPage')) + 1);
@@ -51,8 +51,8 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) =>
 
     // console.log(tasks.tasks);
 
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    document.querySelector('.tasks-container')?.addEventListener('scroll', onScroll);
+    return () => document.querySelector('.tasks-container')?.removeEventListener('scroll', onScroll);
 
     // eslint-disable-next-line
   }, [tasks.tasks, tasks.total])

@@ -72,7 +72,7 @@ export default (
       const total = action.data?.total;
       all = Number(page) > 1 ? action.data.all.concat(state.tasks) : action.data.all;
       finishedTasks = all.filter(t => t?.check);
-      unfinishedTasks = all.filter(t => !t?.check);
+      unfinishedTasks = all.filter(t => !t?.check).sort((task, nextTask) => nextTask.est - task.est);
 
       if (!localStorage.getItem("token")) {
         return {
@@ -88,7 +88,6 @@ export default (
             : null,
         };
       } else {
-
         localStorage.setItem('total', total);
         localStorage.setItem('currentPage', page);
         localStorage.setItem('tasksLen', all.length);
