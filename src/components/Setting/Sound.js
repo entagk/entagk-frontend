@@ -5,7 +5,6 @@ import { alarmSounds, tickingSounds, clickSounds } from "../../actions/timer";
 import audioPlayer from '../../utils/audioPlayer';
 
 const Select = lazy(() => import("./Select"));
-const ToggleButton = lazy(() => import("./ToggleButton"));
 
 function Sound({ type, data, setData }) {
   const sounds = type === 'alarm' ? alarmSounds : type === 'ticking' ? tickingSounds : clickSounds;
@@ -22,7 +21,9 @@ function Sound({ type, data, setData }) {
   }, [change]);
 
   const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: Number(e.target.value) });
+    const min = Number(e.target.min), max = Number(e.target.max), value = Number(e.target.value);
+
+    setData({ ...data, [e.target.name]: value });
     setChange(!change);
   }
 
@@ -62,7 +63,18 @@ function Sound({ type, data, setData }) {
           flexDirection: "row"
         }}>
           <h4>Repeat</h4>
-          <ToggleButton type="alarmRepet" data={data} setData={setData} />
+          <div className='notification-min'>
+            <input
+              style={{ marginInline: "10px 0" }}
+              className={(data?.alarmRepet < 0 || data?.alarmRepet > 60) ? 'error' : undefined}
+              type="number"
+              min="0"
+              max="60"
+              defaultValue={data?.alarmRepet}
+              name="alarmRepet"
+              onChange={handleChange} />
+            <p style={{ marginLeft: 10 }}>Sec</p>
+          </div>
         </div>
       )}
     </div>

@@ -141,8 +141,7 @@ a {
   color: #fff;
 }
 
-
-input.error,
+.block input.error,
 .task-form input.error {
   background: #ff646482;
   color: #d81c1c;

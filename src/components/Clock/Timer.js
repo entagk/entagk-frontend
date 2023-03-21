@@ -38,7 +38,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
         audioPlayer({
             src: setting?.alarmType?.src,
             volume: setting?.alarmVolume,
-            loop: setting?.alarmRepet
+            loop: setting.alarmRepet > 0 ? true : false
         })
     );
 
@@ -160,6 +160,14 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                 dispatch({ type: STOP_TIMER, data: 0 });
             }
 
+            if(setting.alarmRepet > 0) {
+                alarmSound.current.changeLoop(true);
+                setTimeout(() => {
+                    alarmSound.current.handleStop();
+                }, setting.alarmRepet * 1000);
+                console.log("alarm repet")
+            }
+
             dispatch(changeActive(active, activeId, setIsLoadingTask, setMessage));
 
             // eslint-disable-next-line
@@ -226,11 +234,23 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                     <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" size="200" strokeWidth="2.5" />}>
                         {setting.format === "digital" ? (
                             <>
-                                <DigitalTimer handleReset={handleReset} toggleStart={toggleStart} setTime={setTime} time={time} handleSkip={handleSkip} />
+                                <DigitalTimer
+                                    handleReset={handleReset}
+                                    toggleStart={toggleStart}
+                                    setTime={setTime}
+                                    time={time}
+                                    handleSkip={handleSkip}
+                                />
                             </>
                         ) : (
                             <>
-                                <AnalogTimer handleReset={handleReset} toggleStart={toggleStart} setTime={setTime} time={time} handleSkip={handleSkip} />
+                                <AnalogTimer
+                                    handleReset={handleReset}
+                                    toggleStart={toggleStart}
+                                    setTime={setTime}
+                                    time={time}
+                                    handleSkip={handleSkip}
+                                />
                             </>
                         )}
                     </Suspense>

@@ -158,7 +158,7 @@ export const initialSetting = {
   longInterval: 4,
   alarmType: alarmSounds[0],
   alarmVolume: 50,
-  alarmRepet: false,
+  alarmRepet: 0,
   tickingType: tickingSounds[1],
   tickingVolume: 50,
   clickType: clickSounds[1],

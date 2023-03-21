@@ -355,7 +355,7 @@ div.select-container {
   width: fit-content;
 }
 
-.notification-data div.notification-min {
+.block div.notification-min {
   display: flex;
   align-items: center;
   justify-content: flex-end;

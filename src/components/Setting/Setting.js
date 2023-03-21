@@ -195,7 +195,12 @@ function Setting({ setOpenSetting }) {
             className='save'
             type='submit'
             aria-label='submit form'
-            disabled={(data && Object.values(data?.time).includes(0)) || data?.notificationInterval <= 0 || data?.longInterval <= 0}>ok</button>
+            disabled={
+              (data && Object.values(data?.time).includes(0)) ||
+              data?.notificationInterval <= 0 ||
+              data?.longInterval <= 0 ||
+              (data?.alarmRepet < 0 || data?.alarmRepet > 60)
+            }>ok</button>
         </div>
       </form>
     </React.Suspense>
