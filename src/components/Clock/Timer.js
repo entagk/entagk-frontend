@@ -11,6 +11,7 @@ import Loading from "../../utils/Loading";
 import "./style.css";
 import SmallWinBtn from "./SmallWinBtn/SmallWinBtn";
 import SettingOpen from "./SettingOpen/SettingOpen";
+import FullscreenBtn from "./FullscreenBtn/FullscreenBtn";
 
 const AnalogTimer = lazy(() => import("./Analog/Analog"));
 const DigitalTimer = lazy(() => import("./Digital/Digital"));
@@ -246,6 +247,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                     <>
                         <SmallWinBtn />
                         <SettingOpen setOpenSetting={setOpenSetting} />
+                        <FullscreenBtn />
                     </>
                 )}
                 <div className="clock">
