@@ -70,7 +70,7 @@ export default (
       const page = action.data?.currentPage;
       const numberOfPages = action.data?.numberOfPages;
       const total = action.data?.total;
-      all = Number(page) > 1 ? action.data.all.concat(state.tasks) : action.data.all;
+      all = Number(page) > 1 ? state.tasks.concat(action.data.all) : action.data.all;
       finishedTasks = all.filter(t => t?.check);
       unfinishedTasks = all.filter(t => !t?.check).sort((task, nextTask) => nextTask.est - task.est);
 
@@ -97,7 +97,7 @@ export default (
           currentPage: page,
           numberOfPages: numberOfPages,
           total: total,
-          tasks: unfinishedTasks.concat(finishedTasks),
+          tasks: all,
           est: all.length > 0 ? all.reduce((total, task) => total + task.est, 0) : 0,
           act: all.length > 0 ? all.reduce((total, task) => total + task.act, 0) : 0,
           activeId: state?.autoStartNextTask

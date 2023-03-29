@@ -17,7 +17,7 @@ const Sidebar = lazy(() => import("./../Sidebar/Sidebar"));
 
 function Home() {
   const { setting, started } = useSelector(state => state.timer);
-  const {congrats} = useSelector(state => state.tasks);
+  const { congrats } = useSelector(state => state.tasks);
   const [message, setMessage] = useState({ type: '', message: "" });
   const dispatch = useDispatch();
   const [isLoadingTask, setIsLoadingTask] = useState(null);
@@ -39,6 +39,23 @@ function Home() {
       document.body.style.overflowY = 'auto';
     }
   }, [openSetting, openTodo, openSticky]);
+
+
+  useEffect(() => {
+    window.onkeydown = (event) => {
+      if (event.code.toLowerCase() === 'keys' && !started) {
+        setOpenSetting((e) => !e);
+      }
+
+      if (event.code.toLowerCase() === 'keyt') {
+        setOpenTodo(e => !e);
+      }
+
+      if (event.code.toLowerCase() === 'keyn') {
+        setOpenSticky(e => !e);
+      }
+    }
+  })
 
   if (setting === undefined) {
     return (

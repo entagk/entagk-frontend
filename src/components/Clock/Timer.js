@@ -160,7 +160,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                 dispatch({ type: STOP_TIMER, data: 0 });
             }
 
-            if(setting.alarmRepet > 0) {
+            if (setting.alarmRepet > 0) {
                 alarmSound.current.changeLoop(true);
                 setTimeout(() => {
                     alarmSound.current.handleStop();
@@ -182,6 +182,24 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
             }
         }
     }
+
+    const handleKeys = (event) => {
+        if (event.code.toLowerCase() === 'space') {
+            toggleStart();
+        }
+
+        if (event.code.toLowerCase() === 'arrowright' && !started) {
+            handleSkip();
+        }
+
+        if(event.code.toLowerCase() === 'keyc' && !started) {
+            handleReset();
+        }
+    };
+
+    useEffect(() => {
+        window.onkeydown = handleKeys;
+    })
 
     const toggleStart = useCallback(() => {
         console.log("toggle start")

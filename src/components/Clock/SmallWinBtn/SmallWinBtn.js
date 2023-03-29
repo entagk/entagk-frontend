@@ -1,4 +1,5 @@
 import React, {
+  useEffect,
   // useEffect, 
   useState
 } from 'react';
@@ -58,6 +59,14 @@ function SmallWinBtn() {
 
     }
   }
+
+  useEffect(() => {
+    window.onkeydown = (event) => {
+      if(event.code.toLowerCase() === 'keye') {
+        handleOpenExtInt();
+      }
+    }
+  })
 
   if ('open' in window === false) {
     return;
