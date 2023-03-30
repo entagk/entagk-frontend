@@ -2,6 +2,7 @@ import { END_LOADING, LOGOUT, START_LOADING } from "./auth";
 import * as api from './../api';
 
 export const CHANGE_ACTIVE = "CHANGE_ACTIVE";
+export const INCREASE_ACT = "INCREASE_ACT";
 
 export const START_TIMER = "START_TIMER";
 export const STOP_TIMER = "STOP_TIMER";
@@ -157,7 +158,7 @@ export const initialSetting = {
   longInterval: 4,
   alarmType: alarmSounds[0],
   alarmVolume: 50,
-  alarmRepet: false,
+  alarmRepet: 0,
   tickingType: tickingSounds[1],
   tickingVolume: 50,
   clickType: clickSounds[1],
@@ -167,7 +168,7 @@ export const initialSetting = {
   notificationInterval: 1,
 };
 
-export const getSetting = (setMessage) => async dispatch => {
+export const getSetting = (setMessage, setError) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'setting' });
     if (!localStorage.getItem('token')) {
@@ -180,30 +181,37 @@ export const getSetting = (setMessage) => async dispatch => {
     dispatch({ type: END_LOADING, data: 'setting' });
   } catch (error) {
     // const errorMessage = await error.response; 
-    if (error.response?.status === 500) {
+    if (error.response?.status === 401 || error.response?.status === 500) {
       dispatch({ type: LOGOUT });
-      window.location.reload();
     }
     console.error(error);
     setMessage({ message: error?.response?.data?.message || error.message, type: 'error' });
   }
 }
 
-export const changeActive = (active, activeId) => async dispatch => {
+export const changeActive = (active, activeId, setIsLoading, setMessage) => async dispatch => {
   try {
     // setTime()
+    setIsLoading(activeId);
     if (!localStorage.getItem('token')) {
-      dispatch({ type: CHANGE_ACTIVE, data: active });
+      dispatch({ type: CHANGE_ACTIVE });
+      dispatch({ type: INCREASE_ACT, data: active });
     } else {
       if (active === PERIOD && activeId) {
+        dispatch({ type: CHANGE_ACTIVE });
         const { data } = await api.increaseAct(activeId);
-        dispatch({ type: CHANGE_ACTIVE, data: { active, task: data } })
+        dispatch({ type: INCREASE_ACT, data: { active, task: data } });
       } else {
-        dispatch({ type: CHANGE_ACTIVE, data: { active } })
+        dispatch({ type: CHANGE_ACTIVE })
       }
     }
+    setIsLoading(null);
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    setMessage({ message: error.response.data.message || error.message, type: 'error' });
+    if (error.response?.status === 401 || error.response?.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
   }
 }
 
@@ -218,11 +226,11 @@ export const modifySetting = (formData, setMessage) => async dispatch => {
     }
     dispatch({ type: END_LOADING, data: 'setting' });
   } catch (error) {
+    dispatch({ type: END_LOADING, data: 'setting' });
     console.error(error);
     setMessage({ message: error.response.data.message || error.message, type: 'error' });
-    if (error.response?.status === 500) {
+    if (error.response?.status === 401 || error.response?.status === 500) {
       dispatch({ type: LOGOUT });
-      window.location.reload();
     }
   }
-} 
+}

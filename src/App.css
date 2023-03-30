@@ -8,7 +8,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  line-break: anywhere;
+  /* line-break: anywhere; */
 }
 
 body {
@@ -27,6 +27,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: inherit;
 }
 
 button[type="submit"]:disabled {
@@ -41,12 +42,6 @@ textarea {
   outline: none;
   background: none;
   border: none;
-}
-
-input.error {
-  background: #ffa9a9;
-  color: #d81c1c;
-  border: 1px solid #f00;
 }
 
 input:focus {
@@ -106,13 +101,52 @@ a {
 
 .block input,
 .notes textarea {
-  background-color: #9f9f9f33;
   margin-right: 10px;
   border-radius: 8px;
   font-size: 16px;
   padding: 10px;
+  background: #9f9f9f33;
+  color: #1d1d1d;
+}
+
+.glass-effect .block input,
+.glass-effect .notes textarea {
+  color: #fff;
+  background: transparent;
+  border: 1px solid;
 }
 /* end basics */
+
+.glass-container {
+  position: fixed;
+  height: 100%;
+  top: 0;
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  background: #47474761;
+  overflow: auto;
+}
+
+.glass-effect {
+  /* Frosted glass affect */
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  /* Add box-shadow for more depth */
+  box-shadow: 0px 5px 11px 3px rgb(0 0 0 / 15%);
+  background-color: rgb(224 224 224 / 42%);
+  color: #fff;
+}
+
+.block input.error,
+.task-form input.error {
+  background: #ff646482;
+  color: #d81c1c;
+  border: 1px solid;
+}
 
 @import url("./utils/style.css");
 
@@ -127,5 +161,61 @@ a {
     overflow: auto;
     margin: 10px;
     padding: 0 10px;
+  }
+}
+
+.glass-effect {
+  min-width: 512px;
+}
+
+@media (max-width: 550px) {
+  .glass-effect {
+    min-width: 450px;
+  }
+}
+
+@media (max-width: 400px) {
+  .glass-effect {
+    min-width: 360px;
+  }
+}
+
+@media (max-width: 400px) {
+  .glass-effect {
+    min-width: 320px;
+  }
+}
+@media (max-width: 350px) {
+  .glass-effect {
+    min-width: 300px;
+  }
+}
+
+/* animations */
+.zoom-in {
+  animation: zoom-in 1s ease-out;
+}
+
+@keyframes zoom-in {
+  0% {
+    transform: scale(0.5, 0.5);
+  }
+
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+.zoom-out {
+  animation: zoom-out 1s ease-out;
+}
+
+@keyframes zoom-out {
+  0% {
+    transform: scale(2, 2);
+  }
+
+  100% {
+    transform: scale(1, 1);
   }
 }

@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useEffect, useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux"; // 2
 
-import { changeActive, PERIOD, START_TIMER, STOP_TIMER } from "../../actions/timer";
+import { changeActive, PERIOD, START_TIMER, STOP_TIMER, CHANGE_ACTIVE } from "../../actions/timer";
 
 import { pushNotification } from "../../utils/helper";
 import audioPlayer from "../../utils/audioPlayer";
@@ -9,15 +9,18 @@ import audioPlayer from "../../utils/audioPlayer";
 import Loading from "../../utils/Loading";
 
 import "./style.css";
+import SmallWinBtn from "./SmallWinBtn/SmallWinBtn";
+import SettingOpen from "./SettingOpen/SettingOpen";
+import FullscreenBtn from "./FullscreenBtn/FullscreenBtn";
 
 const AnalogTimer = lazy(() => import("./Analog/Analog"));
 const DigitalTimer = lazy(() => import("./Digital/Digital"));
 
 const worker = new window.Worker('worker.js');
-const Timer = () => {
+const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
     const { active, activites, setting, started, periodNum } = useSelector((state) => state.timer);
     const { activeId } = useSelector(state => state.tasks);
-    const [time, setTime] = useState(localStorage.getItem("restOfTime") === null ? 0 : Number(localStorage.getItem("restOfTime")));
+    const [time, setTime] = useState(localStorage.getItem("restOfTime") === null ? 0 : Number(localStorage.getItem("restOfTime")))
 
     const activePeriod = setting?.time[active];
     const dispatch = useDispatch();
@@ -36,7 +39,7 @@ const Timer = () => {
         audioPlayer({
             src: setting?.alarmType?.src,
             volume: setting?.alarmVolume,
-            loop: setting?.alarmRepet
+            loop: setting.alarmRepet > 0 ? true : false
         })
     );
 
@@ -49,7 +52,7 @@ const Timer = () => {
 
     useEffect(() => {
         // eslint-disable-next-line
-        if (typeof window?.Notification != undefined) {
+        if ("Notification" in window) {
             if (window?.Notification?.permission === 'default') {
                 window?.Notification?.requestPermission();
             }
@@ -63,13 +66,14 @@ const Timer = () => {
             if (setting?.time[active] - Number(localStorage.getItem('restOfTime')) > 1) {
                 setTime(setting?.time[active] - Number(localStorage.getItem("restOfTime")));
             } else {
-                dispatch(changeActive(active, activeId));
+                dispatch(changeActive(active, activeId, setIsLoadingTask, setMessage));
                 localStorage.setItem('restOfTime', 0);
             }
         }
         // eslint-disable-next-line
     }, [active, setting.time]);
 
+    // For sounds of timer
     useEffect(() => {
         if (setting?.tickingType.name !== 'none') {
             tickingSound.current.chengeVolume(setting?.tickingVolume);
@@ -86,6 +90,7 @@ const Timer = () => {
         }
     }, [setting]);
 
+    // If the option of auto pomodors or auto breaks is active, wait for 5 seconds and then start the next time.
     useEffect(() => {
         if (((active === PERIOD && setting.autoPomodors) || (active !== PERIOD && setting.autoBreaks)) && periodNum !== 0 && started) {
             setTimeout(() => {
@@ -96,12 +101,13 @@ const Timer = () => {
                 worker.postMessage({ started: !started, count: setting.time[active] });
                 dispatch({ type: START_TIMER, data: 0 });
                 console.log(time, 0, "autoBreaks autoPomodors");
-            }, 1000)
+            }, 5000);
             console.log(active);
         }
         // eslint-disable-next-line
     }, [active, setting.autoBreaks, setting.autoPomodors]);
 
+    // This hook will be executed after the timer has been started working through makeing the focus mode if it active.
     useEffect(() => {
         if (started) {
             document.body.onbeforeunload = () => {
@@ -128,7 +134,7 @@ const Timer = () => {
         if (event.data !== 'stop') {
             setTime(event.data);
             // eslint-disable-next-line
-            if (typeof window?.Notification != undefined) {
+            if ("Notification" in window) {
                 if (window?.Notification?.permission === 'granted') {
                     if (time !== 0) {
                         if (setting.notificationType === 'every') {
@@ -146,13 +152,27 @@ const Timer = () => {
         } else {
             console.log(event.data, time, 0, "worker stop");
 
-            alarmSound.current.handlePlay();
             if (setting.tickingType.name !== "none") {
                 tickingSound.current.handleStop();
             }
+            alarmSound.current.handlePlay();
+
+            if (((active !== PERIOD && !setting.autoPomodors) || (active === PERIOD && !setting.autoBreaks))) {
+                dispatch({ type: STOP_TIMER, data: 0 });
+            }
+
+            if (setting.alarmRepet > 0) {
+                alarmSound.current.changeLoop(true);
+                setTimeout(() => {
+                    alarmSound.current.handleStop();
+                }, setting.alarmRepet * 1000);
+                console.log("alarm repet")
+            }
+
+            dispatch(changeActive(active, activeId, setIsLoadingTask, setMessage));
 
             // eslint-disable-next-line
-            if (typeof window?.Notification != undefined) {
+            if ("Notification" in window) {
                 if (window?.Notification.permission === 'granted') {
                     if (active === PERIOD) {
                         pushNotification("It's time to take a break");
@@ -161,14 +181,26 @@ const Timer = () => {
                     }
                 }
             }
-
-            if (((active !== PERIOD && !setting.autoPomodors) || (active === PERIOD && !setting.autoBreaks))) {
-                dispatch({ type: STOP_TIMER, data: 0 });
-            }
-
-            dispatch(changeActive(active, activeId));
         }
     }
+
+    const handleKeys = (event) => {
+        if (event.code.toLowerCase() === 'space') {
+            toggleStart();
+        }
+
+        if (event.code.toLowerCase() === 'arrowright' && !started) {
+            handleSkip();
+        }
+
+        if(event.code.toLowerCase() === 'keyc' && !started) {
+            handleReset();
+        }
+    };
+
+    useEffect(() => {
+        window.onkeydown = handleKeys;
+    })
 
     const toggleStart = useCallback(() => {
         console.log("toggle start")
@@ -204,18 +236,41 @@ const Timer = () => {
         localStorage.setItem("restOfTime", 0)
     }
 
+    const handleSkip = () => {
+        dispatch({ type: CHANGE_ACTIVE });
+    }
+
     return (
         <>
             <div className="clock-container" style={{ background: activites[active].timerBorder }}>
+                {!started && (
+                    <>
+                        <SmallWinBtn />
+                        <SettingOpen setOpenSetting={setOpenSetting} />
+                        <FullscreenBtn />
+                    </>
+                )}
                 <div className="clock">
                     <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" size="200" strokeWidth="2.5" />}>
                         {setting.format === "digital" ? (
                             <>
-                                <DigitalTimer handleReset={handleReset} toggleStart={toggleStart} setTime={setTime} time={time} />
+                                <DigitalTimer
+                                    handleReset={handleReset}
+                                    toggleStart={toggleStart}
+                                    setTime={setTime}
+                                    time={time}
+                                    handleSkip={handleSkip}
+                                />
                             </>
                         ) : (
                             <>
-                                <AnalogTimer handleReset={handleReset} toggleStart={toggleStart} setTime={setTime} time={time} />
+                                <AnalogTimer
+                                    handleReset={handleReset}
+                                    toggleStart={toggleStart}
+                                    setTime={setTime}
+                                    time={time}
+                                    handleSkip={handleSkip}
+                                />
                             </>
                         )}
                     </Suspense>

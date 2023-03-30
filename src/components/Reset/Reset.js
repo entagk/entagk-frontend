@@ -10,6 +10,7 @@ import LogoutPage from '../Auth/LogoutPage';
 
 import './../Auth/Auth.css';
 import NotValidToken from './NotValidToken';
+import NetworkError from '../NetworkError/NetworkError';
 
 const NavBar = lazy(() => import('./../NavBar/NavBar'));
 const Password = lazy(() => import('./../Auth/Password'))
@@ -106,10 +107,15 @@ function Reset() {
       <div>
         <div className="container">
           <NavBar setMessage={setMessage} />
-          {(message.message !== '' &&
-            !message.message.includes('Network Error')) && (
-              <Message message={message.message} type={message.type} setMessage={setMessage} />
-            )}
+          {message.message && (
+            <>
+              {(!message.message.includes('Network Error')) ? (
+                <Message {...message} setMessage={setMessage} />
+              ) : (
+                <NetworkError />
+              )}
+            </>
+          )}
           <div style={{
             width: '100%',
             display: 'flex',

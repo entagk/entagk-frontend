@@ -1,6 +1,8 @@
-import React, { useCallback, useState } from "react";
-import { AiOutlineUser, AiOutlineSetting, AiOutlineClose } from "react-icons/ai";
-import { HiMenu, HiUser/*, HiOutlineDocumentReport*/ } from "react-icons/hi";
+import React, { useCallback, useState, lazy } from "react";
+import { AiOutlineUser, /*AiOutlineClose*/ } from "react-icons/ai";
+// import { HiMenu, HiUser, HiOutlineDocumentReport } from "react-icons/hi";
+import { FiEdit3 } from 'react-icons/fi';
+import { GrAchievement } from 'react-icons/gr';
 // import { FaMoneyCheck } from "react-icons/fa";
 import { MdLogout, MdLogin, MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -10,11 +12,14 @@ import jwt_decode from "jwt-decode";
 
 import "./style.css";
 import { useEffect } from "react";
-import { getUserData, LOGOUT, deleteUser } from "../../actions/auth";
+import { getUserData, LOGOUT, deleteUser, refreshToken } from "../../actions/auth";
+import Loading from "../../utils/Loading";
+const TodoList = lazy(() => import('../../icons/list/TodoList'));
 
 const NavBar = ({ setMessage }) => {
   const [open, setOpen] = useState(false);
-  const { started, setting } = useSelector(state => state.timer);
+  const [openDelete, setOpenDelete] = useState(false);
+  const { started } = useSelector(state => state.timer);
   const { user } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
@@ -22,6 +27,11 @@ const NavBar = ({ setMessage }) => {
   useEffect(() => {
     if (localStorage.getItem('token') && user === undefined) {
       dispatch(getUserData(setMessage));
+      const decodedToken = jwt_decode(localStorage.getItem('token'));
+      const tokenExp = ((decodedToken.exp * 1000 - new Date().getTime()) / (1000 * 60 * 60));
+      if (localStorage.getItem('token') && tokenExp < 24) {
+        dispatch(refreshToken(setMessage));
+      }
     }
     // eslint-disable-next-line
   }, []);
@@ -30,7 +40,7 @@ const NavBar = ({ setMessage }) => {
     if (user !== undefined) {
       const decodedToken = jwt_decode(localStorage.getItem('token'));
 
-      if (decodedToken.ext * 1000 < new Date().getTime()) {
+      if (decodedToken.exp * 1000 < new Date().getTime()) {
         dispatch({ type: LOGOUT });
         console.log(decodedToken.ext * 1000 - new Date().getTime())
       }
@@ -51,124 +61,120 @@ const NavBar = ({ setMessage }) => {
 
   const logout = () => { dispatch({ type: LOGOUT }); toggleMenu(); };
 
-  const delete_user = () => { dispatch(deleteUser(setMessage)); toggleMenu() }
+  const delete_user = () => { setOpenDelete(false); dispatch(deleteUser(setMessage)); }
+
+  const getUserName = () => {
+    if (user.name.length <= 18) {
+      return user.name;
+    } else if (user.name.split(' ').length > 1) {
+      return user.name.split(' ')[0];
+    } else {
+      return user.name.slice(0, 15) + '...';
+    }
+  }
 
   return (
     <>
-      <div className="nav-bar">
-        <Link to="/">
-          <h1 style={{ color: "#fff" }}>Entagk</h1>
-        </Link>
-        <div>
-          <button
-            aria-label="toggle menu button"
-            style={{ display: (setting?.focusMode && started) && "none" }}
-            className="toggle-menu" onClick={toggleMenu} disabled={started}>
-            <HiMenu />
-          </button>
+      {openDelete && (
+        <div className="glass-container">
+          <div className="glass-effect delete-popup">
+            <h4>Do you sure you want to delete your account ?</h4>
+            <div className="buttons">
+              <button aria-label="cancel deleteing account" onClick={() => setOpenDelete(false)} className="cancel">cancel</button>
+              <button aria-label="ok deleteing account" onClick={delete_user} className="ok">ok</button>
+            </div>
+          </div>
         </div>
-        {open && (
-          <div className="menu-overflow">
-            <div className="menu-content">
-              <div className="close-container">
-                <button
-                  aria-label="close button for menu"
-                  className="close-button"
-                  onClick={toggleMenu}
-                >
-                  <AiOutlineClose />
-                </button>
-              </div>
-              {user && (
-                <div className="user-data" style={{ marginBottom: user && '15px' }}>
-                  <div className="user-avatar" style={{ backgroundImage: `url(${user?.avatar})` }}>
-                    {!user?.avatar &&
-                      (
-                        <AiOutlineUser />
-                      )
-                    }
-                  </div>
-                  <p>{user?.name}</p>
-                </div>
-              )}
-              <div className="row" style={{
-                paddingBottom: "15px"
-              }}>
-                <Link
-                  style={{ padding: user && '10px 16px 10px 30px' }}
-                  to={`${user ? "/profile" : "/auth"}`}
-                  onClick={toggleMenu}
-                  aria-label="user button in menu">
-                  {user ? (
-                    <HiUser />
-                  ) : (<MdLogin />)}
-                  <p style={{ marginLeft: 10 }}>
-                    {user ? "Profile" : "Login"}
-                  </p>
-                </Link>
-                {/* {user && (
-                  <Link
-                    to="/subsecription"
-                    style={{ padding: user && '10px 16px 10px 30px' }}
-                    onClick={toggleMenu}
-                    aria-label="subsecription button in menu">
-                    <FaMoneyCheck />
-                    <p style={{ marginLeft: 10 }}>
-                      Subsecription
-                    </p>
-                  </Link>
-                )} */}
-                <Link
-                  to="/setting"
-                  style={{ padding: user && '10px 16px 10px 30px' }}
-                  onClick={toggleMenu}
-                  aria-label="setting button in menu">
-                  <AiOutlineSetting />
-                  <p style={{ marginLeft: 10 }}>
-                    Setting
-                  </p>
-                </Link>
-                {/* <Link
-                  to="/report"
-                  style={{ padding: user && '10px 16px 10px 30px' }}
-                  onClick={toggleMenu}
-                  aria-label="report button in menu">
-                  <HiOutlineDocumentReport />
-                  <p style={{ marginLeft: 10 }}>
-                    Report
-                  </p>
-                </Link> */}
-                {user && (
-                  <button
-                    onClick={logout}
-                    style={{ padding: user && '10px 16px 10px 30px' }}
-                    aria-label="logout button in menu">
-                    <MdLogout />
-                    <p style={{ marginLeft: 10 }}>
-                      Logout
-                    </p>
-                  </button>
+      )}
+      <nav className="nav-bar">
+        <Link to="/">
+          <h1>Entagk</h1>
+        </Link>
+        <div style={{ position: 'relative' }}>
+          {!localStorage.getItem('token') ? (
+            <Link
+              aria-label="login user"
+              className={`login ${(started || window.location.pathname === '/auth') ? 'disabled' : ''}`}
+              to="/auth"
+            >
+              <MdLogin />
+              <span style={{ marginLeft: 10 }}>
+                Login
+              </span>
+            </Link>
+          ) : user ? (
+            <button
+              aria-label="user button"
+              className="user"
+              onClick={() => setOpen(o => !o)}
+              style={{ boxShadow: open && 'inset 0 0 5px #6f6f6f' }}>
+              <div className={`user-logo ${user?.avatar && 'img'}`}>
+                {user?.avatar ? (
+                  <img src={user.avatar} alt="avatar" width="" height="" />
+                ) : (
+                  <AiOutlineUser />
                 )}
               </div>
-              {user && (
-                <div className="row" style={{ marginTop: user && '20px' }}>
+              <span className="name">{getUserName()}</span>
+            </button>
+          ) : (<><Loading size="30" strokeWidth="5" color={"#fff"} backgroud="transparent" paddingBlock='0' /></>)}
+          {open && (
+            <>
+              <div className="menu-content">
+                <div className="row">
+                  <Link
+                    to="/user/achievements"
+                    onClick={toggleMenu}
+                    aria-label="user button in menu">
+                    <GrAchievement />
+                    <span style={{ marginLeft: 10 }}>
+                      achievements
+                    </span>
+                  </Link>
+                  <Link
+                    to="/user/templates"
+                    onClick={toggleMenu}
+                    aria-label="user button in menu">
+                    <TodoList />
+                    <span style={{ marginLeft: 10 }}>
+                      todos templates
+                    </span>
+                  </Link>
+                  <Link
+                    to="/user/edit"
+                    onClick={toggleMenu}
+                    aria-label="user button in menu">
+                    <FiEdit3 />
+                    <span style={{ marginLeft: 10 }}>
+                      edit account
+                    </span>
+                  </Link>
+                  <button
+                    onClick={logout}
+                    aria-label="logout button in menu">
+                    <MdLogout />
+                    <span style={{ marginLeft: 10 }}>
+                      Logout
+                    </span>
+                  </button>
                   <button
                     aria-label="delete account button"
-                    onClick={delete_user}
-                    style={{ padding: user && '10px 16px 10px 30px' }}>
+                    onClick={() => setOpenDelete(true)}
+                    style={{ color: "red" }}
+                  >
                     <MdDelete />
-                    <p style={{ marginLeft: 10 }}>Delete Account</p>
+                    <span style={{ marginLeft: 10 }}>Delete Account</span>
                   </button>
                 </div>
-              )}
-            </div>
-            <div onClick={toggleMenu} style={{
-              height: "100%",
-              width: "100%"
-            }}></div>
-          </div>
-        )}
-      </div>
+              </div>
+              <div onClick={toggleMenu} style={{
+                height: "100%",
+                width: "100%"
+              }}></div>
+            </>
+          )}
+        </div>
+      </nav>
     </>
   )
 }

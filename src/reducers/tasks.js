@@ -8,8 +8,10 @@ import {
   CLEAR_FINISHED_TASKS,
   CLEAR_ACT_FROM_TASKS,
   CLEAR_ALL_TASKS,
+  ADD_LOCAL_TASKS,
+  CLEAR_CONGRATS
 } from "../actions/tasks";
-import { CHANGE_ACTIVE, PERIOD, MODITY_SETTING, GET_SETTING } from "../actions/timer";
+import { INCREASE_ACT, PERIOD, MODITY_SETTING, GET_SETTING } from "../actions/timer";
 import { nanoid } from "nanoid";
 import { LOGOUT, START_LOADING, END_LOADING, DELETE_USER } from "../actions/auth";
 
@@ -29,6 +31,7 @@ const initialState = {
   est: 0,
   autoStartNextTask: false,
   isLoading: false,
+  congrats: "",
 }
 
 // eslint-disable-next-line
@@ -56,9 +59,20 @@ export default (
         autoStartNextTask: action.data.autoStartNextTask
       };
 
+    case ADD_LOCAL_TASKS:
+      const tasks = action.data;
+      localStorage.removeItem('tasks');
+      localStorage.removeItem('act');
+      localStorage.removeItem('est');
+      return { ...state, tasks: tasks };
+
     case GET_TASKS:
-      finishedTasks = action.data.all.filter(t => t.check);
-      unfinishedTasks = action.data.all.filter(t => !t.check);
+      const page = action.data?.currentPage;
+      const numberOfPages = action.data?.numberOfPages;
+      const total = action.data?.total;
+      all = Number(page) > 1 ? state.tasks.concat(action.data.all) : action.data.all;
+      finishedTasks = all.filter(t => t?.check);
+      unfinishedTasks = all.filter(t => !t?.check).sort((task, nextTask) => nextTask.est - task.est);
 
       if (!localStorage.getItem("token")) {
         return {
@@ -74,11 +88,18 @@ export default (
             : null,
         };
       } else {
+        localStorage.setItem('total', total);
+        localStorage.setItem('currentPage', page);
+        localStorage.setItem('tasksLen', all.length);
+
         return {
           ...state,
-          tasks: unfinishedTasks.concat(finishedTasks),
-          est: action.data.est,
-          act: action.data.act,
+          currentPage: page,
+          numberOfPages: numberOfPages,
+          total: total,
+          tasks: all,
+          est: all.length > 0 ? all.reduce((total, task) => total + task.est, 0) : 0,
+          act: all.length > 0 ? all.reduce((total, task) => total + task.act, 0) : 0,
           activeId: state?.autoStartNextTask
             ? action.data.all.filter((t) => !t.check)[0]?._id
             : null,
@@ -115,16 +136,17 @@ export default (
     case CHANGE_ACTIVE_TASK:
       return {
         ...state,
-        activeId: action.data._id,
-        activeName: action.data.name,
+        activeId: '_id' in action.data ? action.data._id : "",
+        activeName: 'name' in action.data ? action.data.name : "",
       };
 
-    case CHANGE_ACTIVE:
-      let realAct = state.act,
-        newActive =
-          Boolean(state.activeId)
-            ? state.tasks.find((t) => t._id === state.activeId)
-            : { _id: null, name: null };
+    case INCREASE_ACT:
+      let newActive =
+        Boolean(state.activeId)
+          ? state.tasks.find((t) => t._id === state.activeId)
+          : { _id: null, name: null };
+      let realAct = state.act;
+      let congrats = '';
       if (!localStorage.getItem("token")) {
         if (Boolean(state.activeId) && action.data === PERIOD) {
           const taskIndex = state.tasks.findIndex(
@@ -135,6 +157,7 @@ export default (
 
           if (state.tasks[taskIndex].act === state.tasks[taskIndex].est) {
             state.tasks[taskIndex].check = true;
+            congrats = state.tasks[taskIndex].name;
           }
 
           realAct = realAct + 1;
@@ -154,6 +177,7 @@ export default (
           act: realAct,
           activeId: newActive?._id,
           activeName: newActive?.name,
+          congrats: congrats
         };
       } else {
         if (Boolean(state.activeId) && action.data.active === PERIOD) {
@@ -164,6 +188,7 @@ export default (
           );
 
           state.tasks[taskIndex] = task;
+          congrats = task.check ? task.name : "";
 
           realAct = realAct + 1;
 
@@ -178,9 +203,12 @@ export default (
           act: realAct,
           activeId: newActive?._id,
           activeName: newActive?.name,
+          congrats: congrats
         };
       };
 
+    case CLEAR_CONGRATS:
+      return { ...state, congrats: "" };
     case NEW_TASK:
       all = state.tasks;
       finishedTasks = all.filter(t => t.check);
@@ -211,6 +239,7 @@ export default (
           ...state,
           tasks: [...unfinishedTasks, ...finishedTasks],
           est,
+          total: state.total + 1,
           activeId: state.autoStartNextTask ? all.filter(t => !t.check)[0]?._id : state.activeId,
           activeName: state.autoStartNextTask ? all.filter(t => !t.check)[0]?.name : state.activeName
         };
@@ -272,6 +301,8 @@ export default (
           localStorage.setItem("est", newEst);
           localStorage.setItem("act", newAct);
         }
+        console.log(state.activeId !== task._id);
+        console.log(state.activeName !== task.name);
 
         return {
           ...state,
@@ -291,6 +322,7 @@ export default (
           est: newEst,
           act: newAct,
           tasks: newAll,
+          total: state.total - 1,
           activeId: state.activeId !== task._id ? state.activeId : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0]._id : null,
           activeName: state.activeName !== task.name ? state.activeName : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0].name : null
         };
@@ -313,13 +345,13 @@ export default (
 
         const all = state.tasks.filter((t) => t._id !== action.data._id);
         // if () {
-          if (newTask.check && state.autoStartNextTask) {
-            all.push(newTask);
-            newActive._id = all.filter((t) => !t.check)[0]?._id || null;
-            newActive.name = all.filter((t) => !t.check)[0]?.name || null;
-          } else {
-            state.tasks[taskIndex] = newTask;
-          }
+        if (newTask.check && state.autoStartNextTask) {
+          all.push(newTask);
+          newActive._id = all.filter((t) => !t.check)[0]?._id || null;
+          newActive.name = all.filter((t) => !t.check)[0]?.name || null;
+        } else {
+          state.tasks[taskIndex] = newTask;
+        }
         // }
 
         localStorage.setItem(
@@ -399,7 +431,7 @@ export default (
         localStorage.setItem('est', newEst)
       }
 
-      return { ...state, act: newAct, est: newEst, tasks: unfinishedTasks };
+      return { ...state, act: newAct, est: newEst, tasks: unfinishedTasks, total: state.total - finishedTasks.length };
 
     /**
      * loop through the tasks to 
@@ -430,10 +462,9 @@ export default (
         localStorage.setItem("tasks", JSON.stringify([]));
         localStorage.setItem("act", 0);
         localStorage.setItem("est", 0);
-
       }
 
-      return { ...initialState, tasks: [] };
+      return { ...initialState, tasks: [], total: 0, act: 0, est: 0 };
 
     case LOGOUT:
     case DELETE_USER:

@@ -1,7 +1,7 @@
 /* Start the timer */
 
 .app {
-  margin-block: 30px;
+  margin-block: 20px 0;
   text-align: center;
   display: flex;
   align-items: center;
@@ -14,6 +14,7 @@
   background: #b40021;
   padding: 5px;
   border-radius: 5%;
+  position: relative;
 }
 
 .clock {
@@ -205,9 +206,49 @@ h1.digital-number {
 
 /* end the digital timer */
 
+.timer-button {
+  position: absolute;
+  top: 15px;
+  z-index: 120;
+  color: #fff;
+  border: 1px solid;
+  font-size: 20px;
+  box-shadow: 0 0 5px #000;
+  display: none;
+
+  border-radius: 50%;
+  padding: 8px;
+  background: #000000b8;
+
+  transform: rotate(270deg);
+  width: fit-content;
+}
+
+.timer-button:first-of-type {
+  left: 15px;
+}
+
+.timer-button.setting-open {
+  right: 15px;
+}
+
+.clock-container:hover .timer-button {
+  display: flex;
+}
+
 /* End the timer */
 
 /* start the responsive design */
+@media (max-width: 1024px) {
+  .clock-container:hover .timer-button {
+    display: none;
+  }
+
+  .clock-container:hover .timer-button.setting-open {
+    display: flex;
+    right: 15px;
+  }
+}
 
 @media (max-width: 600px) {
   .app {
@@ -277,6 +318,13 @@ h1.digital-number {
   .roller-container {
     width: 182px; /* 260px */
     height: 182px; /* 260px */
+  }
+
+  .roll .up-side,
+  .roll .down-side,
+  .roll .pause-side,
+  .roll .start-side {
+    font-size: 25px;
   }
 }
 

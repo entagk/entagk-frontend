@@ -1,13 +1,12 @@
-const audioPlayer = ({ src, volume = 50, loop = false}) => {
-  const audio = new Audio();
-  audio.src = src;
+const audioPlayer = ({ src, volume = 50, loop = false }) => {
+  const audio = new Audio(src);
   audio.volume = volume / 100;
 
   audio.loop = loop;
 
   const handlePlay = () => {
     if (audio.paused || !audio.currentTime) {
-      audio.play().catch(() => {});
+      audio.play().catch(() => { });
     }
   };
 
@@ -27,7 +26,7 @@ const audioPlayer = ({ src, volume = 50, loop = false}) => {
   }
 
   return {
-    handlePlay, 
+    handlePlay,
     handleStop,
     chengeVolume,
     changeFile,

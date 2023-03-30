@@ -46,12 +46,12 @@ const Menu = ({ setMessage }) => {
             <div className="row">
               <button
                 aria-label="delete all finished tasks"
-                onClick={handleClearFinishedTasks}
+                onClick={handleClearFinishedTasks} type='button'
                 disabled={tasks.filter(t => t.check).length === 0}
               ><MdDelete /> <p>clear finished tasks</p></button>
               <button
                 aria-label="clear all act pomodoros tasks"
-                onClick={handleClearAct}
+                onClick={handleClearAct} type='button'
                 disabled={tasks.filter(t => t.act > 0).length === 0}
               ><BsCheckLg /> <p>clear act pomodoros</p></button>
               {/* <button
@@ -61,6 +61,7 @@ const Menu = ({ setMessage }) => {
                 aria-label="add task from templets"
               ><AiOutlinePlus /> <p><mark>add from templetes</mark></p></button> */}
               <button
+                type='button'
                 aria-label="clear all tasks"
                 onClick={handleClearTasks}
               ><MdDelete /> <p>clear all tasks</p></button>

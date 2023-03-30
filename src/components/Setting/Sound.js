@@ -5,7 +5,6 @@ import { alarmSounds, tickingSounds, clickSounds } from "../../actions/timer";
 import audioPlayer from '../../utils/audioPlayer';
 
 const Select = lazy(() => import("./Select"));
-const ToggleButton = lazy(() => import("./ToggleButton"));
 
 function Sound({ type, data, setData }) {
   const sounds = type === 'alarm' ? alarmSounds : type === 'ticking' ? tickingSounds : clickSounds;
@@ -22,25 +21,28 @@ function Sound({ type, data, setData }) {
   }, [change]);
 
   const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: Number(e.target.value) });
+    const min = Number(e.target.min), max = Number(e.target.max), value = Number(e.target.value);
+
+    setData({ ...data, [e.target.name]: value });
     setChange(!change);
   }
 
   return (
     <div className='alarm-details'>
       <div className="alarm-type">
-        <p style={{width: 'inherit'}}>Sound type</p>
+        <h4>Sound</h4>
         <Select
           data={data}
           options={sounds}
           setData={setData}
           type={`${type}Type`}
           setChange={setChange}
+          width={type === "click" ? "200px" : "150px"}
         />
       </div>
       {data[`${type}Type`].name !== "none" && (
         <div className="alarm-type">
-          <p style={{width: 'inherit'}}>Sound Volume</p>
+          <h4>Volume</h4>
           <div className='range-container'>
             <span className='range-value'>{data[`${type}Volume`]}</span>
             <input
@@ -51,6 +53,7 @@ function Sound({ type, data, setData }) {
               value={data[`${type}Volume`]}
               name={`${type}Volume`}
               onChange={handleChange}
+              style={{ background: `linear-gradient(to right, rgba(0, 255, 141, 0.85) 0%, rgba(0, 255, 141, 0.85) ${data[`${type}Volume`]}%, transparent ${data[`${type}Volume`]}%, transparent 100%)` }}
             />
           </div>
         </div>
@@ -59,8 +62,19 @@ function Sound({ type, data, setData }) {
         <div className="alarm-type" style={{
           flexDirection: "row"
         }}>
-          <p style={{width: 'inherit'}}>Repet</p>
-          <ToggleButton type="alarmRepet" data={data} setData={setData} />
+          <h4>Repeat</h4>
+          <div className='notification-min'>
+            <input
+              style={{ marginInline: "10px 0" }}
+              className={(data?.alarmRepet < 0 || data?.alarmRepet > 60) ? 'error' : undefined}
+              type="number"
+              min="0"
+              max="60"
+              defaultValue={data?.alarmRepet}
+              name="alarmRepet"
+              onChange={handleChange} />
+            <p style={{ marginLeft: 10 }}>Sec</p>
+          </div>
         </div>
       )}
     </div>

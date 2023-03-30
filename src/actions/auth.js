@@ -1,6 +1,6 @@
 import * as api from './../api/index';
-import { getSetting } from './timer';
-import { getTasks } from './tasks';
+import { getSetting, initialSetting, modifySetting } from './timer';
+import { getTasks, addMultipleTasks } from './tasks';
 
 export const START_LOADING = 'START_LOADING';
 export const END_LOADING = 'END_LOADING';
@@ -9,50 +9,57 @@ export const RESET_PASSWORD = 'RESET_PASSWORD';
 export const GET_USER = 'GET_USER';
 export const DELETE_USER = 'DELETE_USER';
 export const UPDATE_USER = 'UPDATE_USER';
+export const REFRESH_TOKEN = 'REFRESH_TOKEN';
 
 export const LOGOUT = 'LOGOUT';
+export const ERROR = 'ERROR';
 
 export const authForm = (formData, type, setMessage, navigate) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'auth' });
-    if (type === 'sign in') {
-      const { data } = await api.signIn(formData);
-
+    if (type !== 'forget password') {
+      const { data } = type === 'sign in' ? await api.signIn(formData) : type === 'sign up' ? await api.signUp(formData) : await api.googleLogin(formData);
       setMessage({ type: 'success', message: data.message })
-      dispatch({ type: AUTH, data });
+      dispatch({ type: AUTH, data: { ...data } });
       dispatch(getUserData(setMessage));
-      dispatch(getSetting(setMessage));
-      dispatch(getTasks(setMessage));
+      const setting = JSON.parse(localStorage.getItem('setting'));
+      const tasks = JSON.parse(localStorage.getItem('tasks'));
+      if (setting !== initialSetting && Boolean(setting)) {
+        dispatch(modifySetting(setting, setMessage));
+      } else {
+        dispatch(getSetting(setMessage));
+      }
 
-      navigate(-1);
-    } else if (type === 'sign up') {
-      const { data } = await api.signUp(formData);
+      if (tasks?.length >= 0) {
+        dispatch(addMultipleTasks(tasks, setMessage));
+      }
+      if (type !== 'sign up') {
+        dispatch(getTasks(setMessage, 1));
+      }
 
-      setMessage({ type: 'success', message: data.message })
-      dispatch({ type: AUTH, data });
-      dispatch(getUserData(setMessage))
-      dispatch(getSetting(setMessage));
-      dispatch(getTasks(setMessage));
-
-      navigate(-1);
-    } else if (type === 'google login') {
-      const { data } = await api.googleLogin(formData);
-
-      setMessage({ type: 'success', message: data.message })
-      dispatch({ type: AUTH, data });
-      dispatch(getUserData(setMessage))
-      dispatch(getSetting(setMessage));
-      dispatch(getTasks(setMessage));
-
-      navigate(-1);
+      navigate("/");
     } else {
       const { data } = await api.forgetPassword(formData);
       setMessage({ type: 'success', message: data.message });
     }
+
     dispatch({ type: END_LOADING, data: 'auth' });
   } catch (error) {
     setMessage({ type: 'error', message: error?.response?.data?.message || error.message })
     dispatch({ type: END_LOADING, data: 'auth' });
+    console.error(error);
+  }
+}
+
+export const refreshToken = (setMessage) => async dispatch => {
+  try {
+    const { data } = await api.getRefreshToken();
+    dispatch({ type: REFRESH_TOKEN, data });
+  } catch (error) {
+    setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    if (error.response?.status === 401 || error.response?.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
     console.error(error);
   }
 }
@@ -64,7 +71,10 @@ export const getUserData = (setMessage) => async dispatch => {
     dispatch({ type: GET_USER, data: data });
     await dispatch({ type: END_LOADING, data: 'auth' });
   } catch (error) {
-    setMessage({ type: 'error', message: error?.response?.data?.message || error.message })
+    setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    if (error.response?.status === 401 || error.response.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
     console.error(error);
   }
 }
@@ -76,11 +86,15 @@ export const deleteUser = (setMessage) => async dispatch => {
     dispatch({ type: DELETE_USER });
 
   } catch (error) {
-    setMessage({ type: 'error', message: error?.response?.data?.message || error.message })
+    setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    if (error.response?.status === 401 || error.response.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
     console.error(error);
   }
 }
 
+// todo at profile editing page
 export const updateUser = (formData, setMessage) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'auth' })
@@ -88,7 +102,10 @@ export const updateUser = (formData, setMessage) => async dispatch => {
     dispatch({ type: UPDATE_USER, data: data.afterUpdatae });
     dispatch({ type: END_LOADING, data: 'auth' })
   } catch (error) {
-    setMessage({ type: 'error', message: error?.response?.data?.message || error.message })
+    setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    if (error.response?.status === 401 || error.response.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
     console.error(error);
   }
 }

@@ -4,11 +4,12 @@ import { useSelector } from "react-redux";
 /* some attachments for redux action */
 import { PERIOD } from "../../../../actions/timer";
 
-const StartButton = lazy(() => import("./Roll/StartRoll"));
+const StartButton = lazy(() => import("./Roll/StartButton"));
 const ClearButton = lazy(() => import("./Roll/ClearButton"));
 const PauseButton = lazy(() => import("./Roll/PauseButton"));
+const SkipButton = lazy(() => import("./Roll/SkipButton"));
 
-const AnalogControllers = ({ time, toggleStart, handleReset }) => {
+const AnalogControllers = ({ time, toggleStart, handleReset, handleSkip }) => {
   const {
     active,
     activites,
@@ -80,8 +81,15 @@ const AnalogControllers = ({ time, toggleStart, handleReset }) => {
                       handleClick={toggleStart}
                       time={time}
                       ariaLabel={"start on roll"}
-                      className={"start-side"}
-                      id={"start-side"}
+                      className={"up-side"}
+                      id={"up-side"}
+                    />
+                    <SkipButton
+                      handleClick={handleSkip}
+                      time={time}
+                      ariaLabel={"continue button on roll"}
+                      className={"down-side"}
+                      id={"down-side"}
                     />
                   </>
                 )}

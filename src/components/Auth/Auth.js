@@ -10,8 +10,9 @@ import GoogleLogin from './GoogleLogin'
 import "./Auth.css";
 import Password from "./Password";
 import LogoutPage from "./LogoutPage";
+import NetworkError from "../NetworkError/NetworkError";
 
-const NavBar = lazy(() => import("./../NavBar/NavBar"))
+const NavBar = lazy(() => import("./../NavBar/NavBar"));
 const initialFormData = {
   name: "",
   email: "",
@@ -117,12 +118,15 @@ const Auth = () => {
       <div>
         <div className="container">
           <NavBar setMessage={setMessage} />
-          {(message.message !== '' &&
-            !message?.message?.includes('Network Error')
-          ) && (
-              <Message {...message} setMessage={setMessage} />
-            )
-          }
+          {message.message && (
+            <>
+              {(!message.message.includes('Network Error')) ? (
+                <Message {...message} setMessage={setMessage} />
+              ) : (
+                <NetworkError />
+              )}
+            </>
+          )}
           <div className={`auth-page ${isSignUp ? "right-panel-active" : "left-panel-active"}`}>
             <div className={`form-container ${isSignUp ? 'sign-up' : 'sign-in'}`}>
               <form onSubmit={handleSubmit}>

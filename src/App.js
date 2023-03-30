@@ -7,7 +7,6 @@ import Auth from './components/Auth/Auth';
 import Reset from './components/Reset/Reset';
 import Profile from './components/Profile/Profile';
 import Subsecription from './components/Subsecription/Subsecription';
-import Setting from './components/Setting/Setting';
 import Report from './components/Report/Report';
 import ErrorPage from './components/ErrorPage/ErrorPage';
 
@@ -45,10 +44,6 @@ const router = createBrowserRouter(
       <Route
         path="/subsecription"
         element={<Subsecription />}
-      />
-      <Route
-        path="/setting"
-        element={<Setting />}
       />
       <Route
         path="/report"

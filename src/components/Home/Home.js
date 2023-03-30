@@ -6,16 +6,24 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getSetting } from '../../actions/timer';
 import NetworkError from '../NetworkError/NetworkError';
+import Congratulation from '../../utils/Congratulation/Congratulation';
 
 const ActiveTask = lazy(() => import('../../components/ActiveTask/ActiveTask'));
 const Timer = lazy(() => import('../../components/Clock/Timer'));
 const NavBar = lazy(() => import('../../components/NavBar/NavBar'));
 const Tasks = lazy(() => import("../../components/Tasks/Tasks"));
+const Setting = lazy(() => import("./../Setting/Setting"));
+const Sidebar = lazy(() => import("./../Sidebar/Sidebar"));
 
 function Home() {
-  const { setting } = useSelector(state => state.timer);
+  const { setting, started } = useSelector(state => state.timer);
+  const { congrats } = useSelector(state => state.tasks);
   const [message, setMessage] = useState({ type: '', message: "" });
   const dispatch = useDispatch();
+  const [isLoadingTask, setIsLoadingTask] = useState(null);
+  const [openSetting, setOpenSetting] = useState(false);
+  const [openTodo, setOpenTodo] = useState(false);
+  const [openSticky, setOpenSticky] = useState(false);
 
   useEffect(() => {
     if (setting === undefined) {
@@ -24,12 +32,34 @@ function Home() {
     // eslint-disable-next-line
   }, [setting]);
 
+  useEffect(() => {
+    if (openSetting || openTodo || openSticky) {
+      document.body.style.overflowY = 'hidden';
+    } else {
+      document.body.style.overflowY = 'auto';
+    }
+  }, [openSetting, openTodo, openSticky]);
+
+
+  useEffect(() => {
+    window.onkeydown = (event) => {
+      if (event.code.toLowerCase() === 'keys' && !started) {
+        setOpenSetting((e) => !e);
+      }
+
+      if (event.code.toLowerCase() === 'keyt') {
+        setOpenTodo(e => !e);
+      }
+
+      if (event.code.toLowerCase() === 'keyn') {
+        setOpenSticky(e => !e);
+      }
+    }
+  })
+
   if (setting === undefined) {
     return (
       <>
-        {message.message && (
-          <Message message={message.message} type={message.type} setMessage={setMessage} />
-        )}
         {(!message.message) ?
           (
             <>
@@ -41,7 +71,13 @@ function Home() {
               />
             </>
           ) : (
-            <NetworkError />
+            <>
+              {(message.message && !message.message.includes('Network Error')) ? (
+                <Message {...message} setMessage={setMessage} />
+              ) : (
+                <NetworkError />
+              )}
+            </>
           )
         }
       </>
@@ -50,8 +86,17 @@ function Home() {
 
   return (
     <>
-      {(message.message && !message.message.includes('Network Error')) && (
-        <Message {...message} setMessage={setMessage} />
+      {congrats && (
+        <Congratulation text={congrats} />
+      )}
+      {message.message && (
+        <>
+          {(!message.message.includes('Network Error')) ? (
+            <Message {...message} setMessage={setMessage} />
+          ) : (
+            <NetworkError />
+          )}
+        </>
       )}
       <React.Suspense fallback={
         <Loading
@@ -62,12 +107,29 @@ function Home() {
         />
       }>
         <div className='container'>
-          <NavBar message={message} setMessage={setMessage} />
+          <NavBar setMessage={setMessage} />
+          {(setting?.focusMode && started) ? null : (
+            <Sidebar setOpenSticky={setOpenSticky} setOpenTodo={setOpenTodo} />
+          )}
           <div className="app">
-            <Timer />
+            <Timer setIsLoadingTask={setIsLoadingTask} setMessage={setMessage} setOpenSetting={setOpenSetting} />
             <ActiveTask />
           </div>
-          <Tasks message={message} setMessage={setMessage} />
+          {openSetting && (
+            <div className="glass-container">
+              <Setting setOpenSetting={setOpenSetting} />
+            </div>
+          )}
+          {openTodo && (
+            <div className="glass-container">
+              <Tasks message={message} setMessage={setMessage} isLoading={isLoadingTask} setIsLoading={setIsLoadingTask} setOpenTodo={setOpenTodo} />
+            </div>
+          )}
+          {openSticky && (
+            <div className="glass-container">
+              <div className='glass-effect'><h1>sticky</h1></div>
+            </div>
+          )}
         </div>
       </React.Suspense>
     </>

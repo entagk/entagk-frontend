@@ -1,22 +1,31 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
+import { CHANGE_ACTIVE_TASK } from "../../actions/tasks";
+import { FiEdit3 } from "react-icons/fi";
+
+import "./style.css";
 
 const ActiveTask = () => {
   const { periodNum } = useSelector(state => state.timer);
   const { activeId, activeName } = useSelector(state => state.tasks);
+  const dispatch = useDispatch();
+
+  const unactive = () => {
+    dispatch({ type: CHANGE_ACTIVE_TASK, data: {} });
+  }
 
   return (
-    <div className="active-task" style={{ marginBlock: 20 }}>
-      <span style={{
-        fontSize: "16px",
-        color: "rgb(255 255 255)", 
-        textShadow: "0 0 2px #878787"
-      }}>#{periodNum + 1}</span>
-      <span style={{ 
-        color: "rgb(237 237 237)",
-        fontWeight: 600,
-        textTransform: "capitalize"
-      }}>{!Boolean(activeId)  ? "please focus on what you are doing now" : activeName}</span>
+    <div className="active-task" style={{ marginBlock: 15 }}>
+      <span className="row1">#{periodNum + 1}</span>
+      <span className="row2">
+        {!Boolean(activeId) ? "please focus on what you are doing now" : activeName}
+        {Boolean(activeId) && (
+          <button className="unactive" onClick={unactive} aria-label="unactive the task">
+            <FiEdit3 />
+          </button>
+        )}
+      </span>
     </div>
   )
 }
