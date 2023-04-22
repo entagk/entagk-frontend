@@ -184,21 +184,25 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
         }
     }
 
-    const handleKeys = (event) => {
-        if (event.code.toLowerCase() === 'space') {
-            toggleStart();
-        }
-
-        if (event.code.toLowerCase() === 'arrowright' && !started) {
-            handleSkip();
-        }
-
-        if(event.code.toLowerCase() === 'keyc' && !started) {
-            handleReset();
-        }
-    };
 
     useEffect(() => {
+        const handleKeys = (event) => {
+            const inputsItems = ['input', 'textarea']
+            if (!inputsItems.find(document.activeElement.tagName.toLowerCase())) {
+                if (event.code.toLowerCase() === 'space') {
+                    toggleStart();
+                }
+
+                if (event.code.toLowerCase() === 'arrowright' && !started) {
+                    handleSkip();
+                }
+
+                if (event.code.toLowerCase() === 'keyc' && !started) {
+                    handleReset();
+                }
+            }
+        };
+
         window.onkeydown = handleKeys;
     })
 

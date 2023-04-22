@@ -42,19 +42,24 @@ function Home() {
 
 
   useEffect(() => {
-    window.onkeydown = (event) => {
-      if (event.code.toLowerCase() === 'keys' && !started) {
-        setOpenSetting((e) => !e);
-      }
+    const handleKeys = (event) => {
+      const inputsItems = ['input', 'textarea']
+      if (!inputsItems.find(document.activeElement.tagName.toLowerCase())) {
+        if (event.code.toLowerCase() === 'keys' && !started) {
+          setOpenSetting((e) => !e);
+        }
 
-      if (event.code.toLowerCase() === 'keyt') {
-        setOpenTodo(e => !e);
-      }
+        if (event.code.toLowerCase() === 'keyt') {
+          setOpenTodo(e => !e);
+        }
 
-      if (event.code.toLowerCase() === 'keyn') {
-        setOpenSticky(e => !e);
+        if (event.code.toLowerCase() === 'keyn') {
+          setOpenSticky(e => !e);
+        }
       }
-    }
+    };
+
+    window.onkeydown = handleKeys;
   })
 
   if (setting === undefined) {
