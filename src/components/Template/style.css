@@ -1,0 +1,37 @@
+.todo-temp {
+  margin-block: 20px;
+  border-radius: 35px;
+  /* background: black; */
+}
+
+.todo-temp .task:first-of-type,
+.tasks .tasks-container .todo-temp button.add-task-button {
+  margin-block: 0;
+}
+
+.todo-temp .task:last-of-type {
+  margin-bottom: 0;
+}
+
+.todo-temp .temp-tasks {
+  padding: 20px;
+}
+
+.loadBtn-container {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadBtn-container button {
+  font-size: 18px;
+  padding: 10px 20px;
+  border: 2px solid;
+  border-radius: 30px;
+}
+
+.loadBtn-container button:hover {
+  background: #ffffff8a;
+}

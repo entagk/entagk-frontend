@@ -11,7 +11,7 @@ const initialData = {
   project: ""
 }
 
-const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage }) => {
+const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, template }) => {
   const dispatch = useDispatch();
   const [data, setData] = useState(oldData === null ? initialData : oldData);
   const [openNotes, setOpenNotes] = useState(data.notes === "" ? false : true);
@@ -33,6 +33,10 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage }) => 
     setOpen(ot => !ot);
     if (!data.name || !data.est) {
       setMessage("Error at name or est");
+    }
+
+    if(template) {
+      data.template = template;
     }
 
     if (!oldData) {

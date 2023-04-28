@@ -9,6 +9,8 @@ export const MODIFY_TASK = "MODIFY_TASK";
 export const DELETE_TASK = "DELETE_TASK";
 export const CHANGE_ACTIVE_TASK = "CHANGE_ACTIVE_TASK";
 
+export const GET_TEMPLATE_TASKS = "GET_TEMPLATE_TASKS";
+
 export const CLEAR_FINISHED_TASKS = "CLEAR_FINISHED_TASKS";
 export const CLEAR_ACT_FROM_TASKS = "CLEAR_ACT_FROM_TASKS";
 export const CLEAR_ALL_TASKS = "CLEAR_ALL_TASKS";
@@ -47,7 +49,7 @@ export const getTasks = (setMessage, page) => async dispatch => {
     dispatch({ type: END_LOADING, data: 'tasks' });
     console.error(err);
     setMessage({ message: err?.response?.data?.message || err.message, type: 'error' });
-    
+
     if (err.response?.status === 401 || err.response?.status === 500) {
       dispatch({ type: LOGOUT });
     }
@@ -111,7 +113,7 @@ export const checkTask = (id, setIsLoading, setMessage) => async dispatch => {
     } else {
       const { data } = await api.checkTask(id);
 
-      dispatch({ type: CHECK_TASK, data: data._id });
+      dispatch({ type: CHECK_TASK, data: data });
     }
 
     setIsLoading(null);
@@ -125,7 +127,7 @@ export const checkTask = (id, setIsLoading, setMessage) => async dispatch => {
   }
 };
 
-export const deleteTask = (id, setIsLoading, setMessage) => async dispatch => {
+export const deleteTask = (id, template, setIsLoading, setMessage) => async dispatch => {
   try {
     setIsLoading(id);
     if (!id) {
@@ -137,9 +139,9 @@ export const deleteTask = (id, setIsLoading, setMessage) => async dispatch => {
     } else {
       const { data } = await api.deleteTask(id);
       setMessage({ message: data.message, type: 'success' })
-      dispatch({ type: DELETE_TASK, data: data.deleted_id });
+      dispatch({ type: DELETE_TASK, data: { id: data.deleted_id, template } });
     }
-    setIsLoading(id);
+    setIsLoading(null);
   } catch (error) {
     setIsLoading(null);
     setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
@@ -152,7 +154,6 @@ export const deleteTask = (id, setIsLoading, setMessage) => async dispatch => {
 
 export const modifyTask = (formData, id, setIsLoading, setMessage) => async dispatch => {
   try {
-    // dispatch({ type: START_LOADING_TASK, data: id});
     setIsLoading(id);
     if (!formData.name || !formData.est) {
       setMessage({ message: "Please enter the task name and est", type: "error" })
@@ -165,7 +166,26 @@ export const modifyTask = (formData, id, setIsLoading, setMessage) => async disp
       dispatch({ type: MODIFY_TASK, data: data });
     }
     setIsLoading(null);
-    // dispatch({ type: END_LOADING_TASK, data: id});
+  } catch (error) {
+    setIsLoading(null);
+    setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
+    console.error(error);
+    if (error.response?.status === 401 || error.response.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
+  }
+}
+
+export const getTodoTasks = (id, page, setLoadingTasks, setIsLoading, setMessage) => async dispatch => {
+  try {
+    setIsLoading(id);
+    setLoadingTasks(true);
+
+    const { data } = await api.getTasksForTodoTemp(id, page);
+    dispatch({ type: GET_TEMPLATE_TASKS, data: { id, ...data } })
+
+    setLoadingTasks(false);
+    setIsLoading(null);
   } catch (error) {
     setIsLoading(null);
     setMessage({ message: error?.response?.data?.message || error.message, type: "error" })

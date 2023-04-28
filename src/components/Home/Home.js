@@ -43,8 +43,9 @@ function Home() {
 
   useEffect(() => {
     const handleKeys = (event) => {
-      const inputsItems = ['input', 'textarea']
-      if (!inputsItems.find(document.activeElement.tagName.toLowerCase())) {
+      const inputsItems = ['input', 'textarea'];
+      const activeElement = document.activeElement.tagName.toLowerCase();
+      if (!inputsItems.includes(activeElement)) {
         if (event.code.toLowerCase() === 'keys' && !started) {
           setOpenSetting((e) => !e);
         }

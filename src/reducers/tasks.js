@@ -9,7 +9,8 @@ import {
   CLEAR_ACT_FROM_TASKS,
   CLEAR_ALL_TASKS,
   ADD_LOCAL_TASKS,
-  CLEAR_CONGRATS
+  CLEAR_CONGRATS,
+  GET_TEMPLATE_TASKS
 } from "../actions/tasks";
 import { INCREASE_ACT, PERIOD, MODITY_SETTING, GET_SETTING } from "../actions/timer";
 import { nanoid } from "nanoid";
@@ -32,6 +33,7 @@ const initialState = {
   autoStartNextTask: false,
   isLoading: false,
   congrats: "",
+  tempTasks: {}
 }
 
 // eslint-disable-next-line
@@ -91,6 +93,7 @@ export default (
         localStorage.setItem('total', total);
         localStorage.setItem('currentPage', page);
         localStorage.setItem('tasksLen', all.length);
+        const tempTasks = all.filter(t => t.tasks.length > 0).map(t => t._id).reduce((pre, newT) => ({ [newT]: {}, ...pre }), {});
 
         return {
           ...state,
@@ -98,6 +101,7 @@ export default (
           numberOfPages: numberOfPages,
           total: total,
           tasks: all,
+          tempTasks: { ...state.tempTasks, ...tempTasks },
           est: all.length > 0 ? all.reduce((total, task) => total + task.est, 0) : 0,
           act: all.length > 0 ? all.reduce((total, task) => total + task.act, 0) : 0,
           activeId: state?.autoStartNextTask
@@ -109,6 +113,7 @@ export default (
         };
       };
 
+    // todo
     case MODITY_SETTING:
       unfinishedTasks = state?.tasks?.filter((t) => !t.check);
       if (!localStorage.getItem("token")) {
@@ -134,10 +139,13 @@ export default (
       };
 
     case CHANGE_ACTIVE_TASK:
+      const tId = action.data?._id?.split(',');
+      const tName = tId?.length === 2 ? state.tasks.filter(t => t._id === tId[0])[0].name + " > " + action.data.name : action.data.name;
+
       return {
         ...state,
-        activeId: '_id' in action.data ? action.data._id : "",
-        activeName: 'name' in action.data ? action.data.name : "",
+        activeId: '_id' in action.data ? tId.at(-1) : "",
+        activeName: 'name' in action.data ? tName : "",
       };
 
     case INCREASE_ACT:
@@ -184,10 +192,15 @@ export default (
           const task = action.data.task;
 
           const taskIndex = state.tasks.findIndex(
-            (t) => t._id === state.activeId
+            (t) => t._id === task.template._id || t._id === task._id
           );
 
-          state.tasks[taskIndex] = task;
+          state.tasks[taskIndex] = task.template?._id ? { ...state.tasks[taskIndex], act: state.tasks[taskIndex].act + 1 } : task;
+
+          if (task.template?._id) {
+            const realTaskIndex = state.tempTasks[task.template._id].tasks.findIndex(t => t._id === task._id);
+            state.tempTasks[task.template._id].tasks[realTaskIndex] = task;
+          }
           congrats = task.check ? task.name : "";
 
           realAct = realAct + 1;
@@ -209,6 +222,7 @@ export default (
 
     case CLEAR_CONGRATS:
       return { ...state, congrats: "" };
+
     case NEW_TASK:
       all = state.tasks;
       finishedTasks = all.filter(t => t.check);
@@ -231,17 +245,26 @@ export default (
           activeName: state.autoStartNextTask ? all.filter(t => !t.check)[0]?.name : state.activeName
         };
       } else {
-        const est = state.est + action.data.est;
+        const task = action.data;
+        state.est += task.est;
 
-        unfinishedTasks.push(action.data)
+        if (task?.template?._id) {
+          const oldTasks = state.tempTasks[task.template?._id].tasks;
+          state.tempTasks[task?.template?._id].tasks = oldTasks.concat([task]);
+          const tempIndex = state.tasks.findIndex(temp => temp._id === task.template._id);
+          state.tasks[tempIndex].est += task.est;
+          state.tasks[tempIndex].check = false;
+          state.tasks[tempIndex].tasks.push(task._id)
+        } else {
+          unfinishedTasks.push(action.data)
+        }
 
         return {
           ...state,
           tasks: [...unfinishedTasks, ...finishedTasks],
-          est,
           total: state.total + 1,
           activeId: state.autoStartNextTask ? all.filter(t => !t.check)[0]?._id : state.activeId,
-          activeName: state.autoStartNextTask ? all.filter(t => !t.check)[0]?.name : state.activeName
+          activeName: state.autoStartNextTask ? all.filter(t => !t.check)[0]?.name : state.activeName,
         };
       };
 
@@ -266,16 +289,30 @@ export default (
           activeName: state.autoStartNextTask ? all.filter(t => !t.check)[0]?.name : (state.activeName || null)
         };
       } else {
-        const task = all.find((t) => t._id === action.data);
+        const taskData = action.data;
 
-        task.check = !task.check;
-        task.act = task.check ? task.est : 0;
+        if (taskData.template?._id) {
+          const tempTask = all.find((t) => t._id === taskData.template._id);
+          const task = state.tempTasks[taskData.template._id].tasks.find(t => t._id === taskData._id);
 
-        newAct = task.check ? state.act + task.est : state.act - task.est;
+          tempTask.check = tempTask.act + taskData.act === tempTask.est;
+          tempTask.act = taskData.check ? tempTask.act - task.act + taskData.act : tempTask.act - task.est;
+
+          task.check = !taskData.check;
+          state.act = taskData.check ? state.act - task.act + task.est : state.act - task.act;
+          task.act = taskData.check ? taskData.est : 0;
+        } else {
+          const task = all.find((t) => t._id === taskData._id);
+          const old = Object.freeze({ act: task.act, est: task.est });
+
+          task.check = !task.check;
+          task.act = task.check ? task.est : 0;
+
+          state.act = task.check ? state.act - old.act + old.est : state.act - old.act;
+        }
 
         return {
           ...state,
-          act: newAct,
           tasks: all,
           activeId: state.autoStartNextTask ? all.filter(t => !t.check)[0]?._id : state.activeId,
           activeName: state.autoStartNextTask ? all.filter(t => !t.check)[0]?.name : (state.activeName || null)
@@ -284,8 +321,10 @@ export default (
 
     case DELETE_TASK:
       all = state.tasks;
-      const task = all.find((t) => t._id === action.data);
-      const newAll = all.filter((task) => task._id !== action.data);
+      const tIndex = action.data?.template ? all.findIndex((t) => t._id === action.data?.template?._id) : all.findIndex((t) => t._id === action.data.id);
+      console.log(tIndex);
+      const task = all[tIndex];
+      let newAll = task.tasks.length > 1 ? all.filter((task) => task._id !== action.data || task._id !== action.data?.id) : all.filter(t => t._id !== task._id);
 
       if (!localStorage.getItem("token")) {
         const newEst = state.est - task.est;
@@ -313,9 +352,19 @@ export default (
           activeName: state.activeName !== task.name ? state.activeName : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0].name : null,
         };
       } else {
-        newEst = state.est - task.est;
-        newAct = task.check ? state.act - task.act : state.act;
-        const unfinishedTasks = all.filter(t => !t.check)
+        const realTask = action.data.template ? state.tempTasks[task._id].tasks.filter(t => t._id === action.data.id)[0] : null;
+        newEst = action.data?.template ? state.est - realTask.est : state.est - task.est;
+        newAct = action.data?.template ? state.act - realTask.act : state.act - task.act;
+        const unfinishedTasks = all.filter(t => !t.check);
+
+        if (action.data?.template && task.tasks.length > 1) {
+          console.log(task);
+          console.log(state.tempTasks[task._id]);
+          state.tempTasks[task._id].tasks = state.tempTasks[task._id].tasks.filter(t => t._id !== action.data.id);
+
+          newAll[tIndex] = { ...task, tasks: task.tasks.filter(t => t !== action.data.id), act: task.act - realTask.act, est: task.est - realTask.est };
+          console.log(newAll);
+        }
 
         return {
           ...state,
@@ -328,14 +377,19 @@ export default (
         };
       };
 
+    case GET_TEMPLATE_TASKS:
+      const data = action.data;
+      const tempTasks = data.currentPage === 1 ? data.tasks : data.tasks.concat(state.tempTasks[data.id]?.tasks);
+      return { ...state, tempTasks: { ...state.tempTasks, [data.id]: { ...data, tasks: tempTasks } } }
+
     /**
      * Update task data
-     */
+    */
     case MODIFY_TASK:
-      newAct = state.act;
-      newEst = state.est;
-      const { act, est } = state.tasks.find((t) => t._id === action.data._id);
-      const taskIndex = state.tasks.findIndex((t) => t._id === action.data._id);
+      const taskIndex = action.data?.template ? state.tempTasks[action.data.template._id].tasks.findIndex((t) => t._id === action.data._id) : state.tasks.findIndex((t) => t._id === action.data._id);
+      const { act, est } = action.data?.template ? state.tempTasks[action.data.template._id].tasks[taskIndex] : state.tasks[taskIndex];
+      newAct = state.act + action.data.act - act;
+      newEst = state.est + action.data.est - est;
 
       if (!localStorage.getItem("token")) {
         const newActive = { _id: null, name: null };
@@ -344,7 +398,7 @@ export default (
         newTask.check = newTask.est === newTask.act;
 
         const all = state.tasks.filter((t) => t._id !== action.data._id);
-        // if () {
+
         if (newTask.check && state.autoStartNextTask) {
           all.push(newTask);
           newActive._id = all.filter((t) => !t.check)[0]?._id || null;
@@ -352,7 +406,6 @@ export default (
         } else {
           state.tasks[taskIndex] = newTask;
         }
-        // }
 
         localStorage.setItem(
           "tasks",
@@ -360,16 +413,8 @@ export default (
             newTask.check && state.autoStartNextTask ? all : state.tasks
           )
         );
-
-        if (est !== action.data.est) {
-          newEst = state.est + (action.data.est - est);
-          localStorage.setItem("est", newEst);
-        }
-
-        if (act !== action.data.act) {
-          newAct = state.act + action.data.act - act;
-          localStorage.setItem("act", newAct);
-        }
+        localStorage.setItem("est", newEst);
+        localStorage.setItem("act", newAct);
 
         return {
           ...state,
@@ -383,26 +428,34 @@ export default (
         const newActive = { _id: null, name: null };
         const newTask = Object.assign({ act, est }, action.data);
 
-        const all = state.tasks.filter((t) => t._id !== action.data._id);
-        if (newTask.check) {
-          all.push(newTask);
-          console.log(all)
-          if (state.autoStartNextTask) {
-            newActive._id = all.filter((t) => !t.check)[0]?._id || null;
-            newActive.name = all.filter((t) => !t.check)[0]?.name || null;
+        if (action.data.template) {
+          state.tempTasks[action.data.template._id].tasks[taskIndex] = newTask;
+          const tempIndex = state.tasks.findIndex(t => t._id === action.data.template._id);
+          const temp = state.tasks[tempIndex];
+          state.tasks[tempIndex] = {
+            ...temp,
+            act: temp.act - act + action.data.act,
+            est: temp.est - est + action.data.est,
+            check: (temp.est - est + action.data.est) === (temp.act - act + action.data.act)
+          };
+
+          if (newTask.check && state.autoStartNextTask) {
+            newActive._id = null;
+            newActive.name = null;
           }
         } else {
-          state.tasks[taskIndex] = newTask;
+          const all = state.tasks.filter((t) => t._id !== action.data._id);
+          if (newTask.check) {
+            all.push(newTask);
+            console.log(all)
+            if (state.autoStartNextTask) {
+              newActive._id = all.filter((t) => !t.check)[0]?._id || null;
+              newActive.name = all.filter((t) => !t.check)[0]?.name || null;
+            }
+          } else {
+            state.tasks[taskIndex] = newTask;
+          }
         }
-
-        if (est !== action.data.est) {
-          newEst = state.est + (action.data.est - est);
-        }
-
-        if (act !== action.data.act) {
-          newAct = state.act + action.data.act - act;
-        }
-        console.log(newActive);
 
         return {
           ...state,

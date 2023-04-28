@@ -1,7 +1,7 @@
 import axios from "axios";
 import jwt_decode from 'jwt-decode';
 
-const API = axios.create({ baseURL: "https://pomodoro-backend-6j65.onrender.com/api" }); // http://localhost:5500/api
+const API = axios.create({ baseURL: "http://localhost:5500/api" }); // http://localhost:5500/api
 
 // Add a request interceptor
 API.interceptors.request.use((config) => {
@@ -94,3 +94,6 @@ export const getAllSetting = () => API.get("/setting/");
 export const updateSetting = (settingData) => API.post("/setting/update/", settingData);
 /* end the setting api */
 
+/* start the template api */
+export const getTasksForTodoTemp = (id, page) => API.get(`/template/todo/tasks/${id}?page=${page}`)
+/* end the template api */

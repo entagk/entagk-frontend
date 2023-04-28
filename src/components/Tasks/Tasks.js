@@ -14,6 +14,7 @@ const TaskForm = lazy(() => import("./TaskForm/TaskForm"));
 const Footer = lazy(() => import("./TaskFooter/TaskFooter"));
 const Menu = lazy(() => import("./TasksMenu/TasksMenu"));
 const Task = lazy(() => import("./Task/Task"));
+const Template = lazy(() => import("../Template/Template"));
 
 const Tasks = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) => {
   const [openFormForNew, setOpenFormForNew] = useState(false);
@@ -133,7 +134,11 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) =>
                           <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
                         </div>
                       } key={task._id}>
-                        <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
+                        {(task?.tasks?.length > 0) ? (
+                          <Template key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} todoTemplate={task} />
+                        ) : (
+                          <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
+                        )}
                       </Suspense>
                     ))}
                     {
@@ -147,7 +152,11 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) =>
                           <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
                         </div>
                       } key={task._id}>
-                        <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
+                        {(task?.tasks?.length > 0) ? (
+                          <Template key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} todoTemplate={task} />
+                        ) : (
+                          <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
+                        )}
                       </Suspense>
                     ))}
                   </>
@@ -159,7 +168,11 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) =>
                           <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
                         </div>
                       } key={task?._id}>
-                        <Task key={task?._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
+                        {(task?.tasks?.length > 0) ? (
+                          <Template key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} todoTemplate={task} />
+                        ) : (
+                          <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
+                        )}
                       </Suspense>
                     ))}
                   </>
