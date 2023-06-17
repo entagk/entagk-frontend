@@ -35,7 +35,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
       setMessage("Error at name or est");
     }
 
-    if(template) {
+    if (template) {
       data.template = template;
     }
 
@@ -81,7 +81,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
                 name="name"
                 type="text"
                 value={data.name}
-                placeholder="What are you working on?"
+                placeholder="What is task title?"
                 onChange={handleChange}
               />
               <div className="text-counter" style={{ color: `${50 - data.name.length > 10 ? "#0effe9" : "#ff002f"}` }}>

@@ -72,7 +72,7 @@
 .tasks .header .menu-content {
   width: max-content;
   left: 0;
-  background-color: #acacac7a;
+  background-color: #acacacd1;
   backdrop-filter: blur(10px);
   color: #fff;
 }

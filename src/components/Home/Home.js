@@ -11,7 +11,7 @@ import Congratulation from '../../utils/Congratulation/Congratulation';
 const ActiveTask = lazy(() => import('../../components/ActiveTask/ActiveTask'));
 const Timer = lazy(() => import('../../components/Clock/Timer'));
 const NavBar = lazy(() => import('../../components/NavBar/NavBar'));
-const Tasks = lazy(() => import("../../components/Tasks/Tasks"));
+const TodoList = lazy(() => import("../Tasks/TodoList"));
 const Setting = lazy(() => import("./../Setting/Setting"));
 const Sidebar = lazy(() => import("./../Sidebar/Sidebar"));
 
@@ -128,7 +128,7 @@ function Home() {
           )}
           {openTodo && (
             <div className="glass-container">
-              <Tasks message={message} setMessage={setMessage} isLoading={isLoadingTask} setIsLoading={setIsLoadingTask} setOpenTodo={setOpenTodo} />
+              <TodoList message={message} setMessage={setMessage} isLoading={isLoadingTask} setIsLoading={setIsLoadingTask} setOpenTodo={setOpenTodo} />
             </div>
           )}
           {openSticky && (

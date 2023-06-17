@@ -1,7 +1,6 @@
 import React, { lazy, Suspense, useEffect, useState } from "react";
 
 import { AiOutlinePlus } from 'react-icons/ai';
-import { CgClose } from "react-icons/cg";
 import { useDispatch, useSelector } from "react-redux";
 import { getTasks } from "../../actions/tasks";
 import Loading from "../../utils/Loading";
@@ -11,12 +10,9 @@ import NetworkError from "../NetworkError/NetworkError";
 import "./style.css";
 
 const TaskForm = lazy(() => import("./TaskForm/TaskForm"));
-const Footer = lazy(() => import("./TaskFooter/TaskFooter"));
-const Menu = lazy(() => import("./TasksMenu/TasksMenu"));
 const Task = lazy(() => import("./Task/Task"));
-const Template = lazy(() => import("../Template/Template"));
 
-const Tasks = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) => {
+const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate, activeTemplate }) => {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const tasks = useSelector(state => state.tasks);
   const { active, activites } = useSelector(state => state.timer);
@@ -66,7 +62,7 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) =>
           (
             <>
               <Loading
-                size="200"
+                size="100"
                 strokeWidth="2"
                 backgroud="white"
                 color={activites[active]?.color}
@@ -88,128 +84,97 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) =>
 
   return (
     <>
-      <Suspense fallback={
-        <Loading
-          size="200"
-          strokeWidth="5"
-          color="white"
-          backgroud="transparent"
-        />
-      }>
-        <div className="tasks glass-effect zoom-in">
-          <div className="close-button-container">
-          </div>
-          <div className="header">
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexWrap: 'nowrap',
-              flexDirection: 'row',
-            }}>
-              <div className="header-buttons">
-                <Menu setMessage={setMessage} />
-              </div>
-              <h2 style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginLeft: "10px",
-              }}>
-                Tasks
-              </h2>
-            </div>
-            <button aria-label='close tasks' className="close-tasks" type='button' onClick={() => setOpenTodo(false)}>
-              <CgClose />
-            </button>
-          </div>
-          <div className="tasks-container">
-            {tasks.tasks?.length > 0 && (
-              <div className="tasks-list">
-                {isLoading === 'new' ? (
-                  <>
-                    {tasks.tasks?.filter(t => !t.check)?.map((task, index) => (
-                      <Suspense fallback={
-                        <div className="loading-container">
-                          <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                        </div>
-                      } key={task._id}>
-                        {(task?.tasks?.length > 0) ? (
-                          <Template key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} todoTemplate={task} />
-                        ) : (
-                          <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
-                        )}
-                      </Suspense>
-                    ))}
-                    {
-                      <div className="loading-container">
-                        <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                      </div>
-                    }
-                    {tasks.tasks?.filter(t => t.check)?.map((task, index) => (
-                      <Suspense fallback={
-                        <div className="loading-container">
-                          <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                        </div>
-                      } key={task._id}>
-                        {(task?.tasks?.length > 0) ? (
-                          <Template key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} todoTemplate={task} />
-                        ) : (
-                          <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
-                        )}
-                      </Suspense>
-                    ))}
-                  </>
-                ) : (
-                  <>
-                    {tasks.tasks?.map((task, index) => (
-                      <Suspense fallback={
-                        <div className="loading-container">
-                          <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                        </div>
-                      } key={task?._id}>
-                        {(task?.tasks?.length > 0) ? (
-                          <Template key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} todoTemplate={task} />
-                        ) : (
-                          <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
-                        )}
-                      </Suspense>
-                    ))}
-                  </>
-                )}
-              </div>
-            )}
-            <> {/* This is for loading while bringing the tasks */}
-              {(tasks.isLoading && tasks.tasks.length > 0) && (
+      {tasks.tasks?.length > 0 && (
+        <div className="tasks-list">
+          {isLoading === 'new' ? (
+            <>
+              {tasks.tasks?.filter(t => !t.check)?.map((task, index) => (
+                <Suspense fallback={
+                  <div className="loading-container">
+                    <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
+                  </div>
+                } key={task._id}>
+                  <Task
+                    key={task._id}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    setMessage={setMessage}
+                    setActiveTemplate={setActiveTemplate}
+                    activeTemplate={activeTemplate}
+                    {...task}
+                  />
+                </Suspense>
+              ))}
+              {
                 <div className="loading-container">
                   <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
                 </div>
-              )}
+              }
+              {tasks.tasks?.filter(t => t.check)?.map((task, index) => (
+                <Suspense fallback={
+                  <div className="loading-container">
+                    <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
+                  </div>
+                } key={task._id}>
+                  <Task
+                    key={task._id}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    setMessage={setMessage}
+                    setActiveTemplate={setActiveTemplate}
+                    activeTemplate={activeTemplate}
+                    {...task}
+                  />
+                </Suspense>
+              ))}
             </>
-            {!openFormForNew ? (
-              <button aria-label="add task button" className="add-task-button" onClick={() => setOpenFormForNew(p => !p)}>
-                <AiOutlinePlus size="25px" />
-                <p style={{ marginLeft: 10 }}>
-                  add task
-                </p>
-              </button>
-            ) : (
-              <Suspense fallback={
-                <div className="loading-container">
-                  <Loading size="60" strokeWidth="5" color={"#fff"} backgroud="transparent" />
-                </div>
-              }>
-                <TaskForm setOpen={setOpenFormForNew} oldData={null} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} />
-              </Suspense>
-            )}
-          </div>
-          {tasks.tasks?.length > 0 && (
-            <div className="footer-container">
-              <Footer />
-            </div>
+          ) : (
+            <>
+              {tasks.tasks?.map((task, index) => (
+                <Suspense fallback={
+                  <div className="loading-container">
+                    <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
+                  </div>
+                } key={task?._id}>
+                  <Task
+                    key={task._id}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    setMessage={setMessage}
+                    setActiveTemplate={setActiveTemplate}
+                    activeTemplate={activeTemplate}
+                    {...task}
+                  />
+                </Suspense>
+              ))}
+            </>
           )}
         </div>
-      </Suspense>
+      )}
+      <> {/* This is for loading while bringing the tasks */}
+        {(tasks.isLoading && tasks.tasks.length > 0) && (
+          <div className="loading-container">
+            <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
+          </div>
+        )}
+      </>
+      {!openFormForNew && (
+        <button aria-label="add task button" className="add-task-button" onClick={() => setOpenFormForNew(p => !p)}>
+          <AiOutlinePlus size="25px" />
+          <p style={{ marginLeft: 10 }}>
+            add task
+          </p>
+        </button>
+      )}
+      {openFormForNew && (
+        <Suspense fallback={
+          <div className="loading-container">
+            <Loading size="60" strokeWidth="5" color={"#fff"} backgroud="transparent" />
+          </div>
+        }>
+          <TaskForm setOpen={setOpenFormForNew} oldData={null} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} />
+        </Suspense>
+      )}
     </>
   )
 };

@@ -3,6 +3,8 @@ const audioPlayer = ({ src, volume = 50, loop = false }) => {
   audio.volume = volume / 100;
 
   audio.loop = loop;
+  // console.log(audio.lang);
+  // console.log(audio.preload);
 
   const handlePlay = () => {
     if (audio.paused || !audio.currentTime) {

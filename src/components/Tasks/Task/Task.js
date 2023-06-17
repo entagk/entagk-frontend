@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CircularMenu from "../../../icons/circularMenu/CircularMenu";
 
 import { FiEdit3 } from 'react-icons/fi';
-import { MdDelete, MdKeyboardArrowDown, /*MdKeyboardArrowUp*/ } from 'react-icons/md';
+import { MdDelete, MdKeyboardArrowRight } from 'react-icons/md';
 import { ImCheckboxChecked, ImCheckboxUnchecked } from 'react-icons/im';
 import { RiCheckboxCircleFill, RiCheckboxBlankCircleLine } from 'react-icons/ri';
 import { checkTask, deleteTask, CHANGE_ACTIVE_TASK } from "../../../actions/tasks";
@@ -13,7 +13,7 @@ import Loading from "../../../utils/Loading";
 
 const TaskForm = lazy(() => import("../TaskForm/TaskForm"));
 
-const Task = ({ isLoading, setIsLoading, setMessage, setShowTasks, ...props }) => {
+const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTemplate, ...props }) => {
   const dispatch = useDispatch();
   const { activeId } = useSelector(state => state.tasks);
   const { setting } = useSelector(state => state.timer);
@@ -49,7 +49,6 @@ const Task = ({ isLoading, setIsLoading, setMessage, setShowTasks, ...props }) =
         }
       }
     }
-    // setOpenMenu(false);
   }
 
   if (openEdit) {
@@ -130,28 +129,32 @@ const Task = ({ isLoading, setIsLoading, setMessage, setShowTasks, ...props }) =
             {openMenu && (
               <div className="menu-content">
                 <div className="row">
-                  {!setting.autoStartNextTask && (
-                    <button aria-label="check button" onClick={handleCheck}>
-                      {!props.check ? (
-                        <>
-                          {
-                            (props.template !== null) ? (
-                              <RiCheckboxCircleFill />
-                            ) : (
-                              <ImCheckboxChecked />
-                            )
-                          }
-                        </>
-                      ) : (
-                        <>
-                          {props.template !== null ? (
-                            <RiCheckboxBlankCircleLine />
+                  {props.tasks.length === 0 && (
+                    <>
+                      {(!setting.autoStartNextTask) && (
+                        <button aria-label="check button" onClick={handleCheck}>
+                          {!props.check ? (
+                            <>
+                              {
+                                (props.template !== null) ? (
+                                  <RiCheckboxCircleFill />
+                                ) : (
+                                  <ImCheckboxChecked />
+                                )
+                              }
+                            </>
                           ) : (
-                            <ImCheckboxUnchecked />
+                            <>
+                              {props.template !== null ? (
+                                <RiCheckboxBlankCircleLine />
+                              ) : (
+                                <ImCheckboxUnchecked />
+                              )}
+                            </>
                           )}
-                        </>
+                        </button>
                       )}
-                    </button>
+                    </>
                   )}
                   <button
                     aria-label="edit button"
@@ -174,8 +177,8 @@ const Task = ({ isLoading, setIsLoading, setMessage, setShowTasks, ...props }) =
           {props.tasks.length > 0 && (
             <button aria-label="toggle the tasks list"
               className="show-tasks"
-              onClick={() => setShowTasks(om => !om)}>
-              <MdKeyboardArrowDown />
+              onClick={() => setActiveTemplate(props)}>
+              <MdKeyboardArrowRight />
             </button>
           )}
         </div>

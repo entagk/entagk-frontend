@@ -176,18 +176,15 @@ export const modifyTask = (formData, id, setIsLoading, setMessage) => async disp
   }
 }
 
-export const getTodoTasks = (id, page, setLoadingTasks, setIsLoading, setMessage) => async dispatch => {
+export const getTodoTasks = (id, page, setLoadingTasks, setMessage) => async dispatch => {
   try {
-    setIsLoading(id);
     setLoadingTasks(true);
 
     const { data } = await api.getTasksForTodoTemp(id, page);
     dispatch({ type: GET_TEMPLATE_TASKS, data: { id, ...data } })
 
     setLoadingTasks(false);
-    setIsLoading(null);
   } catch (error) {
-    setIsLoading(null);
     setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
     if (error.response?.status === 401 || error.response.status === 500) {

@@ -380,6 +380,11 @@ export default (
     case GET_TEMPLATE_TASKS:
       const data = action.data;
       const tempTasks = data.currentPage === 1 ? data.tasks : data.tasks.concat(state.tempTasks[data.id]?.tasks);
+
+      localStorage.setItem(`${data.id}-total`, data.total);
+      localStorage.setItem(`${data.id}-currentPage`, Number(data?.currentPage));
+      localStorage.setItem(`${data.id}-tasksLen`, tempTasks.length);
+
       return { ...state, tempTasks: { ...state.tempTasks, [data.id]: { ...data, tasks: tempTasks } } }
 
     /**
