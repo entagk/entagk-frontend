@@ -66,7 +66,7 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
       style={{
         '--progress': `${props.act / props.est * 100}%`,
       }}
-      onClick={handleActive}>
+      onDoubleClick={handleActive}>
       {isLoading === props._id && (
         <div className="loading-container">
           <Loading size="40" strokeWidth="3" color={"rgb(197 197 197)"} />
