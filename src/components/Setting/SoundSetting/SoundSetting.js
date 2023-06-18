@@ -1,6 +1,6 @@
 import React, { lazy } from 'react';
 
-const Sound = lazy(() => import('../Sound'));
+const Sound = lazy(() => import('./Sound/Sound'));
 
 const SoundSetting = ({ handleChange, data, setData }) => {
   return (
@@ -14,15 +14,17 @@ const SoundSetting = ({ handleChange, data, setData }) => {
           setData={setData}
         />
       </div>
-      <div className='block'>
-        <h3>Click Sound</h3>
-        <Sound
-          type="click"
-          handleChange={handleChange}
-          data={data}
-          setData={setData}
-        />
-      </div>
+      {(data?.clickType && data?.clickVolume) && (
+        <div className='block'>
+          <h3>Click Sound</h3>
+          <Sound
+            type="click"
+            handleChange={handleChange}
+            data={data}
+            setData={setData}
+          />
+        </div>
+      )}
       <div className='block' style={{ border: 'none' }}>
         <h3>Ticking Sound</h3>
         <Sound

@@ -1,10 +1,12 @@
 import React, { lazy, useEffect, useRef, useState } from 'react';
 
-import { alarmSounds, tickingSounds, clickSounds } from "../../actions/timer";
+import { alarmSounds, tickingSounds, clickSounds } from "../../../../actions/timer";
 
-import audioPlayer from '../../utils/audioPlayer';
+import audioPlayer from '../../../../utils/audioPlayer';
 
-const Select = lazy(() => import("./Select"));
+import "./style.css";
+
+const Select = lazy(() => import("../../Select/Select"));
 
 function Sound({ type, data, setData }) {
   const sounds = type === 'alarm' ? alarmSounds : type === 'ticking' ? tickingSounds : clickSounds;
@@ -21,15 +23,15 @@ function Sound({ type, data, setData }) {
   }, [change]);
 
   const handleChange = (e) => {
-    const min = Number(e.target.min), max = Number(e.target.max), value = Number(e.target.value);
+    const value = Number(e.target.value);
 
     setData({ ...data, [e.target.name]: value });
     setChange(!change);
   }
 
   return (
-    <div className='alarm-details'>
-      <div className="alarm-type">
+    <div className='sound-details'>
+      <div className="sound-type">
         <h4>Sound</h4>
         <Select
           data={data}
@@ -41,7 +43,7 @@ function Sound({ type, data, setData }) {
         />
       </div>
       {data[`${type}Type`].name !== "none" && (
-        <div className="alarm-type">
+        <div className="sound-type">
           <h4>Volume</h4>
           <div className='range-container'>
             <span className='range-value'>{data[`${type}Volume`]}</span>
@@ -59,7 +61,7 @@ function Sound({ type, data, setData }) {
         </div>
       )}
       {type === "alarm" && (
-        <div className="alarm-type" style={{
+        <div className="sound-type" style={{
           flexDirection: "row"
         }}>
           <h4>Repeat</h4>

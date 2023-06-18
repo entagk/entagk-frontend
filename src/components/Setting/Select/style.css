@@ -1,0 +1,69 @@
+div.select-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: fit-content;
+}
+
+.setting .block .select-container {
+  width: fit-content;
+}
+
+.select-menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 200px;
+  position: relative;
+}
+
+.select-menu .menu-content {
+  top: 35px;
+  background: #afafaf8f;
+  backdrop-filter: blur(8px);
+  color: #fff;
+  width: 100%;
+
+  max-height: 150px;
+  padding-top: 0px;
+  overflow: auto;
+  justify-content: flex-start;
+}
+
+.select-menu .menu-content .row button {
+  font-size: 16px;
+  /* width: 200px; */
+
+  color: #fff;
+}
+
+.select-menu button.open-menu {
+  border-radius: 6px;
+  font-size: 16px;
+  padding: 10px 16px;
+  width: fit-content;
+  justify-content: space-between;
+  width: max-content;
+
+  background: transparent;
+  color: #fff;
+  border: 1px solid;
+  width: 100%;
+}
+
+.select-menu button.open-menu .arrow {
+  margin-left: 10px;
+}
+
+.select-menu button.active {
+  background-color: rgb(0 0 0 / 26%);
+}
+
+@media (max-width: 400px) {
+  .select-menu button.open-menu {
+    padding: 8px 10px;
+  }
+  .sound-details .sound-type .select-menu button.open-menu {
+    width: 100%;
+  }
+}

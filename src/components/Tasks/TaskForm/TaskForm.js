@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { addNewTask, modifyTask } from "../../../actions/tasks";
+
+import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from 'react-icons/md';
+
+import "./style.css";
+
 import Loading from "../../../utils/Loading";
+const MoreSetting = lazy(() => import("./MoreSetting"));
 
 const initialData = {
   name: "",
@@ -16,6 +22,8 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
   const [data, setData] = useState(oldData === null ? initialData : oldData);
   const [openNotes, setOpenNotes] = useState(data.notes === "" ? false : true);
   const [openProject, setOpenProject] = useState(data.project === "" ? false : true);
+  const [moreDetails, setMoreDetails] = useState(false);
+  const [setting, setSetting] = useState(oldData === null && oldData.tasks.length > 0 ? null : oldData.setting);
 
   const { activites, active } = useSelector(state => state.timer);
 
@@ -42,12 +50,12 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
     if (!oldData) {
       dispatch(addNewTask(data, setIsLoading, setMessage));
     } else {
-      dispatch(modifyTask(data, data._id, setIsLoading, setMessage));
+      dispatch(modifyTask({ ...data, setting }, data._id, setIsLoading, setMessage));
     }
   }
 
   return (
-    <>
+    <Suspense>
       {isLoading === data?._id && (
         <div className="loading-container" style={{
           position: 'fixed',
@@ -105,6 +113,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
                       min='0'
                       max="1000"
                       defaultValue={data.act}
+                      disabled={data.tasks.length > 0}
                       onChange={handleChange}
                     />
                   </div>
@@ -118,6 +127,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
                     type="number"
                     min='1'
                     max="1000"
+                    disabled={data.tasks.length > 0}
                     defaultValue={data.est}
                     onChange={handleChange}
                   />
@@ -155,6 +165,28 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
                 )}
               </div>
             </div>
+            {data.tasks.length > 0 && (
+              <>
+                {moreDetails && (
+                  <MoreSetting setting={setting} setSetting={setSetting} />
+                )}
+
+                <div className="block more-details-container">
+                  <button
+                    className="more-details"
+                    aria-label="more details template"
+                    type="button"
+                    onClick={() => setMoreDetails(s => !s)}>
+                    {moreDetails ? "Less Details" : "More Details"}
+                    {moreDetails ? (
+                      <MdOutlineKeyboardArrowUp size="20" />
+                    ) : (
+                      <MdOutlineKeyboardArrowDown size="20" />
+                    )}
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className="task-footer">
@@ -171,7 +203,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
           >save</button>
         </div>
       </form>
-    </>
+    </Suspense>
   )
 }
 

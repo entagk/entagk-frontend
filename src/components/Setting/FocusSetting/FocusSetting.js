@@ -1,6 +1,6 @@
 import React, { lazy } from 'react';
 
-const ToggleButton = lazy(() => import('../ToggleButton'));
+const ToggleButton = lazy(() => import('../ToggleButton/ToggleButton'));
 
 const FocusSetting = ({ data, setData }) => {
   return (

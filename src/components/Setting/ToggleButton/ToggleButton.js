@@ -1,5 +1,7 @@
 import React from 'react';
 
+import "./style.css";
+
 function ToggleButton({ type, data, setData }) {
   const handleChange = () => {
     setData({ ...data, [type]: !data[type] });

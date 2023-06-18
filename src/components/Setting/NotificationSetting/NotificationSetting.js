@@ -1,6 +1,6 @@
 import React, {lazy} from 'react';
 
-const Select = lazy(() => import('../Select'));
+const Select = lazy(() => import('../Select/Select'));
 
 const NotificationSetting = ({ data, setData, handleChange }) => {
   return (

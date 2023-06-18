@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import { RiArrowUpSLine, RiArrowDownSLine } from 'react-icons/ri';
 
+import './style.css';
+
 function Select({ options, setChange, type, data, setData, width }) {
   const [open, setOpen] = useState(false);
   const realOptions = typeof options[0] === "object" ? options.map((op) => op.name) : options;

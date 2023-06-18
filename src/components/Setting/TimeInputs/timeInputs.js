@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import { BiDownArrow, BiUpArrow } from 'react-icons/bi';
 
+import "./style.css";
+
 function TimeInputs({ name, data, setData }) {
   const [min, setMin] = useState(Number(data?.time[name]) >= 60 ? Math.floor(Number(data?.time[name]) / 60) : 0);
   const [sec, setSec] = useState(Number(data?.time[name]) % 60);
