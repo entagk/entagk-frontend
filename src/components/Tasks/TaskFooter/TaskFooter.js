@@ -1,6 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
+import './style.css'
+
 const Footer = ({ activeTemplate }) => {
   const { est, act } = useSelector(state => state.tasks);
   const template = useSelector(state => state.tasks.tasks.find(t => t._id === activeTemplate?._id))
