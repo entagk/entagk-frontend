@@ -11,6 +11,8 @@ import { RiCheckboxCircleFill, RiCheckboxBlankCircleLine } from 'react-icons/ri'
 import { checkTask, deleteTask, CHANGE_ACTIVE_TASK } from "../../../actions/tasks";
 import Loading from "../../../utils/Loading";
 
+import "./style.css";
+
 const TaskForm = lazy(() => import("../TaskForm/TaskForm"));
 
 const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTemplate, ...props }) => {

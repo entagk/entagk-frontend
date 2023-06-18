@@ -1,42 +1,25 @@
-import React, { useState } from 'react';
-import SoundSetting from '../../Setting/SoundSetting/SoundSetting';
-import TimerSetting from '../../Setting/TimerSetting/TimerSetting';
+import React, { lazy, Suspense } from 'react';
+import { useSelector } from 'react-redux';
 
+import Loading from '../../../utils/Loading';
 
-// 
-/**
-  "setting": {
-    // "time": {
-    //   "PERIOD": 1500,
-    //   "SHORT": 300,
-    //   "LONG": 900
-    // },
-    "timeForAll": true,
-    // "autoBreaks": false,
-    // "autoPomodors": false,
-    // "autoStartNextTask": false,
-    // "longInterval": 4,
-    "alarmType": {
-      "name": "alarm 1",
-      "src": "sounds/alarm/1.mp3"
-    },
-    "alarmVolume": 50,
-    "alarmRepet": 0,
-    "tickingType": {
-        "name": "tricking 1",
-        "src": "sounds/tricking/1.mp3"
-    },
-    "tickingVolume": 50
-  },
- */
+const SoundSetting = lazy(() => import('../../Setting/SoundSetting/SoundSetting'));
+const TimerSetting = lazy(() => import('../../Setting/TimerSetting/TimerSetting'));
 
 function MoreSetting({ setting, setSetting }) {
+  const {active, activites} = useSelector(state => state.timer);
+
   const handleChange = (e) => {
     setSetting({ ...setting, [e.target.name]: Number(e.target.value) })
   }
 
   return (
-    <>
+    <Suspense fallback={<Loading
+      size="100"
+      strokeWidth="5"
+      color={activites[active].color}
+      backgroud="transperent"
+    />}>
       <TimerSetting
         data={setting}
         setData={setSetting}
@@ -47,7 +30,7 @@ function MoreSetting({ setting, setSetting }) {
         setData={setSetting}
         handleChange={handleChange}
       />
-    </>
+    </Suspense>
   );
 }
 

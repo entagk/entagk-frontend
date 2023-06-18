@@ -73,9 +73,7 @@ const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo })
             )}
           </div>
           {tasks.tasks?.length > 0 && (
-            <div className="footer-container">
-              <Footer activeTemplate={activeTemplate} />
-            </div>
+            <Footer activeTemplate={activeTemplate} />
           )}
         </div>
       </Suspense>
