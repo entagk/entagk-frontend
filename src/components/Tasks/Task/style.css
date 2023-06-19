@@ -198,17 +198,55 @@
   line-break: anywhere;
 }
 
+@media (max-width: 768px) {
+  .task {
+    padding: 10px 15px;
+    margin-block: 10px;
+    border-radius: 30px;
+  }
+
+  .task p {
+    font-size: 22px;
+  }
+
+  .task p.act-est span {
+    font-size: 20px;
+  }
+
+  .task .toggle-menu,
+  .task .show-tasks {
+    font-size: 18px;
+    padding: 4px;
+  }
+
+  .task .task-notes {
+    margin: 10px 0;
+    padding: 5px;
+  }
+
+  .task .task-notes p {
+    margin-left: 5px;
+    font-size: 16px;
+  }
+
+  .task .icon-container svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 @media (max-width: 600px) {
   .task {
     margin-block: 10px;
-    padding: 20px 15px 20px 10px;
+    padding: 10px 10px 10px 15px;
+    border-radius: 38px;
   }
 }
 
 @media (max-width: 550px) {
   .task .icon-container svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
   }
 
   .task-inner {
@@ -216,17 +254,17 @@
   }
 
   .task .task-inner p {
-    font-size: 22px;
+    font-size: 20px;
     margin-left: 5px;
   }
 
   .task p.act-est {
     margin-inline: 5px;
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .task p.act-est span {
-    font-size: 22px;
+    font-size: 20px;
   }
 }
 
@@ -234,8 +272,8 @@
   .task {
     font-size: 16px;
     padding: 10px 7.5px 10px 5px;
-    border-radius: 33px;
-    margin-block: 6px;
+    border-radius: 25px;
+    margin-block: 5px;
   }
 
   .task .icon-container svg {

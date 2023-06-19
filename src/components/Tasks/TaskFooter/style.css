@@ -26,14 +26,47 @@
   font-weight: bold;
 }
 
+@media (max-width: 768px) {
+  .tasks .footer {
+    margin: 0;
+    padding: 10px;
+  }
+  .tasks .footer p span {
+    font-size: 20px;
+  }
+}
+
 @media (max-width: 600px) {
   .tasks .footer-container {
     padding: 10px 0;
   }
 
+  .tasks .footer-container {
+    padding: 0;
+  }
+
   .tasks .footer {
-    margin: 10px 0;
-    padding: 10px;
+    margin: 0;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 450px) {
+  .tasks .footer-container {
+    padding: 0px;
+  }
+
+  .tasks .footer {
+    margin: 0;
+    padding: 7.5px;
+  }
+
+  .tasks .footer p {
+    margin-right: 10px;
+    font-size: 16px;
+  }
+  .tasks .footer p span {
+    font-size: 20px;
   }
 }
 /* end tasks footer */

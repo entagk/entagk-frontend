@@ -37,7 +37,6 @@ const Menu = ({ setMessage }) => {
           aria-label="toggle the task list menu"
           className="toggle-menu"
           onClick={() => setOpenMenu(om => !om)}
-          style={{ fontSize: 25, color: "#fff" }}
           disabled={tasks?.length === 0}>
           <HiMenu />
         </button>

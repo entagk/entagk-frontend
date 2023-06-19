@@ -27,7 +27,7 @@
   padding: 10px;
   border-radius: 50%;
   color: #fff;
-  font-size: 20px;
+  font-size: 25px;
   min-width: 0;
 
   background: red;
@@ -85,6 +85,10 @@
   color: #fff;
 }
 
+.tasks .header h2 {
+  margin-left: 10px;
+}
+
 .tasks .tasks-container {
   margin: 20px;
   display: flex;
@@ -121,21 +125,60 @@
 
 /* start the responsive design */
 
-@media (max-width: 740px) {
+@media (max-width: 768px) {
   .tasks {
     padding: 0;
+    border-radius: 30px;
+  }
+
+  .tasks .header {
+    padding: 10px;
+  }
+
+  .tasks .header button.toggle-menu,
+  .header .close-tasks {
+    font-size: 20px;
+    padding: 7px;
+  }
+
+  .header h2 {
+    font-size: 22px;
   }
 
   .tasks .tasks-container {
-    margin: 20px 10px;
+    margin: 10px;
+  }
+
+  .tasks .tasks-container button.add-task-button {
+    margin: 10px 0 10px;
+    padding: 12px;
   }
 }
 
 @media (max-width: 600px) {
+  .tasks {
+    border-radius: 25px;
+  }
+
+  .tasks .header {
+    padding-block: 7px;
+    padding-inline: 10px;
+  }
+
+  .tasks .header button.toggle-menu,
+  .header .close-tasks {
+    font-size: 22px;
+    padding: 5px;
+  }
+
+  .tasks .header h2 {
+    font-size: 22px;
+  }
+
   .tasks .tasks-container {
     margin: 10px;
   }
-  
+
   .tasks .tasks-container button.add-task-button {
     margin: 10px 0 10px;
     padding: 15px;
@@ -143,11 +186,37 @@
 }
 
 @media (max-width: 450px) {
+  .tasks .tasks-container button.add-task-button {
+    padding: 7.5px;
+    font-size: 18px;
+  }
+
   .task-form .pomodoros {
     justify-content: space-between;
   }
 
   .task-form input.name {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  .tasks {
+    border-radius: 25px;
+  }
+
+  .tasks .header {
+    padding-inline: 15px;
+    padding-block: 7.5px;
+  }
+
+  .tasks .header button.toggle-menu,
+  .header .close-tasks {
+    font-size: 20px;
+    padding: 5px;
+  }
+
+  .tasks .header h2 {
     font-size: 20px;
   }
 }

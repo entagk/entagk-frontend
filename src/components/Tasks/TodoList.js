@@ -45,7 +45,6 @@ const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo })
                       aria-label="toggle the task list menu"
                       className="toggle-menu"
                       onClick={() => setActiveTemplate(null)}
-                      style={{ fontSize: 25, color: "#fff" }}
                       disabled={tasks?.length === 0}>
                       <MdKeyboardArrowLeft />
                     </button>
@@ -53,9 +52,6 @@ const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo })
                 )}
               </div>
               <h2 style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
                 marginLeft: "10px",
               }}>
                 {activeTemplate?._id ? activeTemplate?.name : "Tasks"}
