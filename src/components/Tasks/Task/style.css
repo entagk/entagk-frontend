@@ -198,17 +198,10 @@
   line-break: anywhere;
 }
 
-@media (max-width: 450px) {
+@media (max-width: 600px) {
   .task {
-    font-size: 16px;
-  }
-
-  .task .task-inner p {
-    font-size: 18px;
-  }
-
-  .task p.act-est span {
-    font-size: 20px;
+    margin-block: 10px;
+    padding: 20px 15px 20px 10px;
   }
 }
 
@@ -217,30 +210,61 @@
     width: 20px;
     height: 20px;
   }
-  
+
   .task-inner {
     margin-right: 5px;
   }
-  
+
   .task .task-inner p {
     font-size: 22px;
     margin-left: 5px;
   }
-  
+
   .task p.act-est {
     margin-inline: 5px;
     font-size: 20px;
   }
-  
+
   .task p.act-est span {
     font-size: 22px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 450px) {
   .task {
-    margin-block: 10px;
-    padding: 20px 15px 20px 10px;
+    font-size: 16px;
+    padding: 10px 7.5px 10px 5px;
+    border-radius: 33px;
+    margin-block: 6px;
+  }
+
+  .task .icon-container svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .task .task-inner p {
+    font-size: 16px;
+    margin-left: 8px;
+  }
+
+  .task p.act-est span {
+    font-size: 16px;
+  }
+
+  .task .toggle-menu,
+  .task .show-tasks {
+    font-size: 16px;
+    padding: 4px;
+  }
+
+  .task .task-notes {
+    padding: 5px;
+  }
+
+  .task .task-notes p {
+    margin-left: 5px;
+    font-size: 16px;
   }
 }
 /* end task */
