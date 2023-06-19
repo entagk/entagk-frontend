@@ -1,8 +1,11 @@
-import React, { lazy, Suspense, useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 
 import { AiOutlinePlus } from 'react-icons/ai';
+
 import { useDispatch, useSelector } from "react-redux";
+
 import { getTasks } from "../../actions/tasks";
+
 import Loading from "../../utils/Loading";
 import Message from "../../utils/Message";
 import NetworkError from "../NetworkError/NetworkError";
@@ -46,8 +49,6 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate
       }
     }
 
-    // console.log(tasks.tasks);
-
     document.querySelector('.tasks-container')?.addEventListener('scroll', onScroll);
     return () => document.querySelector('.tasks-container')?.removeEventListener('scroll', onScroll);
 
@@ -89,21 +90,15 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate
           {isLoading === 'new' ? (
             <>
               {tasks.tasks?.filter(t => !t.check)?.map((task, index) => (
-                <Suspense fallback={
-                  <div className="loading-container">
-                    <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                  </div>
-                } key={task._id}>
-                  <Task
-                    key={task._id}
-                    isLoading={isLoading}
-                    setIsLoading={setIsLoading}
-                    setMessage={setMessage}
-                    setActiveTemplate={setActiveTemplate}
-                    activeTemplate={activeTemplate}
-                    {...task}
-                  />
-                </Suspense>
+                <Task
+                  key={task._id}
+                  isLoading={isLoading}
+                  setIsLoading={setIsLoading}
+                  setMessage={setMessage}
+                  setActiveTemplate={setActiveTemplate}
+                  activeTemplate={activeTemplate}
+                  {...task}
+                />
               ))}
               {
                 <div className="loading-container">
@@ -111,41 +106,29 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate
                 </div>
               }
               {tasks.tasks?.filter(t => t.check)?.map((task, index) => (
-                <Suspense fallback={
-                  <div className="loading-container">
-                    <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                  </div>
-                } key={task._id}>
-                  <Task
-                    key={task._id}
-                    isLoading={isLoading}
-                    setIsLoading={setIsLoading}
-                    setMessage={setMessage}
-                    setActiveTemplate={setActiveTemplate}
-                    activeTemplate={activeTemplate}
-                    {...task}
-                  />
-                </Suspense>
+                <Task
+                  key={task._id}
+                  isLoading={isLoading}
+                  setIsLoading={setIsLoading}
+                  setMessage={setMessage}
+                  setActiveTemplate={setActiveTemplate}
+                  activeTemplate={activeTemplate}
+                  {...task}
+                />
               ))}
             </>
           ) : (
             <>
               {tasks.tasks?.map((task, index) => (
-                <Suspense fallback={
-                  <div className="loading-container">
-                    <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                  </div>
-                } key={task?._id}>
-                  <Task
-                    key={task._id}
-                    isLoading={isLoading}
-                    setIsLoading={setIsLoading}
-                    setMessage={setMessage}
-                    setActiveTemplate={setActiveTemplate}
-                    activeTemplate={activeTemplate}
-                    {...task}
-                  />
-                </Suspense>
+                <Task
+                  key={task._id}
+                  isLoading={isLoading}
+                  setIsLoading={setIsLoading}
+                  setMessage={setMessage}
+                  setActiveTemplate={setActiveTemplate}
+                  activeTemplate={activeTemplate}
+                  {...task}
+                />
               ))}
             </>
           )}
@@ -167,13 +150,7 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate
         </button>
       )}
       {openFormForNew && (
-        <Suspense fallback={
-          <div className="loading-container">
-            <Loading size="60" strokeWidth="5" color={"#fff"} backgroud="transparent" />
-          </div>
-        }>
-          <TaskForm setOpen={setOpenFormForNew} oldData={null} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} />
-        </Suspense>
+        <TaskForm setOpen={setOpenFormForNew} oldData={null} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} />
       )}
     </>
   )

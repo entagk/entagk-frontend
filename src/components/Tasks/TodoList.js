@@ -11,7 +11,7 @@ const Footer = lazy(() => import("./TaskFooter/TaskFooter"));
 const Menu = lazy(() => import("./TasksMenu/TasksMenu"));
 const Tasks = lazy(() => import("./Tasks"));
 
-const Template = lazy(() => import("../Template/Template"));
+const Template = lazy(() => import("./TodoTemplate"));
 
 const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) => {
   const [activeTemplate, setActiveTemplate] = useState(null);
@@ -66,11 +66,17 @@ const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo })
             </button>
           </div>
           <div className="tasks-container">
-            {activeTemplate ? (
-              <Template todoTemplate={activeTemplate} isLoading={isLoading} setIsLoading={setIsLoading} message={message} setMessage={setMessage} />
-            ) : (
-              <Tasks message={message} setMessage={setMessage} isLoading={isLoading} setIsLoading={setIsLoading} setOpenTodo={setOpenTodo} setActiveTemplate={setActiveTemplate} activeTemplate={activeTemplate} />
-            )}
+            <Suspense fallback={
+              <div className="loading-container">
+                <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
+              </div>
+            }>
+              {activeTemplate ? (
+                <Template todoTemplate={activeTemplate} isLoading={isLoading} setIsLoading={setIsLoading} message={message} setMessage={setMessage} />
+              ) : (
+                <Tasks message={message} setMessage={setMessage} todoTemplate={activeTemplate} isLoading={isLoading} setIsLoading={setIsLoading} setOpenTodo={setOpenTodo} setActiveTemplate={setActiveTemplate} activeTemplate={activeTemplate} />
+              )}
+            </Suspense>
           </div>
           {tasks.tasks?.length > 0 && (
             <Footer activeTemplate={activeTemplate} />

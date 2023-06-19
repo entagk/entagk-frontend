@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState } from "react";
+import React, { lazy, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { addNewTask, modifyTask } from "../../../actions/tasks";
@@ -55,7 +55,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
   }
 
   return (
-    <Suspense>
+    <>
       {isLoading === data?._id && (
         <div className="loading-container" style={{
           position: 'fixed',
@@ -170,7 +170,6 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
                 {moreDetails && (
                   <MoreSetting setting={setting} setSetting={setSetting} />
                 )}
-
                 <div className="block more-details-container">
                   <button
                     className="more-details"
@@ -203,7 +202,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
           >save</button>
         </div>
       </form>
-    </Suspense>
+    </>
   )
 }
 
