@@ -55,6 +55,16 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
     }
   }
 
+  const toggleEdit = () => {
+    setOpenEdit(true);
+    setOpenMenu(false);
+  }
+
+  const toggleDelete = () => {
+    setOpenDelete(true);
+    setOpenMenu(false);
+  }
+
   if (openEdit) {
     return (
       <Suspense fallback={<Loading size="40" strokeWidth="3" color={"rgb(197 197 197)"} />}>
@@ -166,13 +176,13 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
                     )}
                     <button
                       aria-label="edit button"
-                      onClick={() => setOpenEdit(oe => !oe)}
+                      onClick={toggleEdit}
                     >
                       <FiEdit3 />
                     </button>
                     <button
                       aria-label="delet button"
-                      onClick={() => setOpenDelete(true)}
+                      onClick={toggleDelete}
                       style={{ color: 'red' }}
                       className="delete"
                     >

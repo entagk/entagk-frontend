@@ -1,4 +1,4 @@
-import React, { lazy, useState } from "react";
+import React, { lazy, useState, Suspense } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { addNewTask, modifyTask } from "../../../actions/tasks";
@@ -167,9 +167,18 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
             </div>
             {data?.tasks?.length > 0 && (
               <>
-                {moreDetails && (
-                  <MoreSetting setting={setting} setSetting={setSetting} />
-                )}
+                <Suspense fallback={
+                  <Loading
+                    size="100"
+                    strokeWidth="5"
+                    color={activites[active].color}
+                    backgroud="transparent"
+                  />
+                }>
+                  {moreDetails && (
+                    <MoreSetting setting={setting} setSetting={setSetting} />
+                  )}
+                </Suspense>
                 <div className="block more-details-container">
                   <button
                     className="more-details"

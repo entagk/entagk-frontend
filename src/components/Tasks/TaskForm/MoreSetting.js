@@ -14,14 +14,7 @@ function MoreSetting({ setting, setSetting }) {
   }
 
   return (
-    <Suspense fallback={
-      <Loading
-        size="100"
-        strokeWidth="5"
-        color={activites[active].color}
-        backgroud="transperent"
-      />
-    }>
+    <>
       <TimerSetting
         data={setting}
         setData={setSetting}
@@ -32,7 +25,7 @@ function MoreSetting({ setting, setSetting }) {
         setData={setSetting}
         handleChange={handleChange}
       />
-    </Suspense>
+    </>
   );
 }
 
