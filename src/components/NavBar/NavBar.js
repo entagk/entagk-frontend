@@ -1,9 +1,7 @@
 import React, { useCallback, useState, lazy } from "react";
-import { AiOutlineUser, /*AiOutlineClose*/ } from "react-icons/ai";
-// import { HiMenu, HiUser, HiOutlineDocumentReport } from "react-icons/hi";
+import { AiOutlineUser } from "react-icons/ai";
 import { FiEdit3 } from 'react-icons/fi';
 import { GrAchievement } from 'react-icons/gr';
-// import { FaMoneyCheck } from "react-icons/fa";
 import { MdLogout, MdLogin, MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +12,7 @@ import "./style.css";
 import { useEffect } from "react";
 import { getUserData, LOGOUT, deleteUser, refreshToken } from "../../actions/auth";
 import Loading from "../../utils/Loading";
+import DeletePopup from "../../utils/DeletePopup/DeletePopup";
 const TodoList = lazy(() => import('../../icons/list/TodoList'));
 
 const NavBar = ({ setMessage }) => {
@@ -59,9 +58,12 @@ const NavBar = ({ setMessage }) => {
     // eslint-disable-next-line
   }, [open]);
 
-  const logout = () => { dispatch({ type: LOGOUT }); toggleMenu(); };
+  const logout = () => {
+    dispatch({ type: LOGOUT });
+    toggleMenu();
+  };
 
-  const delete_user = () => { setOpenDelete(false); dispatch(deleteUser(setMessage)); }
+  const handleDeleteUser = () => { setOpenDelete(false); dispatch(deleteUser(setMessage)); }
 
   const getUserName = () => {
     if (user.name.length <= 18) {
@@ -73,18 +75,15 @@ const NavBar = ({ setMessage }) => {
     }
   }
 
+  const toggleDelete = () => {
+    setOpenDelete(true);
+    toggleMenu();
+  };
+
   return (
     <>
       {openDelete && (
-        <div className="glass-container">
-          <div className="glass-effect delete-popup">
-            <h4>Do you sure you want to delete your account ?</h4>
-            <div className="buttons">
-              <button aria-label="cancel deleteing account" onClick={() => setOpenDelete(false)} className="cancel">cancel</button>
-              <button aria-label="ok deleteing account" onClick={delete_user} className="ok">ok</button>
-            </div>
-          </div>
-        </div>
+        <DeletePopup type={"your account"} onCancel={() => setOpenDelete(false)} onOk={handleDeleteUser} />
       )}
       <nav className="nav-bar">
         <Link to="/">
@@ -159,7 +158,7 @@ const NavBar = ({ setMessage }) => {
                   </button>
                   <button
                     aria-label="delete account button"
-                    onClick={() => setOpenDelete(true)}
+                    onClick={toggleDelete}
                     style={{ color: "red" }}
                   >
                     <MdDelete />

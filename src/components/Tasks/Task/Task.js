@@ -13,6 +13,7 @@ import Loading from "../../../utils/Loading";
 
 import "./style.css";
 
+const DeletePopup = lazy(() => import("./../../../utils/DeletePopup/DeletePopup"));
 const TaskForm = lazy(() => import("../TaskForm/TaskForm"));
 
 const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTemplate, ...props }) => {
@@ -20,6 +21,7 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
   const { activeId } = useSelector(state => state.tasks);
   const { setting } = useSelector(state => state.timer);
   const [openEdit, setOpenEdit] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
 
   useEffect(() => {
@@ -62,134 +64,139 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
   }
 
   return (
-    <div
-      className={`task ${activeId === props._id ? "active" : ''}`}
-      id={`task-${props._id}`}
-      style={{
-        '--progress': `${props.act / props.est * 100}%`,
-      }}
-      onDoubleClick={handleActive}>
-      {isLoading === props._id && (
-        <div className="loading-container">
-          <Loading size="40" strokeWidth="3" color={"rgb(197 197 197)"} />
-        </div>
+    <>
+      {openDelete && (
+        <DeletePopup type={<><span>{props.name}</span> {props.tasks.length > 0 ? 'template' : 'task'}</>} onCancel={() => setOpenDelete(false)} onOk={handleDelete} />
       )}
-      <div style={{
-        display: "flex",
-        alignItems: "center",
-        width: "100%",
-        justifyContent: "space-between"
-      }}>
-        <div className="task-inner">
-          <div className="icon-container">
-            {props.check ? (
-              <>
-                {
-                  (props.template !== null) ? (
-                    <RiCheckboxCircleFill className="task-uncheck" />
-                  ) : (
-                    <ImCheckboxChecked className="task-uncheck" />
-                  )
-                }
-              </>
-            ) : (
-              <>
-                {props.template !== null ? (
-                  <RiCheckboxBlankCircleLine className="task-check" />
-                ) : (
-                  <ImCheckboxUnchecked className="task-check" />
-                )}
-              </>
-            )}
+      <div
+        className={`task ${activeId === props._id ? "active" : ''}`}
+        id={`task-${props._id}`}
+        style={{
+          '--progress': `${props.act / props.est * 100}%`,
+        }}
+        onDoubleClick={handleActive}>
+        {isLoading === props._id && (
+          <div className="loading-container">
+            <Loading size="40" strokeWidth="3" color={"rgb(197 197 197)"} />
           </div>
-          <p style={{
-            textDecoration: props.check && "line-through"
-          }}>{props.name}</p>
-        </div>
+        )}
         <div style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
-          flexDirection: "row",
+          width: "100%",
+          justifyContent: "space-between"
         }}>
-          <p className="act-est">
-            <span>{props.act}</span>
-            <span style={{
-              fontWeight: "normal",
-              fontSize: "18px",
-              marginInline: "4px"
-            }}>/</span>
-            <span>{props.est}</span>
-          </p>
-          <div className="menu">
-            <button
-              aria-label="toggle the task list menu"
-              className="toggle-menu"
-              onClick={() => setOpenMenu(om => !om)}>
-              <CircularMenu />
-            </button>
-            {openMenu && (
-              <div className="menu-content">
-                <div className="row">
-                  {props.tasks.length === 0 && (
-                    <>
-                      {(!setting.autoStartNextTask) && (
-                        <button aria-label="check button" onClick={handleCheck}>
-                          {!props.check ? (
-                            <>
-                              {
-                                (props.template !== null) ? (
-                                  <RiCheckboxCircleFill />
-                                ) : (
-                                  <ImCheckboxChecked />
-                                )
-                              }
-                            </>
-                          ) : (
-                            <>
-                              {props.template !== null ? (
-                                <RiCheckboxBlankCircleLine />
-                              ) : (
-                                <ImCheckboxUnchecked />
-                              )}
-                            </>
-                          )}
-                        </button>
-                      )}
-                    </>
+          <div className="task-inner">
+            <div className="icon-container">
+              {props.check ? (
+                <>
+                  {
+                    (props.template !== null) ? (
+                      <RiCheckboxCircleFill className="task-uncheck" />
+                    ) : (
+                      <ImCheckboxChecked className="task-uncheck" />
+                    )
+                  }
+                </>
+              ) : (
+                <>
+                  {props.template !== null ? (
+                    <RiCheckboxBlankCircleLine className="task-check" />
+                  ) : (
+                    <ImCheckboxUnchecked className="task-check" />
                   )}
-                  <button
-                    aria-label="edit button"
-                    onClick={() => setOpenEdit(oe => !oe)}
-                  >
-                    <FiEdit3 />
-                  </button>
-                  <button
-                    aria-label="delet button"
-                    onClick={handleDelete}
-                    style={{ color: 'red' }}
-                    className="delete"
-                  >
-                    <MdDelete />
-                  </button>
+                </>
+              )}
+            </div>
+            <p style={{
+              textDecoration: props.check && "line-through"
+            }}>{props.name}</p>
+          </div>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexDirection: "row",
+          }}>
+            <p className="act-est">
+              <span>{props.act}</span>
+              <span style={{
+                fontWeight: "normal",
+                fontSize: "18px",
+                marginInline: "4px"
+              }}>/</span>
+              <span>{props.est}</span>
+            </p>
+            <div className="menu">
+              <button
+                aria-label="toggle the task list menu"
+                className="toggle-menu"
+                onClick={() => setOpenMenu(om => !om)}>
+                <CircularMenu />
+              </button>
+              {openMenu && (
+                <div className="menu-content">
+                  <div className="row">
+                    {props.tasks.length === 0 && (
+                      <>
+                        {(!setting.autoStartNextTask) && (
+                          <button aria-label="check button" onClick={handleCheck}>
+                            {!props.check ? (
+                              <>
+                                {
+                                  (props.template !== null) ? (
+                                    <RiCheckboxCircleFill />
+                                  ) : (
+                                    <ImCheckboxChecked />
+                                  )
+                                }
+                              </>
+                            ) : (
+                              <>
+                                {props.template !== null ? (
+                                  <RiCheckboxBlankCircleLine />
+                                ) : (
+                                  <ImCheckboxUnchecked />
+                                )}
+                              </>
+                            )}
+                          </button>
+                        )}
+                      </>
+                    )}
+                    <button
+                      aria-label="edit button"
+                      onClick={() => setOpenEdit(oe => !oe)}
+                    >
+                      <FiEdit3 />
+                    </button>
+                    <button
+                      aria-label="delet button"
+                      onClick={() => setOpenDelete(true)}
+                      style={{ color: 'red' }}
+                      className="delete"
+                    >
+                      <MdDelete />
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
+            </div>
+            {props.tasks.length > 0 && (
+              <button aria-label="toggle the tasks list"
+                className="show-tasks"
+                onClick={() => setActiveTemplate(props)}>
+                <MdKeyboardArrowRight />
+              </button>
             )}
           </div>
-          {props.tasks.length > 0 && (
-            <button aria-label="toggle the tasks list"
-              className="show-tasks"
-              onClick={() => setActiveTemplate(props)}>
-              <MdKeyboardArrowRight />
-            </button>
-          )}
         </div>
+        {props.notes !== '' && (
+          <div className="task-notes">
+          </div>
+        )}
       </div>
-      {props.notes !== '' && (
-        <div className="task-notes">
-        </div>
-      )}
-    </div>
+    </>
   )
 };
 

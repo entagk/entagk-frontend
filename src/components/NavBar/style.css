@@ -229,34 +229,3 @@
 }
 
 /* end nav-bar */
-
-/* start delete popup */
-.delete-popup {
-  padding: 20px;
-  border-radius: 8px;
-  font-size: 22px;
-}
-
-.delete-popup .buttons {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 14px;
-}
-
-.delete-popup .buttons button {
-  font-size: 20px;
-  padding: 10px 15px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px #989898;
-  color: #fff;
-}
-
-.delete-popup .buttons button:first-of-type {
-  border: 2px solid;
-}
-
-.delete-popup .buttons button:last-of-type {
-  background-color: var(--main-color);
-}
-/* end delete popup */

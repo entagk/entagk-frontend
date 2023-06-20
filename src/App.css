@@ -121,14 +121,14 @@ a {
   position: fixed;
   height: 100%;
   top: 0;
-
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 1002;
   background: #47474761;
   overflow: auto;
+  right: 0;
 }
 
 .glass-effect {
