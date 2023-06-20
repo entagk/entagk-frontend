@@ -88,7 +88,7 @@ const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage }
         <div className="tasks-list">
           {isLoading === 'new' ? (
             <>
-              {tasks?.filter(t => !t.check)?.map((task, index) => (
+              {tasks?.map((task, index) => (
                 <Task
                   key={task._id}
                   isLoading={isLoading}
@@ -102,15 +102,6 @@ const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage }
                   <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
                 </div>
               }
-              {tasks?.filter(t => t.check)?.map((task, index) => (
-                <Task
-                  key={task._id}
-                  isLoading={isLoading}
-                  setIsLoading={setIsLoading}
-                  setMessage={setMessage}
-                  {...task}
-                />
-              ))}
             </>
           ) : (
             <>

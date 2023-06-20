@@ -23,7 +23,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
   const [openNotes, setOpenNotes] = useState(data.notes === "" ? false : true);
   const [openProject, setOpenProject] = useState(data.project === "" ? false : true);
   const [moreDetails, setMoreDetails] = useState(false);
-  const [setting, setSetting] = useState(oldData === null && oldData.tasks.length > 0 ? null : oldData.setting);
+  const [setting, setSetting] = useState(oldData === null && oldData?.tasks?.length > 0 ? null : oldData?.setting);
 
   const { activites, active } = useSelector(state => state.timer);
 
@@ -92,10 +92,10 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
                 placeholder="What is task title?"
                 onChange={handleChange}
               />
-              <div className="text-counter" style={{ color: `${50 - data.name.length > 10 ? "#0effe9" : "#ff002f"}` }}>
+              <div className="text-counter" style={{ color: `${50 - data?.name?.length > 10 ? "#0effe9" : "#ff002f"}` }}>
                 <p
                   style={{ fontSize: "16px", fontWeight: "500", marginBottom: "15px" }}
-                >{50 - data.name.length}</p>
+                >{50 - data?.name?.length}</p>
               </div>
             </div>
             <div className="block">
@@ -113,7 +113,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
                       min='0'
                       max="1000"
                       defaultValue={data.act}
-                      disabled={data.tasks.length > 0}
+                      disabled={data?.tasks?.length > 0}
                       onChange={handleChange}
                     />
                   </div>
@@ -127,7 +127,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
                     type="number"
                     min='1'
                     max="1000"
-                    disabled={data.tasks.length > 0}
+                    disabled={data?.tasks?.length > 0}
                     defaultValue={data.est}
                     onChange={handleChange}
                   />
@@ -138,8 +138,8 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
               {openNotes && (
                 <div className="notes">
                   <textarea name="notes" type='text' maxLength="500" onChange={handleChange} value={data.notes}></textarea>
-                  <div className="text-counter" style={{ color: `${500 - data.notes.length > 100 ? "#0effe9" : "#ff002f"}` }}>
-                    <p style={{ fontSize: "16px", fontWeight: "500" }}>{500 - data.notes.length}</p>
+                  <div className="text-counter" style={{ color: `${500 - data?.notes?.length > 100 ? "#0effe9" : "#ff002f"}` }}>
+                    <p style={{ fontSize: "16px", fontWeight: "500" }}>{500 - data?.notes?.length}</p>
                   </div>
                 </div>
               )}
@@ -165,7 +165,7 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
                 )}
               </div>
             </div>
-            {data.tasks.length > 0 && (
+            {data?.tasks?.length > 0 && (
               <>
                 {moreDetails && (
                   <MoreSetting setting={setting} setSetting={setSetting} />
