@@ -292,13 +292,13 @@ export default (
         const taskData = action.data;
 
         if (taskData.template?._id) {
-          const tempTask = all.find((t) => t._id === taskData.template._id);
+          const tempTask = all?.find((t) => t._id === taskData.template._id);
           const task = state.tempTasks[taskData.template._id].tasks.find(t => t._id === taskData._id);
 
           tempTask.check = tempTask.act + taskData.act === tempTask.est;
           tempTask.act = taskData.check ? tempTask.act - task.act + taskData.act : tempTask.act - task.est;
 
-          task.check = !taskData.check;
+          task.check = !task.check;
           state.act = taskData.check ? state.act - task.act + task.est : state.act - task.act;
           task.act = taskData.check ? taskData.est : 0;
         } else {
@@ -476,6 +476,8 @@ export default (
      * filter the tasks from tasks that is checked
      * and then reduce the total act
      */
+
+    // fix it
     case CLEAR_FINISHED_TASKS:
       all = state.tasks;
       finishedTasks = all.filter((task) => task.check);
@@ -495,6 +497,7 @@ export default (
      * loop through the tasks to 
      * make the act equal to zero and change check to false
      */
+    // fix it
     case CLEAR_ACT_FROM_TASKS:
       all = state.tasks
         .map((t) => {
@@ -515,6 +518,7 @@ export default (
         activeName: state.autoStartNextTask && Boolean(state.activeId) === true ? all[0].name : state.activeName,
       };
 
+    // fix it
     case CLEAR_ALL_TASKS:
       if (!localStorage.getItem("token")) {
         localStorage.setItem("tasks", JSON.stringify([]));
