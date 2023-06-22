@@ -545,14 +545,15 @@ export default (
         activeName: state.autoStartNextTask && Boolean(state.activeId) === true ? all[0].name : state.activeName,
       };
 
-    // fix it
     case CLEAR_ALL_TASKS:
       if (!localStorage.getItem("token")) {
         localStorage.setItem("tasks", JSON.stringify([]));
         localStorage.setItem("act", 0);
         localStorage.setItem("est", 0);
       } else {
-
+        if (Object.values(state.tempTasks).length > 0) {
+          state.tempTasks = {};
+        }
       }
 
       return { ...initialState, tasks: [], total: 0, act: 0, est: 0 };
