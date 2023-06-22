@@ -478,7 +478,7 @@ export default (
      */
 
     case CLEAR_FINISHED_TASKS:
-      all = state.tasks;  
+      all = state.tasks;
       finishedTasks = all.filter((task) => task.check);
       unfinishedTasks = all.filter((task) => !task.check);
 
@@ -492,27 +492,8 @@ export default (
       } else {
         if (Object.values(state.tempTasks).length > 0) {
           const tempTasks = Object.entries(state.tempTasks).filter(tt => unfinishedTasks.find(t => t._id === tt[0]) !== undefined);
-          const newTempTasks = tempTasks.map(([k, v]) => {
-            if (v?.tasks) {
-              console.log([k, v])
-              const unfinishedTT = v?.tasks?.filter(t => !t.check);
-              const finishedTT = v?.tasks?.filter(t => t.check);
 
-              const template = unfinishedTasks.find(t => t._id === unfinishedTT[0].template._id);
-
-              template.act = unfinishedTT.reduce((total, currentTask) => total + currentTask.act, 0);
-              template.est = unfinishedTT.reduce((total, currentTask) => total + currentTask.est, 0);
-
-              newAct = newAct - finishedTT.reduce((total, currnetTask) => total + currnetTask.act, 0);
-              newEst = newEst - finishedTT.reduce((total, currnetTask) => total + currnetTask.est, 0);
-
-              return [k, { ...v, tasks: unfinishedTT }];
-            } else {
-              return [k, v];
-            }
-          })
-
-          state.tempTasks = newTempTasks;
+          state.tempTasks = tempTasks;
         }
       }
 
@@ -528,7 +509,6 @@ export default (
      * loop through the tasks to 
      * make the act equal to zero and change check to false
      */
-    // fix it
     case CLEAR_ACT_FROM_TASKS:
       all = state.tasks
         .map((t) => {
@@ -540,7 +520,21 @@ export default (
 
         localStorage.setItem("act", 0);
       } else {
-        // state.tempTasks = new Object()
+        if (Object.values(state.tempTasks).length > 0) {
+          const tempTasks = Object.entries(state.tempTasks).filter(tt => tt[1]?.tasks?.filter(t => t.act > 0).length > 0);
+
+          const newTempTasks = tempTasks.map(([k, v]) => {
+            if (v?.tasks) {
+              console.log([k, v])
+
+              return [k, { ...v, tasks: v.tasks.map(t => { return { ...t, check: false, act: 0 } }) }];
+            } else {
+              return [k, v];
+            }
+          })
+
+          state.tempTasks = newTempTasks;
+        }
       }
 
       return {

@@ -15,7 +15,11 @@ const TaskForm = lazy(() => import('./TaskForm/TaskForm'));
 
 const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage }) => {
   const dispatch = useDispatch();
-  const { tasks, currentPage, total } = useSelector(state => state.tasks).tempTasks[todoTemplate._id];
+  /**
+   * I have used '|| {}' because after cleaning the task template from act i get the following error, 
+   *    Cannot destructure property 'tasks' of '(intermediate value)(intermediate value)(intermediate value)' as it is undefined.
+   */
+  const { tasks, currentPage, total } = useSelector(state => state?.tasks).tempTasks[todoTemplate._id] || {};
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const [loadingTasks, setLoadingTasks] = useState(false);
   const [page, setPage] = useState(1);
