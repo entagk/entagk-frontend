@@ -477,21 +477,52 @@ export default (
      * and then reduce the total act
      */
 
-    // fix it
     case CLEAR_FINISHED_TASKS:
-      all = state.tasks;
+      all = state.tasks;  
       finishedTasks = all.filter((task) => task.check);
       unfinishedTasks = all.filter((task) => !task.check);
 
       newAct = state.act - finishedTasks.reduce((total, cur) => total + cur.act, 0);
       newEst = state.est - finishedTasks.reduce((total, cur) => total + cur.est, 0);
+
       if (!localStorage.getItem("token")) {
         localStorage.setItem("tasks", JSON.stringify(unfinishedTasks));
         localStorage.setItem("act", newAct);
         localStorage.setItem('est', newEst)
+      } else {
+        if (Object.values(state.tempTasks).length > 0) {
+          const tempTasks = Object.entries(state.tempTasks).filter(tt => unfinishedTasks.find(t => t._id === tt[0]) !== undefined);
+          const newTempTasks = tempTasks.map(([k, v]) => {
+            if (v?.tasks) {
+              console.log([k, v])
+              const unfinishedTT = v?.tasks?.filter(t => !t.check);
+              const finishedTT = v?.tasks?.filter(t => t.check);
+
+              const template = unfinishedTasks.find(t => t._id === unfinishedTT[0].template._id);
+
+              template.act = unfinishedTT.reduce((total, currentTask) => total + currentTask.act, 0);
+              template.est = unfinishedTT.reduce((total, currentTask) => total + currentTask.est, 0);
+
+              newAct = newAct - finishedTT.reduce((total, currnetTask) => total + currnetTask.act, 0);
+              newEst = newEst - finishedTT.reduce((total, currnetTask) => total + currnetTask.est, 0);
+
+              return [k, { ...v, tasks: unfinishedTT }];
+            } else {
+              return [k, v];
+            }
+          })
+
+          state.tempTasks = newTempTasks;
+        }
       }
 
-      return { ...state, act: newAct, est: newEst, tasks: unfinishedTasks, total: state.total - finishedTasks.length };
+      return {
+        ...state,
+        act: newAct,
+        est: newEst,
+        tasks: unfinishedTasks,
+        total: state.total - finishedTasks.length
+      };
 
     /**
      * loop through the tasks to 
@@ -508,6 +539,8 @@ export default (
         localStorage.setItem("tasks", JSON.stringify(all));
 
         localStorage.setItem("act", 0);
+      } else {
+        // state.tempTasks = new Object()
       }
 
       return {
@@ -524,6 +557,8 @@ export default (
         localStorage.setItem("tasks", JSON.stringify([]));
         localStorage.setItem("act", 0);
         localStorage.setItem("est", 0);
+      } else {
+
       }
 
       return { ...initialState, tasks: [], total: 0, act: 0, est: 0 };
