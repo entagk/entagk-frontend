@@ -34,10 +34,10 @@ function ErrorPage() {
         )}
         <div className='buttons'>
           <Link to="/">
-            go to home
+            go home
           </Link>
           <Link to={-1}>
-            go to back
+            go back
           </Link>
         </div>
       </div>

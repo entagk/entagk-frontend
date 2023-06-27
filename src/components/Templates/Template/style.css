@@ -1,0 +1,108 @@
+.template {
+  width: 100%;
+  margin-block: 10px;
+  border-radius: 10px;
+  padding: 15px 20px;
+  text-align: left;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  flex-direction: column;
+  cursor: pointer;
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  width: 100%;
+}
+
+.template:hover {
+  box-shadow: rgb(0 0 0 / 20%) 0px 0px 10px 4px;
+  background-color: #90909066;
+}
+
+.template .loading-container,
+.template-form .loading-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  right: 0px;
+  top: 0px;
+  background: #ffffffad;
+  z-index: 102;
+  visibility: visible;
+}
+
+.template .loading-container {
+  border-radius: inherit;
+}
+
+.template .temp-upper,
+.template .temp-desc,
+.template .temp-lower {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  font-size: 18px;
+}
+
+.template .temp-upper {
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.template .temp-lower,
+.template .temp-desc {
+  color: #f1f1f1;
+  margin-top: 10px;
+}
+
+.template .toggle-menu {
+  z-index: 1001;
+  border: 2px solid white;
+  font-size: 20px;
+  padding: 5px 1px;
+  color: #fff;
+  border-radius: 50%;
+  padding-inline: 5px;
+  margin-right: 10px;
+}
+
+.template .toggle-menu:hover {
+  background-color: #b5b5b582;
+}
+
+.template .menu {
+  position: relative;
+}
+
+.template .menu .menu-content {
+  backdrop-filter: blur(10px);
+  padding: 10px 0;
+  width: max-content;
+  right: 5px;
+  z-index: 1000;
+}
+
+.template .menu .menu-content .row button {
+  font-size: 18px;
+  padding: 6px 10px;
+}
+
+.template .menu .menu-content .row button p {
+  margin-inline: 10px;
+}
+
+.template .menu .menu-content .row button.delete:hover {
+  background-color: #ff00002b;
+}
+
+.temp-est {
+  margin-inline: 10px;
+}

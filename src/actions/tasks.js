@@ -36,7 +36,8 @@ export const getTasks = (setMessage, page) => async dispatch => {
       const { data } = await api.getAllTasks(page);
 
       dispatch({
-        type: GET_TASKS, data: {
+        type: GET_TASKS, 
+        data: {
           all: data.tasks,
           currentPage: data.currentPage,
           numberOfPages: data.numberOfPages,

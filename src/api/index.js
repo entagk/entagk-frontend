@@ -95,5 +95,13 @@ export const updateSetting = (settingData) => API.post("/setting/update/", setti
 /* end the setting api */
 
 /* start the template api */
-export const getTasksForTodoTemp = (id, page) => API.get(`/template/todo/tasks/${id}?page=${page}`)
+export const getTempsForUser = (page) => API.get(`/template/user/?page=${page}`);
+
+export const getTasksForOne = (id, page) => API.get(`/template/one/tasks/private/${id}?page=${page}`);
+
+export const getTasksForTodoTemp = (id, page) => API.get(`/template/todo/tasks/${id}?page=${page}`);
+
+export const deleteTemplate = (id) => API.delete(`/template/${id}`);
+
+export const addToTodo = (id) => API.post(`/template/todo/${id}`);
 /* end the template api */

@@ -5,6 +5,34 @@ export const formatTime = (t) => {
   return `${min >= 10 ? min : '0' + min}:${sec >= 10 ? sec : '0' + sec}`
 };
 
+export const updatedAt = (t) => {
+  const now = new Date(Date.now());
+  const date = new Date(t);
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+
+  if (now.getFullYear() === date.getFullYear()) {
+    if (now.getMonth() === date.getMonth()) {
+      if (now.getDate() === date.getDate()) {
+        if (now.getHours() === date.getHours()) {
+          if (now.getMinutes() === date.getMinutes()) {
+            return `Updated now`
+          } else {
+            return `Updated ${now.getMinutes() - date.getMinutes()} Min ago`;
+          }
+        } else {
+          return `Updated ${now.getHours() - date.getHours()} Hours ago`;
+        }
+      } else {
+        return `Updated ${now.getDate() - date.getDate()} Days ago`;
+      }
+    } else {
+      return `Updated ${date.toLocaleDateString('en', options).split(',')[0]} ago`;
+    }
+  } else {
+    return `Updated ${date.toLocaleDateString('en', options)} ago`;
+  }
+}
+
 export const pushNotification = (message) => {
   // eslint-disable-next-line
   if (typeof window?.Notification !== undefined) {

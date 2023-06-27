@@ -39,8 +39,8 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
   }
 
   const handleDelete = () => {
+    setOpenDelete(false);
     dispatch(deleteTask(props._id, props?.template || null, setIsLoading, setMessage));
-    setOpenMenu(false);
   }
 
   const handleActive = () => {

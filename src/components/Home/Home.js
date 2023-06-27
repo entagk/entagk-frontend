@@ -107,13 +107,13 @@ function Home() {
       <React.Suspense fallback={
         <Loading
           size="200"
-          strokeWidth="5px"
+          strokeWidth="2.5px"
           backgroud="transperent"
           color="#ffffff"
         />
       }>
+        <NavBar setMessage={setMessage} />
         <div className='container'>
-          <NavBar setMessage={setMessage} />
           {(setting?.focusMode && started) ? null : (
             <Sidebar setOpenSticky={setOpenSticky} setOpenTodo={setOpenTodo} />
           )}

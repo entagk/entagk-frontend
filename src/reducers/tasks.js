@@ -12,9 +12,21 @@ import {
   CLEAR_CONGRATS,
   GET_TEMPLATE_TASKS
 } from "../actions/tasks";
-import { INCREASE_ACT, PERIOD, MODITY_SETTING, GET_SETTING } from "../actions/timer";
+import {
+  INCREASE_ACT,
+  PERIOD,
+  MODITY_SETTING,
+  GET_SETTING
+} from "../actions/timer";
 import { nanoid } from "nanoid";
-import { LOGOUT, START_LOADING, END_LOADING, DELETE_USER } from "../actions/auth";
+import {
+  LOGOUT,
+  START_LOADING,
+  END_LOADING,
+  DELETE_USER
+} from "../actions/auth";
+
+import { ADD_TO_TODO_LIST } from "../actions/templates";
 
 const initialData = {
   name: "",
@@ -493,7 +505,7 @@ export default (
         if (Object.values(state.tempTasks).length > 0) {
           const tempTasks = Object.entries(state.tempTasks).filter(tt => unfinishedTasks.find(t => t._id === tt[0]) !== undefined);
 
-          state.tempTasks = tempTasks;
+          state.tempTasks = tempTasks.reduce((a, t) => ({ ...a, [t[0]]: t[1] }), {});
         }
       }
 
@@ -557,6 +569,16 @@ export default (
       }
 
       return { ...initialState, tasks: [], total: 0, act: 0, est: 0 };
+
+    case ADD_TO_TODO_LIST:
+      if (state.tasks?.length > 0) {
+        return {
+          ...state,
+          tasks: state.tasks.concat([action.data]),
+          est: state.est + action.data.est,
+          total: state.total + 1,
+        }
+      } else return state;
 
     case LOGOUT:
     case DELETE_USER:

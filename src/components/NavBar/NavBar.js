@@ -131,7 +131,7 @@ const NavBar = ({ setMessage }) => {
                     </span>
                   </Link>
                   <Link
-                    to="/user/templates"
+                    to="/templates/you"
                     onClick={toggleMenu}
                     aria-label="user button in menu">
                     <TodoList />
