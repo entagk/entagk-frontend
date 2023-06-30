@@ -204,7 +204,7 @@ export default (
           const task = action.data.task;
 
           const taskIndex = state.tasks.findIndex(
-            (t) => t._id === task.template._id || t._id === task._id
+            (t) => t._id === task?.template?._id || t._id === task._id
           );
 
           state.tasks[taskIndex] = task.template?._id ? { ...state.tasks[taskIndex], act: state.tasks[taskIndex].act + 1 } : task;
@@ -222,6 +222,7 @@ export default (
               ? state.tasks[taskIndex]
               : state.autoStartNextTask ? state.tasks[taskIndex + 1] : { _id: null, name: null };
         }
+
         return {
           ...state,
           tasks: state.tasks,
