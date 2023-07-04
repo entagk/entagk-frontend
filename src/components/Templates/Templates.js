@@ -12,11 +12,13 @@ import './style.css';
 
 const NavBar = lazy(() => import('../NavBar/NavBar'));
 const Template = lazy(() => import('./Template/Template.js'));
+const TemplateForm = lazy(() => import('./TemplateForm/TemplateForm.js'))
 
 function Templates() {
   const dispatch = useDispatch();
   const [message, setMessage] = useState({ message: "", type: "" })
   const [isLoading, setIsLoading] = useState(null);
+  const [openFormForNew, setOpenFormForNew] = useState(false);
   const { userTemplates: { templates, total } } = useSelector(state => state.templates) || {};
 
   useEffect(() => {
@@ -94,6 +96,15 @@ function Templates() {
             ))}
           </div>
         </div>
+        {openFormForNew && (
+          <TemplateForm
+            setOpen={setOpenFormForNew}
+            oldData={null}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            setMessage={setMessage}
+          />
+        )}
       </Suspense>
     </>
   );

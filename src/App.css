@@ -100,17 +100,18 @@ a {
 }
 
 .block input,
-.notes textarea {
+.block textarea {
   margin-right: 10px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 16px;
   padding: 10px;
   background: #9f9f9f33;
   color: #1d1d1d;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .glass-effect .block input,
-.glass-effect .notes textarea {
+.glass-effect textarea {
   color: #fff;
   background: transparent;
   border: 1px solid;

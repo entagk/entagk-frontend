@@ -1,0 +1,258 @@
+.temp-form {
+  border-radius: 20px;
+  border: 2px solid;
+  min-width: 600px;
+}
+
+/* start form header */
+
+.temp-form .form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 22px;
+  text-align: center;
+  padding: 20px;
+}
+
+.temp-form .form-header h2 {
+  text-transform: capitalize;
+}
+
+.form-header .close-temp-form {
+  padding: 10px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 25px;
+  min-width: 0;
+
+  background: red;
+}
+
+.form-header .close-temp-form:hover {
+  box-shadow: 0 0 5px #0000008f;
+}
+/* end form header */
+
+/* start form middle */
+.form-middle {
+  padding: 0px 20px;
+}
+
+.form-middle .steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.steps .step {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  width: 100%;
+  color: #ccc;
+}
+
+.steps .step.active {
+  color: #fff;
+}
+
+.steps .step.completed {
+  color: lime;
+}
+
+.steps .step:last-of-type {
+  width: fit-content;
+}
+
+.steps .step:last-of-type .text {
+  margin-inline: 10px 0;
+}
+
+.steps .step .line {
+  border: 2px solid;
+  width: 100%;
+  border-radius: 2px;
+}
+
+.steps .step .text {
+  font-size: 18px;
+  display: flex;
+  width: fit-content;
+  margin-inline: 10px;
+  text-transform: capitalize;
+}
+
+.steps .step .icon {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  border: 2px solid;
+  padding: 5px;
+  width: 34px;
+  height: 34px;
+  margin-inline: 0;
+}
+
+.steps .step.completed .icon {
+  background: lime;
+  color: #fff;
+}
+
+.steps .step:not(:first-of-type) .icon {
+  margin-left: 5px;
+}
+
+.steps .step.active .icon {
+  box-shadow: 0 0 5px 1px #0006;
+}
+
+.form-middle .step-data {
+  margin-top: 20px;
+}
+
+.form-middle .block {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.form-middle input {
+  width: 100%;
+  font-size: 15px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.form-middle input.name {
+  outline: none;
+  font-size: 25px;
+  padding: 10px;
+  width: 100%;
+}
+
+.form-middle input.name::placeholder,
+.form-middle textarea::placeholder {
+  font-style: italic;
+  padding-left: 3px;
+  color: #fff;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.form-middle p {
+  text-transform: capitalize;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.block input,
+.desc textarea {
+  background-color: #9f9f9f33;
+  margin-right: 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.desc {
+  position: relative;
+}
+
+.desc textarea {
+  line-height: 1.4em;
+  height: 200px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.block .text-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: #ff002f;
+  font-size: 20px;
+  font-weight: 100;
+}
+/* end form middle */
+
+/* start form footer */
+.form-footer {
+  border-radius: inherit;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.form-footer button {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 15px;
+  color: #4e696a;
+  margin-block: 0px;
+
+  border-radius: 10px;
+  box-shadow: 0 0 10px #989898;
+  color: #fff;
+}
+
+.form-footer button:first-child {
+  border: 2px solid;
+}
+
+.form-footer button:disabled {
+  cursor: no-drop;
+  background-color: rgba(0, 0, 0, 0.12);
+  box-shadow: none;
+  color: rgba(0, 0, 0, 0.26);
+}
+
+.form-footer button.save {
+  margin-left: 10px;
+  background-color: #000;
+  color: #e7e7e7;
+  border-radius: 10px;
+  background-color: var(--main-color);
+}
+
+.form-footer button.save:hover {
+  box-shadow: 0 0 8px 0px rgb(78 78 78);
+}
+
+.form-footer button.save:disabled {
+  cursor: no-drop;
+  background-color: rgba(0, 0, 0, 0.12);
+  box-shadow: none;
+  color: rgba(0, 0, 0, 0.26);
+}
+/* end form footer */
+
+@media (max-width: 768px) {
+  .form-header .close-tasks {
+    font-size: 20px;
+    padding: 7px;
+  }
+}
+
+@media (max-width: 600px) {
+  .form-header .close-tasks {
+    font-size: 22px;
+    padding: 5px;
+  }
+}
+
+@media (max-width: 400px) {
+  .form-header .close-tasks {
+    font-size: 20px;
+    padding: 5px;
+  }
+}

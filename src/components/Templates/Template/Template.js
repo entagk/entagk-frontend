@@ -13,11 +13,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToTodo, deleteTemplate } from '../../../actions/templates';
 
 const DeletePopup = lazy(() => import("../../../utils/DeletePopup/DeletePopup"));
+const TemplateForm = lazy(() => import('../TemplateForm/TemplateForm'));
 
 function Template({ isLoading, setIsLoading, setMessage, ...props }) {
   const dispatch = useDispatch();
   const [openMenu, setOpenMenu] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const { user } = useSelector(state => state.auth);
 
   const hours = ((
@@ -47,8 +49,21 @@ function Template({ isLoading, setIsLoading, setMessage, ...props }) {
     dispatch(deleteTemplate(props._id, setIsLoading, setMessage));
   }
 
+  const handleOpenEdit = () => {
+    setOpenEdit(true);
+    setOpenMenu(false);
+  }
+
   return (
     <>
+      {openEdit && (
+        <TemplateForm
+          oldData={props}
+          setOpen={setOpenEdit}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+        />
+      )}
       {openDelete && (
         <Suspense fallback={
           <div className="glass-container">
@@ -128,7 +143,7 @@ function Template({ isLoading, setIsLoading, setMessage, ...props }) {
                           <>
                             <button
                               aria-label="edit button"
-                              onClick={() => { }}
+                              onClick={handleOpenEdit}
                             >
                               <FiEdit3 />
                               <p>Edit</p>
@@ -154,7 +169,7 @@ function Template({ isLoading, setIsLoading, setMessage, ...props }) {
         </div>
         <div className='temp-desc'>
           <p>
-            {props.description.length > 200 ? `${props.description.split(196)}...` : props.description}
+            {props.desc.length > 200 ? `${props.desc.split(196)}...` : props.desc}
           </p>
         </div>
         <div className='temp-lower'>
