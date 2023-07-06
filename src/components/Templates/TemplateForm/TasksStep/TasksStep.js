@@ -20,7 +20,7 @@ function TasksStep({ data, setData, handleChange, message, setMessage }) {
   const { active, activites } = useSelector(state => state.timer);
 
   useEffect(() => {
-    if (tasks.tasks === undefined && data.tasks.length > 0) {
+    if (tasks.tasks === undefined && data.tasks?.length > 0) {
       dispatch(getTasksForTemplate(data?._id, 1, setMessage, setIsLoading));
     } else {
       setData({ ...data, tasks: tasks.tasks })
@@ -52,7 +52,7 @@ function TasksStep({ data, setData, handleChange, message, setMessage }) {
     // eslint-disable-next-line
   }, [tasks.tasks, tasks.total])
 
-  if (data.tasks.length > 0 && tasks.tasks === undefined) {
+  if (data.tasks?.length > 0 && tasks.tasks === undefined) {
     console.log(message);
     return (
       <>

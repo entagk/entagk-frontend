@@ -96,7 +96,7 @@ function Templates() {
             ))}
           </div>
         </div>
-        {openFormForNew && (
+        {/* {openFormForNew && ( */}
           <TemplateForm
             setOpen={setOpenFormForNew}
             oldData={null}
@@ -104,7 +104,7 @@ function Templates() {
             setIsLoading={setIsLoading}
             setMessage={setMessage}
           />
-        )}
+        {/* )} */}
       </Suspense>
     </>
   );

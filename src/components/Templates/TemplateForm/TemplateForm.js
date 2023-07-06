@@ -132,7 +132,7 @@ function TemplateForm({
       case 0:
         return !data.name || !data.desc;
       case 1:
-        return data.tasks.length === 0;
+        return data.tasks?.length === 0;
       case 2:
         return true;
       default:
