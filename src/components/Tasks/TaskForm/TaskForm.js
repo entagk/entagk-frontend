@@ -23,7 +23,8 @@ const TaskForm = ({
   isLoading,
   setIsLoading,
   setMessage,
-  template
+  template,
+  setTemplateData
 }) => {
   const dispatch = useDispatch();
   const [data, setData] = useState(oldData === null ? initialData : oldData);
@@ -54,13 +55,18 @@ const TaskForm = ({
       data.template = template;
     }
 
-    console.log('from task form: ');
-    console.log(setMessage);
-
-    if (!oldData) {
-      dispatch(addNewTask(data, setIsLoading, setMessage));
+    if (template !== 'new') {
+      if (!oldData) {
+        dispatch(addNewTask(data, setIsLoading, setMessage));
+      } else {
+        dispatch(modifyTask({ ...data, setting }, data._id, setIsLoading, setMessage));
+      }
     } else {
-      dispatch(modifyTask({ ...data, setting }, data._id, setIsLoading, setMessage));
+      if (!oldData) {
+        setTemplateData(t => ({ ...t, tasks: t.tasks.concat([{...data, id: t.tasks.length + 1}]) }));
+      } else {
+        setTemplateData(t => ({ ...t, tasks: [...t.tasks.filter(task => task.id !== data.id), data] }))
+      }
     }
   }
 

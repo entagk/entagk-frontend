@@ -11,7 +11,7 @@ import '../../../Tasks/style.css'
 const Task = lazy(() => import('../../../Tasks/Task/Task'));
 const TaskForm = lazy(() => import('../../../Tasks/TaskForm/TaskForm'));
 
-function TasksStep({ data, setData, handleChange, message, setMessage }) {
+function TasksStep({ data, setData, message, setMessage }) {
   const dispatch = useDispatch();
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const [isLoading, setIsLoading] = useState("");
@@ -20,11 +20,14 @@ function TasksStep({ data, setData, handleChange, message, setMessage }) {
   const { active, activites } = useSelector(state => state.timer);
 
   useEffect(() => {
-    if (tasks.tasks === undefined && data.tasks?.length > 0) {
+    if (data?._id && tasks.tasks === undefined && data.tasks?.length > 0 && data.tasks.every(t => typeof t === 'string')) {
       dispatch(getTasksForTemplate(data?._id, 1, setMessage, setIsLoading));
     } else {
-      setData({ ...data, tasks: tasks.tasks })
+      if (tasks.tasks) {
+        setData({ ...data, tasks: tasks.tasks })
+      }
     }
+    console.log(data);
     // eslint-disable-next-line
   }, [tasks.tasks]);
 
@@ -52,7 +55,7 @@ function TasksStep({ data, setData, handleChange, message, setMessage }) {
     // eslint-disable-next-line
   }, [tasks.tasks, tasks.total])
 
-  if (data.tasks?.length > 0 && tasks.tasks === undefined) {
+  if (data.tasks?.length > 0 && data.tasks.every(t => typeof t === 'string') && tasks.tasks === undefined) {
     console.log(message);
     return (
       <>
@@ -78,6 +81,8 @@ function TasksStep({ data, setData, handleChange, message, setMessage }) {
                   isLoading={isLoading}
                   setIsLoading={setIsLoading}
                   setMessage={setMessage}
+                  template={data?._id ? { "_id": data?._id, todo: false } : 'new'}
+                  setTemplateData={data?._id ? null : setData}
                   {...task}
                 />
               ))}
@@ -109,7 +114,8 @@ function TasksStep({ data, setData, handleChange, message, setMessage }) {
             <TaskForm
               setOpen={setOpenFormForNew}
               oldData={null}
-              template={data?._id ? { "_id": data?._id, todo: false } : null}
+              template={data?._id ? { "_id": data?._id, todo: false } : 'new'}
+              setTemplateData={data?._id ? null : setData}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
               setMessage={setMessage}

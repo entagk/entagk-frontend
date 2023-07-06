@@ -16,7 +16,7 @@ import "./style.css";
 const DeletePopup = lazy(() => import("./../../../utils/DeletePopup/DeletePopup"));
 const TaskForm = lazy(() => import("../TaskForm/TaskForm"));
 
-const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTemplate, ...props }) => {
+const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, setTemplateData, activeTemplate, ...props }) => {
   const dispatch = useDispatch();
   const { activeId } = useSelector(state => state.tasks);
   const { setting } = useSelector(state => state.timer);
@@ -40,11 +40,16 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
 
   const handleDelete = () => {
     setOpenDelete(false);
-    dispatch(deleteTask(props._id, props?.template || null, setIsLoading, setMessage));
+    if (props?._id) {
+      dispatch(deleteTask(props._id, props?.template || null, setIsLoading, setMessage));
+    } else {
+      setTemplateData(t => ({ ...t, tasks: t.tasks.filter(task => task.id !== props.id) }))
+    };
   }
 
+
   const handleActive = () => {
-    if (props.tasks.length === 0) {
+    if (props.tasks?.length === 0) {
       if ((!props.check && setting.autoStartNextTask) || (!setting.autoStartNextTask && props.act !== props.est)) {
         if (activeId === props._id) {
           dispatch({ type: CHANGE_ACTIVE_TASK, data: {} });
@@ -75,6 +80,7 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
           setIsLoading={setIsLoading}
           setMessage={setMessage}
           template={props?.template ? props.template : null}
+          setTemplateData={setTemplateData}
         />
       </Suspense>
     )
@@ -83,7 +89,10 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
   return (
     <>
       {openDelete && (
-        <DeletePopup type={<><span>{props.name}</span> {props.tasks?.length > 0 ? 'template' : 'task'}</>} onCancel={() => setOpenDelete(false)} onOk={handleDelete} />
+        <DeletePopup
+          type={<><span>{props.name}</span> {props.tasks?.length > 0 ? 'template' : 'task'}</>}
+          onCancel={() => setOpenDelete(false)} onOk={handleDelete}
+        />
       )}
       <div
         className={`task ${activeId === props._id ? "active" : ''}`}
