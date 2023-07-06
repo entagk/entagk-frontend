@@ -13,6 +13,12 @@ export const EDIT_TEMPLATE = "EDIT_TEMPLATE";
 
 export const ADD_TO_TODO_LIST = 'ADD_TO_TODO_LIST';
 
+export const NEW_TEMPLATE_TASK = 'NEW_TEMPLATE_TASK';
+
+export const MODIFY_TEMPLATE_TASK = 'MODIFY_TEMPLATE_TASK';
+
+export const DELETE_TEMPLATE_TASK = 'DELETE_TEMPLATE_TASK';
+
 export const getTemplatesForUser = (page, setMessage) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'template' });
@@ -41,25 +47,24 @@ export const getTemplatesForUser = (page, setMessage) => async dispatch => {
   }
 }
 
-export const getTasksForTemplate = (id, page, setMessage) => async dispatch => {
+export const getTasksForTemplate = (id, page, setMessage, setIsLoading) => async dispatch => {
   try {
-    // dispatch({ type: START_LOADING, data: 'templates' });
-
+    setIsLoading('tasks');
     if (!localStorage.getItem('token')) {
       setMessage({ message: "You should be login", type: 'error' });
     } else {
-      const { data } = api.getTasksForOne(id, page);
+      const { data } = await api.getTasksForOne(id, page);
       console.log(data);
 
       dispatch({
         type: GET_TEMPLATE_TASKS,
-        data: data
+        data: {...data, id}
       });
     }
 
-    // dispatch({ type: END_LOADING, data: 'templates' });
+    setIsLoading(null);
   } catch (err) {
-    dispatch({ type: END_LOADING, data: 'templates' });
+    setIsLoading(null);
     console.error(err);
     setMessage({ message: err?.response?.data?.message || err.message, type: 'error' });
   }

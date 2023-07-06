@@ -1,7 +1,8 @@
 .temp-form {
   border-radius: 20px;
   border: 2px solid;
-  min-width: 600px;
+  min-width: 650px;
+  max-width: 650px;
 }
 
 /* start form header */
@@ -39,10 +40,11 @@
   padding: 0px 20px;
 }
 
-.form-middle .steps {
+.temp-form .steps {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-inline: 20px;
 }
 
 .steps .step {
@@ -142,7 +144,7 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.form-middle p {
+.form-middle .text-counter p {
   text-transform: capitalize;
   margin-bottom: 10px;
   font-weight: bold;
@@ -156,7 +158,7 @@
   margin-right: 10px;
   border-radius: 10px;
   font-size: 16px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .desc {
@@ -166,7 +168,7 @@
 .desc textarea {
   line-height: 1.4em;
   height: 200px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .block .text-counter {
@@ -180,6 +182,15 @@
   font-size: 20px;
   font-weight: 100;
 }
+
+.step-data .tasks-container {
+  margin: 0;
+  max-height: 350px;
+}
+
+.step-data .tasks-container .task {
+  margin-block: 0 20px;
+}
 /* end form middle */
 
 /* start form footer */
@@ -189,7 +200,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
+  padding: 20px 0;
 }
 
 .form-footer button {

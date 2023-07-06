@@ -17,7 +17,14 @@ const initialData = {
   project: ""
 }
 
-const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, template }) => {
+const TaskForm = ({
+  oldData,
+  setOpen,
+  isLoading,
+  setIsLoading,
+  setMessage,
+  template
+}) => {
   const dispatch = useDispatch();
   const [data, setData] = useState(oldData === null ? initialData : oldData);
   const [openNotes, setOpenNotes] = useState(data.notes === "" ? false : true);
@@ -46,6 +53,9 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
     if (template) {
       data.template = template;
     }
+
+    console.log('from task form: ');
+    console.log(setMessage);
 
     if (!oldData) {
       dispatch(addNewTask(data, setIsLoading, setMessage));
@@ -100,25 +110,33 @@ const TaskForm = ({ oldData, setOpen, isLoading, setIsLoading, setMessage, templ
             </div>
             <div className="block">
               <p>
-                {data.act >= 0 && <>act / </>}
+                {(!data.template?.todo && data.template) ? (<></>) : (
+                  <>
+                    {data.act >= 0 && <>act / </>}
+                  </>
+                )}
                 est pomodoros
               </p>
               <div className="pomodoros">
-                {data.act >= 0 && (
-                  <div className="input-number">
-                    <input
-                      name="act"
-                      className="act"
-                      type="number"
-                      min='0'
-                      max="1000"
-                      defaultValue={data.act}
-                      disabled={data?.tasks?.length > 0}
-                      onChange={handleChange}
-                    />
-                  </div>
+                {(!data.template?.todo && data.template) ? (<></>) : (
+                  <>
+                    {data.act >= 0 && (
+                      <div className="input-number">
+                        <input
+                          name="act"
+                          className="act"
+                          type="number"
+                          min='0'
+                          max="1000"
+                          defaultValue={data.act}
+                          disabled={data?.tasks?.length > 0}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    )}
+                    {data.act >= 0 && (<>/</>)}
+                  </>
                 )}
-                {data.act >= 0 && (<>/</>)}
                 <div className="input-number">
                   <input
                     name="est"

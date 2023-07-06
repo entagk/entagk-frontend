@@ -12,13 +12,16 @@ import {
   CLEAR_CONGRATS,
   GET_TEMPLATE_TASKS
 } from "../actions/tasks";
+
 import {
   INCREASE_ACT,
   PERIOD,
   MODITY_SETTING,
   GET_SETTING
 } from "../actions/timer";
+
 import { nanoid } from "nanoid";
+
 import {
   LOGOUT,
   START_LOADING,
@@ -261,7 +264,7 @@ export default (
         const task = action.data;
         state.est += task.est;
 
-        if (task?.template?._id) {
+        if (task?.template?._id && task?.template?.todo) {
           const oldTasks = state.tempTasks[task.template?._id].tasks;
           state.tempTasks[task?.template?._id].tasks = oldTasks.concat([task]);
           const tempIndex = state.tasks.findIndex(temp => temp._id === task.template._id);

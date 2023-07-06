@@ -5,8 +5,11 @@ import { AiOutlineInfo, AiFillSound } from 'react-icons/ai';
 
 import './style.css'
 
-const TodoList = lazy(() => import('../../../icons/list/TodoList'));
+import Message from '../../../utils/Message';
+import NetworkError from '../../NetworkError/NetworkError';
+import FormFooter from './FormFooter/FormFooter';
 
+const TodoList = lazy(() => import('../../../icons/list/TodoList'));
 const InfoStep = lazy(() => import('./InfoStep/InfoStep'));
 const TasksStep = lazy(() => import('./TasksStep/TasksStep'));
 const TimerStep = lazy(() => import('./TimerStep/TimerStep'));
@@ -67,7 +70,12 @@ const initialData = {
   tasks: [],
 };
 
-function TemplateForm({ oldData, isLoading, setIsLoading, setOpen }) {
+function TemplateForm({
+  oldData,
+  isLoading,
+  setIsLoading,
+  setOpen
+}) {
   const [activeStep, setActiveStep] = useState(0);
   const [data, setData] = useState(oldData === null ? initialData : oldData);
   const [message, setMessage] = useState({ message: '', type: '' })
@@ -114,31 +122,6 @@ function TemplateForm({ oldData, isLoading, setIsLoading, setOpen }) {
     setData({ ...data, [e.target.name]: e.target.value });
   }
 
-  const stepComponents = [
-    <InfoStep
-      data={data}
-      setData={setData}
-      handleChange={handleChange}
-    />,
-    <TasksStep
-      data={data}
-      setData={setData}
-      handleChange={handleChange}
-      message={message}
-      setMessage={setMessage}
-    />,
-    <TimerStep
-      data={data}
-      setData={setData}
-      handleChange={handleChange}
-    />,
-    <SoundStep
-      data={data}
-      setData={setData}
-      handleChange={handleChange}
-    />
-  ]
-
   const handleSubmit = (e) => {
     e.priventDefault();
     console.log(e);
@@ -149,7 +132,7 @@ function TemplateForm({ oldData, isLoading, setIsLoading, setOpen }) {
       case 0:
         return !data.name || !data.desc;
       case 1:
-        return true;
+        return data.tasks.length === 0;
       case 2:
         return true;
       default:
@@ -158,52 +141,92 @@ function TemplateForm({ oldData, isLoading, setIsLoading, setOpen }) {
   }
 
   return (
-    <div className="glass-container">
-      <div className="glass-effect temp-form">
-        <div className='form-header'>
-          <h2>{oldData ? 'edit template' : 'new template'}</h2>
-          <button aria-label='close template form' className="close-temp-form" type='button' onClick={() => setOpen(false)}>
-            <CgClose />
-          </button>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className='form-middle'>
-            <div className='steps'>
-              {steps.map((step, index) => (
-                <div key={index} className={`step ${index === activeStep ? 'active' : index < activeStep && 'completed'}`}>
-                  <div className='icon'>{<step.Icon />}</div>
-                  <p className='text'>{step.text}</p>
-                  {index !== 3 && (
-                    <div className="line"></div>
-                  )}
-                </div>
-              ))}
+    <>
+      {(message.message && !message.message.includes('Network Error')) ? (
+        <Message {...message} setMessage={setMessage} />
+      ) : message.message.includes('Network Error') && (
+        <NetworkError />
+      )}
+
+      <div className="glass-container">
+        <div className="glass-effect temp-form">
+          <div className='form-header'>
+            <h2>{oldData ? 'edit template' : 'new template'}</h2>
+            <button aria-label='close template form' className="close-temp-form" type='button' onClick={() => setOpen(false)}>
+              <CgClose />
+            </button>
+          </div>
+          <div className='steps'>
+            {steps.map((step, index) => (
+              <div key={index} className={`step ${index === activeStep ? 'active' : index < activeStep && 'completed'}`}>
+                <div className='icon'>{<step.Icon />}</div>
+                <p className='text'>{step.text}</p>
+                {index !== 3 && (
+                  <div className="line"></div>
+                )}
+              </div>
+            ))}
+          </div>
+          {activeStep !== 1 ? (
+            <form onSubmit={handleSubmit}>
+              <div className='form-middle'>
+                <Suspense fallback={<></>}>
+                  {activeStep === 0 ? (
+                    <InfoStep
+                      key={0}
+                      data={data}
+                      setData={setData}
+                      handleChange={handleChange}
+                    />
+                  ) :
+                    activeStep === 2 ? (
+                      <TimerStep
+                        key={2}
+                        data={data}
+                        setData={setData}
+                        handleChange={handleChange}
+                      />
+                    ) : (
+                      <SoundStep
+                        key={3}
+                        data={data}
+                        setData={setData}
+                        handleChange={handleChange}
+                      />
+                    )
+                  }
+                </Suspense>
+                <FormFooter
+                  disableNextOrSubmit={disableNextOrSubmit}
+                  handleCancelOrPrev={handleCancelOrPrev}
+                  handleNextButton={handleNextButton}
+                  activeStep={activeStep}
+                />
+              </div>
+            </form>
+          ) : (
+            <div className='form-middle'>
+              <Suspense fallback={<></>}>
+                <TasksStep
+                  key={1}
+                  data={data}
+                  setData={setData}
+                  handleChange={handleChange}
+                  message={message}
+                  setMessage={setMessage}
+                />
+              </Suspense>
+              <FormFooter
+                disableNextOrSubmit={disableNextOrSubmit}
+                handleCancelOrPrev={handleCancelOrPrev}
+                handleNextButton={handleNextButton}
+                activeStep={activeStep}
+              />
             </div>
-            <Suspense fallback={<></>}>
-              {stepComponents[activeStep]}
-            </Suspense>
-          </div>
-          <div className='form-footer'>
-            <button
-              aria-label="cancel form button"
-              type="button"
-              onClick={handleCancelOrPrev}
-            >
-              {activeStep === 0 ? 'cancel' : 'previous'}
-            </button>
-            <button
-              aria-label="next/submit form button"
-              type={activeStep <= 2 ? "button" : "submit"}
-              onClick={handleNextButton}
-              className="save"
-              disabled={disableNextOrSubmit()}
-            >
-              {activeStep === 3 ? 'save' : 'next'}
-            </button>
-          </div>
-        </form>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -1,4 +1,9 @@
 import { START_LOADING, END_LOADING, LOGOUT } from "./auth";
+import {
+  NEW_TEMPLATE_TASK,
+  MODIFY_TEMPLATE_TASK,
+  DELETE_TEMPLATE_TASK
+} from './templates';
 import * as api from './../api';
 
 export const GET_TASKS = "GET_TASKS";
@@ -36,7 +41,7 @@ export const getTasks = (setMessage, page) => async dispatch => {
       const { data } = await api.getAllTasks(page);
 
       dispatch({
-        type: GET_TASKS, 
+        type: GET_TASKS,
         data: {
           all: data.tasks,
           currentPage: data.currentPage,
@@ -69,7 +74,11 @@ export const addNewTask = (taskData, setIsLoading, setMessage) => async dispatch
     } else {
       const { data } = await api.addTask(taskData);
 
-      dispatch({ type: NEW_TASK, data: data });
+      if (data.template && !data.template?.todo) {
+        dispatch({ type: NEW_TEMPLATE_TASK, data: data });
+      } else {
+        dispatch({ type: NEW_TASK, data: data });
+      }
     }
     setIsLoading(null);
     // dispatch({ type: END_LOADING, data: 'tasks' });
@@ -140,7 +149,11 @@ export const deleteTask = (id, template, setIsLoading, setMessage) => async disp
     } else {
       const { data } = await api.deleteTask(id);
       setMessage({ message: data.message, type: 'success' })
-      dispatch({ type: DELETE_TASK, data: { id: data.deleted_id, template } });
+      if (template && !template?.todo) {
+        dispatch({ type: DELETE_TEMPLATE_TASK, data: { id: data.deleted_id, template } });
+      } else {
+        dispatch({ type: DELETE_TASK, data: { id: data.deleted_id, template } });
+      }
     }
     setIsLoading(null);
   } catch (error) {
@@ -164,12 +177,17 @@ export const modifyTask = (formData, id, setIsLoading, setMessage) => async disp
       dispatch({ type: MODIFY_TASK, data: { ...formData, _id: id } });
     } else {
       const { data } = await api.updateTask(formData, id);
-      dispatch({ type: MODIFY_TASK, data: data });
+      if (data.template && !data.template?.todo) {
+        dispatch({ type: MODIFY_TEMPLATE_TASK, data: data });
+      } else {
+        dispatch({ type: MODIFY_TASK, data: data });
+      }
     }
     setIsLoading(null);
   } catch (error) {
     setIsLoading(null);
-    setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
+    console.log(formData, id, setIsLoading, setMessage);
+    // setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
     if (error.response?.status === 401 || error.response.status === 500) {
       dispatch({ type: LOGOUT });

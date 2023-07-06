@@ -68,7 +68,14 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
   if (openEdit) {
     return (
       <Suspense fallback={<Loading size="40" strokeWidth="3" color={"rgb(197 197 197)"} />}>
-        <TaskForm oldData={props} setOpen={setOpenEdit} isLoading={isLoading} setIsLoading={setIsLoading} />
+        <TaskForm
+          oldData={props}
+          setOpen={setOpenEdit}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+          setMessage={setMessage}
+          template={props?.template ? props.template : null}
+        />
       </Suspense>
     )
   }
@@ -76,7 +83,7 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
   return (
     <>
       {openDelete && (
-        <DeletePopup type={<><span>{props.name}</span> {props.tasks.length > 0 ? 'template' : 'task'}</>} onCancel={() => setOpenDelete(false)} onOk={handleDelete} />
+        <DeletePopup type={<><span>{props.name}</span> {props.tasks?.length > 0 ? 'template' : 'task'}</>} onCancel={() => setOpenDelete(false)} onOk={handleDelete} />
       )}
       <div
         className={`task ${activeId === props._id ? "active" : ''}`}
@@ -129,12 +136,16 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
             flexDirection: "row",
           }}>
             <p className="act-est">
-              <span>{props.act}</span>
-              <span style={{
-                fontWeight: "normal",
-                fontSize: "18px",
-                marginInline: "4px"
-              }}>/</span>
+              {(!props.template?.todo && props.template) ? (<></>) : (
+                <>
+                  <span>{props.act}</span>
+                  <span style={{
+                    fontWeight: "normal",
+                    fontSize: "18px",
+                    marginInline: "4px"
+                  }}>/</span>
+                </>
+              )}
               <span>{props.est}</span>
             </p>
             <div className="menu">
@@ -147,9 +158,9 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
               {openMenu && (
                 <div className="menu-content">
                   <div className="row">
-                    {props.tasks.length === 0 && (
+                    {((props.template?.todo && props.template) || (!props.template && props.tasks.length === 0)) && (
                       <>
-                        {(!setting.autoStartNextTask) && (
+                        {(!setting?.autoStartNextTask) && (
                           <button aria-label="check button" onClick={handleCheck}>
                             {!props.check ? (
                               <>
@@ -192,7 +203,7 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
                 </div>
               )}
             </div>
-            {props.tasks.length > 0 && (
+            {props.tasks?.length > 0 && (
               <button aria-label="toggle the tasks list"
                 className="show-tasks"
                 onClick={() => setActiveTemplate(props)}>
@@ -205,7 +216,7 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, activeTe
           <div className="task-notes">
           </div>
         )}
-      </div>
+      </div >
     </>
   )
 };
