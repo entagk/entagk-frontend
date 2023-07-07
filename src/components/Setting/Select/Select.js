@@ -16,8 +16,7 @@ function Select({ options, setChange, type, data, setData, width }) {
   return (
     <div className='select-container'>
       <div className='select-menu menu' style={{ width: width || '200px' }} >
-        <button
-          type='button' aria-label='open menu' className='open-menu' onClick={() => setOpen(!open)}>
+        <button type='button' aria-label='open menu' className='open-menu' onClick={() => setOpen(!open)}>
           <span>{data[type]?.name || data[type]}</span>
           {open ?
             (<RiArrowUpSLine className='arrow' />) :

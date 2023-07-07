@@ -1,6 +1,11 @@
 import React from 'react';
 
-function FormFooter({activeStep, handleCancelOrPrev, handleNextButton, disableNextOrSubmit}) {
+function FormFooter({
+  activeStep,
+  handleCancelOrPrev,
+  handleNextButton,
+  disableNextOrSubmit
+}) {
   return (
     <div className='form-footer'>
       <button

@@ -155,10 +155,10 @@
 .block input,
 .desc textarea {
   background-color: #9f9f9f33;
-  margin-right: 10px;
   border-radius: 10px;
   font-size: 16px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
 }
 
 .desc {

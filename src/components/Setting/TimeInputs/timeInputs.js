@@ -81,7 +81,6 @@ function TimeInputs({ name, data, setData }) {
       display: "flex",
       alignItems: "center",
       justifyContent: "flex-end",
-      marginRight: "10px"
     }}>
       <div className='min-sec-input' style={{ width: 'fit-content' }}>
         <input
@@ -126,9 +125,6 @@ function TimeInputs({ name, data, setData }) {
           className={!min && !sec ? `error ${name}-sec` : `${name}-sec`}
           value={sec}
           onChange={onChange}
-          style={{
-            marginLeft: '10px'
-          }}
         />
         <div className='plus-minus-arrows'>
           <button

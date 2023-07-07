@@ -5,7 +5,9 @@ import {
   GET_TEMPLATE_TASKS,
   NEW_TEMPLATE_TASK,
   MODIFY_TEMPLATE_TASK,
-  DELETE_TEMPLATE_TASK
+  DELETE_TEMPLATE_TASK,
+  CREATE_TEMPLATE,
+  MODIFY_TEMPLATE
 } from "../actions/templates";
 
 const initialState = {
@@ -105,6 +107,23 @@ export default (state = initialState, action) => {
         tempTasks: { ...state.tempTasks, [action.data.id]: action.data }
       }
 
+    case CREATE_TEMPLATE:
+      state.tempTasks[action.data._id] = {
+        tasks: action.data.tasks
+      }
+
+      return {
+        ...state,
+        userTemplates: state.userTemplates.templates.concat([action.data]),
+      }
+
+    case MODIFY_TEMPLATE:
+      const oldTempIndex = state.userTemplates.templates.findIndex(t => t._id === action.data._id);
+
+      state.userTemplates.templates[oldTempIndex] = action.data;
+
+      return state;
+
     case DELETE_TEMPLATE:
       const tempId = action.data.deletedTemplate._id
       const filterTemplates = state.userTemplates.templates.filter((t) => t._id !== tempId);
@@ -115,6 +134,7 @@ export default (state = initialState, action) => {
         userTemplates: { ...state.userTemplates, templates: filterTemplates },
         tempTasks: tempTasks.reduce((a, e) => ({ ...a, [e[0]]: e[1] }), {}),
       }
+
 
     default:
       return state;

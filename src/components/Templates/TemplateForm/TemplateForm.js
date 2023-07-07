@@ -8,6 +8,8 @@ import './style.css'
 import Message from '../../../utils/Message';
 import NetworkError from '../../NetworkError/NetworkError';
 import FormFooter from './FormFooter/FormFooter';
+import { useDispatch } from 'react-redux';
+import { addTemplate, modifyTemplate } from '../../../actions/templates';
 
 const TodoList = lazy(() => import('../../../icons/list/TodoList'));
 const InfoStep = lazy(() => import('./InfoStep/InfoStep'));
@@ -15,59 +17,30 @@ const TasksStep = lazy(() => import('./TasksStep/TasksStep'));
 const TimerStep = lazy(() => import('./TimerStep/TimerStep'));
 const SoundStep = lazy(() => import('./SoundStep/SoundStep'));
 
-/*
-  {
-    "_id": "649a0d04948697c38349a936",
-    "name": "New Template",
-    // "visibility": false,
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Sed tempus tortor iaculis, interdum justo eget, dignissim nunc. Morbi sagittis, 
-      felis quis vehicula dapibus, sapien ex imperdiet eros, a scelerisque nunc magna id nisl. 
-      Fusce porttitor posuere erat. Vivamus efficitur sapien enim, vel fringilla mi semper sed. 
-      Suspendisse facilisis felis sed est lobortis fermentum. Phasellus sit amet lobortis est. 
-      Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.jdsj",
-    "tasks": [
-      "649a0d04948697c38349a938",
-      "649a0d04948697c38349a939",
-      "649a0d04948697c38349a93a"
-    ],
-    "userId": "64418d46391fa556399c6a0f",
-    "est": 60,
-    "act": 0,
-    // "color": "#ef9b0f",
-    // "usedBy": 1,
-    "time": {
-        "PERIOD": 1500,
-        "SHORT": 300,
-        "LONG": 900
-    },
-    // "timeForAll": true,
-    "autoBreaks": false,
-    "autoPomodors": false,
-    "autoStartNextTask": false,
-    "longInterval": 4,
-    "alarmType": {
-        "name": "alarm 1",
-        "src": "sounds/alarm/1.mp3"
-    },
-    "alarmVolume": 50,
-    "alarmRepet": 0,
-    "tickingType": {
-        "name": "tricking 1",
-        "src": "sounds/tricking/1.mp3"
-    },
-    "tickingVolume": 50,
-    "templateClone": "",
-    "createdAt": "2023-06-26T22:11:16.230Z",
-    "updatedAt": "2023-06-26T22:11:16.614Z",
-    "__v": 0
-}
- */
-
 const initialData = {
   name: "",
   desc: "",
   tasks: [],
+  time: {
+    "PERIOD": 1500,
+    "SHORT": 300,
+    "LONG": 900,
+  },
+  autoBreaks: false,
+  autoPomodors: false,
+  autoStartNextTask: false,
+  longInterval: 4,
+  alarmType: {
+    "name": "alarm 1",
+    "src": "sounds/alarm/1.mp3"
+  },
+  alarmVolume: 50,
+  alarmRepet: 0,
+  tickingType: {
+    "name": "tricking 1",
+    "src": "sounds/tricking/1.mp3"
+  },
+  tickingVolume: 50,
 };
 
 function TemplateForm({
@@ -76,6 +49,7 @@ function TemplateForm({
   setIsLoading,
   setOpen
 }) {
+  const dispatch = useDispatch();
   const [activeStep, setActiveStep] = useState(0);
   const [data, setData] = useState(oldData === null ? initialData : oldData);
   const [message, setMessage] = useState({ message: '', type: '' })
@@ -114,7 +88,6 @@ function TemplateForm({
     console.log('next')
     if (activeStep < 3) {
       setActiveStep(as => ++as);
-      debugger;
     }
   }
 
@@ -123,8 +96,32 @@ function TemplateForm({
   }
 
   const handleSubmit = (e) => {
-    e.priventDefault();
+    e.preventDefault();
     console.log(e);
+
+    if (!data.name) {
+      setMessage("Empty name");
+    } else if (!data.desc) {
+      setMessage("Empty desc");
+    } else if (data.tasks.length === 0) {
+      setMessage("Empty todo list");
+    } else if (Object.values(data.time).includes(0)) {
+      setMessage({ message: "Please enter valid time data", type: 'error' });
+    } else if (!data.longInterval) {
+      setMessage({ message: "Please enter long break interval", type: 'error' });
+    } else {
+      if (!oldData) {
+        dispatch(addTemplate(data, setIsLoading, setMessage));
+      } else {
+        dispatch(modifyTemplate(data._id, {
+          ...data,
+          tasks: data.tasks.map(t => t._id)
+        },
+          setIsLoading,
+          setMessage
+        ));
+      }
+    }
   }
 
   const disableNextOrSubmit = () => {
@@ -133,10 +130,8 @@ function TemplateForm({
         return !data.name || !data.desc;
       case 1:
         return data.tasks?.length === 0;
-      case 2:
-        return true;
       default:
-        return true;
+        return false;
     }
   }
 
@@ -170,32 +165,32 @@ function TemplateForm({
           {activeStep !== 1 ? (
             <form onSubmit={handleSubmit}>
               <div className='form-middle'>
-                <Suspense fallback={<></>}>
-                  {activeStep === 0 ? (
-                    <InfoStep
-                      key={0}
+                {/* <Suspense fallback={<></>}> */}
+                {activeStep === 0 ? (
+                  <InfoStep
+                    key={0}
+                    data={data}
+                    setData={setData}
+                    handleChange={handleChange}
+                  />
+                ) :
+                  activeStep === 2 ? (
+                    <TimerStep
+                      key={2}
                       data={data}
                       setData={setData}
                       handleChange={handleChange}
                     />
-                  ) :
-                    activeStep === 2 ? (
-                      <TimerStep
-                        key={2}
-                        data={data}
-                        setData={setData}
-                        handleChange={handleChange}
-                      />
-                    ) : (
-                      <SoundStep
-                        key={3}
-                        data={data}
-                        setData={setData}
-                        handleChange={handleChange}
-                      />
-                    )
-                  }
-                </Suspense>
+                  ) : (
+                    <SoundStep
+                      key={3}
+                      data={data}
+                      setData={setData}
+                      handleChange={handleChange}
+                    />
+                  )
+                }
+                {/* </Suspense> */}
                 <FormFooter
                   disableNextOrSubmit={disableNextOrSubmit}
                   handleCancelOrPrev={handleCancelOrPrev}

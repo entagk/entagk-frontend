@@ -9,7 +9,7 @@ export const CREATE_TEMPLATE = "CREATE_TEMPLATE";
 
 export const DELETE_TEMPLATE = "DELETE_TEMPLATE";
 
-export const EDIT_TEMPLATE = "EDIT_TEMPLATE";
+export const MODIFY_TEMPLATE = "MODIFY_TEMPLATE";
 
 export const ADD_TO_TODO_LIST = 'ADD_TO_TODO_LIST';
 
@@ -58,7 +58,7 @@ export const getTasksForTemplate = (id, page, setMessage, setIsLoading) => async
 
       dispatch({
         type: GET_TEMPLATE_TASKS,
-        data: {...data, id}
+        data: { ...data, id }
       });
     }
 
@@ -103,6 +103,49 @@ export const addToTodo = (id, setIsLoading, setMessage) => async dispatch => {
     const { data } = await api.addToTodo(id);
     setMessage({ message: "Successfully deleted", type: 'success' });
     dispatch({ type: ADD_TO_TODO_LIST, data })
+
+    setIsLoading(null);
+  } catch (error) {
+    setIsLoading(null);
+    setMessage({
+      message: error?.response?.data?.message || error?.message,
+      type: 'error'
+    })
+
+    if (error.response?.status === 401 || error.response?.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
+  }
+}
+
+export const addTemplate = (formData, setIsLoading, setMessage) => async dispatch => {
+  try {
+    setIsLoading('new');
+
+    const { data } = await api.addTemplate(formData);
+    dispatch({ type: CREATE_TEMPLATE, data });
+
+    setIsLoading(null);
+  } catch (error) {
+    setIsLoading(null);
+    setMessage({
+      message: error?.response?.data?.message || error?.message,
+      type: 'error'
+    })
+
+    if (error.response?.status === 401 || error.response?.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
+  }
+}
+
+
+export const modifyTemplate = (id, formData, setIsLoading, setMessage) => async dispatch => {
+  try {
+    setIsLoading(id);
+
+    const { data } = await api.modifyTemplate(id, formData);
+    dispatch({ type: MODIFY_TEMPLATE, data })
 
     setIsLoading(null);
   } catch (error) {

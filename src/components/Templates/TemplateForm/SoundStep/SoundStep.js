@@ -1,10 +1,13 @@
 import React from 'react';
+import SoundSetting from '../../../Setting/SoundSetting/SoundSetting';
 
-function SoundStep({ data, setData }) {
+function SoundStep({ data, setData, handleChange }) {
   return (
-    <div>
-      sound
-    </div>
+    <SoundSetting
+      data={data}
+      setData={setData}
+      handleChange={handleChange}
+    />
   );
 }
 

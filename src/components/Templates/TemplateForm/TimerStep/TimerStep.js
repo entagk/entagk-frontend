@@ -1,10 +1,13 @@
 import React from 'react';
+import TimerSetting from '../../../Setting/TimerSetting/TimerSetting';
 
-function TimerStep({ data, setData }) {
+function TimerStep({ data, setData, handleChange }) {
   return (
-    <div>
-      timer
-    </div>
+    <TimerSetting
+      data={data}
+      setData={setData}
+      handleChange={handleChange}
+    />
   );
 }
 

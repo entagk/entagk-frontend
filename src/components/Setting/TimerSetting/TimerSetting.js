@@ -38,7 +38,6 @@ const TimerSetting = ({ handleChange, data, setData }) => {
         </div>
       )}
       <div className='block'>
-        <h3>Time</h3>
         <div className='time-inputs'>
           {[PERIOD, SHORT, LONG].map((item, index) => (
             <div className='time' key={index}>
@@ -71,23 +70,28 @@ const TimerSetting = ({ handleChange, data, setData }) => {
           />
         </div>
       </div>
-      {automations.map((auto, index) => (
-        <div className='block' style={{ border: index === automations.length - 1 ? 'none' : '' }} key={index}>
+      <div className='block'>
+        {automations.map((auto, index) => (
           <div style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-          }}>
-            <h3 style={{ width: 'fit-content' }}>{auto.name}</h3>
-            <ToggleButton
-              type={auto.type}
-              data={data}
-              setData={setData}
-            />
+            border: index === automations.length - 1 ? 'none' : '',
+            marginBottom: index + 1 !== automations.length ? '10px' : "0"
+          }} key={index}>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+            }}>
+              <h3 style={{ width: 'fit-content' }}>{auto.name}</h3>
+              <ToggleButton
+                type={auto.type}
+                data={data}
+                setData={setData}
+              />
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </>
   );
 };

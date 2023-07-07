@@ -104,4 +104,9 @@ export const getTasksForTodoTemp = (id, page) => API.get(`/template/todo/tasks/$
 export const deleteTemplate = (id) => API.delete(`/template/${id}`);
 
 export const addToTodo = (id) => API.post(`/template/todo/${id}`);
+
+export const addTemplate = (formData) => API.post(`/template/add/`, formData);
+
+export const modifyTemplate = (id, formData) => API.patch(`/template/${id}`, formData);
+
 /* end the template api */
