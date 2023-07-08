@@ -196,6 +196,11 @@ a {
   .glass-effect {
     min-width: 360px;
   }
+
+  .block input[type="number"] {
+    width: 60px;
+    padding: 6;
+  }
 }
 
 @media (max-width: 400px) {

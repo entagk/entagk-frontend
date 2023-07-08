@@ -86,14 +86,13 @@
 }
 
 .steps .step .icon {
-  width: fit-content;
   display: flex;
   align-items: center;
+  justify-content: center;
   border-radius: 50%;
   border: 2px solid;
-  padding: 5px;
-  width: 34px;
-  height: 34px;
+  padding: 6px;
+  font-size: 28px;
   margin-inline: 0;
 }
 
@@ -147,8 +146,8 @@
 .form-middle .text-counter p {
   text-transform: capitalize;
   margin-bottom: 10px;
-  font-weight: bold;
-  font-size: 18px;
+  font-weight: 500;
+  font-size: 16px;
   margin-right: 10px;
 }
 
@@ -204,10 +203,10 @@
   padding: 0;
 }
 
-.temp-form .task-form .block { 
+.temp-form .task-form .block {
   padding: 0;
   margin-block: 0 20px;
-} 
+}
 /* end form middle */
 
 /* start form footer */
@@ -265,21 +264,105 @@
 /* end form footer */
 
 @media (max-width: 768px) {
+  .temp-form {
+    margin: 20px;
+    max-width: 100%;
+    min-width: calc(100% - 40px);
+  }
+
+  .temp-form .form-header {
+    padding: 15px;
+  }
+
+  .temp-form .form-header h2 {
+    font-size: 28px;
+  }
+
   .form-header .close-tasks {
     font-size: 20px;
     padding: 7px;
   }
+
+  .temp-form .steps,
+  .temp-form .form-middle {
+    padding-inline: 15px;
+  }
+
+  .form-middle .block,
+  .form-middle .step-data {
+    margin-top: 15px;
+  }
+
+  .temp-form .task-form .form-container {
+    padding: 15px 15px 0;
+  }
+
+  .temp-form .task-form .block {
+    margin-block: 0 15px;
+  }
+
+  .form-footer {
+    padding: 15px 0;
+  }
 }
 
 @media (max-width: 600px) {
-  .form-header .close-tasks {
+  .form-header .close-temp-form {
+    font-size: 24px;
+    padding: 8px;
+  }
+
+  .steps .step .icon {
     font-size: 22px;
-    padding: 5px;
+  }
+}
+
+@media (max-width: 500px) {
+  .temp-form .form-header {
+    padding: 10px;
+  }
+
+  .steps .step {
+    width: fit-content;
+  }
+
+  .steps .step .line {
+    display: none;
+  }
+
+  .steps .step .icon {
+    font-size: 20px;
+  }
+
+  .steps .step .text {
+    font-size: 16px;
+    margin-inline: 6px;
+  }
+
+  .form-middle .text-counter p {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .form-middle input.name {
+    font-size: 20px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 425px) {
+  .temp-form .steps {
+    flex-flow: wrap;
+    justify-content: space-around;
+  }
+
+  .steps .step {
+    margin-bottom: 15px;
   }
 }
 
 @media (max-width: 400px) {
-  .form-header .close-tasks {
+  .form-header .close-temp-form {
     font-size: 20px;
     padding: 5px;
   }

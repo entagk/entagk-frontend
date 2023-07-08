@@ -139,7 +139,6 @@ export const addTemplate = (formData, setIsLoading, setMessage) => async dispatc
   }
 }
 
-
 export const modifyTemplate = (id, formData, setIsLoading, setMessage) => async dispatch => {
   try {
     setIsLoading(id);

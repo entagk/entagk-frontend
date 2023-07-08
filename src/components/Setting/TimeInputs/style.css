@@ -85,6 +85,11 @@
 }
 
 @media (max-width: 400px) {
+  .block .min-sec-input input {
+    padding: 6px;
+    width: 60px;
+  }
+
   .setting .time-inputs h4 {
     font-size: 16px;
   }

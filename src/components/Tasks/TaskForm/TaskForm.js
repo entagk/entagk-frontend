@@ -140,7 +140,7 @@ const TaskForm = ({
                         />
                       </div>
                     )}
-                    {data.act >= 0 && (<>/</>)}
+                    {data.act >= 0 && (<p>/</p>)}
                   </>
                 )}
                 <div className="input-number">

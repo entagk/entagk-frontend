@@ -17,9 +17,7 @@ function InfoStep({ data, setData, handleChange }) {
           onChange={handleChange}
         />
         <div className="text-counter" style={{ color: `${50 - data?.name?.length > 10 ? "#0effe9" : "#ff002f"}` }}>
-          <p
-            style={{ fontSize: "16px", fontWeight: "500", marginBottom: "15px" }}
-          >{50 - data?.name?.length}</p>
+          <p>{50 - data?.name?.length}</p>
         </div>
       </div>
       <div className="block">

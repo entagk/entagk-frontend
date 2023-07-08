@@ -35,6 +35,12 @@
   margin-block: 0 20px;
 }
 
+.task-form .block p {
+  text-transform: capitalize;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
 .task-form .block.more-details-container {
   display: flex;
   align-items: center;
@@ -61,7 +67,7 @@
   color: #fff;
 }
 
-.task-form p {
+.task-form .text-counter p {
   text-transform: capitalize;
   margin-bottom: 10px;
   font-weight: bold;
@@ -75,6 +81,12 @@
   justify-content: flex-start;
   flex-wrap: nowrap;
   flex-direction: row;
+}
+
+.task-form .pomodoros p {
+  font-weight: 200;
+  margin-bottom: 0;
+  margin-inline: 5px;
 }
 
 .pomodoros .input-number {
@@ -170,7 +182,7 @@ button.more-details {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 15px;
+  padding: 15px;
 }
 
 .task-footer button {
@@ -184,6 +196,7 @@ button.more-details {
   border-radius: 8px;
   box-shadow: 0 0 10px #989898;
   color: #fff;
+  margin: 0;
 }
 
 .task-footer button:first-child {
@@ -198,7 +211,7 @@ button.more-details {
 }
 
 .task-footer button.save {
-  margin-left: 10px;
+  margin: 0px;
   background-color: #000;
   color: #e7e7e7;
   border-radius: 5px;
@@ -214,3 +227,10 @@ button.more-details {
 }
 
 /* end task form */
+
+@media (max-width: 500px) {
+  .task-form input.name {
+    font-size: 22px;
+    padding: 8px;
+  }
+}
