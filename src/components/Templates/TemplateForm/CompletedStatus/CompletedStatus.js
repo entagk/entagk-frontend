@@ -12,12 +12,14 @@ function CompletedStatus({ data, setIsLoading, isLoading, setOpen }) {
 
   if (isLoading) {
     return (
-      <Loading
-        color={activites[active].color}
-        backgroud="transparent"
-        size="200"
-        strokeWidth="2.5"
-      />
+      <div className='completed-status'>
+        <Loading
+          size="100"
+          strokeWidth="3.5"
+          backgroud="white"
+          color={activites[active]?.color}
+        />
+      </div>
     )
   }
 

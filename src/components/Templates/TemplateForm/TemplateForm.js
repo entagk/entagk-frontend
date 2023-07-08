@@ -8,15 +8,16 @@ import './style.css'
 import Message from '../../../utils/Message';
 import NetworkError from '../../NetworkError/NetworkError';
 import FormFooter from './FormFooter/FormFooter';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addTemplate, modifyTemplate } from '../../../actions/templates';
-import CompletedStatus from './CompletedStatus/CompletedStatus';
+import Loading from '../../../utils/Loading';
 
 const TodoList = lazy(() => import('../../../icons/list/TodoList'));
 const InfoStep = lazy(() => import('./InfoStep/InfoStep'));
 const TasksStep = lazy(() => import('./TasksStep/TasksStep'));
 const TimerStep = lazy(() => import('./TimerStep/TimerStep'));
 const SoundStep = lazy(() => import('./SoundStep/SoundStep'));
+const CompletedStatus = lazy(() => import('./CompletedStatus/CompletedStatus'));
 
 const initialData = {
   name: "",
@@ -51,6 +52,7 @@ function TemplateForm({
   setOpen
 }) {
   const dispatch = useDispatch();
+  const { active, activites } = useSelector(state => state.timer);
   const [activeStep, setActiveStep] = useState(0);
   const [data, setData] = useState(oldData === null ? initialData : oldData);
   const [message, setMessage] = useState({ message: '', type: '' })
@@ -114,14 +116,17 @@ function TemplateForm({
       if (!oldData) {
         dispatch(addTemplate(data, setIsLoading, setMessage));
       } else {
-        dispatch(modifyTemplate(data._id, {
-          ...data,
-          tasks: data.tasks.map(t => t._id)
-        },
-          setIsLoading,
-          setMessage
-        ));
+        if (oldData === data) {
+          dispatch(modifyTemplate(data._id, {
+            ...data,
+            tasks: data.tasks.map(t => t._id)
+          },
+            setIsLoading,
+            setMessage
+          ));
+        }
       }
+
       setActiveStep(as => ++as);
     }
   }
@@ -149,7 +154,12 @@ function TemplateForm({
         <div className="glass-effect temp-form">
           <div className='form-header'>
             <h2>{oldData ? 'edit template' : 'new template'}</h2>
-            <button aria-label='close template form' className="close-temp-form" type='button' onClick={() => setOpen(false)}>
+            <button
+              aria-label='close template form'
+              className="close-temp-form"
+              type='button'
+              onClick={() => setOpen(false)}
+            >
               <CgClose />
             </button>
           </div>
@@ -167,37 +177,44 @@ function TemplateForm({
           {(activeStep !== 1 && activeStep !== 4) ? (
             <form onSubmit={handleSubmit}>
               <div className='form-middle'>
-                {/* <Suspense fallback={<></>}> */}
-                {activeStep === 0 ? (
-                  <InfoStep
-                    key={0}
-                    data={data}
-                    setData={setData}
-                    handleChange={handleChange}
+                <Suspense fallback={
+                  <Loading
+                    size="100"
+                    strokeWidth="4"
+                    backgroud="#e7e7e7"
+                    color={activites[active]?.color}
                   />
-                ) :
-                  activeStep === 2 ? (
-                    <TimerStep
-                      key={2}
+                }>
+                  {activeStep === 0 ? (
+                    <InfoStep
+                      key={0}
                       data={data}
                       setData={setData}
                       handleChange={handleChange}
                     />
-                  ) : activeStep === 3 ? (
-                    <SoundStep
-                      key={3}
-                      data={data}
-                      setData={setData}
-                      handleChange={handleChange}
-                    />
-                  ) : (
-                    <CompletedStatus
-                      key={4}
-                      data={data}
-                    />
-                  )
-                }
-                {/* </Suspense> */}
+                  ) :
+                    activeStep === 2 ? (
+                      <TimerStep
+                        key={2}
+                        data={data}
+                        setData={setData}
+                        handleChange={handleChange}
+                      />
+                    ) : activeStep === 3 ? (
+                      <SoundStep
+                        key={3}
+                        data={data}
+                        setData={setData}
+                        handleChange={handleChange}
+                      />
+                    ) : (
+                      <CompletedStatus
+                        key={4}
+                        data={data}
+                      />
+                    )
+                  }
+                </Suspense>
                 <FormFooter
                   disableNextOrSubmit={disableNextOrSubmit}
                   handleCancelOrPrev={handleCancelOrPrev}
@@ -208,7 +225,14 @@ function TemplateForm({
             </form>
           ) : activeStep === 1 ? (
             <div className='form-middle'>
-              <Suspense fallback={<></>}>
+              <Suspense fallback={
+                <Loading
+                  size="100"
+                  strokeWidth="4"
+                  backgroud="#e7e7e7"
+                  color={activites[active]?.color}
+                />
+              }>
                 <TasksStep
                   key={1}
                   data={data}
@@ -226,7 +250,14 @@ function TemplateForm({
               />
             </div>
           ) : (
-            <Suspense fallback={<></>}>
+            <Suspense fallback={
+              <Loading
+                size="100"
+                strokeWidth="4"
+                backgroud="#e7e7e7"
+                color={activites[active]?.color}
+              />
+            }>
               <CompletedStatus
                 data={data}
                 setIsLoading={setIsLoading}

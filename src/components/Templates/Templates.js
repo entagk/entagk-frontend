@@ -20,6 +20,7 @@ function Templates() {
   const [isLoading, setIsLoading] = useState(null);
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const { userTemplates: { templates, total } } = useSelector(state => state.templates) || {};
+  const {active, activites} = useSelector(state => state.timer);
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -97,13 +98,26 @@ function Templates() {
           </div>
         </div>
         {openFormForNew && (
-          <TemplateForm
-            setOpen={setOpenFormForNew}
-            oldData={null}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-            setMessage={setMessage}
-          />
+          <Suspense fallback={
+            <div className="glass-container">
+              <div className="glass-effect temp-form">
+                <Loading
+                  size="100"
+                  strokeWidth="4"
+                  backgroud="#e7e7e7"
+                  color={activites[active]?.color}
+                />
+              </div>
+            </div>
+          }>
+            <TemplateForm
+              setOpen={setOpenFormForNew}
+              oldData={null}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+              setMessage={setMessage}
+            />
+          </Suspense>
         )}
       </Suspense>
     </>

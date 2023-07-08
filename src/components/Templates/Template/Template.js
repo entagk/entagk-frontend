@@ -21,6 +21,7 @@ function Template({ isLoading, setIsLoading, setMessage, ...props }) {
   const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const { user } = useSelector(state => state.auth);
+  const { active, activites } = useSelector(state => state.timer);
 
   const hours = ((
     (props.time.PERIOD * props.est) +
@@ -57,12 +58,25 @@ function Template({ isLoading, setIsLoading, setMessage, ...props }) {
   return (
     <>
       {openEdit && (
-        <TemplateForm
-          oldData={props}
-          setOpen={setOpenEdit}
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-        />
+        <Suspense fallback={
+          <div className="glass-container">
+            <div className="glass-effect temp-form">
+              <Loading
+                size="100"
+                strokeWidth="4"
+                backgroud="#e7e7e7"
+                color={activites[active]?.color}
+              />
+            </div>
+          </div>
+        }>
+          <TemplateForm
+            oldData={props}
+            setOpen={setOpenEdit}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+          />
+        </Suspense>
       )}
       {openDelete && (
         <Suspense fallback={
