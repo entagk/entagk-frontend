@@ -10,6 +10,7 @@ import NetworkError from '../../NetworkError/NetworkError';
 import FormFooter from './FormFooter/FormFooter';
 import { useDispatch } from 'react-redux';
 import { addTemplate, modifyTemplate } from '../../../actions/templates';
+import CompletedStatus from './CompletedStatus/CompletedStatus';
 
 const TodoList = lazy(() => import('../../../icons/list/TodoList'));
 const InfoStep = lazy(() => import('./InfoStep/InfoStep'));
@@ -121,6 +122,7 @@ function TemplateForm({
           setMessage
         ));
       }
+      setActiveStep(as => ++as);
     }
   }
 
@@ -162,7 +164,7 @@ function TemplateForm({
               </div>
             ))}
           </div>
-          {activeStep !== 1 ? (
+          {(activeStep !== 1 && activeStep !== 4) ? (
             <form onSubmit={handleSubmit}>
               <div className='form-middle'>
                 {/* <Suspense fallback={<></>}> */}
@@ -181,12 +183,17 @@ function TemplateForm({
                       setData={setData}
                       handleChange={handleChange}
                     />
-                  ) : (
+                  ) : activeStep === 3 ? (
                     <SoundStep
                       key={3}
                       data={data}
                       setData={setData}
                       handleChange={handleChange}
+                    />
+                  ) : (
+                    <CompletedStatus
+                      key={4}
+                      data={data}
                     />
                   )
                 }
@@ -199,7 +206,7 @@ function TemplateForm({
                 />
               </div>
             </form>
-          ) : (
+          ) : activeStep === 1 ? (
             <div className='form-middle'>
               <Suspense fallback={<></>}>
                 <TasksStep
@@ -218,6 +225,15 @@ function TemplateForm({
                 activeStep={activeStep}
               />
             </div>
+          ) : (
+            <Suspense fallback={<></>}>
+              <CompletedStatus
+                data={data}
+                setIsLoading={setIsLoading}
+                isLoading={isLoading}
+                setOpen={setOpen}
+              />
+            </Suspense>
           )}
         </div>
       </div>

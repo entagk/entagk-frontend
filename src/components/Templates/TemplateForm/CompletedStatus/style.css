@@ -1,0 +1,39 @@
+.completed-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  margin: 20px;
+}
+
+.completed-status .icon {
+  font-size: 100px;
+  color: lime;
+  display: flex;
+}
+
+.completed-status h3 {
+  font-size: 30px;
+}
+
+.completed-status p {
+  font-size: 20px;
+  margin-block: 10px;
+}
+
+.completed-status button.close {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 15px;
+  box-shadow: 0 0 10px #989898;
+  background-color: #000;
+  color: #e7e7e7;
+  border-radius: 10px;
+  background-color: var(--main-color);
+}
+
+.completed-status button.close:hover {
+  box-shadow: 0 0 8px 0px rgb(78 78 78);
+}
