@@ -1,13 +1,15 @@
 import { START_LOADING, END_LOADING } from "../actions/auth";
 import {
-  GET_TEMPLATES_FOR_USER,
+  GET_USER_TEMPLATES,
   DELETE_TEMPLATE,
   GET_TEMPLATE_TASKS,
   NEW_TEMPLATE_TASK,
   MODIFY_TEMPLATE_TASK,
   DELETE_TEMPLATE_TASK,
   CREATE_TEMPLATE,
-  MODIFY_TEMPLATE
+  MODIFY_TEMPLATE,
+  SEARCH_USER_TEMPLATRES,
+  SORT_USER_TEMPLATRES
 } from "../actions/templates";
 
 const initialState = {
@@ -93,11 +95,21 @@ export default (state = initialState, action) => {
 
       }
 
-    case GET_TEMPLATES_FOR_USER:
-      console.log(action.data)
+    case GET_USER_TEMPLATES:
       return {
         ...state,
-        userTemplates: action.data,
+        userTemplates: action.data.currentPage > 1 ?
+          {
+            ...action.data,
+            originalData: {
+              ...action.data,
+              templates: state?.userTemplates?.templates ?
+                state.userTemplates?.templates?.concat(action.data.templates) : action.date.templates
+            },
+            templates: state?.userTemplates?.templates ?
+              state.userTemplates?.templates?.concat(action.data.templates) : action.date.templates
+          }
+          : { ...action.data, originalData: action.data },
         tempTasks: action.data.templates.reduce((all, c) => ({ ...all, [c._id]: {} }), state.tempTasks)
       };
 
@@ -135,7 +147,59 @@ export default (state = initialState, action) => {
         tempTasks: tempTasks.reduce((a, e) => ({ ...a, [e[0]]: e[1] }), {}),
       }
 
+    case SEARCH_USER_TEMPLATRES:
+      if (action.data.query !== '') {
+        const keys = action.data.query.split(" ");
+        const result = state.userTemplates.templates.filter(item => {
+          let found = false;
+          keys.forEach(key => {
+            found = found || item.name.includes(key) || item.desc.includes(key);
+          })
 
+          return found;
+        });
+
+        return {
+          ...state,
+          userTemplates: {
+            ...state.userTemplates,
+            templates: result,
+            total: result.length,
+            currentPage: action.data.page,
+            numberOfPages: result.length / 25,
+          }
+        }
+      } else {
+        return {
+          ...state,
+          userTemplates: state.userTemplates.originalData
+        }
+      }
+    case SORT_USER_TEMPLATRES:
+
+      const sortCallback = (a, b) => {
+        if (action.data === 'name') {
+          const nameA = a.name.toLowerCase();
+          const nameB = b.name.toLowerCase();
+
+          if (nameA < nameB) return -1;
+          if (nameA > nameB) return 1;
+
+          return 0;
+        } else {
+          const updatedAtA = Number(new Date(a.updatedAt));
+          const updatedAtB = Number(new Date(b.updatedAt));
+
+          return updatedAtB - updatedAtA;
+        }
+      }
+      return {
+        ...state,
+        userTemplates: {
+          ...state.userTemplates,
+          templates: state.userTemplates?.templates?.sort(sortCallback)
+        }
+      }
     default:
       return state;
   }

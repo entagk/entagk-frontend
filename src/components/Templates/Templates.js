@@ -1,5 +1,6 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 
 import { getTemplatesForUser } from '../../actions/templates';
 
@@ -13,19 +14,22 @@ import './style.css';
 const NavBar = lazy(() => import('../NavBar/NavBar'));
 const Template = lazy(() => import('./Template/Template.js'));
 const TemplateForm = lazy(() => import('./TemplateForm/TemplateForm.js'))
+const SearchBar = lazy(() => import('./SearchBar/SearchBar'));
 
 function Templates() {
   const dispatch = useDispatch();
   const [message, setMessage] = useState({ message: "", type: "" })
-  const [isLoading, setIsLoading] = useState(null);
+  const [isLoadingTemp, setIsLoadingTemp] = useState(null);
   const [openFormForNew, setOpenFormForNew] = useState(false);
-  const { userTemplates: { templates, total } } = useSelector(state => state.templates) || {};
-  const {active, activites} = useSelector(state => state.timer);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { userTemplates: { templates, total }, isLoading } = useSelector(state => state.templates) || {};
+  const { active, activites } = useSelector(state => state.timer);
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
       if (total === undefined && templates === undefined) {
-        dispatch(getTemplatesForUser(1, setMessage));
+        const sort = searchParams.get('sort')
+        dispatch(getTemplatesForUser(sort, 1, setMessage));
       }
     }
     // eslint-disable-next-line
@@ -34,7 +38,7 @@ function Templates() {
   if (templates === undefined && localStorage.getItem('token')) {
     return (
       <>
-        {(!message.message) ?
+        {(!message.message.includes('Network Error')) ?
           (
             <>
               <Loading
@@ -77,7 +81,7 @@ function Templates() {
       )}
       <Suspense fallback={
         <Loading
-          size="200"
+          size="100"
           strokeWidth="5px"
           backgroud="transperent"
           color="#ffffff"
@@ -85,17 +89,36 @@ function Templates() {
       }>
         <NavBar />
         <div className='container'>
-          <div className='templates-container'>
-            {templates?.map((temp) => (
-              <Template
-                {...temp}
-                key={temp._id}
-                isLoading={isLoading}
-                setIsLoading={setIsLoading}
-                setMessage={setMessage}
+          <SearchBar
+            searchParams={searchParams}
+            setSearchParams={setSearchParams}
+            setOpenFormForNew={setOpenFormForNew}
+          />
+          {isLoading ? (
+            <div style={{
+              width: "100%",
+              margin: "30px",
+            }}>
+              <Loading
+                size="100"
+                strokeWidth="5"
+                backgroud="transperent"
+                color="#ffffff"
               />
-            ))}
-          </div>
+            </div>
+          ) : (
+            <div className='templates-container'>
+              {templates?.map((temp) => (
+                <Template
+                  {...temp}
+                  key={temp._id}
+                  isLoading={isLoadingTemp}
+                  setIsLoading={setIsLoadingTemp}
+                  setMessage={setMessage}
+                />
+              ))}
+            </div>
+          )}
         </div>
         {openFormForNew && (
           <Suspense fallback={
@@ -113,8 +136,8 @@ function Templates() {
             <TemplateForm
               setOpen={setOpenFormForNew}
               oldData={null}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
+              isLoading={isLoadingTemp}
+              setIsLoading={setIsLoadingTemp}
               setMessage={setMessage}
             />
           </Suspense>
