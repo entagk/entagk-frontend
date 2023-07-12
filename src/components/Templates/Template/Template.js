@@ -23,6 +23,7 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
   const [openEdit, setOpenEdit] = useState(false);
   const { user } = useSelector(state => state.auth);
   const { active, activites } = useSelector(state => state.timer);
+  const [showMore, setShowMore] = useState(false);
 
   const hours = ((
     (props.time.PERIOD * props.est) +
@@ -55,7 +56,7 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
     setOpenEdit(true);
     setOpenMenu(false);
   }
-  
+
   const handleShowingTasks = () => {
     setShowTodo(props._id);
     setOpenMenu(false);
@@ -195,7 +196,18 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
         </div>
         <div className='temp-desc'>
           <p>
-            {props.desc.length > 200 ? `${props.desc.split(196)}...` : props.desc}
+            {(props.desc.length > 200 && !showMore) ? `${props.desc.slice(0, 196)}...` : props.desc}
+            {(props.desc.length > 200 && !showMore) ?
+              <button 
+              aria-label="see mroe" 
+              className='show-more' 
+              onClick={() => setShowMore(true)}>see more</button> :
+              <>
+                {showMore && (
+                  <button aria-label="see mroe" className='show-more' onClick={() => setShowMore(false)}>see less</button>
+                )}
+              </>
+            }
           </p>
         </div>
         <div className='temp-lower'>
