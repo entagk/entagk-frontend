@@ -2,7 +2,7 @@ import React from "react";
 
 const Loading = ({ color, backgroud, paddingBlock, size, strokeWidth }) => {
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", margin: 20 }}>
       <div
         className="loading"
         style={{

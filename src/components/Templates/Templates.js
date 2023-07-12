@@ -11,8 +11,11 @@ import NoLogin from '../NoLogin/NoLogin';
 
 import './style.css';
 
+import TemplateTasksHeader from './TemplateTasks/TemplateTasksHeader';
+
 const NavBar = lazy(() => import('../NavBar/NavBar'));
 const Template = lazy(() => import('./Template/Template.js'));
+const TemplateTasks = lazy(() => import('./TemplateTasks/TemplateTasks'))
 const TemplateForm = lazy(() => import('./TemplateForm/TemplateForm.js'))
 const SearchBar = lazy(() => import('./SearchBar/SearchBar'));
 
@@ -22,6 +25,7 @@ function Templates() {
   const [isLoadingTemp, setIsLoadingTemp] = useState(null);
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [showTodo, setShowTodo] = useState('');
   const { userTemplates: { templates, total }, isLoading } = useSelector(state => state.templates) || {};
   const { active, activites } = useSelector(state => state.timer);
 
@@ -79,6 +83,34 @@ function Templates() {
           )}
         </>
       )}
+      {showTodo !== "" && (
+        <>
+          <div className='glass-container'>
+            <div className='glass-effect template-tasks'>
+              <TemplateTasksHeader
+                template={templates.filter(t => t._id === showTodo)[0]}
+                setOpenTodo={setShowTodo}
+              />
+              <Suspense fallback={<>
+                <Loading
+                  size="100"
+                  strokeWidth="4"
+                  backgroud="white"
+                  color={activites[active]?.color}
+                />
+              </>
+              }>
+                <TemplateTasks
+                  templateId={showTodo}
+                  setOpenTodo={setShowTodo}
+                  message={message}
+                  setMessage={setMessage}
+                />
+              </Suspense>
+            </div>
+          </div>
+        </>
+      )}
       <Suspense fallback={
         <Loading
           size="100"
@@ -112,6 +144,7 @@ function Templates() {
                 <Template
                   {...temp}
                   key={temp._id}
+                  setShowTodo={setShowTodo}
                   isLoading={isLoadingTemp}
                   setIsLoading={setIsLoadingTemp}
                   setMessage={setMessage}

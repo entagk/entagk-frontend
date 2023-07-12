@@ -176,7 +176,6 @@ export default (state = initialState, action) => {
         }
       }
     case SORT_USER_TEMPLATRES:
-
       const sortCallback = (a, b) => {
         if (action.data === 'name') {
           const nameA = a.name.toLowerCase();

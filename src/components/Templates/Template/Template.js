@@ -12,10 +12,11 @@ import './style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToTodo, deleteTemplate } from '../../../actions/templates';
 
+const TodoList = lazy(() => import('../../../icons/list/TodoList'));
 const DeletePopup = lazy(() => import("../../../utils/DeletePopup/DeletePopup"));
 const TemplateForm = lazy(() => import('../TemplateForm/TemplateForm'));
 
-function Template({ isLoading, setIsLoading, setMessage, ...props }) {
+function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }) {
   const dispatch = useDispatch();
   const [openMenu, setOpenMenu] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -52,6 +53,11 @@ function Template({ isLoading, setIsLoading, setMessage, ...props }) {
 
   const handleOpenEdit = () => {
     setOpenEdit(true);
+    setOpenMenu(false);
+  }
+  
+  const handleShowingTasks = () => {
+    setShowTodo(props._id);
     setOpenMenu(false);
   }
 
@@ -132,6 +138,12 @@ function Template({ isLoading, setIsLoading, setMessage, ...props }) {
               {openMenu && (
                 <div className="menu-content">
                   <div className="row">
+                    <button aria-label='show todo' onClick={handleShowingTasks}>
+                      <Suspense fallback={<></>}>
+                        <TodoList />
+                      </Suspense>
+                      <p>Todo</p>
+                    </button>
                     {!user ? (
                       <>
                         <div style={{ padding: 10 }}>
