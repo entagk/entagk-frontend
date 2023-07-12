@@ -2,7 +2,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
-import { getTemplatesForUser } from '../../actions/templates';
+import { getTemplatesForUser, searchTemplates } from '../../actions/templates';
 
 import Loading from '../../utils/Loading';
 import Message from '../../utils/Message';
@@ -18,6 +18,7 @@ const Template = lazy(() => import('./Template/Template.js'));
 const TemplateTasks = lazy(() => import('./TemplateTasks/TemplateTasks'))
 const TemplateForm = lazy(() => import('./TemplateForm/TemplateForm.js'))
 const SearchBar = lazy(() => import('./SearchBar/SearchBar'));
+const PaginationBar = lazy(() => import('./PaginationBar/PaginationBar'));
 
 function Templates() {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ function Templates() {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [showTodo, setShowTodo] = useState('');
-  const { userTemplates: { templates, total }, isLoading } = useSelector(state => state.templates) || {};
+  const { userTemplates: { templates, total, numberOfPages, currentPage }, isLoading } = useSelector(state => state.templates) || {};
   const { active, activites } = useSelector(state => state.timer);
 
   useEffect(() => {
@@ -70,6 +71,14 @@ function Templates() {
     return (
       <NoLogin />
     )
+  }
+
+  const changePage = (page) => {
+    if (page !== currentPage && !searchParams.get('search')) {
+      dispatch(getTemplatesForUser(searchParams.get('sort'), page, setMessage))
+    } else {
+      dispatch(searchTemplates(searchParams.get('search'), searchParams.get('sort'), page, setMessage))
+    }
   }
 
   return (
@@ -151,6 +160,13 @@ function Templates() {
                 />
               ))}
             </div>
+          )}
+          {(numberOfPages !== 1) && (
+            <PaginationBar
+              numberOfPages={numberOfPages}
+              currentPage={currentPage}
+              changePage={changePage}
+            />
           )}
         </div>
         {openFormForNew && (

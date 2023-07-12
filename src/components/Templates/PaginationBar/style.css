@@ -1,0 +1,37 @@
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+}
+
+.pagination-bar .pages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-bar button {
+  margin-inline: 5px;
+  font-size: 20px;
+  border: 2px solid;
+  border-radius: 50%;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+}
+
+.pagination-bar button.active {
+  background-color: #dadada99;
+  box-shadow: 0 0 7px rgb(141 141 141);
+}
+
+.pagination-bar button:hover {
+  background-color: #dadada99;
+}
+
+.pagination-bar button:disabled {
+  color: #ddd;
+  background-color: transparent;
+}

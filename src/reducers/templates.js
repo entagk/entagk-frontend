@@ -98,18 +98,7 @@ export default (state = initialState, action) => {
     case GET_USER_TEMPLATES:
       return {
         ...state,
-        userTemplates: action.data.currentPage > 1 ?
-          {
-            ...action.data,
-            originalData: {
-              ...action.data,
-              templates: state?.userTemplates?.templates ?
-                state.userTemplates?.templates?.concat(action.data.templates) : action.date.templates
-            },
-            templates: state?.userTemplates?.templates ?
-              state.userTemplates?.templates?.concat(action.data.templates) : action.date.templates
-          }
-          : { ...action.data, originalData: action.data },
+        userTemplates: { ...action.data, originalData: action.data },
         tempTasks: action.data.templates.reduce((all, c) => ({ ...all, [c._id]: {} }), state.tempTasks)
       };
 
