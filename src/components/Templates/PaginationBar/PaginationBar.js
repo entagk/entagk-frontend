@@ -21,23 +21,23 @@ function PaginationBar({ numberOfPages, currentPage, changePage }) {
         >
           1
         </button>
-        {(currentPage <= 2 && numberOfPages !== 3) ? (
+        {(currentPage <= 2 && numberOfPages > 3) ? (
           <>
             <button key={2} onClick={() => changePage(2)} className={`page-num ${2 === currentPage ? 'active' : ''}`}>
               2
             </button>
             <p>...</p>
           </>
-        ) : currentPage >= numberOfPages - 1 ? (
+        ) : (currentPage >= numberOfPages - 1) && numberOfPages > 2 ? (
           <>
             <p>...</p>
             <button key={numberOfPages - 1} onClick={() => changePage(numberOfPages - 1)} className={`page-num ${numberOfPages - 1 === currentPage ? 'active' : ''}`}>
               {numberOfPages - 1}
             </button>
           </>
-        ) : (
+        ) : numberOfPages > 2 && (
           <>
-            {currentPage - 1 !== 2 && (
+            {(currentPage - 1 !== 2 && numberOfPages > 2) && (
               <p>...</p>
             )}
             <button key={currentPage - 1} onClick={() => changePage(currentPage - 1)} className='page-num'>
@@ -49,7 +49,7 @@ function PaginationBar({ numberOfPages, currentPage, changePage }) {
             <button key={currentPage + 1} className={`page-num`} onClick={() => changePage(currentPage + 1)} >
               {currentPage + 1}
             </button>
-            {currentPage + 1 !== numberOfPages - 1 && (
+            {(currentPage + 1 !== numberOfPages - 1 && numberOfPages !== 2) && (
               <p>...</p>
             )}
           </>

@@ -129,7 +129,7 @@ function Templates() {
         />
       }>
         <NavBar />
-        <div className='container'>
+        <div className='templates container'>
           <SearchBar
             searchParams={searchParams}
             setSearchParams={setSearchParams}

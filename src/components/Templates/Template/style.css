@@ -1,8 +1,7 @@
 .template {
-  width: 100%;
-  margin-block: 10px;
   border-radius: 20px;
-  padding: 20px;
+  border: 2px solid #fff;
+  padding: 15px;
   text-align: left;
   font-size: 20px;
   display: flex;
@@ -12,9 +11,12 @@
   flex-direction: column;
   cursor: pointer;
   background: transparent;
-  border: 2px solid #fff;
   color: #fff;
   width: 100%;
+}
+
+.template:not(:last-of-type) {
+  margin-bottom: 20px;
 }
 
 .template:hover {
@@ -89,7 +91,6 @@
   color: #fff;
   border-radius: 50%;
   padding-inline: 5px;
-  margin-right: 10px;
 }
 
 .template .toggle-menu:hover {
@@ -123,4 +124,10 @@
 
 .temp-est {
   margin-inline: 10px;
+}
+
+@media (max-width: 768px) {
+  .template .temp-upper {
+    font-size: 22px;
+  }
 }

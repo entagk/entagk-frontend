@@ -4,6 +4,8 @@
   justify-content: center;
   color: #fff;
   font-size: 20px;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
 .pagination-bar .pages {

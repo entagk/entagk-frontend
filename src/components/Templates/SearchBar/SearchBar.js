@@ -48,18 +48,18 @@ function SearchBar({ setOpenFormForNew, searchParams, setSearchParams, setMessag
 
   return (
     <div className='search-bar'>
-      <div className='search-keyword'>
-        <span className='icon'>
-          <AiOutlineSearch />
-        </span>
-        <input
-          type='search'
-          placeholder='Write your query'
-          value={searchParams.get('search') || ""}
-          onChange={handleChangeSearchQuery}
-        />
-      </div>
-      <div className='search-buttons'>
+      <div>
+        <div className='search-keyword'>
+          <span className='icon'>
+            <AiOutlineSearch />
+          </span>
+          <input
+            type='search'
+            placeholder='Write your query'
+            value={searchParams.get('search') || ""}
+            onChange={handleChangeSearchQuery}
+          />
+        </div>
         <div className="menu" >
           <button
             aria-label="toggle the task list menu"

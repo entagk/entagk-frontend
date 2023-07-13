@@ -13,9 +13,7 @@ function TemplateTasksHeader({template, setOpenTodo}) {
           flexWrap: 'nowrap',
           flexDirection: 'row',
         }}>
-          <h2 style={{
-            marginLeft: "10px",
-          }}>
+          <h2>
             {template?.name + " Tasks"}
           </h2>
         </div>

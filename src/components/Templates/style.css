@@ -8,4 +8,10 @@
   flex-direction: column;
 }
 
-@import url('./TemplateTasks/style.css');
+@import url("./TemplateTasks/style.css");
+
+@media (max-width: 550px) {
+  .templates.container {
+    padding: 0;
+  }
+}
