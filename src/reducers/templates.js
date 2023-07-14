@@ -109,13 +109,20 @@ export default (state = initialState, action) => {
       }
 
     case CREATE_TEMPLATE:
-      state.tempTasks[action.data._id] = {
-        tasks: action.data.tasks
-      }
+      if (state.userTemplates.numberOfPages === state.userTemplates.currentPage) {
+        state.tempTasks[action.data._id] = {
+          tasks: action.data.tasks
+        }
 
-      return {
-        ...state,
-        userTemplates: state.userTemplates.templates.concat([action.data]),
+        return {
+          ...state,
+          userTemplates: {
+            ...state.userTemplates,
+            total: state.userTemplates.total + 1
+          }
+        }
+      } else {
+        return state;
       }
 
     case MODIFY_TEMPLATE:

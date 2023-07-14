@@ -36,7 +36,7 @@ function CompletedStatus({ data, setIsLoading, isLoading, setOpen }) {
           </>
         ) : (
           <>
-            {/* A new template has been added successfully. */}
+            A new template has been added successfully.
           </>
         )}
       </p>
