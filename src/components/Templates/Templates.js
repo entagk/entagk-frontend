@@ -33,7 +33,7 @@ function Templates() {
   useEffect(() => {
     if (localStorage.getItem('token')) {
       if (total === undefined && templates === undefined) {
-        const sort = searchParams.get('sort')
+        const sort = searchParams.get('sort') || 'updatedAt'
         dispatch(getTemplatesForUser(sort, 1, setMessage));
       }
     }

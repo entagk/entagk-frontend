@@ -80,14 +80,11 @@ function TemplateForm({
     if (activeStep === 0) {
       setOpen(false);
     } else {
-      setActiveStep(as => --as);
+      setActiveStep(as => as - 1);
     }
   }
 
   const handleNextButton = (e) => {
-    if (e.target.type === 'submit') {
-      e.priventDefault();
-    }
     console.log('next')
     if (activeStep < 3) {
       setActiveStep(as => ++as);
@@ -100,7 +97,6 @@ function TemplateForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(e);
 
     if (!data.name) {
       setMessage("Empty name");
@@ -114,14 +110,15 @@ function TemplateForm({
       setMessage({ message: "Please enter long break interval", type: 'error' });
     } else {
       if (!oldData) {
-        dispatch(addTemplate(data, setIsLoading, setMessage));
+        dispatch(addTemplate(data, setIsLoading, setActiveStep, setMessage));
       } else {
-        if (oldData === data) {
+        if (oldData !== data) {
           dispatch(modifyTemplate(data._id, {
             ...data,
             tasks: data.tasks.map(t => t._id)
           },
             setIsLoading,
+            setActiveStep,
             setMessage
           ));
         }
@@ -137,6 +134,10 @@ function TemplateForm({
         return !data.name || !data.desc;
       case 1:
         return data.tasks?.length === 0;
+      case 2:
+        return Object.values(data.time).includes(0);
+      case 3:
+        return data.longInterval === 0;
       default:
         return false;
     }
@@ -149,7 +150,6 @@ function TemplateForm({
       ) : message.message.includes('Network Error') && (
         <NetworkError />
       )}
-
       <div className="glass-container">
         <div className="glass-effect temp-form">
           <div className='form-header'>
@@ -174,7 +174,7 @@ function TemplateForm({
               </div>
             ))}
           </div>
-          {(activeStep !== 1 && activeStep !== 4) ? (
+          {(activeStep === 3) ? (
             <form onSubmit={handleSubmit}>
               <div className='form-middle'>
                 <Suspense fallback={
@@ -185,45 +185,21 @@ function TemplateForm({
                     color={activites[active]?.color}
                   />
                 }>
-                  {activeStep === 0 ? (
-                    <InfoStep
-                      key={0}
-                      data={data}
-                      setData={setData}
-                      handleChange={handleChange}
-                    />
-                  ) :
-                    activeStep === 2 ? (
-                      <TimerStep
-                        key={2}
-                        data={data}
-                        setData={setData}
-                        handleChange={handleChange}
-                      />
-                    ) : activeStep === 3 ? (
-                      <SoundStep
-                        key={3}
-                        data={data}
-                        setData={setData}
-                        handleChange={handleChange}
-                      />
-                    ) : (
-                      <CompletedStatus
-                        key={4}
-                        data={data}
-                      />
-                    )
-                  }
+                  <SoundStep
+                    data={data}
+                    setData={setData}
+                    handleChange={handleChange}
+                  />
+                  <FormFooter
+                    disableNextOrSubmit={disableNextOrSubmit}
+                    handleCancelOrPrev={handleCancelOrPrev}
+                    handleNextButton={handleNextButton}
+                    activeStep={activeStep}
+                  />
                 </Suspense>
-                <FormFooter
-                  disableNextOrSubmit={disableNextOrSubmit}
-                  handleCancelOrPrev={handleCancelOrPrev}
-                  handleNextButton={handleNextButton}
-                  activeStep={activeStep}
-                />
               </div>
             </form>
-          ) : activeStep === 1 ? (
+          ) : activeStep < 3 ? (
             <div className='form-middle'>
               <Suspense fallback={
                 <Loading
@@ -233,14 +209,29 @@ function TemplateForm({
                   color={activites[active]?.color}
                 />
               }>
-                <TasksStep
-                  key={1}
-                  data={data}
-                  setData={setData}
-                  handleChange={handleChange}
-                  message={message}
-                  setMessage={setMessage}
-                />
+                {activeStep === 0 ? (
+                  <InfoStep
+                    data={data}
+                    setData={setData}
+                    handleChange={handleChange}
+                  />
+                ) :
+                  activeStep === 1 ? (
+                    <TasksStep
+                      data={data}
+                      setData={setData}
+                      handleChange={handleChange}
+                      message={message}
+                      setMessage={setMessage}
+                    />
+                  ) : (
+                    <TimerStep
+                      data={data}
+                      setData={setData}
+                      handleChange={handleChange}
+                    />
+                  )
+                }
               </Suspense>
               <FormFooter
                 disableNextOrSubmit={disableNextOrSubmit}
@@ -250,21 +241,23 @@ function TemplateForm({
               />
             </div>
           ) : (
-            <Suspense fallback={
-              <Loading
-                size="100"
-                strokeWidth="4"
-                backgroud="#e7e7e7"
-                color={activites[active]?.color}
-              />
-            }>
-              <CompletedStatus
-                data={data}
-                setIsLoading={setIsLoading}
-                isLoading={isLoading}
-                setOpen={setOpen}
-              />
-            </Suspense>
+            <>
+              <Suspense fallback={
+                <Loading
+                  size="100"
+                  strokeWidth="4"
+                  backgroud="#e7e7e7"
+                  color={activites[active]?.color}
+                />
+              }>
+                <CompletedStatus
+                  data={data}
+                  setIsLoading={setIsLoading}
+                  isLoading={isLoading}
+                  setOpen={setOpen}
+                />
+              </Suspense>
+            </>
           )}
         </div>
       </div>
