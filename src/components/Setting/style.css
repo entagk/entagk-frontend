@@ -1,6 +1,7 @@
 /* Start the setting */
 .setting {
   margin-block: 30px;
+  margin-inline: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -90,6 +91,7 @@
 .setting .block h3 {
   margin-right: 20px;
   width: fit-content;
+  font-size: 18px;
 }
 
 .setting .block input {
@@ -122,10 +124,9 @@
 
 .setting .footer {
   margin-top: 10px;
-  padding-block: 20px 30px;
+  padding: 20px;
   background: #ececec38;
   width: 100%;
-  padding-inline: 30px;
   border-radius: 0 0 10px 10px;
   display: flex;
   align-items: center;
@@ -154,20 +155,66 @@
   color: rgba(0, 0, 0, 0.26);
 }
 
+@media (max-width: 768px) {
+  .setting {
+    max-width: calc(100% - 40px);
+  }
+
+  .setting-header h2 {
+    font-size: 28px;
+  }
+
+  .setting-menu button {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 500px) {
+  .setting {
+    border-radius: 38px 38px 10px 10px;
+  }
+
+  .setting-header {
+    padding: 15px;
+  }
+
+  .setting-header h2 {
+    font-size: 24px;
+  }
+
+  .setting-menu button {
+    padding: 10px 15px;
+    margin: 0;
+  }
+
+  .setting .footer {
+    padding: 15px;
+  }
+
+  .setting .footer button {
+    font-size: 18px;
+    padding: 8px 10px;
+  }
+}
+
 @media (max-width: 450px) {
+  .setting-header,
+  .setting .footer {
+    padding: 10px;
+  }
+
   .setting-header h2 {
     margin-inline: 10px;
     font-size: 24px;
   }
 
   .setting .block,
-  .setting-header {
-    padding-inline: 12px;
+  .setting-header button {
+    padding-inline: 10px;
   }
 
   .setting .block {
     border: none;
-    /* flex-flow: wrap; */
     flex-direction: row;
     width: min-content;
   }
@@ -181,15 +228,20 @@
     width: 100%;
     justify-content: center;
   }
+
+  .setting .footer {
+    padding: 10px;
+  }
 }
 
 @media (max-width: 400px) {
-  .setting-menu button {
-    font-size: 20px;
+  .setting {
+    border-radius: 24px 24px 10px 10px;
   }
 
-  .setting-header {
-    padding-top: 20px;
+  .setting-menu button {
+    font-size: 18px;
+    padding: 8px 10px;
   }
 
   .setting-header h2 {
@@ -198,15 +250,14 @@
 
   .setting-header .close-setting {
     font-size: 15px;
-    padding: 5px;
+    padding: 10px;
   }
 
   .setting .block:not(:last-of-type) {
-    padding-inline: 20px;
+    padding-inline: 10px;
   }
 
   .setting .block h3 {
-    /* width: 100%; */
     text-align: inherit;
     font-size: 18px;
     margin-right: 0;
@@ -223,16 +274,6 @@
 
   .setting .block.notification {
     flex-direction: column;
-  }
-
-  .setting .footer {
-    padding-inline: 20px;
-    padding-bottom: 20px;
-  }
-
-  .setting .footer button {
-    font-size: 16px;
-    padding: 8px 10px;
   }
 }
 

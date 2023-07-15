@@ -223,13 +223,13 @@ a {
 
 @media (max-width: 550px) {
   .glass-effect {
-    min-width: 450px;
+    min-width: calc(100% - 40px);
   }
 }
 
 @media (max-width: 400px) {
   .glass-effect {
-    min-width: 360px;
+    width: calc(100% - 40px);
   }
 
   .block input[type="number"] {
@@ -238,14 +238,9 @@ a {
   }
 }
 
-@media (max-width: 400px) {
-  .glass-effect {
-    min-width: 320px;
-  }
-}
 @media (max-width: 350px) {
   .glass-effect {
-    min-width: 300px;
+    width: calc(100% - 40px);
   }
 }
 

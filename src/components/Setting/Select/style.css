@@ -61,7 +61,7 @@ div.select-container {
 
 @media (max-width: 400px) {
   .select-menu button.open-menu {
-    padding: 8px 10px;
+    padding: 8px;
   }
   .sound-details .sound-type .select-menu button.open-menu {
     width: 100%;
