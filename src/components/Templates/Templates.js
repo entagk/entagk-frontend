@@ -28,7 +28,7 @@ function Templates() {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [showTodo, setShowTodo] = useState('');
-  const { userTemplates: { templates, total, numberOfPages, currentPage }, isLoading } = useSelector(state => state.templates) || {};
+  const { userTemplates: { templates, total, numberOfPages, currentPage }, isLoading } = useSelector(state => state.templates) || { userTemplates: {} };
   const { active, activites } = useSelector(state => state.timer);
 
   useEffect(() => {
@@ -131,7 +131,7 @@ function Templates() {
       }>
         <NavBar />
         <div className='templates container'>
-          {templates.length > 0 && searchParams.get('search') === 0 ? (
+          {templates?.length > 0 || searchParams.get('search') ? (
             <>
               <SearchBar
                 searchParams={searchParams}
@@ -153,6 +153,11 @@ function Templates() {
               ) : (
                 <div className='templates-container'>
                   <>
+                    {searchParams.get('search') && (
+                      <p className='search-result'>
+                        <span>{templates.length}</span> results for tempaltes matching <span>{searchParams.get('search')}</span>
+                      </p>
+                    )}
                     {templates?.map((temp) => (
                       <Template
                         {...temp}
@@ -174,7 +179,7 @@ function Templates() {
                 />
               )}
             </>
-          ) : (
+          ) : templates.length > 0 && !searchParams.get('search') && (
             <div className='no-templates'>
               <h2>
                 No templates

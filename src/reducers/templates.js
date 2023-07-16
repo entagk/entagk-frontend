@@ -118,7 +118,8 @@ export default (state = initialState, action) => {
           ...state,
           userTemplates: {
             ...state.userTemplates,
-            total: state.userTemplates.total + 1
+            total: state.userTemplates.total + 1,
+            templates: state.templates.concat([action.data])
           }
         }
       } else {

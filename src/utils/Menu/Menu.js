@@ -5,8 +5,6 @@ import "./style.css"
 function Menu({ children, MainButton, ...props }) {
   const [open, setOpen] = useState(false);
 
-  console.log(children.map(child => child.props?.onClick));
-
   return (
     <div className="menu">
       {React.cloneElement(MainButton, { onClick: () => setOpen(o => !o), className: open ? `${MainButton.props.className} open` : MainButton.props.className })}

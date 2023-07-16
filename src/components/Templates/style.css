@@ -8,6 +8,17 @@
   flex-direction: column;
 }
 
+.search-result {
+  color: #fff;
+  width: 100%;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.search-result span {
+  font-weight: bold;
+}
+
 .no-templates {
   width: 100%;
   text-align: center;
