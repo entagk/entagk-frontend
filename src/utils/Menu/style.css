@@ -1,0 +1,96 @@
+.menu {
+  position: relative;
+}
+
+button.toggle-menu {
+  outline: none;
+  border: 0;
+  background: transparent;
+  color: white;
+  /* background: #bfbebe; */
+  padding: 10px;
+  border-radius: 50%;
+  font-size: 25px;
+  /* box-shadow: 0px 0px 5px #7a7a7a; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button.toggle-menu:hover:not(:disabled) {
+  background-color: #2c282842; /*   box-shadow: 0px 0px 10px #7a7a7a; */
+}
+
+.menu-content {
+  color: #000;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  right: 0;
+  background: #fff;
+  box-shadow: 0px 0px 5px #7a7a7a;
+  margin-block: 10px 20px;
+  border-radius: 10px;
+  padding-block: 12px;
+  width: max-content;
+  z-index: 1001;
+}
+
+.menu-content .row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  font-size: 30px;
+}
+
+.menu-content .row button,
+.menu-content .row a {
+  font-size: 20px;
+  padding: 10px 16px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.menu-content .row button span,
+.menu-content .row a span {
+  margin-left: 10px;
+  font-size: 18px;
+  text-transform: capitalize;
+}
+
+.menu-content .row button:hover,
+.menu-content .row a:hover {
+  background: rgba(0, 0, 0, 0.092);
+}
+
+@media (max-width: 768px) {
+  .menu-content {
+    width: 198px;
+  }
+
+  .menu-content .row a,
+  .menu-content .row button {
+    font-size: 16px;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 375px) {
+  .menu-content {
+    width: 170px;
+  }
+
+  .menu-content .row a span,
+  .menu-content .row button span {
+    margin-left: 10px;
+    margin-inline: 5px;
+    font-size: 16px;
+  }
+}

@@ -12,6 +12,8 @@ import { checkTask, deleteTask, CHANGE_ACTIVE_TASK } from "../../../actions/task
 import Loading from "../../../utils/Loading";
 
 import "./style.css";
+import Menu from "../../../utils/Menu/Menu";
+import MenuItem from "../../../utils/Menu/MenuItem";
 
 const DeletePopup = lazy(() => import("./../../../utils/DeletePopup/DeletePopup"));
 const TaskForm = lazy(() => import("../TaskForm/TaskForm"));
@@ -22,7 +24,6 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, setTempl
   const { setting } = useSelector(state => state.timer);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const [openMenu, setOpenMenu] = useState(false);
 
   useEffect(() => {
     if (props.notes && document.querySelector(`.task#task-${props._id} .task-notes`)) {
@@ -35,7 +36,6 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, setTempl
 
   const handleCheck = () => {
     dispatch(checkTask(props._id, setIsLoading, setMessage));
-    setOpenMenu(false);
   }
 
   const handleDelete = () => {
@@ -62,12 +62,10 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, setTempl
 
   const toggleEdit = () => {
     setOpenEdit(true);
-    setOpenMenu(false);
   }
 
   const toggleDelete = () => {
     setOpenDelete(true);
-    setOpenMenu(false);
   }
 
   if (openEdit) {
@@ -157,61 +155,82 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, setTempl
               )}
               <span>{props.est}</span>
             </p>
-            <div className="menu">
-              <button
-                aria-label="toggle the task list menu"
-                className="toggle-menu"
-                onClick={() => setOpenMenu(om => !om)}>
-                <CircularMenu />
-              </button>
-              {openMenu && (
-                <div className="menu-content">
-                  <div className="row">
-                    {((props.template?.todo && props.template) || (!props.template && props.tasks.length === 0)) && (
-                      <>
-                        {(!setting?.autoStartNextTask) && (
-                          <button aria-label="check button" onClick={handleCheck}>
-                            {!props.check ? (
+            <Suspense
+              fallback={<></>}
+            >
+              <Menu MainButton={
+                <button
+                  aria-label="toggle the task list menu"
+                  className="toggle-menu"
+                  >
+                  <CircularMenu />
+                </button>
+              }>
+                {((props.template?.todo && props.template) || (!props.template && props.tasks.length === 0)) && (
+                  <>
+                    {(!setting?.autoStartNextTask) && (
+                      <MenuItem aria-label="check button" onClick={handleCheck}>
+                        {!props.check ? (
+                          <>
+                            {
+                              (props.template !== null) ? (
+                                <>
+                                  <RiCheckboxCircleFill />
+                                  <span style={{ marginLeft: 10 }}>
+                                    Check
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <ImCheckboxChecked />
+                                  <span style={{ marginLeft: 10 }}>
+                                    Check
+                                  </span>
+                                </>
+                              )
+                            }
+                          </>
+                        ) : (
+                          <>
+                            {props.template !== null ? (
                               <>
-                                {
-                                  (props.template !== null) ? (
-                                    <RiCheckboxCircleFill />
-                                  ) : (
-                                    <ImCheckboxChecked />
-                                  )
-                                }
+                                <RiCheckboxBlankCircleLine />
+                                <span style={{ marginLeft: 10 }}>
+                                  Uncheck
+                                </span>
                               </>
                             ) : (
                               <>
-                                {props.template !== null ? (
-                                  <RiCheckboxBlankCircleLine />
-                                ) : (
-                                  <ImCheckboxUnchecked />
-                                )}
+                                <ImCheckboxUnchecked />
+                                <span style={{ marginLeft: 10 }}>
+                                  Uncheck
+                                </span>
                               </>
                             )}
-                          </button>
+                          </>
                         )}
-                      </>
+                      </MenuItem>
                     )}
-                    <button
-                      aria-label="edit button"
-                      onClick={toggleEdit}
-                    >
-                      <FiEdit3 />
-                    </button>
-                    <button
-                      aria-label="delet button"
-                      onClick={toggleDelete}
-                      style={{ color: 'red' }}
-                      className="delete"
-                    >
-                      <MdDelete />
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+                  </>
+                )}
+                <MenuItem
+                  aria-label="edit button"
+                  onClick={toggleEdit}
+                >
+                  <FiEdit3 />
+                  <span style={{ marginLeft: 10 }}>Edit</span>
+                </MenuItem>
+                <MenuItem
+                  aria-label="delet button"
+                  onClick={toggleDelete}
+                  style={{ color: 'red' }}
+                  className="delete"
+                >
+                  <MdDelete />
+                  <span style={{ marginLeft: 10 }}>Delete</span>
+                </MenuItem>
+              </Menu>
+            </Suspense>
             {props.tasks?.length > 0 && (
               <button aria-label="toggle the tasks list"
                 className="show-tasks"
@@ -225,7 +244,7 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, setTempl
           <div className="task-notes">
           </div>
         )}
-      </div >
+      </div>
     </>
   )
 };

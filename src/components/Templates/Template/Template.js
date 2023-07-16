@@ -12,13 +12,15 @@ import './style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToTodo, deleteTemplate } from '../../../actions/templates';
 
+const Menu = lazy(() => import('../../../utils/Menu/Menu'));
+const MenuItem = lazy(() => import('../../../utils/Menu/MenuItem'));
+
 const TodoList = lazy(() => import('../../../icons/list/TodoList'));
 const DeletePopup = lazy(() => import("../../../utils/DeletePopup/DeletePopup"));
 const TemplateForm = lazy(() => import('../TemplateForm/TemplateForm'));
 
 function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }) {
   const dispatch = useDispatch();
-  const [openMenu, setOpenMenu] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const { user } = useSelector(state => state.auth);
@@ -38,13 +40,11 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
   }, 10000);
 
   const hadnleAddToTodo = () => {
-    setOpenMenu(false);
     dispatch(addToTodo(props._id, setIsLoading, setMessage));
   }
 
   const toggleDelete = () => {
     setOpenDelete(true);
-    setOpenMenu(false);
   }
 
   const handleDelete = () => {
@@ -54,12 +54,10 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
 
   const handleOpenEdit = () => {
     setOpenEdit(true);
-    setOpenMenu(false);
   }
 
   const handleShowingTasks = () => {
     setShowTodo(props._id);
-    setOpenMenu(false);
   }
 
   return (
@@ -129,79 +127,76 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
             <p className='temp-est'>
               {props.est}
             </p>
-            <div className="menu">
-              <button
-                aria-label="toggle the task list menu"
-                className="toggle-menu"
-                onClick={() => setOpenMenu(om => !om)}>
-                <CircularMenu />
-              </button>
-              {openMenu && (
-                <div className="menu-content">
-                  <div className="row">
-                    <button aria-label='show todo' onClick={handleShowingTasks}>
-                      <Suspense fallback={<></>}>
-                        <TodoList />
-                      </Suspense>
-                      <p>Todo</p>
-                    </button>
-                    {!user ? (
+            <Suspense fallback={<></>}>
+              <Menu MainButton={
+                <button
+                  aria-label="toggle the task list menu"
+                  className="toggle-menu"
+                >
+                  <CircularMenu />
+                </button>
+              }>
+                <MenuItem aria-label='show todo' onClick={handleShowingTasks}>
+                  <Suspense fallback={<></>}>
+                    <TodoList />
+                  </Suspense>
+                  <span>Todo</span>
+                </MenuItem>
+                {!user ? (
+                  <>
+                    <div style={{ padding: 10 }}>
+                      <Loading
+                        size="30"
+                        strokeWidth="5"
+                        color={"#ccc"}
+                        backgroud="transparent"
+                        paddingBlock='0'
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <MenuItem
+                      aria-label='add to todo list'
+                      onClick={hadnleAddToTodo}
+                    >
+                      <MdAddTask />
+                      <span>Add to todo</span>
+                    </MenuItem>
+                    {user._id === props.userId && (
                       <>
-                        <div style={{ padding: 10 }}>
-                          <Loading
-                            size="30"
-                            strokeWidth="5"
-                            color={"#ccc"}
-                            backgroud="transparent"
-                            paddingBlock='0'
-                          />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          aria-label='add to todo list'
-                          onClick={hadnleAddToTodo}
+                        <MenuItem
+                          aria-label="edit button"
+                          onClick={handleOpenEdit}
                         >
-                          <MdAddTask />
-                          <p>Add to todo</p>
-                        </button>
-                        {user._id === props.userId && (
-                          <>
-                            <button
-                              aria-label="edit button"
-                              onClick={handleOpenEdit}
-                            >
-                              <FiEdit3 />
-                              <p>Edit</p>
-                            </button>
-                            <button
-                              aria-label="delet button"
-                              onClick={toggleDelete}
-                              style={{ color: 'red' }}
-                              className="delete"
-                            >
-                              <MdDelete />
-                              <p>Delete</p>
-                            </button>
-                          </>
-                        )}
+                          <FiEdit3 />
+                          <span>Edit</span>
+                        </MenuItem>
+                        <MenuItem
+                          aria-label="delet button"
+                          onClick={toggleDelete}
+                          style={{ color: 'red' }}
+                          className="delete"
+                        >
+                          <MdDelete />
+                          <span>Delete</span>
+                        </MenuItem>
                       </>
                     )}
-                  </div>
-                </div>
-              )}
-            </div>
+                  </>
+                )}
+              </Menu>
+            </Suspense>
           </div>
         </div>
         <div className='temp-desc'>
           <p>
             {(props.desc.length > 200 && !showMore) ? `${props.desc.slice(0, 196)}...` : props.desc}
             {(props.desc.length > 200 && !showMore) ?
-              <button 
-              aria-label="see mroe" 
-              className='show-more' 
-              onClick={() => setShowMore(true)}>see more</button> :
+              <button
+                aria-label="see mroe"
+                className='show-more'
+                onClick={() => setShowMore(true)}>see more</button> :
               <>
                 {showMore && (
                   <button aria-label="see mroe" className='show-more' onClick={() => setShowMore(false)}>see less</button>

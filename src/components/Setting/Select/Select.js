@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { Suspense, lazy } from 'react';
 
-import { RiArrowUpSLine, RiArrowDownSLine } from 'react-icons/ri';
+import { RiArrowDownSLine } from 'react-icons/ri';
 
 import './style.css';
 
+const Menu = lazy(() => import('../../../utils/Menu/Menu'));
+const MenuItem = lazy(() => import('../../../utils/Menu/MenuItem'));
+
 function Select({ options, setChange, type, data, setData, width }) {
-  const [open, setOpen] = useState(false);
   const realOptions = typeof options[0] === "object" ? options.map((op) => op.name) : options;
 
   const handleChange = (e) => {
@@ -15,29 +17,32 @@ function Select({ options, setChange, type, data, setData, width }) {
 
   return (
     <div className='select-container'>
-      <div className='select-menu menu' style={{ width: width || '200px' }} >
-        <button type='button' aria-label='open menu' className='open-menu' onClick={() => setOpen(!open)}>
-          <span>{data[type]?.name || data[type]}</span>
-          {open ?
-            (<RiArrowUpSLine className='arrow' />) :
-            (<RiArrowDownSLine className='arrow' />)
-          }</button>
-        {open && (
-          <div className='menu-content' style={{ top: 35 }}>
-            <div className='row' style={{ width: "100%" }}>
-              {realOptions?.map((option, index) => (
-                <button
-                  key={index}
-                  aria-label={option}
-                  type='button'
-                  onClick={handleChange}
-                  value={index}
-                  className={data[type].name === option || data[type] === option ? "active" : null}
-                >{option}</button>
-              ))}
-            </div>
-          </div>
-        )}
+      <div className='select-menu menu' style={{ width: width || '200px' }}>
+        <Suspense fallback={<></>}>
+          <Menu MainButton={
+            <button
+              type='button'
+              aria-label='open menu'
+              className='toggle-menu'
+            >
+              <span>{data[type]?.name || data[type]}</span>
+              <RiArrowDownSLine className='arrow' />
+            </button>
+          }
+            style={{ top: 35 }}
+          >
+            {realOptions?.map((option, index) => (
+              <MenuItem
+                key={index}
+                aria-label={option}
+                type='button'
+                onClick={handleChange}
+                value={index}
+                className={data[type].name === option || data[type] === option ? "active" : null}
+              >{option}</MenuItem>
+            ))}
+          </Menu>
+        </Suspense>
       </div>
     </div>
   );

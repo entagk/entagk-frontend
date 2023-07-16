@@ -37,21 +37,17 @@ div.select-container {
   color: #fff;
 }
 
-.select-menu button.open-menu {
-  border-radius: 6px;
+.select-menu button.toggle-menu {
   font-size: 16px;
   padding: 10px 16px;
-  width: fit-content;
   justify-content: space-between;
-  width: max-content;
 
-  background: transparent;
-  color: #fff;
   border: 1px solid;
+  border-radius: 6px;
   width: 100%;
 }
 
-.select-menu button.open-menu .arrow {
+.select-menu button.toggle-menu .arrow {
   margin-left: 10px;
 }
 
@@ -60,10 +56,10 @@ div.select-container {
 }
 
 @media (max-width: 400px) {
-  .select-menu button.open-menu {
+  .select-menu button.toggle-menu {
     padding: 8px;
   }
-  .sound-details .sound-type .select-menu button.open-menu {
+  .sound-details .sound-type .select-menu button.toggle-menu {
     width: 100%;
   }
 }

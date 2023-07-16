@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Suspense, lazy } from 'react';
 
 import { AiOutlinePlus, AiOutlineSearch } from 'react-icons/ai';
 
@@ -9,9 +9,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SEARCH_USER_TEMPLATRES, SORT_USER_TEMPLATRES, getTemplatesForUser, searchTemplates } from '../../../actions/templates';
 import { END_LOADING, START_LOADING } from '../../../actions/auth';
 
+const Menu = lazy(() => import('../../../utils/Menu/Menu'));
+const MenuItem = lazy(() => import('../../../utils/Menu/MenuItem'));
+
 function SearchBar({ setOpenFormForNew, searchParams, setSearchParams, setMessage }) {
   const dispatch = useDispatch();
-  const [openMenu, setOpenMenu] = useState(false);
   const { templates, total, originalData } = useSelector(state => state.templates.userTemplates);
 
   const handleChangeSearchQuery = (e) => {
@@ -30,7 +32,7 @@ function SearchBar({ setOpenFormForNew, searchParams, setSearchParams, setMessag
 
   const handleSortElement = (e) => {
     const search = searchParams.get('search');
-    searchParams.set("sort", e.target.key);
+    searchParams.set("sort", e.target.value);
     setSearchParams(searchParams);
 
     if (templates?.length === total) {
@@ -60,36 +62,37 @@ function SearchBar({ setOpenFormForNew, searchParams, setSearchParams, setMessag
             onChange={handleChangeSearchQuery}
           />
         </div>
-        <div className="menu" >
-          <button
-            aria-label="toggle the task list menu"
-            className="toggle-menu"
-            onClick={() => setOpenMenu(om => !om)}>
-            <span className='text'>
-              Sort
-            </span>
-            <span className='icon'>
-              <RiArrowDownSLine className='arrow' />
-            </span>
-          </button>
-          {openMenu && (
-            <div className="menu-content">
-              <div className="row">
-                <button
-                  aria-label="Last updated sort choice"
-                  type='button'
-                  key="updatedAt"
-                  onClick={handleSortElement}
-                >
-                  Last Updated
-                </button>
-                <button aria-label="Name sort choice" type='button' value="name" onClick={handleSortElement}>
-                  Name
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        <Suspense fallback={<></>}>
+          <Menu MainButton={
+            <button
+              aria-label="toggle the task list menu"
+              className="toggle-menu"
+            >
+              <span className='text'>
+                Sort
+              </span>
+              <span className='icon'>
+                <RiArrowDownSLine className='arrow' />
+              </span>
+            </button>
+          }>
+            <MenuItem
+              aria-label="Last updated sort choice"
+              type='button'
+              value="updatedAt"
+              onClick={handleSortElement}
+            >
+              Last Updated
+            </MenuItem>
+            <MenuItem
+              aria-label="Name sort choice"
+              type='button'
+              value="name"
+              onClick={handleSortElement}>
+              Name
+            </MenuItem>
+          </Menu>
+        </Suspense>
       </div>
       <button aria-label='New template' className='add-temp' onClick={() => setOpenFormForNew(true)}>
         <span className='icon'>

@@ -88,8 +88,6 @@
   border: 2px solid white;
   font-size: 20px;
   padding: 5px 1px;
-  color: #fff;
-  border-radius: 50%;
   padding-inline: 5px;
 }
 
@@ -104,9 +102,7 @@
 .template .menu .menu-content {
   backdrop-filter: blur(10px);
   padding: 10px 0;
-  width: max-content;
   right: 5px;
-  z-index: 1000;
 }
 
 .template .menu .menu-content .row button {
@@ -114,7 +110,7 @@
   padding: 6px 10px;
 }
 
-.template .menu .menu-content .row button p {
+.template .menu .menu-content .row button span {
   margin-inline: 10px;
 }
 
