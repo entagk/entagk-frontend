@@ -8,6 +8,57 @@
   flex-direction: column;
 }
 
+.no-templates {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 20px;
+  color: #fff;
+}
+
+.no-templates h2 {
+  font-size: 40px;
+}
+
+.no-templates p {
+  margin-block: 20px;
+  font-size: 20px;
+}
+
+.add-temp {
+  border: 2px solid;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 20px;
+  color: #ffffff;
+}
+.add-temp {
+  background: #dadada99;
+}
+
+.add-temp .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+}
+
+.add-temp:hover {
+  box-shadow: 0 0 7px rgb(141 141 141);
+}
+
+@media (max-width: 768px) {
+  .add-temp {
+    margin-top: 10px;
+    width: 100%;
+    font-size: 18px;
+    padding: 8px;
+  }
+}
+
 @import url("./TemplateTasks/style.css");
 
 @media (max-width: 550px) {

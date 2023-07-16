@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
 import { getTemplatesForUser, searchTemplates } from '../../actions/templates';
+import { AiOutlinePlus } from 'react-icons/ai';
 
 import Loading from '../../utils/Loading';
 import Message from '../../utils/Message';
@@ -130,43 +131,64 @@ function Templates() {
       }>
         <NavBar />
         <div className='templates container'>
-          <SearchBar
-            searchParams={searchParams}
-            setSearchParams={setSearchParams}
-            setOpenFormForNew={setOpenFormForNew}
-          />
-          {isLoading ? (
-            <div style={{
-              width: "100%",
-              margin: "30px",
-            }}>
-              <Loading
-                size="100"
-                strokeWidth="5"
-                backgroud="transperent"
-                color="#ffffff"
+          {templates.length > 0 && searchParams.get('search') === 0 ? (
+            <>
+              <SearchBar
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
+                setOpenFormForNew={setOpenFormForNew}
               />
-            </div>
-          ) : (
-            <div className='templates-container'>
-              {templates?.map((temp) => (
-                <Template
-                  {...temp}
-                  key={temp._id}
-                  setShowTodo={setShowTodo}
-                  isLoading={isLoadingTemp}
-                  setIsLoading={setIsLoadingTemp}
-                  setMessage={setMessage}
+              {isLoading ? (
+                <div style={{
+                  width: "100%",
+                  margin: "30px",
+                }}>
+                  <Loading
+                    size="100"
+                    strokeWidth="5"
+                    backgroud="transperent"
+                    color="#ffffff"
+                  />
+                </div>
+              ) : (
+                <div className='templates-container'>
+                  <>
+                    {templates?.map((temp) => (
+                      <Template
+                        {...temp}
+                        key={temp._id}
+                        setShowTodo={setShowTodo}
+                        isLoading={isLoadingTemp}
+                        setIsLoading={setIsLoadingTemp}
+                        setMessage={setMessage}
+                      />
+                    ))}
+                  </>
+                </div>
+              )}
+              {(numberOfPages > 1) && (
+                <PaginationBar
+                  numberOfPages={numberOfPages}
+                  currentPage={currentPage}
+                  changePage={changePage}
                 />
-              ))}
+              )}
+            </>
+          ) : (
+            <div className='no-templates'>
+              <h2>
+                No templates
+              </h2>
+              <p>Add your first template</p>
+              <button aria-label='New template' className='add-temp' onClick={() => setOpenFormForNew(true)}>
+                <span className='icon'>
+                  <AiOutlinePlus />
+                </span>
+                <span className='text'>
+                  Add Template
+                </span>
+              </button>
             </div>
-          )}
-          {(numberOfPages !== 1) && (
-            <PaginationBar
-              numberOfPages={numberOfPages}
-              currentPage={currentPage}
-              changePage={changePage}
-            />
           )}
         </div>
         {openFormForNew && (
