@@ -44,3 +44,41 @@ export const pushNotification = (message) => {
     });
   }
 };
+
+export const getPages = (current, numberOfPages) => {
+  if (numberOfPages <= 5) {
+    return Array(numberOfPages).fill(0).map((e, i) => i + 1);
+  }
+
+  let pages = [current];
+  if (current === 1) {
+    pages.push(2);
+    if (numberOfPages > current + 2) {
+      pages.push('...');
+    }
+    pages.push(numberOfPages);
+  } else {
+    if (numberOfPages !== current) {
+      if (current - 1 > 2) {
+        pages.unshift(current - 1);
+        pages.unshift("...");
+      } else if (current !== 2) {
+        pages.unshift(2);
+      }
+
+      if (numberOfPages - current >= 2) {
+        pages.push(current + 1);
+        pages.push("...")
+      }
+      pages.push(numberOfPages);
+    } else {
+      pages.unshift(numberOfPages - 1);
+      if (numberOfPages - 2 > 1) {
+        pages.unshift('...');
+      }
+    }
+    pages.unshift(1);
+  }
+
+  return pages;
+};

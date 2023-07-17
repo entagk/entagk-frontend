@@ -98,7 +98,7 @@ function Templates() {
           <div className='glass-container'>
             <div className='glass-effect template-tasks'>
               <TemplateTasksHeader
-                template={templates.filter(t => t._id === showTodo)[0]}
+                template={templates[currentPage - 1].filter(t => t._id === showTodo)[0]}
                 setOpenTodo={setShowTodo}
               />
               <Suspense fallback={<>
@@ -131,7 +131,7 @@ function Templates() {
       }>
         <NavBar />
         <div className='templates container'>
-          {templates?.length > 0 || searchParams.get('search') ? (
+          {(templates[currentPage - 1]?.length > 0 || searchParams.get('search')) ? (
             <>
               <SearchBar
                 searchParams={searchParams}
@@ -155,10 +155,10 @@ function Templates() {
                   <>
                     {searchParams.get('search') && (
                       <p className='search-result'>
-                        <span>{templates.length}</span> results for tempaltes matching <span>{searchParams.get('search')}</span>
+                        <span>{total}</span> results for tempaltes matching <span>{searchParams.get('search')}</span>
                       </p>
                     )}
-                    {templates?.map((temp) => (
+                    {templates[currentPage - 1]?.map((temp) => (
                       <Template
                         {...temp}
                         key={temp._id}
@@ -179,7 +179,7 @@ function Templates() {
                 />
               )}
             </>
-          ) : templates.length > 0 && !searchParams.get('search') && (
+          ) : templates[currentPage - 1].length > 0 && !searchParams.get('search') && (
             <div className='no-templates'>
               <h2>
                 No templates

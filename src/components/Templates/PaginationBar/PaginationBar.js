@@ -3,25 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
 import './style.css';
+import { getPages } from '../../../utils/helper';
 
 function PaginationBar({ numberOfPages, currentPage, changePage }) {
-  const pages = new Array(numberOfPages).fill(1).map((p, i) => i + 1);
-  const [beforePages, setBeforePages] = useState(pages.slice(1, currentPage - 1))
-  const [afterPages, setAfterPages] = useState(numberOfPages !== 2 ? [2] : []);
+  const [pages, setPages] = useState(getPages(currentPage, numberOfPages))
 
   useEffect(() => {
-    if (currentPage > 1) {
-      if (currentPage !== 2) {
-        setBeforePages([currentPage - 1])
-      } else {
-        setBeforePages([])
-      }
-      if (currentPage < numberOfPages - 1) {
-        setAfterPages([currentPage + 1])
-      } else {
-        setAfterPages([])
-      }
-    }
+    setPages(getPages(currentPage, numberOfPages));
     // eslint-disable-next-line
   }, [currentPage])
 
@@ -36,41 +24,19 @@ function PaginationBar({ numberOfPages, currentPage, changePage }) {
         <MdKeyboardArrowLeft />
       </button>
       <div className='pages'>
-        <button key={1} className={`page-num ${1 === currentPage ? 'active' : ''}`}
-          onClick={() => changePage(1)}
-        >
-          1
-        </button>
-        {(beforePages[0] > 2) && (<p>...</p>)}
-        {beforePages.map(page => (
-          <button key={page} className={`page-num ${page === currentPage ? 'active' : ''}`}
-            onClick={() => changePage(page)}
-          >
-            {page}
-          </button>
-        ))}
-        {(currentPage !== 1 && currentPage !== numberOfPages) && (
+        {pages.map(page => (
           <>
-            <button key={currentPage} className={'page-num active'}
-              onClick={() => changePage(currentPage)}
-            >
-              {currentPage}
-            </button>
+            {page === '...' ? (
+              <p>...</p>
+            ) : (
+              <button key={page} className={`page-num ${page === currentPage ? 'active' : ''}`}
+                onClick={() => changePage(page)}
+              >
+                {page}
+              </button>
+            )}
           </>
-        )}
-        {afterPages.map(page => (
-          <button key={page} className={`page-num ${page === currentPage ? 'active' : ''}`}
-            onClick={() => changePage(page)}
-          >
-            {page}
-          </button>
         ))}
-        {(numberOfPages - afterPages[0] > 1) && (<p>...</p>)}
-        <button key={numberOfPages} className={`page-num ${numberOfPages === currentPage ? 'active' : ''}`}
-          onClick={() => changePage(numberOfPages)}
-        >
-          {numberOfPages}
-        </button>
       </div>
       <button
         aria-label='next arrow button'
