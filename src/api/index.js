@@ -95,9 +95,7 @@ export const updateSetting = (settingData) => API.post("/setting/update/", setti
 /* end the setting api */
 
 /* start the template api */
-export const getTempsForUser = (sort, page) => API.get(`/template/user/?sort=${sort}&page=${page}`);
-
-export const searchTemplatesForUser = (page, sort, query) => API.get(`/template/user/search?search=${query}&page=${page}&sort=${sort}`);
+export const getTempsForUser = (sort, page, query) => API.get(`/template/user/?sort=${sort}&page=${page}&search=${query}`);
 
 export const getTasksForOne = (id, page) => API.get(`/template/one/tasks/private/${id}?page=${page}`);
 

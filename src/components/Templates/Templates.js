@@ -2,7 +2,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
-import { getTemplatesForUser, searchTemplates } from '../../actions/templates';
+import { getTemplatesForUser, CHANGE_CURRENT_PAGE } from '../../actions/templates';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 import Loading from '../../utils/Loading';
@@ -28,14 +28,14 @@ function Templates() {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [showTodo, setShowTodo] = useState('');
-  const { userTemplates: { templates, total, numberOfPages, currentPage }, isLoading } = useSelector(state => state.templates) || { userTemplates: {} };
+  const { userTemplates: { templates, total, numberOfPages, currentPage }, isLoading } = useSelector(state => state?.templates) || { userTemplates: {} };
   const { active, activites } = useSelector(state => state.timer);
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
       if (total === undefined && templates === undefined) {
         const sort = searchParams.get('sort') || 'updatedAt'
-        dispatch(getTemplatesForUser(sort, 1, setMessage));
+        dispatch(getTemplatesForUser(sort, searchParams.get('search'), 1, setMessage));
       }
     }
     // eslint-disable-next-line
@@ -75,10 +75,10 @@ function Templates() {
   }
 
   const changePage = (page) => {
-    if (page !== currentPage && !searchParams.get('search')) {
-      dispatch(getTemplatesForUser(searchParams.get('sort'), page, setMessage))
+    if (!templates[page - 1] || searchParams.get('search')) {
+      dispatch(getTemplatesForUser(searchParams.get('sort'), searchParams.get('search'), page, setMessage));
     } else {
-      dispatch(searchTemplates(searchParams.get('search'), searchParams.get('sort'), page, setMessage))
+      dispatch({ type: CHANGE_CURRENT_PAGE, data: { type: "userTemplates", page } })
     }
   }
 
@@ -179,7 +179,7 @@ function Templates() {
                 />
               )}
             </>
-          ) : templates[currentPage - 1].length > 0 && !searchParams.get('search') && (
+          ) : templates[currentPage - 1]?.length > 0 && !searchParams.get('search') && (
             <div className='no-templates'>
               <h2>
                 No templates

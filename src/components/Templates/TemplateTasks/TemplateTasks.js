@@ -17,7 +17,8 @@ function TemplateTasks({ templateId, setOpenTodo, message, setMessage }) {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const [isLoading, setIsLoading] = useState("");
   const tasks = useSelector(state => state.templates.tempTasks[templateId]) || {};
-  const template = useSelector(state => state.templates.userTemplates.templates.find(t => t._id === templateId));
+  const { currentPage } = useSelector(state => state.templates.userTemplates);
+  const template = useSelector(state => state.templates.userTemplates.templates[currentPage - 1].find(t => t._id === templateId));
   const [page, setPage] = useState(1);
   const { active, activites } = useSelector(state => state.timer);
 

@@ -25,6 +25,7 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
   const [openEdit, setOpenEdit] = useState(false);
   const { user } = useSelector(state => state.auth);
   const { active, activites } = useSelector(state => state.timer);
+  const { currentPage, numberOfPages, templates } = useSelector(state => state.templates.userTemplates);
   const [showMore, setShowMore] = useState(false);
 
   const hours = ((
@@ -49,7 +50,7 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
 
   const handleDelete = () => {
     setOpenDelete(false);
-    dispatch(deleteTemplate(props._id, setIsLoading, setMessage));
+    dispatch(deleteTemplate(props._id, templates[currentPage - 1].length, currentPage, numberOfPages, setIsLoading, setMessage));
   }
 
   const handleOpenEdit = () => {

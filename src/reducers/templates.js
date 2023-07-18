@@ -9,7 +9,9 @@ import {
   CREATE_TEMPLATE,
   MODIFY_TEMPLATE,
   SEARCH_USER_TEMPLATRES,
-  SORT_USER_TEMPLATRES
+  SORT_USER_TEMPLATRES,
+  CHANGE_CURRENT_PAGE,
+  TEMPLATE_LIMIT
 } from "../actions/templates";
 
 const initialState = {
@@ -40,7 +42,7 @@ export default (state = initialState, action) => {
       state.tempTasks[newTask.template?._id].tasks = state.tempTasks[newTask.template?._id].tasks.concat([newTask]);
       state.tempTasks[newTask.template?._id].tasks.total = ++state.tempTasks[newTask.template?._id].tasks.total;
 
-      const userTemplate = state.userTemplates.templates.find(t => t._id === newTask?.template._id);
+      const userTemplate = state.userTemplates.templates[state.userTemplates.currentPage - 1].find(t => t._id === newTask?.template._id);
       userTemplate.tasks = [...userTemplate.tasks, newTask._id];
       userTemplate.est = userTemplate.est + newTask.est;
 
@@ -61,7 +63,7 @@ export default (state = initialState, action) => {
 
       state.tempTasks[updatedTask.template?._id].tasks = [...state.tempTasks[updatedTask.template?._id].tasks.filter(t => t._id !== updatedTask._id), updatedTask];
 
-      const userTemplate2 = state.userTemplates.templates.find(t => t._id === updatedTask?.template._id);
+      const userTemplate2 = state.userTemplates.templates[state.userTemplates.currentPage - 1].find(t => t._id === updatedTask?.template._id);
       userTemplate2.est = userTemplate2.est - est + updatedTask.est;
 
       return {
@@ -96,11 +98,32 @@ export default (state = initialState, action) => {
       }
 
     case GET_USER_TEMPLATES:
-      return {
-        ...state,
-        userTemplates: { ...action.data, originalData: action.data },
-        tempTasks: action.data.templates.reduce((all, c) => ({ ...all, [c._id]: {} }), state.tempTasks)
-      };
+      const templates = state.userTemplates.templates || [];
+      templates[action.data.currentPage - 1] = action.data.templates;
+
+      if (!(new URLSearchParams(document.location.search).get('search'))) {
+        return {
+          ...state,
+          userTemplates: { ...action.data, templates: templates },
+          tempTasks: action.data.templates.reduce((all, c) => ({ ...all, [c._id]: {} }), state.tempTasks)
+        };
+      } else {
+        return {
+          ...state,
+          userTemplates: { ...action.data, templates: templates },
+          tempTasks: action.data.templates.reduce((all, c) => ({ ...all, [c._id]: {} }), state.tempTasks)
+        };
+      }
+
+    case CHANGE_CURRENT_PAGE:
+      if (action.data.type === 'userTemplates') {
+        return {
+          ...state,
+          userTemplates: { ...state.userTemplates, currentPage: action.data.page }
+        }
+      } else {
+        return state;
+      }
 
     case GET_TEMPLATE_TASKS:
       return {
@@ -110,68 +133,94 @@ export default (state = initialState, action) => {
 
     case CREATE_TEMPLATE:
       if (state.userTemplates.numberOfPages === state.userTemplates.currentPage) {
-        state.tempTasks[action.data._id] = {
-          tasks: action.data.tasks
+        if ((TEMPLATE_LIMIT * state.userTemplates.numberOfPages) - state.userTemplates.total !== 0) {//22*2-44 = 0
+          state.userTemplates.templates[state.userTemplates.numberOfPages - 1].push(action.data);
+        } else {
+          state.userTemplates.templates[state.userTemplates.numberOfPages] = [action.data]
+          state.userTemplates.numberOfPages = state.userTemplates.numberOfPages + 1;
         }
 
         return {
           ...state,
           userTemplates: {
             ...state.userTemplates,
-            total: state.userTemplates.total + 1,
-            templates: state.templates.concat([action.data])
+            total: state.userTemplates.total + 1
           }
         }
       } else {
-        return state;
+        if ((TEMPLATE_LIMIT * state.userTemplates.numberOfPages) - state.userTemplates.total === 0) {
+          state.userTemplates.templates[state.userTemplates.numberOfPages] = [action.data]
+          state.userTemplates.numberOfPages = state.userTemplates.numberOfPages + 1;
+        } else if (state.userTemplates.templates[state.userTemplates.numberOfPages - 1]) {
+          state.userTemplates.templates[state.userTemplates.numberOfPages - 1].push(action.data);
+        }
+
+        return {
+          ...state,
+          userTemplates: {
+            ...state.userTemplates,
+            total: state.userTemplates.total + 1
+          }
+        }
       }
 
     case MODIFY_TEMPLATE:
-      const oldTempIndex = state.userTemplates.templates.findIndex(t => t._id === action.data._id);
+      const oldTempIndex = state.userTemplates.templates[state.userTemplates.currentPage - 1].findIndex(t => t._id === action.data._id);
 
-      state.userTemplates.templates[oldTempIndex] = action.data;
+      state.userTemplates.templates[state.userTemplates.currentPage - 1][oldTempIndex] = action.data;
 
       return state;
 
     case DELETE_TEMPLATE:
       const tempId = action.data.deletedTemplate._id
-      const filterTemplates = state.userTemplates.templates.filter((t) => t._id !== tempId);
       const tempTasks = Object.entries(state.tempTasks).filter(t => t[0] !== tempId);
-
-      return {
-        ...state,
-        userTemplates: { ...state.userTemplates, templates: filterTemplates },
-        tempTasks: tempTasks.reduce((a, e) => ({ ...a, [e[0]]: e[1] }), {}),
-      }
-
-    case SEARCH_USER_TEMPLATRES:
-      if (action.data.query !== '') {
-        const keys = action.data.query.split(" ");
-        const result = state.userTemplates.templates.filter(item => {
-          let found = false;
-          keys.forEach(key => {
-            found = found || item.name.includes(key) || item.desc.includes(key);
-          })
-
-          return found;
-        });
+      if (state.userTemplates.currentPage === state.userTemplates.numberOfPages) {
+        state.userTemplates.templates[state.userTemplates.currentPage - 1] = state.userTemplates.templates[state.userTemplates.currentPage - 1].filter((t) => t._id !== tempId);
 
         return {
           ...state,
           userTemplates: {
             ...state.userTemplates,
-            templates: result,
-            total: result.length,
-            currentPage: action.data.page,
-            numberOfPages: result.length / 25,
-          }
+            total: state.userTemplates.total - 1,
+            currentPage: state.userTemplates.templates[state.userTemplates.currentPage - 1].length === 0 ? state.userTemplates.currentPage - 1 : state.userTemplates.currentPage,
+            numberOfPages: state.userTemplates.templates[state.userTemplates.currentPage - 1].length === 0 ? state.userTemplates.numberOfPages - 1 : state.userTemplates.numberOfPages
+          },
+          tempTasks: tempTasks.reduce((a, e) => ({ ...a, [e[0]]: e[1] }), {}),
         }
       } else {
         return {
           ...state,
-          userTemplates: state.userTemplates.originalData
+          userTemplates: {
+            ...state.userTemplates,
+            total: state.userTemplates.total - 1,
+            numberOfPages: state.userTemplates.templates[state.userTemplates.currentPage - 1].length === 0 ? state.userTemplates.numberOfPages - 1 : state.userTemplates.numberOfPages
+          },
+          tempTasks: tempTasks.reduce((a, e) => ({ ...a, [e[0]]: e[1] }), {}),
         }
       }
+
+    case SEARCH_USER_TEMPLATRES:
+      const keys = action.data.query.split(" ");
+      const result = state.userTemplates.templates.filter(item => {
+        let found = false;
+        keys.forEach(key => {
+          found = found || item.name.includes(key) || item.desc.includes(key);
+        })
+
+        return found;
+      });
+
+      return {
+        ...state,
+        userTemplates: {
+          ...state.userTemplates,
+          templates: result,
+          total: result.length,
+          currentPage: action.data.page,
+          numberOfPages: result.length / 25,
+        }
+      }
+
     case SORT_USER_TEMPLATRES:
       const sortCallback = (a, b) => {
         if (action.data === 'name') {
@@ -196,6 +245,7 @@ export default (state = initialState, action) => {
           templates: state.userTemplates?.templates?.sort(sortCallback)
         }
       }
+
     default:
       return state;
   }

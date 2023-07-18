@@ -11,7 +11,7 @@ function PaginationBar({ numberOfPages, currentPage, changePage }) {
   useEffect(() => {
     setPages(getPages(currentPage, numberOfPages));
     // eslint-disable-next-line
-  }, [currentPage])
+  }, [currentPage, numberOfPages])
 
   return (
     <div className='pagination-bar'>

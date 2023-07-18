@@ -5,6 +5,8 @@ export const GET_USER_TEMPLATES = "GET_USER_TEMPLATES";
 
 export const GET_TEMPLATE_TASKS = "GET_TEMPLATE_TASKS";
 
+export const CHANGE_CURRENT_PAGE = "CHANGE_CURRENT_PAGE";
+
 export const SORT_USER_TEMPLATRES = "SORT_USER_TEMPLATRES";
 
 export const SEARCH_USER_TEMPLATRES = "SEARCH_USER_TEMPLATRES";
@@ -23,14 +25,16 @@ export const MODIFY_TEMPLATE_TASK = 'MODIFY_TEMPLATE_TASK';
 
 export const DELETE_TEMPLATE_TASK = 'DELETE_TEMPLATE_TASK';
 
-export const getTemplatesForUser = (sort, page, setMessage) => async dispatch => {
+export const TEMPLATE_LIMIT = 2;
+
+export const getTemplatesForUser = (sort, search, page, setMessage) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'templates' });
 
     if (!localStorage.getItem('token')) {
       setMessage({ message: "You should be login", type: 'error' });
     } else {
-      const { data } = await api.getTempsForUser(sort, page);
+      const { data } = await api.getTempsForUser(sort, page, search || "");
       console.log(data);
 
       dispatch({
@@ -74,7 +78,7 @@ export const getTasksForTemplate = (id, page, setMessage, setIsLoading) => async
   }
 }
 
-export const deleteTemplate = (id, setIsLoading, setMessage) => async dispatch => {
+export const deleteTemplate = (id, pageLen, currentPage, numberOfPages, setIsLoading, setMessage) => async dispatch => {
   try {
     setIsLoading(id);
     if (!id) {
@@ -84,6 +88,16 @@ export const deleteTemplate = (id, setIsLoading, setMessage) => async dispatch =
     const { data } = await api.deleteTemplate(id);
     setMessage({ message: "Successfully deleted", type: 'success' });
     dispatch({ type: DELETE_TEMPLATE, data });
+
+    let params = new URLSearchParams(document.location.search);
+    let search = params.get('search') || ""
+    let sort = params.get('sort') || "updatedAt"
+
+    if (currentPage !== numberOfPages) {
+      dispatch(getTemplatesForUser(sort, search, currentPage, setMessage))
+    } else if (pageLen === 1) {
+      dispatch(getTemplatesForUser(sort, search, currentPage-1, setMessage))
+    }
 
     setIsLoading(null);
   } catch (error) {
@@ -153,31 +167,6 @@ export const modifyTemplate = (id, formData, setIsLoading, setMessage) => async 
     setIsLoading(null);
   } catch (error) {
     setIsLoading(null);
-    setMessage({
-      message: error?.response?.data?.message || error?.message,
-      type: 'error'
-    })
-
-    if (error.response?.status === 401 || error.response?.status === 500) {
-      dispatch({ type: LOGOUT });
-    }
-  }
-}
-
-export const searchTemplates = (query, sort, page, setMessage) => async dispatch => {
-  try {
-    dispatch({ type: START_LOADING, data: 'templates' });
-    if (query !== "") {
-      const { data } = await api.searchTemplatesForUser(page, sort, query);
-
-      dispatch({ type: GET_USER_TEMPLATES, data });
-    } else {
-      setMessage({ message: "please, enter the search query", type: 'error' })
-    }
-
-    dispatch({ type: END_LOADING, data: 'templates' });
-  } catch (error) {
-    dispatch({ type: END_LOADING, data: 'templates' });
     setMessage({
       message: error?.response?.data?.message || error?.message,
       type: 'error'

@@ -68,7 +68,7 @@ export const getPages = (current, numberOfPages) => {
 
       if (numberOfPages - current >= 2) {
         pages.push(current + 1);
-        pages.push("...")
+        if (numberOfPages - current > 2) pages.push("...")
       }
       pages.push(numberOfPages);
     } else {
