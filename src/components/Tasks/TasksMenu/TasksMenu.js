@@ -7,7 +7,7 @@ import { MdDelete } from 'react-icons/md';
 import { BsCheckLg } from 'react-icons/bs';
 import { clearFinishedTasks, clearAct, clearAllTasks } from "../../../actions/tasks";
 
-import Loading from "../../../utils/Loading";
+import Loading from "../../../utils/Loading/Loading";
 
 const Menu = lazy(() => import("../../../utils/Menu/Menu"));
 const MenuItem = lazy(() => import("../../../utils/Menu/MenuItem"));

@@ -1,12 +1,14 @@
 import React, { lazy, useEffect, useState } from 'react';
 
-import Loading from '../../utils/Loading';
+import Loading from '../../utils/Loading/Loading';
 import Message from '../../utils/Message';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getSetting } from '../../actions/timer';
 import NetworkError from '../NetworkError/NetworkError';
 import Congratulation from '../../utils/Congratulation/Congratulation';
+
+import "./style.css";
 
 const ActiveTask = lazy(() => import('../../components/ActiveTask/ActiveTask'));
 const Timer = lazy(() => import('../../components/Clock/Timer'));
@@ -69,12 +71,13 @@ function Home() {
         {(!message.message) ?
           (
             <>
-              <Loading
-                size="200"
-                strokeWidth="2.5"
-                color="#ffffff"
-                backgroud="transperent"
-              />
+              <div className='center-fullpage'>
+                <Loading
+                  size="verybig"
+                  backgroud="transperent"
+                  color="#ffffff"
+                />
+              </div>
             </>
           ) : (
             <>
@@ -105,15 +108,16 @@ function Home() {
         </>
       )}
       <React.Suspense fallback={
-        <Loading
-          size="200"
-          strokeWidth="2.5px"
-          backgroud="transperent"
-          color="#ffffff"
-        />
+        <div className='center-fullpage'>
+          <Loading
+            size="verybig"
+            backgroud="transperent"
+            color="#ffffff"
+          />
+        </div>
       }>
-        <NavBar setMessage={setMessage} />
         <div className='container'>
+          <NavBar setMessage={setMessage} />
           {(setting?.focusMode && started) ? null : (
             <Sidebar setOpenSticky={setOpenSticky} setOpenTodo={setOpenTodo} />
           )}
@@ -121,22 +125,67 @@ function Home() {
             <Timer setIsLoadingTask={setIsLoadingTask} setMessage={setMessage} setOpenSetting={setOpenSetting} />
             <ActiveTask />
           </div>
-          {openSetting && (
-            <div className="glass-container">
-              <Setting setOpenSetting={setOpenSetting} />
-            </div>
-          )}
-          {openTodo && (
-            <div className="glass-container">
-              <TodoList message={message} setMessage={setMessage} isLoading={isLoadingTask} setIsLoading={setIsLoadingTask} setOpenTodo={setOpenTodo} />
-            </div>
-          )}
-          {openSticky && (
-            <div className="glass-container">
-              <div className='glass-effect'><h1>sticky</h1></div>
-            </div>
-          )}
         </div>
+      </React.Suspense>
+      <React.Suspense
+        fallback={
+          <>
+            <div className='glass-container'>
+              <Loading
+                color="white"
+                backgroud="transparent"
+                className="glass-effect setting-loader"
+                size="big"
+              />
+            </div>
+          </>
+        }
+      >
+        {openSetting && (
+          <div className="glass-container">
+            <Setting setOpenSetting={setOpenSetting} />
+          </div>
+        )}
+      </React.Suspense>
+      <React.Suspense
+        fallback={
+          <>
+            <div className='glass-container'>
+              <Loading
+                color="white"
+                backgroud="transparent"
+                className="glass-effect todo-loader"
+                size="big"
+              />
+            </div>
+          </>
+        }
+      >
+        {openTodo && (
+          <div className="glass-container">
+            <TodoList message={message} setMessage={setMessage} isLoading={isLoadingTask} setIsLoading={setIsLoadingTask} setOpenTodo={setOpenTodo} />
+          </div>
+        )}
+      </React.Suspense>
+      <React.Suspense
+        fallback={
+          <>
+            <div className='glass-container'>
+              <Loading
+                color="white"
+                backgroud="transparent"
+                className="glass-effect todo-loader"
+                size="big"
+              />
+            </div>
+          </>
+        }
+      >
+        {openSticky && (
+          <div className="glass-container">
+            <div className='glass-effect'><h1>sticky</h1></div>
+          </div>
+        )}
       </React.Suspense>
     </>
   );

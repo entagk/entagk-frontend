@@ -3,7 +3,7 @@ import React, { lazy, useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { getTodoTasks } from '../../actions/tasks';
 
-import Loading from '../../utils/Loading';
+import Loading from '../../utils/Loading/Loading';
 
 import Message from "../../utils/Message";
 import NetworkError from "../NetworkError/NetworkError";

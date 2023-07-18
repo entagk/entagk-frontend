@@ -3,7 +3,7 @@ import React, { lazy, Suspense, useState } from "react";
 import { CgClose } from "react-icons/cg";
 import { MdKeyboardArrowLeft } from 'react-icons/md';
 import { useSelector } from "react-redux";
-import Loading from "../../utils/Loading";
+import Loading from "../../utils/Loading/Loading";
 
 import "./style.css";
 

@@ -8,7 +8,7 @@ import { CgTimelapse } from 'react-icons/cg';
 import { MdNotifications } from 'react-icons/md';
 import { TbFocus } from 'react-icons/tb';
 
-import Loading from '../../utils/Loading';
+import Loading from '../../utils/Loading/Loading';
 import Message from '../../utils/Message';
 import NetworkError from '../NetworkError/NetworkError';
 

@@ -16,7 +16,7 @@ import {
   refreshToken
 } from "../../actions/auth";
 
-import Loading from "../../utils/Loading";
+import Loading from "../../utils/Loading/Loading";
 
 const DeletePopup = lazy(() => import("../../utils/DeletePopup/DeletePopup"));
 const TodoList = lazy(() => import('../../icons/list/TodoList'));

@@ -16,7 +16,7 @@ const ActiveTask = () => {
   }
 
   return (
-    <div className="active-task" style={{ marginBlock: 15 }}>
+    <div className="active-task">
       <span className="row1">#{periodNum + 1}</span>
       <span className="row2">
         {!Boolean(activeId) ? "please focus on what you are doing now" : activeName}

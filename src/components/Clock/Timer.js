@@ -6,7 +6,7 @@ import { changeActive, PERIOD, START_TIMER, STOP_TIMER, CHANGE_ACTIVE } from "..
 import { pushNotification } from "../../utils/helper";
 import audioPlayer from "../../utils/audioPlayer";
 
-import Loading from "../../utils/Loading";
+import Loading from "../../utils/Loading/Loading";
 
 import "./style.css";
 import SmallWinBtn from "./SmallWinBtn/SmallWinBtn";

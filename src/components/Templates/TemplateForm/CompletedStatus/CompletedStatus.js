@@ -4,7 +4,7 @@ import React from 'react';
 
 import { FaCheck } from 'react-icons/fa'
 import './style.css';
-import Loading from '../../../../utils/Loading';
+import Loading from '../../../../utils/Loading/Loading';
 import { useSelector } from 'react-redux';
 
 function CompletedStatus({ data, setIsLoading, isLoading, setOpen }) {

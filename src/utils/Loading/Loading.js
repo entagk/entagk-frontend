@@ -1,8 +1,10 @@
 import React from "react";
 
+import './style.css'
+
 const Loading = ({ color, backgroud, paddingBlock = 0, size, strokeWidth, className }) => {
   const sizes = {
-    verybig: { width: 200, stocke: 5 },
+    verybig: { width: 200, stocke: 4 },
     big: { width: 100, stocke: 5 },
     medium: { width: 50, stocke: 5 },
     small: { width: 30, stocke: 6 }

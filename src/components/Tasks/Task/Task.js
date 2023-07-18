@@ -9,7 +9,7 @@ import { MdDelete, MdKeyboardArrowRight } from 'react-icons/md';
 import { ImCheckboxChecked, ImCheckboxUnchecked } from 'react-icons/im';
 import { RiCheckboxCircleFill, RiCheckboxBlankCircleLine } from 'react-icons/ri';
 import { checkTask, deleteTask, CHANGE_ACTIVE_TASK } from "../../../actions/tasks";
-import Loading from "../../../utils/Loading";
+import Loading from "../../../utils/Loading/Loading";
 
 import "./style.css";
 import Menu from "../../../utils/Menu/Menu";

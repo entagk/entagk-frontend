@@ -5,7 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import { getTemplatesForUser, CHANGE_CURRENT_PAGE } from '../../actions/templates';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import Loading from '../../utils/Loading';
+import Loading from '../../utils/Loading/Loading';
 import Message from '../../utils/Message';
 import NetworkError from '../NetworkError/NetworkError';
 import NoLogin from '../NoLogin/NoLogin';

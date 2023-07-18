@@ -2,7 +2,7 @@ import React, { lazy, useState, useEffect } from 'react';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import Loading from "../../../utils/Loading";
+import Loading from "../../../utils/Loading/Loading";
 import { useDispatch, useSelector } from 'react-redux';
 import { getTasksForTemplate } from '../../../actions/templates';
 

@@ -5,15 +5,13 @@
   text-shadow: rgb(135, 135, 135) 0px 0px 2px;
 }
 
-
 .active-task {
-  margin-block: 20px;
+  margin-block: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
-
 
 .active-task .row2 {
   color: rgb(237, 237, 237);

@@ -7,7 +7,7 @@ import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from 'react-icon
 
 import "./style.css";
 
-import Loading from "../../../utils/Loading";
+import Loading from "../../../utils/Loading/Loading";
 const MoreSetting = lazy(() => import("./MoreSetting"));
 
 const initialData = {

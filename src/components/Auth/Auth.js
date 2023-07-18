@@ -2,7 +2,7 @@ import React, { lazy, Suspense, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { authForm } from "../../actions/auth";
-import Loading from "../../utils/Loading";
+import Loading from "../../utils/Loading/Loading";
 import Message from '../../utils/Message';
 
 import GoogleLogin from './GoogleLogin'

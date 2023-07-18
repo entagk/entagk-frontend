@@ -8,17 +8,12 @@
 
 /* Start the tasks */
 .tasks {
-  width: 820px;
-  padding-inline: 20px;
-  color: rgb(255, 255, 255);
-  margin-bottom: 20px;
-  margin: 20px;
-  border-radius: 15px;
-  padding-block: 10px;
   position: relative;
-  box-shadow: 1px 1px 10px 0px #858585;
-
+  margin: 20px;
   padding: 0;
+  width: 820px;
+  color: rgb(255, 255, 255);
+  box-shadow: 1px 1px 10px 0px #858585;
   border-radius: 40px;
 }
 

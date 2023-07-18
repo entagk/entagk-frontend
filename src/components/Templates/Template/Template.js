@@ -6,7 +6,7 @@ import { FiEdit3 } from 'react-icons/fi';
 import { MdDelete, MdAddTask } from 'react-icons/md';
 import CircularMenu from "../../../icons/circularMenu/CircularMenu";
 
-import Loading from '../../../utils/Loading';
+import Loading from '../../../utils/Loading/Loading';
 
 import './style.css';
 import { useDispatch, useSelector } from 'react-redux';

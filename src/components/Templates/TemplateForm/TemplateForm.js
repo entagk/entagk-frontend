@@ -10,7 +10,7 @@ import NetworkError from '../../NetworkError/NetworkError';
 import FormFooter from './FormFooter/FormFooter';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTemplate, modifyTemplate } from '../../../actions/templates';
-import Loading from '../../../utils/Loading';
+import Loading from '../../../utils/Loading/Loading';
 
 const TodoList = lazy(() => import('../../../icons/list/TodoList'));
 const InfoStep = lazy(() => import('./InfoStep/InfoStep'));
