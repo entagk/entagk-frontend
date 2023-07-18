@@ -1,28 +1,33 @@
 import React from "react";
 
-const Loading = ({ color, backgroud, paddingBlock, size, strokeWidth }) => {
+const Loading = ({ color, backgroud, paddingBlock = 0, size, strokeWidth, className }) => {
+  const sizes = {
+    verybig: { width: 200, stocke: 5 },
+    big: { width: 100, stocke: 5 },
+    medium: { width: 50, stocke: 5 },
+    small: { width: 30, stocke: 6 }
+  };
+
   return (
-    <div style={{ position: "relative", margin: 20 }}>
+    <div
+      className={`loading-container ${className}`}
+    >
       <div
         className="loading"
         style={{
-          marginBlock: "auto",
           paddingBlock: `${paddingBlock}px`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
           backgroud: backgroud,
-          fontSize: `${size}px`,
+          fontSize: `${sizes[size]?.width || size}px`,
         }}
       >
         <div className="circle-container">
-          <div className="circle" style={{ width: `${size}px`, height: `${size}px` }} /* 200, 200 */>
+          <div className="circle" style={{ width: `${sizes[size]?.width || size}px`, height: `${sizes[size]?.width || size}px` }} /* 200, 200 */>
             <svg viewBox='0 0 100 100' /* 25 25 50 50 */>
               <circle
                 cx="50"
                 cy="50"
                 r="42"
-                strokeWidth={strokeWidth}
+                strokeWidth={sizes[size]?.stocke || strokeWidth}
                 style={{
                   fill: "transparent",
                   stroke: backgroud || '#edebe9'
@@ -32,7 +37,7 @@ const Loading = ({ color, backgroud, paddingBlock, size, strokeWidth }) => {
                 cx="50"
                 cy="50"
                 r="42"
-                strokeWidth={strokeWidth}
+                strokeWidth={sizes[size]?.stocke || strokeWidth}
                 style={{
                   fill: "transparent",
                   stroke: color

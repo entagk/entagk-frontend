@@ -35,6 +35,13 @@
 /* End message */
 
 /* start loading circle */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 20px;
+}
 
 .loading {
   position: relative;

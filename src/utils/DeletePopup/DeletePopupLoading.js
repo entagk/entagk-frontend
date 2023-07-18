@@ -1,7 +1,7 @@
 import React from 'react';
 import Loading from '../Loading';
 
-function DeletePopupLoading(props) {
+function DeletePopupLoading({ background }) {
   return (
     <div className="glass-container" style={{ background: background && "none" }}>
       <div className="glass-effect delete-popup">

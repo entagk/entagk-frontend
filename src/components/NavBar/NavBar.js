@@ -17,8 +17,8 @@ import {
 } from "../../actions/auth";
 
 import Loading from "../../utils/Loading";
-import DeletePopup from "../../utils/DeletePopup/DeletePopup";
 
+const DeletePopup = lazy(() => import("../../utils/DeletePopup/DeletePopup"));
 const TodoList = lazy(() => import('../../icons/list/TodoList'));
 const Menu = lazy(() => import("../../utils/Menu/Menu"));
 const MenuItem = lazy(() => import("../../utils/Menu/MenuItem"));
@@ -81,7 +81,22 @@ const NavBar = ({ setMessage }) => {
   return (
     <>
       {openDelete && (
-        <DeletePopup type={"your account"} onCancel={() => setOpenDelete(false)} onOk={handleDeleteUser} />
+        <Suspense fallback={
+          <div className="glass-container">
+            <Loading
+              size="medium"
+              color={"#fff"}
+              backgroud="transparant"
+              className={"glass-effect delete-popup"}
+            />
+          </div>
+        }>
+          <DeletePopup
+            type={"your account"}
+            onCancel={() => setOpenDelete(false)}
+            onOk={handleDeleteUser}
+          />
+        </Suspense>
       )}
       <nav className="nav-bar">
         <Link to="/">
@@ -101,7 +116,16 @@ const NavBar = ({ setMessage }) => {
             </Link>
           ) : user ? (
             <>
-              <Suspense fallback={<></>}>
+              <Suspense fallback={
+                <>
+                  <Loading
+                    size="small"
+                    color={"#fff"}
+                    backgroud="transparent"
+                    paddingBlock='0'
+                  />
+                </>
+              }>
                 <Menu MainButton={
                   <button
                     aria-label="user button"
@@ -120,7 +144,6 @@ const NavBar = ({ setMessage }) => {
                   <MenuItem
                     component={Link}
                     to="/user/achievements"
-                    // onClick={toggleMenu}
                     aria-label="user button in menu"
                   >
                     <GrAchievement />
@@ -131,7 +154,6 @@ const NavBar = ({ setMessage }) => {
                   <MenuItem
                     component={Link}
                     to="/templates/you"
-                    // onClick={toggleMenu}
                     aria-label="user button in menu">
                     <TodoList />
                     <span style={{ marginLeft: 10 }}>
@@ -141,7 +163,6 @@ const NavBar = ({ setMessage }) => {
                   <MenuItem
                     component={Link}
                     to="/user/edit"
-                    // onClick={toggleMenu}
                     aria-label="user button in menu">
                     <FiEdit3 />
                     <span style={{ marginLeft: 10 }}>
@@ -167,7 +188,16 @@ const NavBar = ({ setMessage }) => {
                 </Menu>
               </Suspense>
             </>
-          ) : (<><Loading size="30" strokeWidth="5" color={"#fff"} backgroud="transparent" paddingBlock='0' /></>)}
+          ) : (
+            <>
+              <Loading
+                size="small"
+                color={"#fff"}
+                backgroud="transparent"
+                paddingBlock='0'
+              />
+            </>
+          )}
         </div>
       </nav>
     </>
