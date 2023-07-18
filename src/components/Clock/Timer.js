@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState, useCallback, useRef } from "react";
+import React, { Suspense, useEffect, useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux"; // 2
 
 import { changeActive, PERIOD, START_TIMER, STOP_TIMER, CHANGE_ACTIVE } from "../../actions/timer";
@@ -13,8 +13,8 @@ import SmallWinBtn from "./SmallWinBtn/SmallWinBtn";
 import SettingOpen from "./SettingOpen/SettingOpen";
 import FullscreenBtn from "./FullscreenBtn/FullscreenBtn";
 
-const AnalogTimer = lazy(() => import("./Analog/Analog"));
-const DigitalTimer = lazy(() => import("./Digital/Digital"));
+import AnalogTimer from "./Analog/Analog";
+import DigitalTimer from "./Digital/Digital";
 
 const worker = new window.Worker('worker.js');
 const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
@@ -26,13 +26,14 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
     const dispatch = useDispatch();
 
     /** All sounds that we use it in timer.*/
-    const tickingSound = useRef(setting?.tickingType?.name !== "none" ?
-        audioPlayer({
-            src: setting?.tickingType?.src,
-            volume: setting?.tickingVolume,
-            loop: true
-        }) :
-        null
+    const tickingSound = useRef(
+        setting?.tickingType?.name !== "none" ?
+            audioPlayer({
+                src: setting?.tickingType?.src,
+                volume: setting?.tickingVolume,
+                loop: true
+            }) :
+            null
     );
 
     const alarmSound = useRef(
@@ -184,7 +185,6 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
         }
     }
 
-
     useEffect(() => {
         const handleKeys = (event) => {
             const inputsItems = ['input', 'textarea']
@@ -256,7 +256,16 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                     </>
                 )}
                 <div className="clock">
-                    <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" size="200" strokeWidth="2.5" />}>
+                    <Suspense fallback={
+                        <>
+                            <Loading
+                                color={activites[active].color}
+                                backgroud="transparent"
+                                size="175"
+                                strokeWidth={4}
+                            />
+                        </>
+                    }>
                         {setting.format === "digital" ? (
                             <>
                                 <DigitalTimer
@@ -280,7 +289,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                         )}
                     </Suspense>
                 </div>
-            </div>
+            </div >
         </>
     )
 }

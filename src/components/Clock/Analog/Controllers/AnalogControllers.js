@@ -1,8 +1,9 @@
-import React, { lazy } from "react";
+import React, { Suspense, lazy } from "react";
 import { useSelector } from "react-redux";
 
 /* some attachments for redux action */
 import { PERIOD } from "../../../../actions/timer";
+import Loading from "../../../../utils/Loading/Loading";
 
 const StartButton = lazy(() => import("./Roll/StartButton"));
 const ClearButton = lazy(() => import("./Roll/ClearButton"));
@@ -52,8 +53,14 @@ const AnalogControllers = ({ time, toggleStart, handleReset, handleSkip }) => {
                     )`
         }}
       >
-        <div className="roll" style={{ flexDirection: "column" }}>
-          <>
+        <div className="roll" style={{ flexDirection: "column", overflow: "hidden" }}>
+          <Suspense fallback={
+            <Loading
+              size="big"
+              color={activites[active].color}
+              backgroud="transparant"
+            />
+          }>
             {started ? (
               <>
                 <PauseButton
@@ -95,7 +102,7 @@ const AnalogControllers = ({ time, toggleStart, handleReset, handleSkip }) => {
                 )}
               </>
             )}
-          </>
+          </Suspense>
         </div>
       </div>
     </>
