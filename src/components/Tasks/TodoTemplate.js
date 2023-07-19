@@ -1,4 +1,4 @@
-import React, { lazy, useEffect, useState } from 'react';
+import React, { lazy, useEffect, useState, Suspense } from 'react';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { getTodoTasks } from '../../actions/tasks';
@@ -23,7 +23,6 @@ const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage }
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const [loadingTasks, setLoadingTasks] = useState(false);
   const [page, setPage] = useState(1);
-  const { active, activites } = useSelector(state => state.timer);
 
   useEffect(() => {
     if (tasks === undefined && total === undefined) {
@@ -59,17 +58,16 @@ const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage }
   }, [tasks, total])
 
   if (tasks === undefined) {
-    console.log(message);
+
     return (
       <>
         {(!message.message) ?
           (
             <>
               <Loading
-                size="100"
-                strokeWidth="2"
-                backgroud="white"
-                color={activites[active]?.color}
+                size="big"
+                color="white"
+                backgroud="transparent"
               />
             </>
           ) : (
@@ -93,30 +91,50 @@ const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage }
           {isLoading === 'new' ? (
             <>
               {tasks?.map((task, index) => (
-                <Task
-                  key={task._id}
-                  isLoading={isLoading}
-                  setIsLoading={setIsLoading}
-                  setMessage={setMessage}
-                  {...task}
-                />
+                <Suspense fallback={
+                  <Loading
+                    size="medium"
+                    color={"#fff"}
+                    backgroud="transparent"
+                    style={{}}
+                  />
+                }>
+                  <Task
+                    key={task._id}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    setMessage={setMessage}
+                    {...task}
+                  />
+                </Suspense>
               ))}
               {
-                <div className="loading-container">
-                  <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                </div>
+                <Loading
+                  size="medium"
+                  color={"#fff"}
+                  backgroud="transparent"
+                />
               }
             </>
           ) : (
             <>
               {tasks?.map((task, index) => (
-                <Task
-                  key={task._id}
-                  isLoading={isLoading}
-                  setIsLoading={setIsLoading}
-                  setMessage={setMessage}
-                  {...task}
-                />
+                <Suspense fallback={
+                  <Loading
+                    size="medium"
+                    color={"#fff"}
+                    backgroud="transparent"
+                    style={{}}
+                  />
+                }>
+                  <Task
+                    key={task._id}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    setMessage={setMessage}
+                    {...task}
+                  />
+                </Suspense>
               ))}
             </>
           )}
@@ -124,9 +142,12 @@ const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage }
       )}
       <> {/* This is for loading while bringing the tasks */}
         {(loadingTasks && tasks.length > 0) && (
-          <div className="loading-container">
-            <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-          </div>
+          <Loading
+            size="medium"
+            color={"#fff"}
+            backgroud="transparent"
+            style={{ marginTop: 0 }}
+          />
         )}
       </>
       {!openFormForNew && (
@@ -137,9 +158,18 @@ const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage }
           </p>
         </button>
       )}
-      {openFormForNew && (
-        <TaskForm setOpen={setOpenFormForNew} oldData={null} template={{ "_id": todoTemplate._id }} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} />
-      )}
+      <Suspense fallback={
+        <Loading
+          size="big"
+          color={"#fff"}
+          backgroud="transparent"
+          className="center-fullpage"
+        />
+      }>
+        {openFormForNew && (
+          <TaskForm setOpen={setOpenFormForNew} oldData={null} template={{ "_id": todoTemplate._id }} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} />
+        )}
+      </Suspense>
     </>
   );
 };

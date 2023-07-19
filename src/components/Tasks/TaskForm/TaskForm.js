@@ -1,6 +1,6 @@
 import React, { lazy, useState, Suspense } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addNewTask, modifyTask } from "../../../actions/tasks";
 
 import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from 'react-icons/md';
@@ -33,8 +33,6 @@ const TaskForm = ({
   const [moreDetails, setMoreDetails] = useState(false);
   const [setting, setSetting] = useState(oldData === null && oldData?.tasks?.length > 0 ? null : oldData?.setting);
 
-  const { activites, active } = useSelector(state => state.timer);
-
   const handleChange = (e) => {
     if (e.target.name === 'est' || e.target.name === 'act') {
       setData({ ...data, [e.target.name]: Number(e.target.value) });
@@ -63,7 +61,7 @@ const TaskForm = ({
       }
     } else {
       if (!oldData) {
-        setTemplateData(t => ({ ...t, tasks: t.tasks.concat([{...data, id: t.tasks.length + 1}]) }));
+        setTemplateData(t => ({ ...t, tasks: t.tasks.concat([{ ...data, id: t.tasks.length + 1 }]) }));
       } else {
         setTemplateData(t => ({ ...t, tasks: [...t.tasks.filter(task => task.id !== data.id), data] }))
       }
@@ -73,27 +71,18 @@ const TaskForm = ({
   return (
     <>
       {isLoading === data?._id && (
-        <div className="loading-container" style={{
-          position: 'fixed',
-          top: '0',
-          right: '0',
-          background: '#ffffff73',
-          width: '100%',
-          height: '100%',
-          zIndex: '1000',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <Loading
-            size="100"
-            strokeWidth="5"
-            color={activites[active].color}
-            backgroud="transperent"
-          />
-        </div>
+        <Loading
+          size="big"
+          color={"#fff"}
+          backgroud="transparent"
+          className="center-fullpage"
+        />
       )}
-      <form className="task-form zoom-in" style={{ margin: oldData !== null && "20px 0 20px" }} onSubmit={handleSave}>
+      <form
+        className="task-form zoom-in"
+        style={{ margin: oldData !== null && "20px 0 20px" }}
+        onSubmit={handleSave}
+      >
         <div className="form-container">
           <div className="form-inner-container">
             <div className="block" style={{ position: "relative" }}>
@@ -193,14 +182,16 @@ const TaskForm = ({
               <>
                 <Suspense fallback={
                   <Loading
-                    size="100"
-                    strokeWidth="5"
-                    color={activites[active].color}
+                    size="medium"
+                    color="white"
                     backgroud="transparent"
                   />
                 }>
                   {moreDetails && (
-                    <MoreSetting setting={setting} setSetting={setSetting} />
+                    <MoreSetting
+                      setting={setting}
+                      setSetting={setSetting}
+                    />
                   )}
                 </Suspense>
                 <div className="block more-details-container">

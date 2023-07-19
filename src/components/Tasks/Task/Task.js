@@ -9,16 +9,26 @@ import { MdDelete, MdKeyboardArrowRight } from 'react-icons/md';
 import { ImCheckboxChecked, ImCheckboxUnchecked } from 'react-icons/im';
 import { RiCheckboxCircleFill, RiCheckboxBlankCircleLine } from 'react-icons/ri';
 import { checkTask, deleteTask, CHANGE_ACTIVE_TASK } from "../../../actions/tasks";
+
 import Loading from "../../../utils/Loading/Loading";
 
 import "./style.css";
-import Menu from "../../../utils/Menu/Menu";
-import MenuItem from "../../../utils/Menu/MenuItem";
+
+const Menu = lazy(() => import("../../../utils/Menu/Menu"));
+const MenuItem = lazy(() => import("../../../utils/Menu/MenuItem"));
 
 const DeletePopup = lazy(() => import("./../../../utils/DeletePopup/DeletePopup"));
 const TaskForm = lazy(() => import("../TaskForm/TaskForm"));
 
-const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, setTemplateData, activeTemplate, ...props }) => {
+const Task = ({
+  isLoading,
+  setIsLoading,
+  setMessage,
+  setActiveTemplate,
+  setTemplateData,
+  activeTemplate,
+  ...props
+}) => {
   const dispatch = useDispatch();
   const { activeId } = useSelector(state => state.tasks);
   const { setting } = useSelector(state => state.timer);
@@ -26,7 +36,9 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, setTempl
   const [openDelete, setOpenDelete] = useState(false);
 
   useEffect(() => {
-    if (props.notes && document.querySelector(`.task#task-${props._id} .task-notes`)) {
+    if (
+      props.notes &&
+      document.querySelector(`.task#task-${props._id} .task-notes`)) {
       // eslint-disable-next-line
       let reg = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gm
       document.querySelector(`.task#task-${props._id} .task-notes`).innerHTML = "<p>" + props.notes.replaceAll(reg, (value) => `<a target="_blank" href="${value}">${value}</a>`) + "</p>";
@@ -70,7 +82,14 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, setTempl
 
   if (openEdit) {
     return (
-      <Suspense fallback={<Loading size="40" strokeWidth="3" color={"rgb(197 197 197)"} />}>
+      <Suspense fallback={
+        <Loading
+          size="medium"
+          color={"#fff"}
+          backgroud="transparent"
+          className="center-fullpage"
+        />
+      }>
         <TaskForm
           oldData={props}
           setOpen={setOpenEdit}
@@ -100,9 +119,19 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, setTempl
         }}
         onDoubleClick={handleActive}>
         {isLoading === props._id && (
-          <div className="loading-container">
-            <Loading size="40" strokeWidth="3" color={"rgb(197 197 197)"} />
-          </div>
+          <Loading
+            size="medium"
+            color={"#fff"}
+            backgroud="transparent"
+            className="center-fullpage"
+            style={{
+              position: 'absolute',
+              margin: 0,
+              background: '#68696996',
+              borderRadius: 'inherit',
+              zIndex: 1010
+            }}
+          />
         )}
         <div style={{
           display: "flex",
@@ -156,13 +185,20 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, setTempl
               <span>{props.est}</span>
             </p>
             <Suspense
-              fallback={<></>}
+              fallback={
+                <Loading
+                  size="small"
+                  color={"#fff"}
+                  backgroud="transparent"
+                  className="center-fullpage"
+                />
+              }
             >
               <Menu MainButton={
                 <button
                   aria-label="toggle the task list menu"
                   className="toggle-menu"
-                  >
+                >
                   <CircularMenu />
                 </button>
               }>

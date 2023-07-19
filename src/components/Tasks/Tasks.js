@@ -1,4 +1,4 @@
-import React, { lazy, useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 
 import { AiOutlinePlus } from 'react-icons/ai';
 
@@ -18,7 +18,6 @@ const Task = lazy(() => import("./Task/Task"));
 const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate, activeTemplate }) => {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const tasks = useSelector(state => state.tasks);
-  const { active, activites } = useSelector(state => state.timer);
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   console.log(tasks);
@@ -64,10 +63,9 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate
           (
             <>
               <Loading
-                size="100"
-                strokeWidth="2"
-                backgroud="white"
-                color={activites[active]?.color}
+                size="big"
+                color="white"
+                backgroud="transparent"
               />
             </>
           ) : (
@@ -91,20 +89,32 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate
           {isLoading === 'new' ? (
             <>
               {tasks.tasks?.filter(t => !t.check)?.map((task, index) => (
-                <Task
-                  key={task._id}
-                  isLoading={isLoading}
-                  setIsLoading={setIsLoading}
-                  setMessage={setMessage}
-                  setActiveTemplate={setActiveTemplate}
-                  activeTemplate={activeTemplate}
-                  {...task}
-                />
+                <Suspense fallback={
+                  <Loading
+                    size="medium"
+                    color={"#fff"}
+                    backgroud="transparent"
+                    style={{}}
+                  />
+                }>
+                  <Task
+                    key={task._id}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    setMessage={setMessage}
+                    setActiveTemplate={setActiveTemplate}
+                    activeTemplate={activeTemplate}
+                    {...task}
+                  />
+                </Suspense>
               ))}
               {
-                <div className="loading-container">
-                  <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                </div>
+                <Loading
+                  size="medium"
+                  color={"#fff"}
+                  backgroud="transparent"
+                  style={{ marginTop: 0 }}
+                />
               }
               {tasks.tasks?.filter(t => t.check)?.map((task, index) => (
                 <Task
@@ -137,9 +147,12 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate
       )}
       <> {/* This is for loading while bringing the tasks */}
         {(tasks.isLoading && tasks.tasks.length > 0) && (
-          <div className="loading-container">
-            <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-          </div>
+          <Loading
+            size="medium"
+            color={"#fff"}
+            backgroud="transparent"
+            style={{ marginTop: 0 }}
+          />
         )}
       </>
       {!openFormForNew && (
@@ -150,9 +163,24 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate
           </p>
         </button>
       )}
-      {openFormForNew && (
-        <TaskForm setOpen={setOpenFormForNew} oldData={null} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} />
-      )}
+      <Suspense fallback={
+        <Loading
+          size="big"
+          color={"#fff"}
+          backgroud="transparent"
+          className="center-fullpage"
+        />
+      }>
+        {openFormForNew && (
+          <TaskForm
+            setOpen={setOpenFormForNew}
+            oldData={null}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            setMessage={setMessage}
+          />
+        )}
+      </Suspense>
     </>
   )
 };

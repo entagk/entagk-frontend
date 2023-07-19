@@ -2,7 +2,7 @@ import React from "react";
 
 import './style.css'
 
-const Loading = ({ color, backgroud, paddingBlock = 0, size, strokeWidth, className }) => {
+const Loading = ({ color, backgroud, paddingBlock = 0, size, strokeWidth, className, style }) => {
   const sizes = {
     verybig: { width: 200, stocke: 4 },
     big: { width: 100, stocke: 5 },
@@ -12,7 +12,8 @@ const Loading = ({ color, backgroud, paddingBlock = 0, size, strokeWidth, classN
 
   return (
     <div
-      className={`loading-container ${className}`}
+      className={`loading-container ${className || ""}`}
+      style={style}
     >
       <div
         className="loading"
