@@ -166,9 +166,9 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, setTempl
                   <CircularMenu />
                 </button>
               }>
-                {((props.template?.todo && props.template) || (!props.template && props.tasks.length === 0)) && (
+                {((props.template?.todo && props.template) || (!props.template && props.tasks.length === 0)) ? (
                   <>
-                    {(!setting?.autoStartNextTask) && (
+                    {(!setting?.autoStartNextTask) ? (
                       <MenuItem aria-label="check button" onClick={handleCheck}>
                         {!props.check ? (
                           <>
@@ -210,9 +210,9 @@ const Task = ({ isLoading, setIsLoading, setMessage, setActiveTemplate, setTempl
                           </>
                         )}
                       </MenuItem>
-                    )}
+                    ) : (<></>)}
                   </>
-                )}
+                ) : (<></>)}
                 <MenuItem
                   aria-label="edit button"
                   onClick={toggleEdit}
