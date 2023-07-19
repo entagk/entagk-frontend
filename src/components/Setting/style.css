@@ -83,7 +83,7 @@
 }
 
 .setting .block h2,
-.setting .block div,
+.setting .block > div,
 .setting .block h3 {
   width: 100%;
 }
@@ -94,7 +94,7 @@
   font-size: 18px;
 }
 
-.setting .block input {
+.setting .block > input {
   width: 75px;
   padding: 10px;
   font-size: 16px;
