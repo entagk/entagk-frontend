@@ -18,7 +18,7 @@ function DeletePopup({
   return (
     <div className="glass-container" style={{ background: background && "none" }}>
       <div className="glass-effect delete-popup">
-        <p>Are you sure to {type}?</p>
+        <p>Are you sure to delete {type}?</p>
         <div className="buttons">
           <button aria-label="ok deleteing account" onClick={onOk} className="ok">Delete</button>
           <button aria-label="cancel deleteing account" onClick={onCancel} className="cancel">cancel</button>

@@ -1,9 +1,23 @@
 /* start delete popup */
-
 .delete-popup {
   padding: 20px;
   border-radius: 8px;
   font-size: 22px;
+}
+
+.smaller-popup.delete-popup {
+  position: absolute;
+  background: #fff;
+  color: #000;
+  right: 0;
+  z-index: 1010;
+  top: 70px;
+  font-size: 20px;
+  padding: 10px;
+}
+
+.smaller-popup.delete-popup p {
+  font-size: 16px;
 }
 
 .delete-popup p {
@@ -14,11 +28,20 @@
   font-weight: bold;
 }
 
+.smaller-popup.delete-popup .buttons {
+  margin-top: 10px;
+}
+
 .delete-popup .buttons {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 14px;
+}
+
+.delete-popup.smaller-popup .buttons button {
+  font-size: 14px;
+  padding: 8px 12px;
 }
 
 .delete-popup .buttons button {
@@ -29,6 +52,10 @@
   color: #fff;
 }
 
+.smaller-popup.delete-popup .buttons button.cancel {
+  color: var(--main-color);
+}
+
 .delete-popup .buttons button.cancel {
   border: 2px solid;
 }
@@ -37,4 +64,31 @@
   background-color: var(--main-color);
 }
 
+@media (max-width: 768px) {
+  .smaller-popup.delete-popup {
+    top: 64px;
+  }
+
+  .smaller-popup.delete-popup p {
+    font-size: 14px;
+  }
+
+  .smaller-popup.delete-popup .buttons button {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 450px) {
+  .smaller-popup.delete-popup {
+    top: 46px;
+  }
+
+  .smaller-popup.delete-popup p {
+    font-size: 12px;
+  }
+
+  .smaller-popup.delete-popup .buttons button {
+    font-size: 10px;
+  }
+}
 /* end delete popup */

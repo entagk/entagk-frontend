@@ -17,7 +17,7 @@ import "./style.css";
 const Menu = lazy(() => import("../../../utils/Menu/Menu"));
 const MenuItem = lazy(() => import("../../../utils/Menu/MenuItem"));
 
-const DeletePopup = lazy(() => import("./../../../utils/DeletePopup/DeletePopup"));
+const DeletePopupSmaller = lazy(() => import("./../../../utils/DeletePopup/DeletePopupSmaller"));
 const TaskForm = lazy(() => import("../TaskForm/TaskForm"));
 
 const Task = ({
@@ -77,7 +77,7 @@ const Task = ({
   }
 
   const toggleDelete = () => {
-    setOpenDelete(true);
+    setOpenDelete(e => !e);
   }
 
   if (openEdit) {
@@ -106,10 +106,34 @@ const Task = ({
   return (
     <>
       {openDelete && (
-        <DeletePopup
-          type={<><span>{props.name}</span> {props.tasks?.length > 0 ? 'template' : 'task'}</>}
-          onCancel={() => setOpenDelete(false)} onOk={handleDelete}
-        />
+        <Suspense fallback={
+          <div style={{ position: "relative" }}>
+            <Loading
+              size="medium"
+              color="var(--main-color)"
+              backgroud="transparent"
+              style={{
+                position: "absolute",
+                background: "#fff",
+                color: "#000",
+                right: 0,
+                zIndex: 1010,
+                top: "45px",
+                fontSize: "20px",
+                padding: 10,
+                borderRadius: 8,
+              }}
+            />
+          </div>
+        }>
+          <div style={{ position: "relative" }}>
+            <DeletePopupSmaller
+              type={<><span>{props.name}</span> {props.tasks?.length > 0 ? 'template' : 'task'}</>}
+              onCancel={() => setOpenDelete(false)}
+              onOk={handleDelete}
+            />
+          </div>
+        </Suspense>
       )}
       <div
         className={`task ${activeId === props._id ? "active" : ''}`}
