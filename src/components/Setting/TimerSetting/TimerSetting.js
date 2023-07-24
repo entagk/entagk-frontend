@@ -1,6 +1,8 @@
-import React, { lazy } from 'react';
+import React, { Suspense, lazy } from 'react';
 
 import { LONG, PERIOD, SHORT } from "../../../actions/timer";
+
+import Loading from '../../../utils/Loading/Loading';
 
 const Select = lazy(() => import('../Select/Select'));
 const TimeInputs = lazy(() => import('../TimeInputs/timeInputs'));
@@ -27,14 +29,23 @@ const TimerSetting = ({ handleChange, data, setData }) => {
       {data?.format && (
         <div className='block' style={{ flexDirection: "row" }}>
           <h3>Timer format</h3>
-          <Select
-            options={["analog", "digital"]}
-            type="format"
-            data={data}
-            setData={setData}
-            setChange={() => { }}
-            width="106px"
-          />
+          <Suspense fallback={
+            <Loading
+              size="small"
+              color={"#fff"}
+              backgroud="transparent"
+              paddingBlock='0'
+            />
+          }>
+            <Select
+              options={["analog", "digital"]}
+              type="format"
+              data={data}
+              setData={setData}
+              setChange={() => { }}
+              width="106px"
+            />
+          </Suspense>
         </div>
       )}
       <div className='block'>
@@ -42,11 +53,20 @@ const TimerSetting = ({ handleChange, data, setData }) => {
           {[PERIOD, SHORT, LONG].map((item, index) => (
             <div className='time' key={index}>
               <h4>{index === 0 ? 'Pomodoro' : item.toLocaleLowerCase()}</h4>
-              <TimeInputs
-                name={item}
-                data={data}
-                setData={setData}
-              />
+              <Suspense fallback={
+                <Loading
+                  size="small"
+                  color={"#fff"}
+                  backgroud="transparent"
+                  paddingBlock='0'
+                />
+              }>
+                <TimeInputs
+                  name={item}
+                  data={data}
+                  setData={setData}
+                />
+              </Suspense>
             </div>
           ))}
         </div>
@@ -83,11 +103,20 @@ const TimerSetting = ({ handleChange, data, setData }) => {
               flexWrap: "wrap",
             }}>
               <h3 style={{ width: 'fit-content' }}>{auto.name}</h3>
-              <ToggleButton
-                type={auto.type}
-                data={data}
-                setData={setData}
-              />
+              <Suspense fallback={
+                <Loading
+                  size="small"
+                  color={"#fff"}
+                  backgroud="transparent"
+                  paddingBlock='0'
+                />
+              }>
+                <ToggleButton
+                  type={auto.type}
+                  data={data}
+                  setData={setData}
+                />
+              </Suspense>
             </div>
           </div>
         ))}

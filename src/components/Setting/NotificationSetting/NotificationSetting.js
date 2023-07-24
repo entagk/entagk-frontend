@@ -1,4 +1,6 @@
-import React, {lazy} from 'react';
+import React, { Suspense, lazy } from 'react';
+
+import Loading from '../../../utils/Loading/Loading';
 
 const Select = lazy(() => import('../Select/Select'));
 
@@ -7,7 +9,23 @@ const NotificationSetting = ({ data, setData, handleChange }) => {
     <div className='block notification' style={{ border: "none" }}>
       <h3>Notification</h3>
       <div className='notification-data'>
-        <Select options={["every", "last"]} data={data} type="notificationType" setData={setData} width="100px" setChange={() => { }} />
+        <Suspense fallback={
+          <Loading
+            size="small"
+            color={"#fff"}
+            backgroud="transparent"
+            paddingBlock='0'
+          />
+        }>
+          <Select
+            options={["every", "last"]}
+            data={data}
+            type="notificationType"
+            setData={setData}
+            width="100px"
+            setChange={() => { }}
+          />
+        </Suspense>
         <div className='notification-min'>
           <input
             style={{ marginInline: "10px 0" }}
