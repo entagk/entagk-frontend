@@ -24,7 +24,6 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
   const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const { user } = useSelector(state => state.auth);
-  const { active, activites } = useSelector(state => state.timer);
   const { currentPage, numberOfPages, templates } = useSelector(state => state.templates.userTemplates);
   const [showMore, setShowMore] = useState(false);
 
@@ -66,14 +65,12 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
       {openEdit && (
         <Suspense fallback={
           <div className="glass-container">
-            <div className="glass-effect temp-form">
-              <Loading
-                size="100"
-                strokeWidth="4"
-                backgroud="#e7e7e7"
-                color={activites[active]?.color}
-              />
-            </div>
+            <Loading
+              size="big"
+              backgroud="transparant"
+              color="white"
+              className="glass-effect temp-form"
+            />
           </div>
         }>
           <TemplateForm
@@ -87,14 +84,12 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
       {openDelete && (
         <Suspense fallback={
           <div className="glass-container">
-            <div className="glass-effect delete-popup">
-              <Loading
-                size="60"
-                strokeWidth="5"
-                color="white"
-                backgroud="#ccc"
-              />
-            </div>
+            <Loading
+              size="medium"
+              color={"#fff"}
+              backgroud="transparant"
+              className="glass-effect delete-popup"
+            />
           </div>
         }>
           <DeletePopup
@@ -108,8 +103,7 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
         {isLoading === props._id && (
           <div className="loading-container">
             <Loading
-              size="50"
-              strokeWidth="3"
+              size="medium"
               color={"#ccc"}
               backgroud={"white"}
             />
@@ -128,7 +122,14 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
             <p className='temp-est'>
               {props.est}
             </p>
-            <Suspense fallback={<></>}>
+            <Suspense fallback={
+              <Loading
+                size="small"
+                color={"#fff"}
+                backgroud="transparent"
+                style={{ paddingBlock: '0' }}
+              />
+            }>
               <Menu MainButton={
                 <button
                   aria-label="toggle the task list menu"
@@ -138,7 +139,14 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
                 </button>
               }>
                 <MenuItem aria-label='show todo' onClick={handleShowingTasks}>
-                  <Suspense fallback={<></>}>
+                  <Suspense fallback={
+                    <Loading
+                      size="small"
+                      color={"#fff"}
+                      backgroud="transparent"
+                      style={{ paddingBlock: '0' }}
+                    />
+                  }>
                     <TodoList />
                   </Suspense>
                   <span>Todo</span>
