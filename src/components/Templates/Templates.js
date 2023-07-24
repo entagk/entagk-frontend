@@ -29,7 +29,6 @@ function Templates() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showTodo, setShowTodo] = useState('');
   const { userTemplates: { templates, total, numberOfPages, currentPage }, isLoading } = useSelector(state => state?.templates) || { userTemplates: {} };
-  const { active, activites } = useSelector(state => state.timer);
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -48,10 +47,10 @@ function Templates() {
           (
             <>
               <Loading
-                size="100"
-                strokeWidth="5"
+                size="verybig"
                 backgroud="transperent"
                 color="#ffffff"
+                className='center-fullpage'
               />
             </>
           ) : (
@@ -101,19 +100,17 @@ function Templates() {
                 template={templates[currentPage - 1].filter(t => t._id === showTodo)[0]}
                 setOpenTodo={setShowTodo}
               />
-              <Suspense fallback={<>
-                <Loading
-                  size="100"
-                  strokeWidth="4"
-                  backgroud="white"
-                  color={activites[active]?.color}
-                />
-              </>
+              <Suspense fallback={
+                <>
+                  <Loading
+                    size="big"
+                    backgroud="transparant"
+                    color="white"
+                  />
+                </>
               }>
                 <TemplateTasks
                   templateId={showTodo}
-                  setOpenTodo={setShowTodo}
-                  message={message}
                   setMessage={setMessage}
                 />
               </Suspense>
@@ -123,14 +120,14 @@ function Templates() {
       )}
       <Suspense fallback={
         <Loading
-          size="100"
-          strokeWidth="5px"
+          size="verybig"
           backgroud="transperent"
           color="#ffffff"
+          className='center-fullpage'
         />
       }>
-        <NavBar />
         <div className='templates container'>
+          <NavBar />
           {(templates[currentPage - 1]?.length > 0 || searchParams.get('search')) ? (
             <>
               <SearchBar
@@ -139,17 +136,15 @@ function Templates() {
                 setOpenFormForNew={setOpenFormForNew}
               />
               {isLoading ? (
-                <div style={{
-                  width: "100%",
-                  margin: "30px",
-                }}>
-                  <Loading
-                    size="100"
-                    strokeWidth="5"
-                    backgroud="transperent"
-                    color="#ffffff"
-                  />
-                </div>
+                <Loading
+                  size="big"
+                  backgroud="transperent"
+                  color="#ffffff"
+                  style={{
+                    width: "100%",
+                    margin: "30px",
+                  }}
+                />
               ) : (
                 <div className='templates-container'>
                   <>
@@ -196,29 +191,28 @@ function Templates() {
             </div>
           )}
         </div>
-        {openFormForNew && (
-          <Suspense fallback={
-            <div className="glass-container">
-              <div className="glass-effect temp-form">
-                <Loading
-                  size="100"
-                  strokeWidth="4"
-                  backgroud="#e7e7e7"
-                  color={activites[active]?.color}
-                />
-              </div>
-            </div>
-          }>
-            <TemplateForm
-              setOpen={setOpenFormForNew}
-              oldData={null}
-              isLoading={isLoadingTemp}
-              setIsLoading={setIsLoadingTemp}
-              setMessage={setMessage}
-            />
-          </Suspense>
-        )}
       </Suspense>
+      {openFormForNew && (
+        <Suspense fallback={
+          <div className="glass-container">
+            <div className="glass-effect temp-form">
+              <Loading
+                size="big"
+                backgroud="transparant"
+                color="white"
+              />
+            </div>
+          </div>
+        }>
+          <TemplateForm
+            setOpen={setOpenFormForNew}
+            oldData={null}
+            isLoading={isLoadingTemp}
+            setIsLoading={setIsLoadingTemp}
+            setMessage={setMessage}
+          />
+        </Suspense>
+      )}
     </>
   );
 }

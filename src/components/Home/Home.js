@@ -71,13 +71,12 @@ function Home() {
         {(!message.message) ?
           (
             <>
-              <div className='center-fullpage'>
-                <Loading
-                  size="verybig"
-                  backgroud="transperent"
-                  color="#ffffff"
-                />
-              </div>
+              <Loading
+                size="verybig"
+                backgroud="transperent"
+                color="#ffffff"
+                className='center-fullpage'
+              />
             </>
           ) : (
             <>
@@ -108,13 +107,12 @@ function Home() {
         </>
       )}
       <React.Suspense fallback={
-        <div className='center-fullpage'>
-          <Loading
-            size="verybig"
-            backgroud="transperent"
-            color="#ffffff"
-          />
-        </div>
+        <Loading
+          size="verybig"
+          backgroud="transperent"
+          color="#ffffff"
+          className="center-fullpage"
+        />
       }>
         <div className='container'>
           <NavBar setMessage={setMessage} />

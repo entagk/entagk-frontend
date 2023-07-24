@@ -38,8 +38,7 @@ function Setting({ setOpenSetting }) {
   if (setting === undefined) {
     return (
       <Loading
-        size="200"
-        strokeWidth="2.5"
+        size="big"
         color="#ffffff"
         backgroud="transperent"
       />
