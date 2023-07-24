@@ -88,10 +88,10 @@ function Setting({ setOpenSetting }) {
   return (
     <React.Suspense fallback={
       <Loading
-        size="200"
-        strokeWidth="5px"
+        size="big"
         color="#ffffff"
-        backgroud="transperent"
+        backgroud="transparant"
+        className="center-fullpage"
       />
     }>
       {message.message && (
@@ -103,28 +103,22 @@ function Setting({ setOpenSetting }) {
           )}
         </>
       )}
-      {(setting && isLoading) && (
-        <div className="loading-container" style={{
-          position: 'fixed',
-          top: '0',
-          right: '0',
-          background: '#ffffff73',
-          width: '100%',
-          height: '100%',
-          zIndex: '1000',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <Loading
-            size="200"
-            strokeWidth="5"
-            color={activites[active].color}
-            backgroud="transperent"
-          />
-        </div>
-      )}
       <form className='glass-effect setting zoom-in' onSubmit={handleSubmit}>
+        {(setting && isLoading) && (
+          <Loading
+            size="big"
+            color={activites[active].color}
+            backgroud="transparant"
+            style={{
+              backgroud: "#ffffff73",
+              margin: 0,
+              background: '#ffffff30',
+              borderRadius: 'inherit',
+              border: 'inherit',
+            }}
+            className="center-fullpage"
+          />
+        )}
         <Header linkClick={handleSubmit} status={status} setStatus={setStatus} />
         <>
           {status === '' ? (

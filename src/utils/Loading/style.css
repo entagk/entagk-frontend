@@ -11,6 +11,10 @@
   z-index: 1001;
 }
 
+.loading-container.center-fullpage {
+  position: fixed;
+}
+
 .loading-container {
   display: flex;
   align-items: center;

@@ -12,7 +12,7 @@ const Loading = ({ color, backgroud, paddingBlock = 0, size, strokeWidth, classN
 
   return (
     <div
-      className={`loading-container ${className || ""}`}
+      className={`${className || ""} loading-container`}
       style={style}
     >
       <div
