@@ -101,13 +101,12 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
       )}
       <div className='template'>
         {isLoading === props._id && (
-          <div className="loading-container">
-            <Loading
-              size="medium"
-              color={"#ccc"}
-              backgroud={"white"}
-            />
-          </div>
+          <Loading
+            size="medium"
+            color={"#fff"}
+            backgroud="transparent"
+            style={{ margin: 0 }}
+          />
         )}
         <div className='temp-upper'>
           <p className='temp-name'>
@@ -155,8 +154,7 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
                   <>
                     <div style={{ padding: 10 }}>
                       <Loading
-                        size="30"
-                        strokeWidth="5"
+                        size="small"
                         color={"#ccc"}
                         backgroud="transparent"
                         paddingBlock='0'
