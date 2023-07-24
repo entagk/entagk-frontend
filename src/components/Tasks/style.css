@@ -14,7 +14,7 @@
   width: 820px;
   color: rgb(255, 255, 255);
   box-shadow: 1px 1px 10px 0px #858585;
-  border-radius: 10px;
+  border-radius: 20px;
   border: 2px solid;
 }
 
@@ -73,7 +73,6 @@
 @media (max-width: 768px) {
   .tasks {
     padding: 0;
-    border-radius: 30px;
   }
 
   .tasks .header {
@@ -101,10 +100,6 @@
 }
 
 @media (max-width: 600px) {
-  .tasks {
-    border-radius: 25px;
-  }
-
   .tasks .header {
     padding-block: 7px;
     padding-inline: 10px;
@@ -146,10 +141,6 @@
 }
 
 @media (max-width: 400px) {
-  .tasks {
-    border-radius: 25px;
-  }
-
   .tasks .header {
     padding-inline: 15px;
     padding-block: 7.5px;

@@ -9,7 +9,7 @@
   box-shadow: 1px 1px 10px 0px #858585;
   position: absolute;
   top: 0px;
-  border-radius: 10px;
+  border-radius: 20px;
   border: 2px solid;
 }
 
@@ -127,7 +127,7 @@
   padding: 20px;
   background: #ececec38;
   width: 100%;
-  border-radius: 0 0 10px 10px;
+  border-radius: inherit;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -170,10 +170,6 @@
 }
 
 @media (max-width: 500px) {
-  .setting {
-    border-radius: 38px 38px 10px 10px;
-  }
-
   .setting-header {
     padding: 15px;
   }
@@ -235,10 +231,6 @@
 }
 
 @media (max-width: 400px) {
-  .setting {
-    border-radius: 24px 24px 10px 10px;
-  }
-
   .setting-menu button {
     font-size: 18px;
     padding: 8px 10px;
