@@ -14,12 +14,18 @@ function Menu({ children, MainButton, ...props }) {
             <div className="row">
               {children.map((child, index) => (
                 <React.Fragment key={index}>
-                  {React.cloneElement(child, {
-                    onClick: (e) => {
-                      child.props.onClick(e);
-                      setOpen(false);
-                    }
-                  })}
+                  {child?.type !== 'div' ? (
+                    <>
+                      {
+                        React.cloneElement(child, {
+                          onClick: (e) => {
+                            child.props.onClick(e);
+                            setOpen(false);
+                          }
+                        })
+                      }
+                    </>
+                  ): child}
                 </React.Fragment>
               ))}
             </div>
