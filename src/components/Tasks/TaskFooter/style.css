@@ -1,7 +1,6 @@
 /* start tasks footer */
 .tasks .footer {
   color: #e7e7e7;
-  border-top: 2px solid #fff;
   text-align: center;
   display: flex;
   align-items: center;
@@ -9,12 +8,9 @@
   text-transform: capitalize;
   padding: 20px;
   font-size: 18px;
-  border-radius: 84px;
-  box-shadow: 0px -5px 5px -5px #121212;
-  margin: 20px 0;
-
-  margin-bottom: 0;
-  border: 2px solid;
+  border: none;
+  box-shadow: none;
+  border-radius: inherit;
 }
 
 .tasks .footer p {

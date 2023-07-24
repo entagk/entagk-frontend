@@ -65,7 +65,7 @@ const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo })
             <CgClose />
           </button>
         </div>
-        <div className="tasks-container">
+        <div className="tasks-container" style={{ marginBlock: 0 }}>
           <Suspense fallback={
             <Loading
               size="big"
