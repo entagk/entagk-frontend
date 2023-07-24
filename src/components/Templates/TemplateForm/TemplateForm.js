@@ -8,7 +8,7 @@ import './style.css'
 import Message from '../../../utils/Message';
 import NetworkError from '../../NetworkError/NetworkError';
 import FormFooter from './FormFooter/FormFooter';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addTemplate, modifyTemplate } from '../../../actions/templates';
 import Loading from '../../../utils/Loading/Loading';
 
@@ -52,7 +52,6 @@ function TemplateForm({
   setOpen
 }) {
   const dispatch = useDispatch();
-  const { active, activites } = useSelector(state => state.timer);
   const [activeStep, setActiveStep] = useState(0);
   const [data, setData] = useState(oldData === null ? initialData : oldData);
   const [message, setMessage] = useState({ message: '', type: '' })
@@ -64,7 +63,7 @@ function TemplateForm({
     },
     {
       text: 'todo',
-      Icon: () => <TodoList />,
+      Icon: () => <Suspense fallback={<></>}><TodoList /></Suspense>,
     },
     {
       text: 'timer',
@@ -179,10 +178,9 @@ function TemplateForm({
               <div className='form-middle'>
                 <Suspense fallback={
                   <Loading
-                    size="100"
-                    strokeWidth="4"
-                    backgroud="#e7e7e7"
-                    color={activites[active]?.color}
+                    size="big"
+                    backgroud="transparant"
+                    color="white"
                   />
                 }>
                   <SoundStep
@@ -203,10 +201,9 @@ function TemplateForm({
             <div className='form-middle'>
               <Suspense fallback={
                 <Loading
-                  size="100"
-                  strokeWidth="4"
-                  backgroud="#e7e7e7"
-                  color={activites[active]?.color}
+                  size="big"
+                  backgroud="transparant"
+                  color="white"
                 />
               }>
                 {activeStep === 0 ? (
@@ -244,10 +241,9 @@ function TemplateForm({
             <>
               <Suspense fallback={
                 <Loading
-                  size="100"
-                  strokeWidth="4"
-                  backgroud="#e7e7e7"
-                  color={activites[active]?.color}
+                  size="big"
+                  backgroud="transparant"
+                  color="white"
                 />
               }>
                 <CompletedStatus

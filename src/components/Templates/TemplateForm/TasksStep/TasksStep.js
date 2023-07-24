@@ -1,4 +1,4 @@
-import React, { lazy, useState, useEffect } from 'react';
+import React, { lazy, useState, useEffect, Suspense } from 'react';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 
@@ -17,7 +17,6 @@ function TasksStep({ data, setData, message, setMessage }) {
   const [isLoading, setIsLoading] = useState("");
   const tasks = useSelector(state => state.templates.tempTasks[data?._id]) || {};
   const [page, setPage] = useState(1);
-  const { active, activites } = useSelector(state => state.timer);
 
   useEffect(() => {
     if (data?._id && tasks.tasks === undefined && data.tasks?.length > 0 && data.tasks.every(t => typeof t === 'string')) {
@@ -60,10 +59,9 @@ function TasksStep({ data, setData, message, setMessage }) {
     return (
       <>
         <Loading
-          size="100"
-          strokeWidth="4"
-          backgroud="white"
-          color={activites[active]?.color}
+          size="big"
+          color="white"
+          backgroud="transparent"
         />
       </>
     )
@@ -76,22 +74,33 @@ function TasksStep({ data, setData, message, setMessage }) {
           {data.tasks?.length > 0 && (
             <div className="tasks-list">
               {data.tasks?.map((task) => (
-                <Task
-                  key={task._id}
-                  isLoading={isLoading}
-                  setIsLoading={setIsLoading}
-                  setMessage={setMessage}
-                  template={data?._id ? { "_id": data?._id, todo: false } : 'new'}
-                  setTemplateData={data?._id ? null : setData}
-                  {...task}
-                />
+                <Suspense fallback={
+                  <Loading
+                    size="medium"
+                    color={"#fff"}
+                    backgroud="transparent"
+                  />
+                }>
+                  <Task
+                    key={task._id}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    setMessage={setMessage}
+                    template={data?._id ? { "_id": data?._id, todo: false } : 'new'}
+                    setTemplateData={data?._id ? null : setData}
+                    {...task}
+                  />
+                </Suspense>
               ))}
               {isLoading === 'new' && (
                 <>
                   {
-                    <div className="loading-container">
-                      <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                    </div>
+                    <Loading
+                      size="medium"
+                      color={"#fff"}
+                      backgroud="transparent"
+                      style={{ marginTop: 0 }}
+                    />
                   }
                 </>
               )}
@@ -99,9 +108,12 @@ function TasksStep({ data, setData, message, setMessage }) {
           )}
           {/* This is for loading while bringing the tasks */}
           {(isLoading === 'tasks' && tasks.tasks?.length > 0) && (
-            <div className="loading-container">
-              <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-            </div>
+            <Loading
+              size="medium"
+              color={"#fff"}
+              backgroud="transparent"
+              style={{ marginTop: 0 }}
+            />
           )}
           {!openFormForNew ? (
             <button aria-label="add task button" className="add-task-button" onClick={() => setOpenFormForNew(p => !p)}>

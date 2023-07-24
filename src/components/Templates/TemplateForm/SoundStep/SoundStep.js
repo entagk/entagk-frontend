@@ -1,5 +1,6 @@
-import React from 'react';
-import SoundSetting from '../../../Setting/SoundSetting/SoundSetting';
+import React, { lazy } from 'react';
+
+const SoundSetting = lazy(() => import('../../../Setting/SoundSetting/SoundSetting'));
 
 function SoundStep({ data, setData, handleChange }) {
   return (
