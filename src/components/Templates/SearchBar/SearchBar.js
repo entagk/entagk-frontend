@@ -8,6 +8,8 @@ import './style.css';
 import { useDispatch } from 'react-redux';
 import { getTemplatesForUser } from '../../../actions/templates';
 
+import Loading from '../../../utils/Loading/Loading';
+
 const Menu = lazy(() => import('../../../utils/Menu/Menu'));
 const MenuItem = lazy(() => import('../../../utils/Menu/MenuItem'));
 
@@ -44,7 +46,14 @@ function SearchBar({ setOpenFormForNew, searchParams, setSearchParams, setMessag
             onChange={handleChangeSearchQuery}
           />
         </div>
-        <Suspense fallback={<></>}>
+        <Suspense fallback={
+          <Loading
+            size="small"
+            color={"#fff"}
+            backgroud="transparent"
+            style={{ paddingBlock: '0' }}
+          />
+        }>
           <Menu MainButton={
             <button
               aria-label="toggle the task list menu"
