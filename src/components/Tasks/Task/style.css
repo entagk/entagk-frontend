@@ -154,17 +154,19 @@
 }
 
 .task .task-notes {
-  margin: 15px 0;
+  margin-block: 20px 0;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 0;
   width: 100%;
 
   background: #f9da79e8;
-  border: 2px solid;
+  border-top: 2px solid;
+  background: none;
+  display: none;
 }
 
 .task .task-notes p {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .task .task-notes a {
@@ -172,6 +174,10 @@
   font-weight: bold;
   color: #2a2aff;
   line-break: anywhere;
+}
+
+.task:hover .task-notes {
+  display: block;
 }
 
 @media (max-width: 768px) {
