@@ -26,6 +26,7 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
   const { user } = useSelector(state => state.auth);
   const { currentPage, numberOfPages, templates } = useSelector(state => state.templates.userTemplates);
   const [showMore, setShowMore] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
 
   const hours = ((
     (props.time.PERIOD * props.est) +
@@ -38,26 +39,37 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
   setInterval(() => {
     setUpdated(updatedAt(props?.updatedAt));
   }, 10000);
-
+  
   const hadnleAddToTodo = () => {
+    setOpenMenu(false);
     dispatch(addToTodo(props._id, setIsLoading, setMessage));
   }
-
+  
   const toggleDelete = () => {
     setOpenDelete(true);
+    setOpenMenu(false);
   }
 
   const handleDelete = () => {
     setOpenDelete(false);
-    dispatch(deleteTemplate(props._id, templates[currentPage - 1].length, currentPage, numberOfPages, setIsLoading, setMessage));
+    dispatch(deleteTemplate(
+      props._id,
+      templates[currentPage - 1].length,
+      currentPage,
+      numberOfPages,
+      setIsLoading,
+      setMessage
+    ));
   }
 
   const handleOpenEdit = () => {
     setOpenEdit(true);
+    setOpenMenu(false);
   }
 
   const handleShowingTasks = () => {
     setShowTodo(props._id);
+    setOpenMenu(false);
   }
 
   return (
@@ -126,24 +138,26 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
                 size="small"
                 color={"#fff"}
                 backgroud="transparent"
-                style={{ paddingBlock: '0' }}
+                style={{ paddingBlock: '0', margin: 0 }}
               />
             }>
-              <Menu MainButton={
-                <button
-                  aria-label="toggle the task list menu"
-                  className="toggle-menu"
-                >
-                  <CircularMenu />
-                </button>
-              }>
+              <Menu
+                open={openMenu}
+                setOpen={setOpenMenu}
+                MainButton={
+                  <button
+                    aria-label="toggle the task list menu"
+                    className="toggle-menu"
+                  >
+                    <CircularMenu />
+                  </button>
+                }>
                 <MenuItem aria-label='show todo' onClick={handleShowingTasks}>
                   <Suspense fallback={
                     <Loading
                       size="small"
                       color={"#fff"}
                       backgroud="transparent"
-                      style={{ paddingBlock: '0' }}
                     />
                   }>
                     <TodoList />

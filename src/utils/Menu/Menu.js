@@ -1,13 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import "./style.css"
 
-function Menu({ children, MainButton, ...props }) {
-  const [open, setOpen] = useState(false);
+function Menu({ children, setOpen, open, MainButton, ...props }) {
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => document.removeEventListener("click", handleClickOutside);
+  });
 
   return (
-    <div className="menu">
-      {React.cloneElement(MainButton, { onClick: () => setOpen(o => !o), className: open ? `${MainButton.props.className} open` : MainButton.props.className })}
+    <div className="menu" ref={menuRef}>
+      {React.cloneElement(MainButton, {
+        onClick: () => setOpen(o => !o),
+        className: open ? `${MainButton.props.className} open` : MainButton.props.className
+      })}
       {
         open && (
           <div className="menu-content" {...props}>
@@ -25,7 +43,7 @@ function Menu({ children, MainButton, ...props }) {
                         })
                       }
                     </>
-                  ): child}
+                  ) : child}
                 </React.Fragment>
               ))}
             </div>

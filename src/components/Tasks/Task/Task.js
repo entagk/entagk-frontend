@@ -34,6 +34,7 @@ const Task = ({
   const { setting } = useSelector(state => state.timer);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
 
   useEffect(() => {
     if (
@@ -48,8 +49,9 @@ const Task = ({
 
   const handleCheck = () => {
     dispatch(checkTask(props._id, setIsLoading, setMessage));
+    setOpenMenu(false);
   }
-
+  
   const handleDelete = () => {
     setOpenDelete(false);
     if (props?._id) {
@@ -58,8 +60,8 @@ const Task = ({
       setTemplateData(t => ({ ...t, tasks: t.tasks.filter(task => task.id !== props.id) }))
     };
   }
-
-
+  
+  
   const handleActive = () => {
     if (props.tasks?.length === 0) {
       if ((!props.check && setting.autoStartNextTask) || (!setting.autoStartNextTask && props.act !== props.est)) {
@@ -71,13 +73,15 @@ const Task = ({
       }
     }
   }
-
+  
   const toggleEdit = () => {
     setOpenEdit(true);
+    setOpenMenu(false);
   }
-
+  
   const toggleDelete = () => {
     setOpenDelete(e => !e);
+    setOpenMenu(false);
   }
 
   if (openEdit) {
@@ -218,14 +222,17 @@ const Task = ({
                 />
               }
             >
-              <Menu MainButton={
-                <button
-                  aria-label="toggle the task list menu"
-                  className="toggle-menu"
-                >
-                  <CircularMenu />
-                </button>
-              }>
+              <Menu
+                open={openMenu}
+                setOpen={setOpenMenu}
+                MainButton={
+                  <button
+                    aria-label="toggle the task list menu"
+                    className="toggle-menu"
+                  >
+                    <CircularMenu />
+                  </button>
+                }>
                 {((props.template?.todo && props.template) || (!props.template && props.tasks.length === 0)) ? (
                   <>
                     {(!setting?.autoStartNextTask) ? (

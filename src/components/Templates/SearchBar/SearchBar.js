@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 
 import { AiOutlinePlus, AiOutlineSearch } from 'react-icons/ai';
 
@@ -15,6 +15,7 @@ const MenuItem = lazy(() => import('../../../utils/Menu/MenuItem'));
 
 function SearchBar({ setOpenFormForNew, searchParams, setSearchParams, setMessage }) {
   const dispatch = useDispatch();
+  const [openMenu, setOpenMenu] = useState(false);
 
   const handleChangeSearchQuery = (e) => {
     const sort = searchParams.get('sort');
@@ -25,6 +26,7 @@ function SearchBar({ setOpenFormForNew, searchParams, setSearchParams, setMessag
   }
 
   const handleSortElement = (e) => {
+    setOpenMenu(false);
     const search = searchParams.get('search');
     searchParams.set("sort", e.target.value);
     setSearchParams(searchParams);
@@ -54,19 +56,22 @@ function SearchBar({ setOpenFormForNew, searchParams, setSearchParams, setMessag
             style={{ paddingBlock: '0' }}
           />
         }>
-          <Menu MainButton={
-            <button
-              aria-label="toggle the task list menu"
-              className="toggle-menu"
-            >
-              <span className='text'>
-                Sort
-              </span>
-              <span className='icon'>
-                <RiArrowDownSLine className='arrow' />
-              </span>
-            </button>
-          }>
+          <Menu
+            open={openMenu}
+            setOpen={setOpenMenu}
+            MainButton={
+              <button
+                aria-label="toggle the task list menu"
+                className="toggle-menu"
+              >
+                <span className='text'>
+                  Sort
+                </span>
+                <span className='icon'>
+                  <RiArrowDownSLine className='arrow' />
+                </span>
+              </button>
+            }>
             <MenuItem
               aria-label="Last updated sort choice"
               type='button'

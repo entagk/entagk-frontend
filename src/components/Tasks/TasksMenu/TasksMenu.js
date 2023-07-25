@@ -19,6 +19,7 @@ const TasksMenu = ({ setMessage }) => {
   const { active, activites } = useSelector(state => state.timer);
   const dispatch = useDispatch();
   const [clear, setClear] = useState("");
+  const [openMenu, setOpenMenu] = useState(false);
 
   const handleClearFinishedTasks = () => {
     setClear('');
@@ -37,6 +38,7 @@ const TasksMenu = ({ setMessage }) => {
 
   const handleClear = (type) => {
     setClear(type)
+    setOpenMenu(false);
   }
 
   return (
@@ -79,6 +81,8 @@ const TasksMenu = ({ setMessage }) => {
       </Suspense>
       <Suspense fallback={<></>}>
         <Menu
+          open={openMenu}
+          setOpen={setOpenMenu}
           MainButton={
             <button
               aria-label="toggle the task list menu"

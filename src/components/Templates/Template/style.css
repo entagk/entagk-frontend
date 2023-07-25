@@ -24,8 +24,8 @@
   background-color: #90909066;
 }
 
-.template .loading-container,
-.template-form .loading-container {
+.template > .loading-container,
+.template-form > .loading-container {
   position: absolute;
   display: flex;
   align-items: center;

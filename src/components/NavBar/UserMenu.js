@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import React, { lazy, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { FiEdit3 } from 'react-icons/fi';
@@ -15,10 +15,12 @@ const MenuItem = lazy(() => import("../../utils/Menu/MenuItem"));
 
 function UserMenu({ setOpenDelete, }) {
   const dispatch = useDispatch();
+  const [openMenu, setOpenMenu] = useState(false);
   const { user } = useSelector(state => state.auth);
 
   const logout = () => {
     dispatch({ type: LOGOUT });
+    setOpenMenu(false);
   };
 
   const getUserName = () => {
@@ -33,6 +35,7 @@ function UserMenu({ setOpenDelete, }) {
 
   const toggleDelete = () => {
     setOpenDelete(true);
+    setOpenMenu(false);
   };
 
   const stringToColor = (string) => {
@@ -51,26 +54,30 @@ function UserMenu({ setOpenDelete, }) {
   };
 
   return (
-    <Menu MainButton={
-      <button
-        aria-label="user button"
-        className={`user-menu ${user?.avatar ? 'img' : ''}`}
-        style={{ background: stringToColor(user?.name), padding: user?.avatar && 0 }}
-      >
-        {user?.avatar ? (
-          <img
-            src={user?.avatar}
-            alt="avatar"
-            width=""
-            height=""
-          />
-        ) : (
-          <span>
-            {user.name[0].toUpperCase()}
-          </span>
-        )}
-      </button>
-    }>
+    <Menu
+      open={openMenu}
+      setOpen={setOpenMenu}
+      MainButton={
+        <button
+          aria-label="user button"
+          className={`user-menu ${user?.avatar ? 'img' : ''}`}
+          style={{ background: stringToColor(user?.name), padding: user?.avatar && 0 }}
+        >
+          {user?.avatar ? (
+            <img
+              src={user?.avatar}
+              alt="avatar"
+              width=""
+              height=""
+            />
+          ) : (
+            <span>
+              {user.name[0].toUpperCase()}
+            </span>
+          )}
+        </button>
+      }
+    >
       <div className="user-details">
         <div className="menu-avatar"
           style={{ background: stringToColor(user?.name), padding: user?.avatar && 0 }}
