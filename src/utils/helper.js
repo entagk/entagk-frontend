@@ -82,3 +82,29 @@ export const getPages = (current, numberOfPages) => {
 
   return pages;
 };
+
+
+export const onScroll = (setPage, totalKey, tasksLenKey, tasksCurrentPageKey) => {
+  const handleScrolling = () => {
+    let scrollTop = document.querySelector('.tasks-container')?.scrollTop;
+    let scrollHeight = document.querySelector('.tasks-list')?.scrollHeight;
+    let clientHeight = document.querySelector('.tasks-container')?.clientHeight;
+
+    if (
+      scrollTop + clientHeight >= scrollHeight &&
+      Number(localStorage.getItem(totalKey)) > Number(localStorage.getItem(tasksLenKey))
+    ) {
+      setPage(Number(localStorage.getItem(tasksCurrentPageKey)) + 1);
+    }
+
+    if (
+      scrollTop + clientHeight >= scrollHeight &&
+      Number(localStorage.getItem(totalKey)) > Number(localStorage.getItem(tasksLenKey))
+    ) {
+      setPage(Number(localStorage.getItem(tasksCurrentPageKey)) + 1);
+    }
+  }
+
+  document.querySelector('.tasks-container')?.addEventListener('scroll', handleScrolling);
+  return () => document.querySelector('.tasks-container')?.removeEventListener('scroll', handleScrolling);
+}

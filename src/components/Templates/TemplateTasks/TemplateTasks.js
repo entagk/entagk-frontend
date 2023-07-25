@@ -8,6 +8,8 @@ import { getTasksForTemplate } from '../../../actions/templates';
 
 import './style.css';
 
+import { onScroll } from '../../../utils/helper';
+
 const Task = lazy(() => import('../../Tasks/Task/Task'));
 const TaskForm = lazy(() => import('../../Tasks/TaskForm/TaskForm'));
 
@@ -43,19 +45,7 @@ function TemplateTasks({ templateId, setMessage }) {
   }, [page])
 
   useEffect(() => {
-    const onScroll = () => {
-      let scrollTop = document.querySelector('.tasks-container')?.scrollTop;
-      let scrollHeight = document.querySelector('.tasks-list')?.scrollHeight;
-      let clientHeight = document.querySelector('.tasks-container')?.clientHeight;
-
-      if (scrollTop + clientHeight >= scrollHeight && Number(localStorage.getItem(`${templateId}-total`)) > Number(localStorage.getItem(`${templateId}-tasksLen`))) {
-        setPage(Number(localStorage.getItem(`${templateId}-currentPage`)) + 1);
-      }
-    }
-
-    document.querySelector('.tasks-container')?.addEventListener('scroll', onScroll);
-    return () => document.querySelector('.tasks-container')?.removeEventListener('scroll', onScroll);
-
+    onScroll(setPage, `${templateId}-total`, `${templateId}-tasksLen`, `${templateId}-currentPage`);
     // eslint-disable-next-line
   }, [tasks.tasks, tasks.total])
 

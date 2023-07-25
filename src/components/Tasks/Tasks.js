@@ -11,6 +11,7 @@ import Message from "../../utils/Message";
 import NetworkError from "../NetworkError/NetworkError";
 
 import "./style.css";
+import { onScroll } from "../../utils/helper";
 
 const TaskForm = lazy(() => import("./TaskForm/TaskForm"));
 const Task = lazy(() => import("./Task/Task"));
@@ -39,19 +40,7 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate
   }, [page])
 
   useEffect(() => {
-    const onScroll = () => {
-      let scrollTop = document.querySelector('.tasks-container')?.scrollTop;
-      let scrollHeight = document.querySelector('.tasks-list')?.scrollHeight;
-      let clientHeight = document.querySelector('.tasks-container')?.clientHeight;
-
-      if (scrollTop + clientHeight >= scrollHeight && Number(localStorage.getItem('total')) > Number(localStorage.getItem('tasksLen'))) {
-        setPage(Number(localStorage.getItem('currentPage')) + 1);
-      }
-    }
-
-    document.querySelector('.tasks-container')?.addEventListener('scroll', onScroll);
-    return () => document.querySelector('.tasks-container')?.removeEventListener('scroll', onScroll);
-
+    onScroll(setPage, 'total', 'tasksLen', 'currentPage');
     // eslint-disable-next-line
   }, [tasks.tasks, tasks.total])
 

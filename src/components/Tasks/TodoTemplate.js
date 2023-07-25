@@ -10,6 +10,8 @@ import NetworkError from "../NetworkError/NetworkError";
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import { onScroll } from '../../utils/helper';
+
 const Task = lazy(() => import('./Task/Task'));
 const TaskForm = lazy(() => import('./TaskForm/TaskForm'));
 
@@ -41,19 +43,7 @@ const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage }
   }, [page])
 
   useEffect(() => {
-    const onScroll = () => {
-      let scrollTop = document.querySelector('.tasks-container')?.scrollTop;
-      let scrollHeight = document.querySelector('.tasks-list')?.scrollHeight;
-      let clientHeight = document.querySelector('.tasks-container')?.clientHeight;
-
-      if (scrollTop + clientHeight >= scrollHeight && Number(localStorage.getItem(`${todoTemplate._id}-total`)) > Number(localStorage.getItem(`${todoTemplate._id}-tasksLen`))) {
-        setPage(Number(localStorage.getItem(`${todoTemplate._id}-currentPage`)) + 1);
-      }
-    }
-
-    document.querySelector('.tasks-container')?.addEventListener('scroll', onScroll);
-    return () => document.querySelector('.tasks-container')?.removeEventListener('scroll', onScroll);
-
+    onScroll(setPage, `${todoTemplate._id}-total`, `${todoTemplate._id}-tasksLen`, `${todoTemplate._id}-currentPage`);
     // eslint-disable-next-line
   }, [tasks, total])
 

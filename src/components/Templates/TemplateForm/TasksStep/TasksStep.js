@@ -8,6 +8,8 @@ import { getTasksForTemplate } from '../../../../actions/templates';
 
 import '../../../Tasks/style.css'
 
+import { onScroll } from '../../../../utils/helper';
+
 const Task = lazy(() => import('../../../Tasks/Task/Task'));
 const TaskForm = lazy(() => import('../../../Tasks/TaskForm/TaskForm'));
 
@@ -38,19 +40,7 @@ function TasksStep({ data, setData, message, setMessage }) {
   }, [page])
 
   useEffect(() => {
-    const onScroll = () => {
-      let scrollTop = document.querySelector('.tasks-container')?.scrollTop;
-      let scrollHeight = document.querySelector('.tasks-list')?.scrollHeight;
-      let clientHeight = document.querySelector('.tasks-container')?.clientHeight;
-
-      if (scrollTop + clientHeight >= scrollHeight && Number(localStorage.getItem(`${data._id}-total`)) > Number(localStorage.getItem(`${data._id}-tasksLen`))) {
-        setPage(Number(localStorage.getItem(`${data._id}-currentPage`)) + 1);
-      }
-    }
-
-    document.querySelector('.tasks-container')?.addEventListener('scroll', onScroll);
-    return () => document.querySelector('.tasks-container')?.removeEventListener('scroll', onScroll);
-
+    onScroll(setPage, `${data._id}-total`, `${data._id}-tasksLen`, `${data._id}-currentPage`);
     // eslint-disable-next-line
   }, [tasks.tasks, tasks.total])
 
