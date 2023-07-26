@@ -18,7 +18,7 @@ API.interceptors.request.use((config) => {
   if (token && config.url !== '/user/verify_reset_id') {
     config.headers.Authorization = `Bearer ${token}`;
   } else {
-    if (localStorage.getItem("rest-token")) {
+    if (localStorage.getItem("reset-token")) {
       config.headers.Authorization = `Bearer ${localStorage.getItem("reset-token")}`;
     }
   }
