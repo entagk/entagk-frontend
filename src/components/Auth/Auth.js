@@ -79,42 +79,25 @@ const Auth = () => {
 
   if (message.message === 'Network Error') {
     return (
-      <div>
-        <h2>There is no Internet Connection</h2>
-      </div>
+      <NetworkError />
     )
   }
 
   return (
     <Suspense fallback={
       <Loading
-        size="200"
-        strokeWidth="5"
+        size="verybig"
         color="#ffffff"
         backgroud="transperent"
       />
     }>
-      {isLoading && (
-        <div className="loading-container" style={{
-          position: 'fixed',
-          top: '0',
-          right: '0',
-          background: '#ffffff73',
-          width: '100%',
-          height: '100%',
-          zIndex: '1000',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+      {/* {isLoading && (
           <Loading
-            size="200"
-            strokeWidth="5"
+            size="big"
             color={activites[active].color}
-            backgroud="transperent"
+            backgroud="#fff"
           />
-        </div>
-      )}
+      )} */}
       <div>
         <div className="container">
           <NavBar setMessage={setMessage} />
@@ -193,10 +176,27 @@ const Auth = () => {
                   <button
                     aria-label="submit auth data"
                     type="submit"
-                    disabled={isSignUp ?
+                    disabled={isLoading || isSignUp ?
                       (!formData.name || !formData.email || !formData.password || (formData.password !== formData.confirmPassword)) :
                       forgetPassword ? (!formData.email) : (!formData.email || !formData.password)
-                    }>{isLoading ? "loading..." : isSignUp ? "sign up" : forgetPassword ? 'send mail' : 'sign in'}</button>
+                    }
+                    style={{ paddingBlock: isLoading && 5 }}
+                  >
+                    {isLoading ?
+                      <Loading
+                        size="small"
+                        strokeWidth="5px"
+                        color={"#fff"}
+                        backgroud="transparent"
+                        style={{ margin: 0 }}
+                      />
+                      : isSignUp ?
+                        "sign up" :
+                        forgetPassword ?
+                          'send mail' :
+                          'sign in'
+                    }
+                  </button>
                 </div>
               </form>
             </div>
