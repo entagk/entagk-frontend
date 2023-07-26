@@ -87,8 +87,9 @@ const Auth = () => {
     <Suspense fallback={
       <Loading
         size="verybig"
-        color="#ffffff"
         backgroud="transperent"
+        color="#ffffff"
+        className="center-fullpage"
       />
     }>
       {/* {isLoading && (
