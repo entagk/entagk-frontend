@@ -8,6 +8,7 @@ import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from 'react-icon
 import "./style.css";
 
 import Loading from "../../../utils/Loading/Loading";
+import Button from "../../../utils/Button/Button";
 const MoreSetting = lazy(() => import("./MoreSetting"));
 
 const initialData = {
@@ -163,18 +164,22 @@ const TaskForm = ({
               )}
               <div className="add-buttons">
                 {!openNotes && (
-                  <button
+                  <Button
                     aria-label="add notes button"
                     type="button"
                     onClick={() => setOpenNotes(on => !on)}
-                  >+ add notes</button>
+                    variant="none"
+                  >
+                    + add notes
+                  </Button>
                 )}
                 {(!openProject) && (
-                  <button
+                  <Button
                     aria-label="add project button"
                     type="button"
                     onClick={() => setOpenProject(on => !on)}
-                  >+ add project</button>
+                    variant="none"
+                  >+ add project</Button>
                 )}
               </div>
             </div>
@@ -195,35 +200,44 @@ const TaskForm = ({
                   )}
                 </Suspense>
                 <div className="block more-details-container">
-                  <button
+                  <Button
                     className="more-details"
                     aria-label="more details template"
                     type="button"
-                    onClick={() => setMoreDetails(s => !s)}>
+                    onClick={() => setMoreDetails(s => !s)}
+                    endIcon={
+                      <>
+                        {moreDetails ? (
+                          <MdOutlineKeyboardArrowUp size="20" />
+                        ) : (
+                          <MdOutlineKeyboardArrowDown size="20" />
+                        )}
+                      </>
+                    }
+                    variant="outlined"
+                  >
                     {moreDetails ? "Less Details" : "More Details"}
-                    {moreDetails ? (
-                      <MdOutlineKeyboardArrowUp size="20" />
-                    ) : (
-                      <MdOutlineKeyboardArrowDown size="20" />
-                    )}
-                  </button>
+                  </Button>
                 </div>
               </>
             )}
           </div>
         </div>
         <div className="task-footer">
-          <button
-            aria-label="cancel form button"
-            type="button"
-            onClick={() => setOpen(o => !o)}
-          >cancel</button>
-          <button
+          <Button
             aria-label="submit form button"
             type="submit"
             className="save"
             disabled={!data.name || !data.est}
-          >save</button>
+            variant='contained'
+            color="main"
+          >save</Button>
+          <Button
+            aria-label="cancel form button"
+            type="button"
+            onClick={() => setOpen(o => !o)}
+            variant="outlined"
+          >cancel</Button>
         </div>
       </form>
     </>

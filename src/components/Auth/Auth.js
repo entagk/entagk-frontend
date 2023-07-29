@@ -11,6 +11,7 @@ import "./Auth.css";
 import Password from "./Password";
 import LogoutPage from "./LogoutPage";
 import NetworkError from "../NetworkError/NetworkError";
+import Button from "../../utils/Button/Button";
 
 const NavBar = lazy(() => import("./../NavBar/NavBar"));
 const initialFormData = {
@@ -33,6 +34,7 @@ const Auth = () => {
     password: false, confirmPassword: false
   });
 
+  // use: localStorage.getItem('token') 
   if (user) {
     return (
       <LogoutPage />
@@ -146,18 +148,14 @@ const Auth = () => {
                     />
                   )}
                   {!isSignUp && (
-                    <div style={{
-                      width: '100%',
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "flex-start"
-                    }}>
-                      <button
+                    <div className="forget-password-container">
+                      <Button
+                        variant="text"
                         aria-label="forget password button"
                         className="forget-password"
                         type="button"
                         onClick={() => setForgetPassword(fp => !fp)}
-                      >forget password</button>
+                      >forget password</Button>
                     </div>
                   )}
                   {isSignUp && (
@@ -174,14 +172,14 @@ const Auth = () => {
                   <GoogleLogin setMessage={setMessage} navigate={navigate} />
                 </div>
                 <div className="block">
-                  <button
+                  <Button
                     aria-label="submit auth data"
                     type="submit"
                     disabled={isLoading || isSignUp ?
                       (!formData.name || !formData.email || !formData.password || (formData.password !== formData.confirmPassword)) :
                       forgetPassword ? (!formData.email) : (!formData.email || !formData.password)
                     }
-                    style={{ paddingBlock: isLoading && 5 }}
+                    style={{ paddingBlock: isLoading && 5, color: '#fff', backgroud: 'var(--main-color)', textTransform: 'uppercase' }}
                   >
                     {isLoading ?
                       <Loading
@@ -197,7 +195,7 @@ const Auth = () => {
                           'send mail' :
                           'sign in'
                     }
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
@@ -218,14 +216,14 @@ const Auth = () => {
                     </p>
                     <h3>{isSignUp ? "Already have account" : "Don't have account ?"}</h3>
                   </div>
-                  <button
+                  <Button
                     type="button"
-                    style={{ backgroundColor: "#00000031" }}
+                    style={{ backgroundColor: "#fff", color: 'var(--main-color)' }}
                     aria-label="form toggole button"
                     onClick={() => { setIsSignUp((p) => !p); setForgetPassword(false); }}
                   >
                     {isSignUp ? "sign in" : "sign up"}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>

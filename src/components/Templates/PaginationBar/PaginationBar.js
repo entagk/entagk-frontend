@@ -4,6 +4,7 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
 import './style.css';
 import { getPages } from '../../../utils/helper';
+import Button from '../../../utils/Button/Button';
 
 function PaginationBar({ numberOfPages, currentPage, changePage }) {
   const [pages, setPages] = useState(getPages(currentPage, numberOfPages))
@@ -15,37 +16,44 @@ function PaginationBar({ numberOfPages, currentPage, changePage }) {
 
   return (
     <div className='pagination-bar'>
-      <button
+      <Button
         aria-label='previous arrow button'
         className='prev-arrow'
         onClick={() => changePage(currentPage - 1)}
         disabled={currentPage - 1 === 0}
-      >
-        <MdKeyboardArrowLeft />
-      </button>
+        startIcon={
+          <MdKeyboardArrowLeft />
+        }
+        variant='single-icon'
+      />
       <div className='pages'>
         {pages.map(page => (
           <>
             {page === '...' ? (
               <p>...</p>
             ) : (
-              <button key={page} className={`page-num ${page === currentPage ? 'active' : ''}`}
+              <Button
+                key={page}
+                className={`page-num ${page === currentPage ? 'active' : ''}`}
                 onClick={() => changePage(page)}
+                variant='single-icon'
               >
                 {page}
-              </button>
+              </Button>
             )}
           </>
         ))}
       </div>
-      <button
+      <Button
         aria-label='next arrow button'
         className='prev-arrow'
         disabled={numberOfPages === currentPage}
         onClick={() => changePage(currentPage + 1)}
-      >
-        <MdKeyboardArrowRight />
-      </button>
+        variant='single-icon'
+        startIcon={
+          <MdKeyboardArrowRight />
+        }
+      />
     </div>
   );
 }

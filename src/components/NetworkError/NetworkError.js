@@ -2,6 +2,7 @@ import React from 'react';
 import NoIntenet from '../../icons/NoInternet/NoIntenet';
 
 import './style.css'
+import Button from '../../utils/Button/Button';
 
 function NetworkError() {
   const reload = () => {
@@ -13,7 +14,7 @@ function NetworkError() {
       <NoIntenet />
       <h2>There is no Internet Connection, try again later.</h2>
       <div>
-        <button aria-label='reload button' onClick={reload}>reload</button>
+        <Button aria-label='reload button' onClick={reload}>reload</Button>
       </div>
     </div>
   );

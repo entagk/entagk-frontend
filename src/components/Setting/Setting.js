@@ -13,6 +13,7 @@ import Message from '../../utils/Message';
 import NetworkError from '../NetworkError/NetworkError';
 
 import "./style.css";
+import Button from '../../utils/Button/Button';
 const Header = lazy(() => import('./SettingHeader/header'));
 const TimerSetting = lazy(() => import('./TimerSetting/TimerSetting'));
 const SoundSetting = lazy(() => import('./SoundSetting/SoundSetting'));
@@ -123,44 +124,61 @@ function Setting({ setOpenSetting }) {
           {status === '' ? (
             <>
               <div className='setting-menu'>
-                <button
+                <Button
                   aria-label='timer setting button'
                   type='button'
-                  onClick={() => setStatus('timer')}>
+                  onClick={() => setStatus('timer')}
+                  variant='none'
+                  endIcon={
+                    <BsArrowRight />
+                  }
+                >
                   <span style={{ marginRight: "40px" }}>
                     <CgTimelapse />
                     <span className='text'>Timer Setting </span>
-                  </span> <BsArrowRight />
-                </button>
-                <button
+                  </span>
+                </Button>
+                <Button
                   aria-label='sounds setting button'
                   type='button'
+                  variant='none'
+                  endIcon={
+                    <BsArrowRight />
+                  }
                   onClick={() => setStatus('sounds')}>
                   <span style={{ marginRight: "40px" }}>
                     <AiFillSound />
                     <span className='text'>Sounds Setting</span>
-                  </span> <BsArrowRight />
-                </button>
+                  </span>
+                </Button>
                 {"Notification" in window && (
-                  <button
+                  <Button
                     aria-label='notifications setting button'
                     type='button'
+                    variant='none'
+                    endIcon={
+                      <BsArrowRight />
+                    }
                     onClick={() => setStatus('notifications')}>
                     <span style={{ marginRight: "40px" }}>
                       <MdNotifications />
                       <span className='text'>Notifications Setting</span>
-                    </span> <BsArrowRight />
-                  </button>
+                    </span>
+                  </Button>
                 )}
-                <button
+                <Button
                   aria-label='focus setting button'
                   type='button'
+                  variant='none'
+                  endIcon={
+                    <BsArrowRight />
+                  }
                   onClick={() => setStatus('focus')}>
                   <span style={{ marginRight: "40px" }}>
                     <TbFocus />
                     <span className='text'>Focus Setting</span>
-                  </span> <BsArrowRight />
-                </button>
+                  </span>
+                </Button>
               </div>
             </>
           ) : status === 'timer' ? (
@@ -183,8 +201,7 @@ function Setting({ setOpenSetting }) {
         </>
 
         <div className='footer'>
-          <button type='button' aria-label='cancel form' onClick={() => setOpenSetting(false)}>cancel</button>
-          <button
+          <Button
             className='save'
             type='submit'
             aria-label='submit form'
@@ -193,7 +210,19 @@ function Setting({ setOpenSetting }) {
               data?.notificationInterval <= 0 ||
               data?.longInterval <= 0 ||
               (data?.alarmRepet < 0 || data?.alarmRepet > 60)
-            }>ok</button>
+            }
+            variant='contained'
+            color="main"
+          >Ok</Button>
+          <Button
+            type='button'
+            aria-label='cancel form'
+            onClick={() => setOpenSetting(false)}
+            variant='outlined'
+            className="cancel"
+          >
+            Cancel
+          </Button>
         </div>
       </form>
     </React.Suspense>

@@ -27,17 +27,21 @@
 }
 
 .setting-header .close-setting {
-  font-size: 20px;
   padding: 10px;
   border-radius: 50%;
   color: #fff;
-  font-size: 20px;
+  font-size: 25px;
   min-width: 0;
   background: red;
 }
 
 .setting-header .close-setting:hover {
   box-shadow: 0 0 5px #0000008f;
+}
+
+.setting-header .close-setting .icon {
+  width: inherit;
+  height: inherit;
 }
 
 .setting-header h2 {
@@ -133,26 +137,8 @@
   justify-content: space-between;
 }
 
-.setting .footer button {
-  font-size: 20px;
-  padding: 10px 15px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px #989898;
-  color: #fff;
-}
-.setting .footer button:first-child {
-  border: 2px solid;
-}
-
-.setting .footer button.save {
-  background-color: var(--main-color);
-}
-
-.setting .footer button.save:disabled {
-  cursor: no-drop;
-  background-color: rgba(0, 0, 0, 0.12);
-  box-shadow: none;
-  color: rgba(0, 0, 0, 0.26);
+.setting .footer button.cancel:hover {
+  background-color: var(--main-light-black);
 }
 
 @media (max-width: 768px) {
@@ -185,11 +171,6 @@
 
   .setting .footer {
     padding: 15px;
-  }
-
-  .setting .footer button {
-    font-size: 18px;
-    padding: 8px 10px;
   }
 }
 

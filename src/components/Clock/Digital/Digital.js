@@ -8,6 +8,7 @@ import { MdRestartAlt } from "react-icons/md";
 import { PERIOD } from "../../../actions/timer";
 
 import { formatTime } from "../../../utils/helper";
+import Button from "../../../utils/Button/Button";
 
 const DigitalTimer = ({ time, toggleStart, handleReset, handleSkip }) => {
   const {
@@ -22,27 +23,47 @@ const DigitalTimer = ({ time, toggleStart, handleReset, handleSkip }) => {
     <div>
       <h1 id="digital-number" className="digital-number">{formatTime(time)}</h1>
       <div className="digital-controlers">
-        <button aria-label="start-pause-button" //"start on roll"
-          className="start-digital" id="start-digital" style={{ background: activites[active].color }} disabled={time === 0}
+        <Button
+          aria-label="start-pause-button" //"start on roll"
+          className="start-digital"
+          id="start-digital"
+          style={{ background: activites[active].color }}
+          disabled={time === 0}
           onClick={toggleStart}
-        >
-          {started ? (
-            <TbPlayerPause />
-          ) : (
-            <TbPlayerPlay />
-          )}
-        </button>
+          variant="none"
+          startIcon={
+            <>
+              {started ? (
+                <TbPlayerPause />
+              ) : (
+                <TbPlayerPlay />
+              )}
+            </>
+          }
+        />
         {(!started && time === activePeriod) && (
-          <button aria-label="reset-button" className="reset-digital" id="reset-digital"
+          <Button
+            aria-label="reset-button"
+            className="reset-digital"
+            id="reset-digital"
             onClick={handleSkip}
-          >
-            <TbPlayerSkipForward />
-          </button>
+            variant="none"
+            startIcon={
+              <TbPlayerSkipForward />
+            }
+          />
         )}
         {(time !== activePeriod && !started && active === PERIOD) && (
-          <button aria-label="reset-button" className="reset-digital" id="reset-digital" onClick={handleReset}>
-            <MdRestartAlt />
-          </button>
+          <Button
+            aria-label="reset-button"
+            className="reset-digital"
+            id="reset-digital"
+            onClick={handleReset}
+            variant="none"
+            startIcon={
+              <MdRestartAlt />
+            }
+          />
         )}
       </div>
     </div>

@@ -41,27 +41,7 @@
 
 .delete-popup.smaller-popup .buttons button {
   font-size: 14px;
-  padding: 8px 12px;
-}
-
-.delete-popup .buttons button {
-  font-size: 20px;
-  padding: 10px 15px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px #989898;
-  color: #fff;
-}
-
-.smaller-popup.delete-popup .buttons button.cancel {
-  color: var(--main-color);
-}
-
-.delete-popup .buttons button.cancel {
-  border: 2px solid;
-}
-
-.delete-popup .buttons button.ok {
-  background-color: var(--main-color);
+  padding: 6px 14px;
 }
 
 @media (max-width: 768px) {

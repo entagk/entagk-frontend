@@ -11,9 +11,9 @@ import Loading from '../../../utils/Loading/Loading';
 import './style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToTodo, deleteTemplate } from '../../../actions/templates';
+import Button from '../../../utils/Button/Button';
 
 const Menu = lazy(() => import('../../../utils/Menu/Menu'));
-const MenuItem = lazy(() => import('../../../utils/Menu/MenuItem'));
 
 const TodoList = lazy(() => import('../../../icons/list/TodoList'));
 const DeletePopup = lazy(() => import("../../../utils/DeletePopup/DeletePopup"));
@@ -39,12 +39,12 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
   setInterval(() => {
     setUpdated(updatedAt(props?.updatedAt));
   }, 10000);
-  
+
   const hadnleAddToTodo = () => {
     setOpenMenu(false);
     dispatch(addToTodo(props._id, setIsLoading, setMessage));
   }
-  
+
   const toggleDelete = () => {
     setOpenDelete(true);
     setOpenMenu(false);
@@ -145,25 +145,34 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
                 open={openMenu}
                 setOpen={setOpenMenu}
                 MainButton={
-                  <button
+                  <Button
                     aria-label="toggle the task list menu"
                     className="toggle-menu"
-                  >
-                    <CircularMenu />
-                  </button>
+                    startIcon={
+                      <CircularMenu />
+                    }
+                    variant="single-icon"
+                    style={{ margin: 0 }}
+                  />
                 }>
-                <MenuItem aria-label='show todo' onClick={handleShowingTasks}>
-                  <Suspense fallback={
-                    <Loading
-                      size="small"
-                      color={"#fff"}
-                      backgroud="transparent"
-                    />
-                  }>
-                    <TodoList />
-                  </Suspense>
-                  <span>Todo</span>
-                </MenuItem>
+                <Button
+                  aria-label='show todo'
+                  onClick={handleShowingTasks}
+                  startIcon={
+                    <Suspense fallback={
+                      <Loading
+                        size="small"
+                        color={"#fff"}
+                        backgroud="transparent"
+                      />
+                    }>
+                      <TodoList />
+                    </Suspense>
+                  }
+                  variant='none'
+                >
+                  <>Todo</>
+                </Button>
                 {!user ? (
                   <>
                     <div style={{ padding: 10 }}>
@@ -177,31 +186,40 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
                   </>
                 ) : (
                   <>
-                    <MenuItem
+                    <Button
                       aria-label='add to todo list'
                       onClick={hadnleAddToTodo}
+                      startIcon={
+                        <MdAddTask />
+                      }
+                      variant='none'
                     >
-                      <MdAddTask />
-                      <span>Add to todo</span>
-                    </MenuItem>
+                      <>Add to todo</>
+                    </Button>
                     {user._id === props.userId && (
                       <>
-                        <MenuItem
+                        <Button
                           aria-label="edit button"
                           onClick={handleOpenEdit}
+                          variant='none'
+                          startIcon={
+                            <FiEdit3 />
+                          }
                         >
-                          <FiEdit3 />
-                          <span>Edit</span>
-                        </MenuItem>
-                        <MenuItem
+                          <>Edit</>
+                        </Button>
+                        <Button
                           aria-label="delet button"
                           onClick={toggleDelete}
                           style={{ color: 'red' }}
                           className="delete"
+                          variant='none'
+                          startIcon={
+                            <MdDelete />
+                          }
                         >
-                          <MdDelete />
-                          <span>Delete</span>
-                        </MenuItem>
+                          <>Delete</>
+                        </Button>
                       </>
                     )}
                   </>
@@ -214,13 +232,20 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
           <p>
             {(props.desc.length > 200 && !showMore) ? `${props.desc.slice(0, 196)}...` : props.desc}
             {(props.desc.length > 200 && !showMore) ?
-              <button
+              <Button
                 aria-label="see mroe"
                 className='show-more'
-                onClick={() => setShowMore(true)}>see more</button> :
+                onClick={() => setShowMore(true)}
+                variant='none'
+              >see more</Button> :
               <>
                 {showMore && (
-                  <button aria-label="see mroe" className='show-more' onClick={() => setShowMore(false)}>see less</button>
+                  <Button
+                    aria-label="see mroe"
+                    className='show-more'
+                    onClick={() => setShowMore(false)}
+                    variant='none'
+                  >see less</Button>
                 )}
               </>
             }

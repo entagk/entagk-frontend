@@ -8,10 +8,10 @@ import { MdLogout, MdDelete } from "react-icons/md";
 import { LOGOUT } from '../../actions/auth';
 
 import { Link } from 'react-router-dom';
+import Button from '../../utils/Button/Button';
 
 const TodoList = lazy(() => import('../../icons/list/TodoList'));
 const Menu = lazy(() => import("../../utils/Menu/Menu"));
-const MenuItem = lazy(() => import("../../utils/Menu/MenuItem"));
 
 function UserMenu({ setOpenDelete, }) {
   const dispatch = useDispatch();
@@ -58,10 +58,11 @@ function UserMenu({ setOpenDelete, }) {
       open={openMenu}
       setOpen={setOpenMenu}
       MainButton={
-        <button
+        <Button
           aria-label="user button"
           className={`user-menu ${user?.avatar ? 'img' : ''}`}
           style={{ background: stringToColor(user?.name), padding: user?.avatar && 0 }}
+          variant='none'
         >
           {user?.avatar ? (
             <img
@@ -75,7 +76,7 @@ function UserMenu({ setOpenDelete, }) {
               {user.name[0].toUpperCase()}
             </span>
           )}
-        </button>
+        </Button>
       }
     >
       <div className="user-details">
@@ -98,50 +99,60 @@ function UserMenu({ setOpenDelete, }) {
         <span className="user-name">{getUserName()}</span>
         <span className="user-email">{user.email}</span>
       </div>
-      <MenuItem
+      <Button
         component={Link}
         to="/user/achievements"
-        aria-label="user button in menu"
+        aria-label="achievments link in user menu"
+        variant='none'
+        startIcon={
+          <GrAchievement />
+        }
       >
-        <GrAchievement />
-        <span style={{ marginLeft: 10 }}>
-          achievements
-        </span>
-      </MenuItem>
-      <MenuItem
+        achievements
+      </Button>
+      <Button
         component={Link}
         to="/templates/you"
-        aria-label="user button in menu">
-        <TodoList />
-        <span style={{ marginLeft: 10 }}>
-          todos templates
-        </span>
-      </MenuItem>
-      <MenuItem
+        aria-label="templates link in user menu"
+        variant='none'
+        startIcon={
+          <TodoList />
+        }
+      >
+        todos templates
+      </Button>
+      <Button
         component={Link}
         to="/user/edit"
-        aria-label="user button in menu">
-        <FiEdit3 />
-        <span style={{ marginLeft: 10 }}>
-          edit account
-        </span>
-      </MenuItem>
-      <MenuItem
+        aria-label="edit user link in user menu"
+        variant='none'
+        startIcon={
+          <FiEdit3 />
+        }
+      >
+        edit account
+      </Button>
+      <Button
         onClick={logout}
-        aria-label="logout button in menu">
-        <MdLogout />
-        <span style={{ marginLeft: 10 }}>
-          Logout
-        </span>
-      </MenuItem>
-      <MenuItem
+        aria-label="logout button in menu"
+        variant='none'
+        startIcon={
+          <MdLogout />
+        }
+      >
+        Logout
+      </Button>
+      <Button
         aria-label="delete account button"
         onClick={toggleDelete}
         style={{ color: "red" }}
+        variant='none'
+        startIcon={
+          <MdDelete />
+        }
       >
-        <MdDelete />
-        <span style={{ marginLeft: 10 }}>Delete Account</span>
-      </MenuItem>
+        Delete Account
+      </Button>
     </Menu>
   );
 }

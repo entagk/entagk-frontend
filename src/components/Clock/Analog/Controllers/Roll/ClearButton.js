@@ -1,16 +1,18 @@
 import React from "react";
 import { MdRestartAlt } from "react-icons/md";
+import Button from "../../../../../utils/Button/Button";
 
 const ClearButton = ({ handleClear }) => {
   return (
     <>
-      <button
+      <Button
         aria-label="clear button on roll"
         className="down-side" id="down"
         onClick={handleClear}
+        variant="none"
       >
         <MdRestartAlt />
-      </button>
+      </Button>
     </>
   )
 }

@@ -53,11 +53,11 @@
 }
 
 .task:hover {
-  background-color: #00000036;
+  background-color: var(--main-light-black);
 }
 
 .task.active {
-  background-color: #00000036;
+  background-color: var(--main-light-black);
   box-shadow: none;
 }
 
@@ -74,18 +74,17 @@
 .task .toggle-menu,
 .task .show-tasks {
   z-index: 1001;
-  border: 2px solid white;
-  font-size: 20px;
+  font-size: 25px;
   padding: 5px 1px;
   color: #fff;
   border-radius: 50%;
   padding-inline: 5px;
-  margin-right: 10px;
 }
 
-.task .toggle-menu:hover,
-.task .show-tasks:hover {
-  background-color: #b5b5b582;
+.task .toggle-menu .icon.start,
+.task .show-tasks .icon.start {
+  width: inherit;
+  height: inherit;
 }
 
 .task .menu .menu-content {
@@ -132,7 +131,7 @@
 .task p.act-est {
   /* position: absolute; */
   right: 0;
-  margin: 0 10px;
+  margin-inline: 8px 0;
   text-align: center;
   justify-content: center;
 }

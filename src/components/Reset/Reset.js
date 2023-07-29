@@ -11,6 +11,7 @@ import LogoutPage from '../Auth/LogoutPage';
 import './../Auth/Auth.css';
 import NotValidToken from './NotValidToken';
 import NetworkError from '../NetworkError/NetworkError';
+import Button from '../../utils/Button/Button';
 
 const NavBar = lazy(() => import('./../NavBar/NavBar'));
 const Password = lazy(() => import('./../Auth/Password'))
@@ -124,7 +125,7 @@ function Reset() {
                 />
               </div>
               <div className="block">
-                <button
+                <Button
                   aria-label="submit auth data"
                   type="submit"
                   disabled={
@@ -144,7 +145,7 @@ function Reset() {
                       />
                       : 'reset password'
                   }
-                </button>
+                </Button>
               </div>
             </form>
           </div>

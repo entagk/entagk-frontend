@@ -21,7 +21,7 @@
 
 .template:hover {
   box-shadow: rgb(0 0 0 / 20%) 0px 0px 10px 4px;
-  background-color: #90909066;
+  background-color: var(--main-light-black);
 }
 
 .template > .loading-container,
@@ -83,12 +83,9 @@
   font-size: 16px;
 }
 
-.template .toggle-menu {
-  z-index: 1001;
-  border: 2px solid white;
-  font-size: 20px;
-  padding: 5px 1px;
-  padding-inline: 5px;
+.template .toggle-menu .start.icon {
+  width: inherit;
+  height: inherit;
 }
 
 .template .toggle-menu:hover {
@@ -110,10 +107,6 @@
   border-radius: 10px;
   font-size: 18px;
   padding: 8px;
-}
-
-.template .menu .menu-content .row button span {
-  margin-inline: 10px;
 }
 
 .template .menu .menu-content .row button.delete:hover {

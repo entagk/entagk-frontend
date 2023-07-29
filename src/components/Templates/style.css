@@ -39,30 +39,16 @@
   font-size: 20px;
 }
 
-.add-temp {
+button.add-temp {
   border: 2px solid;
   padding: 10px;
   border-radius: 10px;
   font-size: 20px;
-  color: #ffffff;
-}
-.add-temp {
-  background: #dadada99;
 }
 
-.add-temp .icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 5px;
-}
-
-.add-temp:hover {
-  box-shadow: 0 0 7px rgb(141 141 141);
-}
 
 @media (max-width: 768px) {
-  .add-temp {
+  button.add-temp {
     margin-top: 10px;
     width: 100%;
     font-size: 18px;

@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import Loading from "../../utils/Loading/Loading";
 
 import "./style.css";
+import Button from "../../utils/Button/Button";
 
 const Footer = lazy(() => import("./TaskFooter/TaskFooter"));
 const Menu = lazy(() => import("./TasksMenu/TasksMenu"));
@@ -40,13 +41,16 @@ const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo })
                 </Suspense>
               ) : (
                 <div className="menu">
-                  <button
+                  <Button
                     aria-label="toggle the task list menu"
                     className="toggle-menu"
                     onClick={() => setActiveTemplate(null)}
-                    disabled={tasks?.length === 0}>
-                    <MdKeyboardArrowLeft />
-                  </button>
+                    disabled={tasks?.length === 0}
+                    startIcon={
+                      <MdKeyboardArrowLeft />
+                    }
+                    variant="single-icon"
+                  />
                 </div>
               )}
             </div>
@@ -56,14 +60,16 @@ const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo })
               {activeTemplate?._id ? activeTemplate?.name : "Tasks"}
             </h2>
           </div>
-          <button
+          <Button
             aria-label='close tasks'
             className="close-tasks"
             type='button'
             onClick={() => setOpenTodo(false)}
-          >
-            <CgClose />
-          </button>
+            variant='none'
+            startIcon={
+              <CgClose />
+            }
+          />
         </div>
         <div className="tasks-container" style={{ marginBlock: 0 }}>
           <Suspense fallback={

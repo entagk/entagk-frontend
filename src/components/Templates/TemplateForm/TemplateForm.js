@@ -11,6 +11,7 @@ import FormFooter from './FormFooter/FormFooter';
 import { useDispatch } from 'react-redux';
 import { addTemplate, modifyTemplate } from '../../../actions/templates';
 import Loading from '../../../utils/Loading/Loading';
+import Button from '../../../utils/Button/Button';
 
 const TodoList = lazy(() => import('../../../icons/list/TodoList'));
 const InfoStep = lazy(() => import('./InfoStep/InfoStep'));
@@ -153,14 +154,15 @@ function TemplateForm({
         <div className="glass-effect temp-form">
           <div className='form-header'>
             <h2>{oldData ? 'edit template' : 'new template'}</h2>
-            <button
+            <Button
               aria-label='close template form'
               className="close-temp-form"
               type='button'
               onClick={() => setOpen(false)}
-            >
-              <CgClose />
-            </button>
+              startIcon={
+                <CgClose />
+              }
+            />
           </div>
           <div className='steps'>
             {steps.map((step, index) => (

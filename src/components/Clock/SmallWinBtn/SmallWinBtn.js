@@ -6,6 +6,7 @@ import React, {
 
 import { RiExternalLinkLine } from "react-icons/ri";
 import { CgInternal } from "react-icons/cg";
+import Button from '../../../utils/Button/Button';
 
 function SmallWinBtn() {
   const [minWin, setMinWin] = useState(localStorage.getItem('opened') === 'popup');
@@ -62,7 +63,7 @@ function SmallWinBtn() {
 
   useEffect(() => {
     window.onkeydown = (event) => {
-      if(event.code.toLowerCase() === 'keye') {
+      if (event.code.toLowerCase() === 'keye') {
         handleOpenExtInt();
       }
     }
@@ -74,14 +75,24 @@ function SmallWinBtn() {
 
   return (
     <>
-      <button aria-label='small external window' className='timer-button' type="button" onClick={handleOpenExtInt}>
-        {(!minWin) ?
-          <RiExternalLinkLine />
-          : <>
-            <CgInternal />
+      <Button
+        aria-label='small external window'
+        className='timer-button'
+        type="button"
+        onClick={handleOpenExtInt}
+        color='main'
+        variant='single-icon'
+        startIcon={
+          <>
+            {(!minWin) ?
+              <RiExternalLinkLine />
+              : <>
+                <CgInternal />
+              </>
+            }
           </>
         }
-      </button>
+      />
     </>
   );
 }

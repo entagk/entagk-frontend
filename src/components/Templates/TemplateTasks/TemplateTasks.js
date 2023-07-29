@@ -1,7 +1,5 @@
 import React, { lazy, useState, useEffect, Suspense } from 'react';
 
-import { AiOutlinePlus } from 'react-icons/ai';
-
 import Loading from "../../../utils/Loading/Loading";
 import { useDispatch, useSelector } from 'react-redux';
 import { getTasksForTemplate } from '../../../actions/templates';
@@ -9,6 +7,7 @@ import { getTasksForTemplate } from '../../../actions/templates';
 import './style.css';
 
 import { onScroll } from '../../../utils/helper';
+import AddTaskButton from '../../Tasks/AddTaskButton/AddTaskButton';
 
 const Task = lazy(() => import('../../Tasks/Task/Task'));
 const TaskForm = lazy(() => import('../../Tasks/TaskForm/TaskForm'));
@@ -105,12 +104,17 @@ function TemplateTasks({ templateId, setMessage }) {
             />
           )}
           {!openFormForNew ? (
-            <button aria-label="add task button" className="add-task-button" onClick={() => setOpenFormForNew(p => !p)}>
-              <AiOutlinePlus size="25px" />
-              <p style={{ marginLeft: 10 }}>
-                add task
-              </p>
-            </button>
+            <Suspense fallback={
+              <Loading
+                size="small"
+                strokeWidth="5px"
+                color={"#fff"}
+                backgroud="transparent"
+                style={{ margin: 0 }}
+              />
+            }>
+              <AddTaskButton setOpenFormForNew={setOpenFormForNew} />
+            </Suspense>
           ) : (
             <Suspense fallback={
               <Loading

@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../../../../utils/Button/Button';
 
 function FormFooter({
   activeStep,
@@ -8,22 +9,25 @@ function FormFooter({
 }) {
   return (
     <div className='form-footer'>
-      <button
-        aria-label="cancel form button"
-        type="button"
-        onClick={handleCancelOrPrev}
-      >
-        {activeStep === 0 ? 'cancel' : 'previous'}
-      </button>
-      <button
+      <Button
         aria-label="next/submit form button"
         type={activeStep <= 2 ? "button" : "submit"}
         onClick={handleNextButton}
         className="save"
         disabled={disableNextOrSubmit()}
+        variant='contained'
+        color="main"
       >
-        {activeStep === 3 ? 'save' : 'next'}
-      </button>
+        {activeStep === 3 ? 'Save' : 'Next'}
+      </Button>
+      <Button
+        aria-label="cancel form button"
+        type="button"
+        onClick={handleCancelOrPrev}
+        variant='outlined'
+      >
+        {activeStep === 0 ? 'Cancel' : 'Previous'}
+      </Button>
     </div>
   );
 }

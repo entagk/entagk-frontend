@@ -1,0 +1,11 @@
+.tasks-container button.add-task-button {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 20px;
+  background: var(--main-light-black);
+  border-radius: 60px;
+  font-size: 20px;
+  color: #fff;
+  border: 2px dashed #ffffff;
+  text-transform: capitalize;
+}

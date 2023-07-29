@@ -14,6 +14,7 @@ import {
 } from "../../actions/auth";
 
 import Loading from "../../utils/Loading/Loading";
+import Button from "../../utils/Button/Button";
 
 const DeletePopup = lazy(() => import("../../utils/DeletePopup/DeletePopup"));
 const UserMenu = lazy(() => import('./UserMenu.js'))
@@ -81,16 +82,18 @@ const NavBar = ({ setMessage }) => {
         </Link>
         <div style={{ position: 'relative' }}>
           {!localStorage.getItem('token') ? (
-            <Link
-              aria-label="login user"
-              className={`login ${(started || window.location.pathname === '/auth') ? 'disabled' : ''}`}
-              to="/auth"
-            >
-              <MdLogin />
-              <span style={{ marginLeft: 10 }}>
+            <>
+              <Button
+                aria-label="login user"
+                component={Link}
+                startIcon={<MdLogin />}
+                variant="contained"
+                className={`login ${(started || window.location.pathname === '/auth') ? 'disabled' : ''}`}
+                to="/auth"
+              >
                 Login
-              </span>
-            </Link>
+              </Button>
+            </>
           ) : user ? (
             <>
               <Suspense fallback={

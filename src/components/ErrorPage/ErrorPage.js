@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouteError, Link } from 'react-router-dom';
 
 import './syle.css'
+import Button from '../../utils/Button/Button';
 
 function ErrorPage() {
   const error = useRouteError();
@@ -33,12 +34,22 @@ function ErrorPage() {
           </>
         )}
         <div className='buttons'>
-          <Link to="/">
+          {/* if the location is / then, show reload not go to bome */}
+          <Button
+            component={Link}
+            to="/"
+            variant='contained'
+          >
             go home
-          </Link>
-          <Link to={-1}>
+          </Button>
+          {/* if the location is / or length is 1 then, don't show go back else, go backreload not go to bome */}
+          <Button
+            component={Link}
+            to={-1}
+            variant='outlined'
+          >
             go back
-          </Link>
+          </Button>
         </div>
       </div>
     </div>

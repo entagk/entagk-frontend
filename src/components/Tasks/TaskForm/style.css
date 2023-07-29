@@ -160,10 +160,11 @@
   text-align: center;
   font-weight: 600;
   text-decoration: underline;
+  font-size: 1rem;
 }
 
 .add-buttons button:last-of-type {
-  margin-left: 10px;
+  margin-left: 8px;
 }
 
 button.more-details {
@@ -184,48 +185,6 @@ button.more-details {
   justify-content: space-between;
   padding: 15px;
 }
-
-.task-footer button {
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 10px 15px;
-  color: #4e696a;
-  margin-block: 10px;
-
-  border-radius: 8px;
-  box-shadow: 0 0 10px #989898;
-  color: #fff;
-  margin: 0;
-}
-
-.task-footer button:first-child {
-  border: 2px solid;
-}
-
-.task-footer button:disabled {
-  cursor: no-drop;
-  background-color: rgba(0, 0, 0, 0.12);
-  box-shadow: none;
-  color: rgba(0, 0, 0, 0.26);
-}
-
-.task-footer button.save {
-  margin: 0px;
-  background-color: #000;
-  color: #e7e7e7;
-  border-radius: 5px;
-  box-shadow: 0 0 8px 0px rgb(78 78 78);
-  background-color: var(--main-color);
-}
-
-.task-footer button.save:disabled {
-  cursor: no-drop;
-  background-color: rgba(0, 0, 0, 0.12);
-  box-shadow: none;
-  color: rgba(0, 0, 0, 0.26);
-}
-
 /* end task form */
 
 @media (max-width: 500px) {

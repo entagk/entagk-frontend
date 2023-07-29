@@ -186,13 +186,19 @@ h1.digital-number {
   justify-content: center;
   background: #e7e7e7;
   border-radius: 50%;
-  font-size: 25px;
   margin-inline: 10px;
   box-shadow: 0px 0px 5px #7a7a7a;
 
   font-size: 30px;
   padding: 20px;
 }
+
+button.start-digital .start.icon,
+button.reset-digital .start.icon {
+  width: inherit;
+  height: inherit;
+}
+
 
 .digital-controlers .start-digital:hover,
 .digital-controlers .reset-digital:hover {
@@ -210,17 +216,9 @@ h1.digital-number {
   position: absolute;
   top: 15px;
   z-index: 120;
-  color: #fff;
-  border: 1px solid;
-  font-size: 20px;
-  box-shadow: 0 0 5px #000;
   display: none;
-
-  border-radius: 50%;
-  padding: 8px;
-  background: #000000b8;
-
   transform: rotate(270deg);
+  width: -moz-fit-content;
   width: fit-content;
 }
 

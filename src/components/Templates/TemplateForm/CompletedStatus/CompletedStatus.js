@@ -6,6 +6,7 @@ import { FaCheck } from 'react-icons/fa'
 import './style.css';
 import Loading from '../../../../utils/Loading/Loading';
 import { useSelector } from 'react-redux';
+import Button from '../../../../utils/Button/Button';
 
 function CompletedStatus({ data, setIsLoading, isLoading, setOpen }) {
   const { active, activites } = useSelector(state => state.timer);
@@ -41,9 +42,15 @@ function CompletedStatus({ data, setIsLoading, isLoading, setOpen }) {
         )}
       </p>
       <div>
-        <button aria-label='close popup' className='close' onClick={() => setOpen(false)}>
+        <Button
+          aria-label='close popup'
+          className='close'
+          onClick={() => setOpen(false)}
+          variant='contained'
+          color="main"
+        >
           Close
-        </button>
+        </Button>
       </div>
     </div>
   );

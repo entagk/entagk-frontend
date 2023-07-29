@@ -50,14 +50,18 @@
   justify-content: center;
 }
 
-.tasks .header button:first-child:hover {
-  background-color: #2c282842;
+.tasks .header button .start.icon {
+  width: inherit;
+  height: inherit;
+}
+
+.tasks .header .menu-content button .start.icon {
+  width: 20px;
 }
 
 .tasks .header .menu-content {
   width: max-content;
   left: 0;
-  background-color: #acacacd1;
   backdrop-filter: blur(10px);
   color: #fff;
 }

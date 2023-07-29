@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { CgClose } from 'react-icons/cg';
+import Button from '../../../utils/Button/Button';
 
-function TemplateTasksHeader({template, setOpenTodo}) {
+function TemplateTasksHeader({ template, setOpenTodo }) {
   return (
     <>
       <div className="header">
@@ -17,9 +18,15 @@ function TemplateTasksHeader({template, setOpenTodo}) {
             {template?.name + " Tasks"}
           </h2>
         </div>
-        <button aria-label='close tasks' className="close-temp-tasks" type='button' onClick={() => setOpenTodo("")}>
+        <Button
+          aria-label='close tasks'
+          className="close-temp-tasks"
+          type='button'
+          onClick={() => setOpenTodo("")}
+          variant='none'
+        >
           <CgClose />
-        </button>
+        </Button>
       </div>
     </>
   );

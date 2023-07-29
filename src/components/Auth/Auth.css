@@ -65,7 +65,7 @@ div.form-container.reset-form {
   margin: 12px 10px;
 }
 
-.auth-page .form-container .block input::placeholder ,
+.auth-page .form-container .block input::placeholder,
 .form-container.reset-form .block input::placeholder {
   text-transform: capitalize;
 }
@@ -85,34 +85,24 @@ div.form-container.reset-form {
 
 .form-container .block .password button.icon {
   position: absolute;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin: 0;
   color: inherit;
-  padding: 0;
-  box-shadow: none;
-  border-radius: 50%;
-  width: 35px;
-  height: 35px;
   right: 0;
-}
-
-.form-container .block .password button.icon:hover {
-  background: #0000002b;
 }
 
 .auth-page button,
 .reset-form button {
   margin: 20px;
-  color: #fff;
-  padding: 10px 30px;
-  font-size: 16px;
-  border-radius: 20px;
   box-shadow: 0 0 5px #615f60;
   text-transform: uppercase;
   font-weight: 600;
+}
+
+.auth-page .forget-password-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .auth-page .forget-password {
@@ -130,6 +120,7 @@ div.form-container.reset-form {
 
 .form-container button[type="submit"]:not(:disabled) {
   background-color: var(--main-color);
+  color: #fff;
 }
 
 .form-container.sign-in,

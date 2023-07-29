@@ -9,9 +9,9 @@ import { useDispatch } from 'react-redux';
 import { getTemplatesForUser } from '../../../actions/templates';
 
 import Loading from '../../../utils/Loading/Loading';
+import Button from '../../../utils/Button/Button';
 
 const Menu = lazy(() => import('../../../utils/Menu/Menu'));
-const MenuItem = lazy(() => import('../../../utils/Menu/MenuItem'));
 
 function SearchBar({ setOpenFormForNew, searchParams, setSearchParams, setMessage }) {
   const dispatch = useDispatch();
@@ -60,44 +60,51 @@ function SearchBar({ setOpenFormForNew, searchParams, setSearchParams, setMessag
             open={openMenu}
             setOpen={setOpenMenu}
             MainButton={
-              <button
+              <Button
                 aria-label="toggle the task list menu"
                 className="toggle-menu"
-              >
-                <span className='text'>
-                  Sort
-                </span>
-                <span className='icon'>
+                endIcon={
                   <RiArrowDownSLine className='arrow' />
-                </span>
-              </button>
+                }
+                variant='outlined'
+              >
+                Sort
+              </Button>
             }>
-            <MenuItem
+            <Button
               aria-label="Last updated sort choice"
               type='button'
               value="updatedAt"
               onClick={handleSortElement}
+              variant='none'
             >
               Last Updated
-            </MenuItem>
-            <MenuItem
+            </Button>
+            <Button
               aria-label="Name sort choice"
               type='button'
               value="name"
+              variant='none'
               onClick={handleSortElement}>
               Name
-            </MenuItem>
+            </Button>
           </Menu>
         </Suspense>
       </div>
-      <button aria-label='New template' className='add-temp' onClick={() => setOpenFormForNew(true)}>
-        <span className='icon'>
+      <Button
+        aria-label='New template'
+        className='add-temp'
+        onClick={() => setOpenFormForNew(true)}
+        startIcon={
           <AiOutlinePlus />
-        </span>
-        <span className='text'>
-          Add Template
-        </span>
-      </button>
+        }
+        variant='contained'
+        style={{
+          border: 'none'
+        }}
+      >
+        Add Template
+      </Button>
     </div>
   );
 }

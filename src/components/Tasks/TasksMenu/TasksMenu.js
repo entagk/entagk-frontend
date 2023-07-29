@@ -10,7 +10,7 @@ import { clearFinishedTasks, clearAct, clearAllTasks } from "../../../actions/ta
 import Loading from "../../../utils/Loading/Loading";
 
 const Menu = lazy(() => import("../../../utils/Menu/Menu"));
-const MenuItem = lazy(() => import("../../../utils/Menu/MenuItem"));
+const Button = lazy(() => import('../../../utils/Button/Button'))
 
 const DeletePopup = lazy(() => import("./../../../utils/DeletePopup/DeletePopup"));
 
@@ -45,7 +45,7 @@ const TasksMenu = ({ setMessage }) => {
     <>
       <Suspense fallback={
         <Loading
-          size="100"
+          size="big"
           strokeWidth="5"
           color={activites[active].color}
           backgroud="transparent"
@@ -79,42 +79,65 @@ const TasksMenu = ({ setMessage }) => {
           />
         )}
       </Suspense>
-      <Suspense fallback={<></>}>
+      <Suspense fallback={
+        <Loading
+          size="small"
+          strokeWidth="5px"
+          color={"#fff"}
+          backgroud="transparent"
+          style={{ margin: 0 }}
+        />
+      }>
         <Menu
           open={openMenu}
           setOpen={setOpenMenu}
           MainButton={
-            <button
+            <Button
               aria-label="toggle the task list menu"
               className="toggle-menu"
-              disabled={tasks?.length === 0}>
-              <HiMenu />
-            </button>
+              disabled={tasks?.length === 0}
+              startIcon={
+                <HiMenu />
+              }
+              variant="single-icon"
+            />
           }
         >
-          <MenuItem
+          <Button
             type='button'
             onClick={() => handleClear('act')}
             aria-label="clear all act pomodoros tasks"
             disabled={tasks?.filter(t => t.act > 0).length === 0}
+            startIcon={
+              <BsCheckLg />
+            }
+            variant="none"
           >
-            <BsCheckLg /> <span>clear act pomodoros</span>
-          </MenuItem>
-          <MenuItem
+            <>clear act pomodoros</>
+          </Button>
+          <Button
             type='button'
             onClick={() => handleClear('finished')}
             aria-label="delete all finished tasks"
             disabled={tasks?.filter(t => t.check).length === 0}
+            startIcon={
+              <MdDelete />
+            }
+            variant="none"
           >
-            <MdDelete /> <span>clear finished tasks</span>
-          </MenuItem>
-          <MenuItem
+            <>clear finished tasks</>
+          </Button>
+          <Button
             type='button'
             aria-label="clear all tasks"
             onClick={() => handleClear('all')}
+            startIcon={
+              <MdDelete />
+            }
+            variant="none"
           >
-            <MdDelete /> <span>clear all tasks</span>
-          </MenuItem>
+            <>clear all tasks</>
+          </Button>
         </Menu>
       </Suspense>
     </>

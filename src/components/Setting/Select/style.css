@@ -25,7 +25,6 @@ div.select-container {
   width: 100%;
 
   max-height: 150px;
-  padding-top: 0px;
   overflow: auto;
   justify-content: flex-start;
 }
@@ -39,12 +38,21 @@ div.select-container {
 
 .select-menu button.toggle-menu {
   font-size: 16px;
-  padding: 10px 16px;
+  padding: 10px;
   justify-content: space-between;
 
   border: 1px solid;
   border-radius: 6px;
   width: 100%;
+}
+
+.select-menu button.toggle-menu:hover,
+.select-menu button.toggle-menu.open {
+  background-color: var(--main-light-black);
+}
+
+.select-menu button.toggle-menu.open {
+  border: 2px solid;
 }
 
 .select-menu button.toggle-menu .arrow {

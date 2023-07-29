@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import './style.css';
+import Button from '../Button/Button';
 
 function DeletePopup({
   type,
@@ -20,8 +21,19 @@ function DeletePopup({
       <div className="glass-effect delete-popup">
         <p>Are you sure to delete {type}?</p>
         <div className="buttons">
-          <button aria-label="ok deleteing account" onClick={onOk} className="ok">Delete</button>
-          <button aria-label="cancel deleteing account" onClick={onCancel} className="cancel">cancel</button>
+          <Button
+            aria-label="ok deleteing account"
+            onClick={onOk}
+            className="ok"
+            variant='contained'
+            color="main"
+          >Delete</Button>
+          <Button
+            aria-label="cancel deleteing account"
+            onClick={onCancel}
+            className="cancel"
+            variant='outlined'
+          >cancel</Button>
         </div>
       </div>
     </div>

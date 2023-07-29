@@ -13,6 +13,7 @@ import NoLogin from '../NoLogin/NoLogin';
 import './style.css';
 
 import TemplateTasksHeader from './TemplateTasks/TemplateTasksHeader';
+import Button from '../../utils/Button/Button';
 
 const NavBar = lazy(() => import('../NavBar/NavBar'));
 const Template = lazy(() => import('./Template/Template.js'));
@@ -180,14 +181,20 @@ function Templates() {
                 No templates
               </h2>
               <p>Add your first template</p>
-              <button aria-label='New template' className='add-temp' onClick={() => setOpenFormForNew(true)}>
-                <span className='icon'>
+              <Button
+                aria-label='New template'
+                className='add-temp'
+                onClick={() => setOpenFormForNew(true)}
+                startIcon={
                   <AiOutlinePlus />
-                </span>
-                <span className='text'>
-                  Add Template
-                </span>
-              </button>
+                }
+                variant='contained'
+                style={{
+                  border: 'none'
+                }}
+              >
+                Add Template
+              </Button>
             </div>
           )}
         </div>
