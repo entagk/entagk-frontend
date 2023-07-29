@@ -18,7 +18,7 @@ import DigitalTimer from "./Digital/Digital";
 
 const worker = new window.Worker('worker.js');
 const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
-    const { active, activites, setting, started, periodNum } = useSelector((state) => state.timer);
+    const { active, setting, started, periodNum } = useSelector((state) => state.timer);
     const { activeId } = useSelector(state => state.tasks);
     const [time, setTime] = useState(localStorage.getItem("restOfTime") === null ? 0 : Number(localStorage.getItem("restOfTime")))
 
@@ -61,8 +61,6 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
     }, []);
 
     useEffect(() => {
-        document.body.style.backgroundColor = activites[active].color;
-
         if (setting.time !== undefined) {
             if (setting?.time[active] - Number(localStorage.getItem('restOfTime')) > 1) {
                 setTime(setting?.time[active] - Number(localStorage.getItem("restOfTime")));
@@ -124,7 +122,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
         } else {
             document.body.onbeforeunload = null;
             if (setting.focusMode) {
-                document.body.style.backgroundColor = activites[active].color;
+                document.body.style.backgroundColor = 'var(--main-color)';
                 document.body.style.overflow = "auto";
             }
         }
@@ -247,7 +245,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
 
     return (
         <>
-            <div className="clock-container" style={{ background: activites[active].timerBorder }}>
+            <div className="clock-container" style={{ background: 'var(--secondary-color)' }}>
                 {!started && (
                     <>
                         <SmallWinBtn />
@@ -259,7 +257,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                     <Suspense fallback={
                         <>
                             <Loading
-                                color={activites[active].color}
+                                color="var(--main-color)"
                                 backgroud="transparent"
                                 size="175"
                                 strokeWidth={4}

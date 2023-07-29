@@ -16,7 +16,6 @@ const DeletePopup = lazy(() => import("./../../../utils/DeletePopup/DeletePopup"
 
 const TasksMenu = ({ setMessage }) => {
   const { tasks } = useSelector(state => state.tasks);
-  const { active, activites } = useSelector(state => state.timer);
   const dispatch = useDispatch();
   const [clear, setClear] = useState("");
   const [openMenu, setOpenMenu] = useState(false);
@@ -47,7 +46,7 @@ const TasksMenu = ({ setMessage }) => {
         <Loading
           size="big"
           strokeWidth="5"
-          color={activites[active].color}
+          color={"var(--main-color)"}
           backgroud="transparent"
         />
       }>

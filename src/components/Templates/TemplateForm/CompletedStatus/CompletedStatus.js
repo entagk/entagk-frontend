@@ -5,12 +5,9 @@ import React from 'react';
 import { FaCheck } from 'react-icons/fa'
 import './style.css';
 import Loading from '../../../../utils/Loading/Loading';
-import { useSelector } from 'react-redux';
 import Button from '../../../../utils/Button/Button';
 
-function CompletedStatus({ data, setIsLoading, isLoading, setOpen }) {
-  const { active, activites } = useSelector(state => state.timer);
-
+function CompletedStatus({ data, isLoading, setOpen }) {
   if (isLoading) {
     return (
       <div className='completed-status'>
@@ -18,7 +15,7 @@ function CompletedStatus({ data, setIsLoading, isLoading, setOpen }) {
           size="100"
           strokeWidth="3.5"
           backgroud="white"
-          color={activites[active]?.color}
+          color={"var(--main-color)"}
         />
       </div>
     )

@@ -14,7 +14,7 @@
 }
 
 body {
-  background-color: #ff002f;
+  background-color: var(--main-color);
   height: 100%;
   margin: 20px;
   padding: 0 20px;

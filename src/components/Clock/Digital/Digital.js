@@ -13,7 +13,6 @@ import Button from "../../../utils/Button/Button";
 const DigitalTimer = ({ time, toggleStart, handleReset, handleSkip }) => {
   const {
     active,
-    activites,
     setting,
     started,
   } = useSelector((state) => state.timer);
@@ -27,7 +26,7 @@ const DigitalTimer = ({ time, toggleStart, handleReset, handleSkip }) => {
           aria-label="start-pause-button" //"start on roll"
           className="start-digital"
           id="start-digital"
-          style={{ background: activites[active].color }}
+          style={{ background: "var(--main-color)" }}
           disabled={time === 0}
           onClick={toggleStart}
           variant="none"

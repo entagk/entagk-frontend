@@ -21,7 +21,7 @@ const NotificationSetting = lazy(() => import('./NotificationSetting/Notificatio
 const FocusSetting = lazy(() => import('./FocusSetting/FocusSetting'));
 
 function Setting({ setOpenSetting }) {
-  const { setting, isLoading, activites, active } = useSelector(state => state.timer);
+  const { setting, isLoading } = useSelector(state => state.timer);
 
   const [message, setMessage] = useState({ type: '', message: "" });
   const [data, setData] = useState(setting);
@@ -107,7 +107,7 @@ function Setting({ setOpenSetting }) {
         {(setting && isLoading) && (
           <Loading
             size="big"
-            color={activites[active].color}
+            color={"var(--main-color)"}
             backgroud="transparant"
             style={{
               backgroud: "#ffffff73",

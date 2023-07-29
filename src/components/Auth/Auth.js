@@ -25,7 +25,6 @@ const Auth = () => {
   const dispatch = useDispatch();
   const { isLoading, user } = useSelector(state => state.auth);
   const navigate = useNavigate();
-  const { activites, active } = useSelector(state => state.timer);
   const [isSignUp, setIsSignUp] = useState(false);
   const [message, setMessage] = useState({ type: '', message: '' })
   const [forgetPassword, setForgetPassword] = useState(false);
@@ -94,13 +93,6 @@ const Auth = () => {
         className="center-fullpage"
       />
     }>
-      {/* {isLoading && (
-          <Loading
-            size="big"
-            color={activites[active].color}
-            backgroud="#fff"
-          />
-      )} */}
       <div>
         <div className="container">
           <NavBar setMessage={setMessage} />
@@ -202,7 +194,7 @@ const Auth = () => {
             <div className="overlay-container">
               <div
                 className="overlay"
-                style={{ backgroundImage: `linear-gradient(270deg, ${activites[active].timerBorder}, ${activites[active].color})` }}>
+                style={{ backgroundImage: `linear-gradient(270deg, var(--secondary-color), var(--main-color))` }}>
                 <div className={`overlay-panel ${isSignUp ? "overlay-left" : "overlay-right"}`}>
                   <div className="text-container">
                     <h1>
