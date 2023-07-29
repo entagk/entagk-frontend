@@ -9,7 +9,7 @@ import GoogleLogin from './GoogleLogin'
 
 import "./Auth.css";
 import Password from "./Password";
-import LogoutPage from "./LogoutPage";
+import LogoutPage from "./LogoutPage/LogoutPage";
 import NetworkError from "../NetworkError/NetworkError";
 import Button from "../../utils/Button/Button";
 
@@ -23,7 +23,7 @@ const initialFormData = {
 
 const Auth = () => {
   const dispatch = useDispatch();
-  const { isLoading, user } = useSelector(state => state.auth);
+  const { isLoading } = useSelector(state => state.auth);
   const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
   const [message, setMessage] = useState({ type: '', message: '' })
@@ -33,8 +33,7 @@ const Auth = () => {
     password: false, confirmPassword: false
   });
 
-  // use: localStorage.getItem('token') 
-  if (user) {
+  if (localStorage.getItem('token')) {
     return (
       <LogoutPage />
     )

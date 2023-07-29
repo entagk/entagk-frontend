@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { resetPassword, verifyResetToken } from '../../actions/auth';
 import Loading from '../../utils/Loading/Loading';
 import Message from '../../utils/Message';
-import LogoutPage from '../Auth/LogoutPage';
+import LogoutPage from '../Auth/LogoutPage/LogoutPage';
 
 import './../Auth/Auth.css';
 import NotValidToken from './NotValidToken';
