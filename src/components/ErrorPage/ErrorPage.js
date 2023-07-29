@@ -8,17 +8,14 @@ function ErrorPage() {
   const error = useRouteError();
   console.error(error);
 
+  const reload = () => {
+    window.location.reload();
+  }
+
   return (
     <div className='error-page'>
       <h1>Opps!</h1>
-      <div style={{
-        width: '100%',
-        textAlign: 'center',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-      }}>
+      <div>
         {error.status === 404 && (
           <div>
             <h1 className='error-404'>404</h1>
@@ -34,22 +31,34 @@ function ErrorPage() {
           </>
         )}
         <div className='buttons'>
-          {/* if the location is / then, show reload not go to bome */}
-          <Button
-            component={Link}
-            to="/"
-            variant='contained'
-          >
-            go home
-          </Button>
-          {/* if the location is / or length is 1 then, don't show go back else, go backreload not go to bome */}
-          <Button
-            component={Link}
-            to={-1}
-            variant='outlined'
-          >
-            go back
-          </Button>
+          {window.location.pathname === '/' ? (
+            <Button
+              variant='contained'
+              onClick={reload}
+              style={{
+                marginInline: 20
+              }}
+            >
+              reload
+            </Button>
+          ) : (
+            <Button
+              component={Link}
+              to="/"
+              variant='contained'
+            >
+              go home
+            </Button>
+          )}
+          {(window.location.pathname === '/' || window.history.length > 2) && (
+            <Button
+              component={Link}
+              to={-1}
+              variant='outlined'
+            >
+              go back
+            </Button>
+          )}
         </div>
       </div>
     </div>

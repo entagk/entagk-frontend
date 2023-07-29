@@ -11,6 +11,15 @@
   height: 100%;
 }
 
+.error-page > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  flex-direction: column;
+}
+
 .error-page h1 {
   font-size: 50px;
   margin-block: 16px;
@@ -37,7 +46,8 @@ h1.error-404 {
   margin-right: 20px;
 }
 
-.error-page a {
+.error-page a,
+.error-page button {
   margin-block: 20px;
   text-transform: capitalize;
 }
