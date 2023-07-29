@@ -1,6 +1,5 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { resetPassword, verifyResetToken } from '../../actions/auth';
@@ -18,7 +17,6 @@ const Password = lazy(() => import('./../Auth/Password'))
 
 function Reset() {
   const { tokenId } = useParams();
-  const { user } = useSelector(state => state.auth);
   const navigate = useNavigate();
   const [message, setMessage] = useState({ message: '', type: '' });
   const [validate, setValidate] = useState(undefined);

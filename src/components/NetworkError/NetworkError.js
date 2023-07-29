@@ -14,7 +14,12 @@ function NetworkError() {
       <NoIntenet />
       <h2>There is no Internet Connection, try again later.</h2>
       <div>
-        <Button aria-label='reload button' onClick={reload}>reload</Button>
+        <Button
+          aria-label='reload button'
+          onClick={reload}
+        >
+          reload
+        </Button>
       </div>
     </div>
   );

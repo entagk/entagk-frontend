@@ -12,7 +12,7 @@
   text-align: center;
   font-size: 30px;
   position: fixed;
-  z-index: 1001;
+  z-index: 9001;
   background: #5d5d5da3;
   right: 0;
   top: 0;
@@ -22,16 +22,12 @@
 }
 
 .network-error h2 {
-  margin-block: 30px;
+  margin-block: 20px;
 }
 
 .network-error button {
-  padding: 10px 15px;
-  /* border: 2px solid; */
-  border-radius: 10px;
-  font-size: 20px;
-  background: #f00;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
+  text-transform: capitalize;
 }
 
 .network-error button:hover {
