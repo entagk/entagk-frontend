@@ -10,10 +10,12 @@ import { LOGOUT } from '../../actions/auth';
 import { Link } from 'react-router-dom';
 import Button from '../../utils/Button/Button';
 
+import { stringToColor } from '../../utils/helper';
+
 const TodoList = lazy(() => import('../../icons/list/TodoList'));
 const Menu = lazy(() => import("../../utils/Menu/Menu"));
 
-function UserMenu({ setOpenDelete, }) {
+function UserMenu({ setOpenDelete, setOpenEditAccount }) {
   const dispatch = useDispatch();
   const [openMenu, setOpenMenu] = useState(false);
   const { user } = useSelector(state => state.auth);
@@ -36,21 +38,6 @@ function UserMenu({ setOpenDelete, }) {
   const toggleDelete = () => {
     setOpenDelete(true);
     setOpenMenu(false);
-  };
-
-  const stringToColor = (string) => {
-    let hash = 0;
-    let i;
-    for (i = 0; i < string?.length; i++) {
-      hash = string.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    let color = "#";
-    for (i = 0; i < 3; i++) {
-      const value = (hash >> (i * 8)) & 0xff;
-      color += `00${value.toString(16)}`.substr(-2);
-    }
-    return color;
   };
 
   return (
@@ -122,8 +109,7 @@ function UserMenu({ setOpenDelete, }) {
         todos templates
       </Button>
       <Button
-        component={Link}
-        to="/user/edit"
+        onClick={() => setOpenEditAccount(true)}
         aria-label="edit user link in user menu"
         variant='none'
         startIcon={

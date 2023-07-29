@@ -17,12 +17,14 @@ import Loading from "../../utils/Loading/Loading";
 import Button from "../../utils/Button/Button";
 
 const DeletePopup = lazy(() => import("../../utils/DeletePopup/DeletePopup"));
-const UserMenu = lazy(() => import('./UserMenu.js'))
+const UserMenu = lazy(() => import('./UserMenu.js'));
+const EditAccount = lazy(() => import('../EditAccount/EditAccount'));
 
 const NavBar = ({ setMessage }) => {
   const [openDelete, setOpenDelete] = useState(false);
   const { started } = useSelector(state => state.timer);
   const { user } = useSelector(state => state.auth);
+  const [openEditAccount, setOpenEditAccount] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -76,6 +78,13 @@ const NavBar = ({ setMessage }) => {
           />
         </Suspense>
       )}
+      {openEditAccount && (
+        <Suspense>
+          <EditAccount
+            setClose={setOpenEditAccount}
+          />
+        </Suspense>
+      )}
       <nav className="nav-bar">
         <Link to="/">
           <h1>Entagk</h1>
@@ -106,7 +115,10 @@ const NavBar = ({ setMessage }) => {
                   />
                 </>
               }>
-                <UserMenu setOpenDelete={setOpenDelete} />
+                <UserMenu
+                  setOpenDelete={setOpenDelete}
+                  setOpenEditAccount={setOpenEditAccount}
+                />
               </Suspense>
             </>
           ) : (

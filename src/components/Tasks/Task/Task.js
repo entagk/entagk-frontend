@@ -61,7 +61,6 @@ const Task = ({
     };
   }
 
-
   const handleActive = () => {
     if (props.tasks?.length === 0) {
       if ((!props.check && setting.autoStartNextTask) || (!setting.autoStartNextTask && props.act !== props.est)) {
