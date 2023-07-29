@@ -26,12 +26,14 @@
   border-radius: inherit;
 }
 
-.setting-header .close-setting {
+.setting-header button {
   padding: 10px;
   border-radius: 50%;
   color: #fff;
   font-size: 25px;
   min-width: 0;
+}
+.setting-header .close-setting {
   background: red;
 }
 

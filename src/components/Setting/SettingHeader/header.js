@@ -8,8 +8,7 @@ function Header({ linkClick, status, setStatus }) {
     <div className='setting-header'>
       {status !== '' && (
         <Button
-          aria-label='close setting'
-          className="close-setting"
+          aria-label='back'
           type='button'
           variant='single-icon'
           color="white"
