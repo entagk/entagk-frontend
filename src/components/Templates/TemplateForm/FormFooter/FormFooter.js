@@ -10,6 +10,14 @@ function FormFooter({
   return (
     <div className='form-footer'>
       <Button
+        aria-label="cancel form button"
+        type="button"
+        onClick={handleCancelOrPrev}
+        variant='outlined'
+      >
+        {activeStep === 0 ? 'Cancel' : 'Previous'}
+      </Button>
+      <Button
         aria-label="next/submit form button"
         type={activeStep <= 2 ? "button" : "submit"}
         onClick={handleNextButton}
@@ -19,14 +27,6 @@ function FormFooter({
         color="main"
       >
         {activeStep === 3 ? 'Save' : 'Next'}
-      </Button>
-      <Button
-        aria-label="cancel form button"
-        type="button"
-        onClick={handleCancelOrPrev}
-        variant='outlined'
-      >
-        {activeStep === 0 ? 'Cancel' : 'Previous'}
       </Button>
     </div>
   );
