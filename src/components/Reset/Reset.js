@@ -33,7 +33,7 @@ function Reset() {
     verifyResetToken(setMessage, setValidate, setIsLoading)
   }, [tokenId]);
 
-  if (user) {
+  if (localStorage.getItem('token')) {
     return (
       <LogoutPage />
     )
