@@ -70,26 +70,6 @@ div.form-container.reset-form {
   text-transform: capitalize;
 }
 
-.form-container .password {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 12px 10px;
-  position: relative;
-}
-
-.form-container .block .password input {
-  margin: 0;
-}
-
-.form-container .block .password button.icon {
-  position: absolute;
-  margin: 0;
-  color: inherit;
-  right: 0;
-}
-
 .auth-page button,
 .reset-form button {
   margin: 20px;
@@ -268,12 +248,5 @@ div.form-container.reset-form {
 
   .auth-page .form-container .block input {
     margin: 6px 5px;
-  }
-  .auth-page .password {
-    margin: 6px 5px;
-  }
-
-  .auth-page .block .password input {
-    margin: 0;
   }
 }

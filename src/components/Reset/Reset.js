@@ -13,7 +13,7 @@ import NetworkError from '../NetworkError/NetworkError';
 import Button from '../../utils/Button/Button';
 
 const NavBar = lazy(() => import('./../NavBar/NavBar'));
-const Password = lazy(() => import('./../Auth/Password'))
+const Password = lazy(() => import('./../Auth/Password/Password'))
 
 function Reset() {
   const { tokenId } = useParams();

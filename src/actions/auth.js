@@ -95,17 +95,23 @@ export const deleteUser = (setMessage) => async dispatch => {
 }
 
 // todo at profile editing page
-export const updateUser = (formData, setMessage) => async dispatch => {
+export const updateUser = (formData, setFormError, setMessage, setSuccess) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'auth' })
     const { data } = await api.updateUser(formData);
     dispatch({ type: UPDATE_USER, data: data.afterUpdatae });
+    setSuccess(true);
     dispatch({ type: END_LOADING, data: 'auth' })
   } catch (error) {
-    setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    if (error.response.data.errors) {
+      setFormError(pFE => ({ ...pFE, ...error.response.data.errors }))
+    } else {
+      setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    }
     if (error.response?.status === 401 || error.response.status === 500) {
       dispatch({ type: LOGOUT });
     }
+    dispatch({ type: END_LOADING, data: 'auth' })
     console.error(error);
   }
 }

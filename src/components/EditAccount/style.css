@@ -3,12 +3,13 @@
   margin-inline: 20px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
   box-shadow: 1px 1px 10px 0px #858585;
   position: absolute;
   border-radius: 20px;
   border: 2px solid;
+  max-height: calc(100% - 40px);
 }
 
 .edit-account-header {
@@ -63,8 +64,47 @@
   margin-bottom: 20px;
 }
 
+.edit-account .inputs {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow-y: scroll;
+  flex-direction: column;
+}
+
+.edit-account .inputs::-webkit-scrollbar {
+  width: 5px;
+}
+
+.edit-account .block {
+  flex-direction: column;
+}
+
 .edit-account .block input {
   width: 100%;
+}
+
+.edit-account .block .error-text {
+  width: 100%;
+  margin-block: 5px;
+  color: #d81c1c;
+  font-size: 14px;
+}
+
+.edit-account .block.change-password {
+  justify-content: space-between;
+  text-transform: capitalize;
+  flex-direction: row;
+}
+
+.edit-account .block.change-password p {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.edit-account .password {
+  margin: 0;
 }
 
 .edit-account .footer {

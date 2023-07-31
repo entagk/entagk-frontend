@@ -8,12 +8,12 @@ import Message from '../../utils/Message';
 import GoogleLogin from './GoogleLogin'
 
 import "./Auth.css";
-import Password from "./Password";
 import LogoutPage from "./LogoutPage/LogoutPage";
 import NetworkError from "../NetworkError/NetworkError";
 import Button from "../../utils/Button/Button";
 
 const NavBar = lazy(() => import("./../NavBar/NavBar"));
+const Password = lazy(() => import("./Password/Password"));
 const initialFormData = {
   name: "",
   email: "",
@@ -29,9 +29,6 @@ const Auth = () => {
   const [message, setMessage] = useState({ type: '', message: '' })
   const [forgetPassword, setForgetPassword] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
-  const [passowordShow, setPasswordShow] = useState({
-    password: false, confirmPassword: false
-  });
 
   if (localStorage.getItem('token')) {
     return (
@@ -47,10 +44,6 @@ const Auth = () => {
   const emailPattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$";
 
   const validateEmail = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-
-  const handlePasswordShowing = (type) => {
-    setPasswordShow({ ...passowordShow, [type]: !passowordShow[type] });
-  }
 
   const handleSubmit = async (e) => {
     await e.preventDefault();
@@ -131,11 +124,10 @@ const Auth = () => {
                   />
                   {!forgetPassword && (
                     <Password
-                      passowordShow={passowordShow}
                       formData={formData}
-                      type="password"
+                      name="password"
+                      placeholder="password"
                       handleChange={handleChange}
-                      onClick={handlePasswordShowing}
                     />
                   )}
                   {!isSignUp && (
@@ -151,16 +143,18 @@ const Auth = () => {
                   )}
                   {isSignUp && (
                     <Password
-                      passowordShow={passowordShow}
                       formData={formData}
-                      type="confirmPassword"
+                      name="confirmPassword"
                       handleChange={handleChange}
-                      onClick={handlePasswordShowing}
+                      placeholder="confirm password"
                     />
                   )}
                 </div>
                 <div className="block">
-                  <GoogleLogin setMessage={setMessage} navigate={navigate} />
+                  <GoogleLogin
+                    setMessage={setMessage}
+                    navigate={navigate}
+                  />
                 </div>
                 <div className="block">
                   <Button

@@ -6,7 +6,7 @@ import Loading from '../../../utils/Loading/Loading';
 
 const Select = lazy(() => import('../Select/Select'));
 const TimeInputs = lazy(() => import('../TimeInputs/timeInputs'));
-const ToggleButton = lazy(() => import('../ToggleButton/ToggleButton'));
+const ToggleButton = lazy(() => import('../../../utils/ToggleButton/ToggleButton'));
 
 const TimerSetting = ({ handleChange, data, setData }) => {
   const automations = [

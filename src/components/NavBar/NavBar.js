@@ -82,6 +82,7 @@ const NavBar = ({ setMessage }) => {
         <Suspense>
           <EditAccount
             setClose={setOpenEditAccount}
+            setMessage={setMessage}
           />
         </Suspense>
       )}

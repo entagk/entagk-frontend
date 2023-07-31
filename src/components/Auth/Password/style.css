@@ -1,0 +1,29 @@
+.password {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px 10px;
+  position: relative;
+}
+
+.block .password input {
+  margin: 0;
+}
+
+.block .password button.icon {
+  position: absolute;
+  margin: 0;
+  color: inherit;
+  right: 0;
+}
+
+@media (max-width: 425px) {
+  .auth-page .password {
+    margin: 6px 5px;
+  }
+
+  .auth-page .block .password input {
+    margin: 0;
+  }
+}
