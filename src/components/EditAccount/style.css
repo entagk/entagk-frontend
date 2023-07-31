@@ -77,14 +77,6 @@
   width: 5px;
 }
 
-.edit-account .block {
-  flex-direction: column;
-}
-
-.edit-account .block input {
-  width: 100%;
-}
-
 .edit-account .block .error-text {
   width: 100%;
   margin-block: 5px;

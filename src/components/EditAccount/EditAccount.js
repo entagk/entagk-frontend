@@ -8,8 +8,8 @@ import Button from '../../utils/Button/Button';
 
 import './style.css'
 import ToggleButton from '../../utils/ToggleButton/ToggleButton';
-import Password from '../Auth/Password/Password';
 import Loading from '../../utils/Loading/Loading';
+import Input from '../../utils/Input/Input';
 
 const ChangeAvatar = lazy(() => import('./ChangeAvatar/ChangeAvatar'));
 
@@ -19,9 +19,8 @@ function EditAccount({ setClose, setMessage }) {
   const [data, setData] = useState({ name: user.name });
   const { isLoading } = useSelector(state => state.auth);
   const [formErrors, setFormError] = useState({});
-  const [validations, setValidations] = useState({ 'name': () => data.name.trim.length > 0 })
+  const [validations, setValidations] = useState({ 'name': () => data.name.trim().length > 0 })
   const [changePassword, setChangePassword] = useState(false);
-
   const [requiredFields, setRequiredFields] = useState(['name']);
   const passwordRequired = ['oldPassword', 'newPassword', 'confirmNewPassword'];
 
@@ -35,7 +34,7 @@ function EditAccount({ setClose, setMessage }) {
             ...pVs,
             [f]: (d) => {
               if (d.length < 8) {
-                setFormError(fE => ({ ...fE, [f]: "The password shouldn't be less than 8 letter or numbers" }));
+                setFormError(fE => ({ ...fE, [f]: "The password must be at least 8 letters and numbers" }));
                 return true;
               } else {
                 setFormError(fE => ({ ...fE, [f]: "" }))
@@ -74,48 +73,13 @@ function EditAccount({ setClose, setMessage }) {
     // eslint-disable-next-line
   }, [changePassword]);
 
-  const handleFieldError = (field, value, validateFun) => {
-    if (value) {
-      if (field === 'confirmNewPassword') {
-        validateFun(value, data['newPassword']);
-      } else {
-        validateFun(value);
-      }
-    } else {
-      setFormError(fep => ({ ...fep, [field]: '' }))
-    }
-  }
-
-  const handleChange = (e) => {
-    setData({
-      ...data,
-      [e.target.name]: e.target.value
-    });
-
-    if (e.target.value !== '' && formErrors[e.target.name] === 'This is required') {
-      setFormError(fep => ({ ...fep, [e.target.name]: '' }));
-    }
-  }
-
-  const onBlur = (e) => {
-    if (e.target.value === '' && requiredFields.includes(e.target.name)) {
-      setFormError(fep => ({ ...fep, [e.target.name]: 'This is required' }));
-    } else {
-      handleFieldError(
-        e.target.name,
-        e.target.value,
-        validations[e.target.name]
-      );
-    }
-  }
-
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    await event.preventDefault();
 
     const dataEntries = Object.entries(data);
     const errors = Object.entries(formErrors).filter(([k, v]) => v.length > 0);
     dataEntries.forEach(([k, v]) => {
-      if (v === '') {
+      if (v === '' && requiredFields.includes(k)) {
         errors.push([k, 'This is required']);
         setFormError(fep => ({ ...fep, [k]: 'This is required' }));
       }
@@ -124,6 +88,15 @@ function EditAccount({ setClose, setMessage }) {
     if (errors.length === 0) {
       dispatch(updateUser(data, setFormError, setMessage));
     }
+  }
+
+  const requiredForEveryInput = {
+    formErrors: formErrors,
+    setFormError: setFormError,
+    validations: validations,
+    formData: data,
+    setFormData: setData,
+    requiredFields: requiredFields,
   }
 
   return (
@@ -144,22 +117,12 @@ function EditAccount({ setClose, setMessage }) {
         </div>
         <div className='inputs'>
           <ChangeAvatar />
-          <div className='block'>
-            <input
-              name="name"
-              type="name"
-              placeholder="name"
-              value={data.name}
-              onChange={handleChange}
-              className={formErrors.name?.length > 0 ? 'error' : undefined}
-              onBlur={onBlur}
-            />
-            {formErrors.name?.length > 0 && (
-              <span className='error-text'>
-                {formErrors['name']}
-              </span>
-            )}
-          </div>
+          <Input
+            {...requiredForEveryInput}
+            name="name"
+            type="name"
+            placeholder="name"
+          />
           <div className='block change-password'>
             <p>
               change password
@@ -168,48 +131,27 @@ function EditAccount({ setClose, setMessage }) {
           </div>
           {changePassword && (
             <>
-              <div className='block'>
-                <Password
-                  name="oldPassword"
-                  placeholder="old password"
-                  formData={data}
-                  handleChange={handleChange}
-                  onBlur={onBlur}
-                />
-                {formErrors['oldPassword'] && (
-                  <span className='error-text'>
-                    {formErrors['oldPassword']}
-                  </span>
-                )}
-              </div>
-              <div className='block'>
-                <Password
-                  placeholder="new password"
-                  formData={data}
-                  handleChange={handleChange}
-                  onBlur={onBlur}
-                  name="newPassword"
-                />
-                {formErrors['newPassword'] && (
-                  <span className='error-text'>
-                    {formErrors['newPassword']}
-                  </span>
-                )}
-              </div>
-              <div className='block'>
-                <Password
-                  formData={data}
-                  handleChange={handleChange}
-                  onBlur={onBlur}
-                  name="confirmNewPassword"
-                  placeholder="confirm new password"
-                />
-                {formErrors['confirmNewPassword'] && (
-                  <span className='error-text'>
-                    {formErrors['confirmNewPassword']}
-                  </span>
-                )}
-              </div>
+              <Input
+                {...requiredForEveryInput}
+                type="password"
+                name="oldPassword"
+                placeholder="old password"
+                aria-label="old password"
+              />
+              <Input
+                {...requiredForEveryInput}
+                placeholder="new password"
+                type="password"
+                name="newPassword"
+                aria-label="new password"
+              />
+              <Input
+                {...requiredForEveryInput}
+                type="password"
+                name="confirmNewPassword"
+                placeholder="confirm new password"
+                aria-label="confirm new password"
+              />
             </>
           )}
         </div>

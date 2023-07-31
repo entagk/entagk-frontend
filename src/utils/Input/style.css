@@ -1,0 +1,34 @@
+.input-block {
+  width: 100%;
+  margin: 10px 0px;
+  padding-inline: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.input-block input {
+  width: 100%;
+}
+
+.input-block input:focus {
+  border: 2px solid;
+}
+
+.input-block .error-text {
+  width: 100%;
+  margin-block: 5px;
+  color: #d81c1c;
+  font-size: 14px;
+}
+
+.input-block input::placeholder {
+  text-transform: capitalize;
+}
+
+@media (max-width: 425px) {
+  .input-block input {
+    margin: 6px 5px;
+  }
+}

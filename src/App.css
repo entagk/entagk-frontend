@@ -27,8 +27,10 @@ textarea {
   border: none;
 }
 
-input:focus {
+input:focus,
+textarea:focus {
   background-color: #dddddd3d;
+  border: 2px solid;
 }
 
 textarea {
@@ -83,6 +85,7 @@ a {
 }
 
 .block input,
+.input-block input,
 .block textarea {
   border-radius: 10px;
   font-size: 16px;
@@ -93,6 +96,7 @@ a {
 }
 
 .glass-effect .block input,
+.glass-effect .input-block input,
 .glass-effect textarea {
   color: #fff;
   background: transparent;
@@ -125,6 +129,7 @@ a {
 }
 
 .block input.error,
+.input-block input.error,
 .task-form input.error {
   background: #ff646482;
   color: #d81c1c;

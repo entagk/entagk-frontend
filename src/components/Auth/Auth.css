@@ -59,15 +59,9 @@ div.form-container.reset-form {
   flex-direction: column;
 }
 
-.auth-page .form-container .block input,
-.form-container.reset-form .block input {
-  width: 100%;
-  margin: 12px 10px;
-}
-
-.auth-page .form-container .block input::placeholder,
-.form-container.reset-form .block input::placeholder {
-  text-transform: capitalize;
+.auth-page .form-container .block .input-block {
+  padding: 0;
+  margin-inline: 12px;
 }
 
 .auth-page button,
@@ -246,7 +240,7 @@ div.form-container.reset-form {
     font-size: 35px;
   }
 
-  .auth-page .form-container .block input {
+  .auth-page .form-container .block .input-block {
     margin: 6px 5px;
   }
 }

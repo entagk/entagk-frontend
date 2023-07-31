@@ -6,10 +6,9 @@ import './style.css';
 
 function Password({
   formData,
-  handleChange,
-  onBlur,
   name,
-  placeholder
+  formErrors,
+  ...props
 }) {
   const [show, setShow] = useState(false);
 
@@ -17,12 +16,10 @@ function Password({
     <div className="password">
       <input
         name={name}
-        type={show ? "text" : "password"}
-        placeholder={placeholder}
         value={formData[name]}
-        className={formData.password !== formData.confirmPassword && name === 'confirmPassword' ? 'error' : undefined}
-        onChange={handleChange}
-        onBlur={onBlur}
+        className={formErrors[name] ? 'error' : undefined}
+        {...props}
+        type={show ? "text" : "password"}
       />
       <Button
         variant='single-icon'

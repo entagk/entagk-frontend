@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { authForm } from "../../actions/auth";
@@ -13,7 +13,7 @@ import NetworkError from "../NetworkError/NetworkError";
 import Button from "../../utils/Button/Button";
 
 const NavBar = lazy(() => import("./../NavBar/NavBar"));
-const Password = lazy(() => import("./Password/Password"));
+const Input = lazy(() => import("../../utils/Input/Input"));
 const initialFormData = {
   name: "",
   email: "",
@@ -30,41 +30,127 @@ const Auth = () => {
   const [forgetPassword, setForgetPassword] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
 
+
+  const [formErrors, setFormError] = useState({});
+  const [validations, setValidations] = useState({
+    email: (e) => {
+      const validateEmail = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+      if (!validateEmail.test(e)) {
+        setFormError(fE => ({ ...fE, email: 'This email is invalid' }));
+        return true;
+      } else {
+        setFormError(fE => ({ ...fE, email: '' }));
+        return false;
+      }
+    },
+    password: (p, cP) => {
+      if (p.length < 8) {
+        setFormError(fE => ({ ...fE, password: "The password must be at least 8 letters and numbers" }));
+        return true;
+      } else {
+        if (p === cP) {
+          if (formErrors['confirmPassword'] === "The password should be matched") {
+            setFormError(fE => ({ ...fE, 'confirmPassword': "" }))
+          }
+        }
+        setFormError(fE => ({ ...fE, password: "" }));
+        return false;
+      }
+
+    },
+  });
+
+  const [requiredFields, setRequiredFields] = useState(['email', 'password']);
+  const signUpRequired = ['name', 'confirmPassword'];
+
+  useEffect(() => {
+    if (isSignUp) {
+      setRequiredFields(pF => [...pF, ...signUpRequired])
+      setValidations(pV => ({
+        ...pV,
+        name: (n) => {
+          if (n.trim().length === 0) {
+            setFormError(fE => ({ ...fE, name: "This field is required" }))
+            return true;
+          } else {
+            setFormError(fE => ({ ...fE, name: "" }))
+            return false;
+          }
+        },
+        confirmPassword: (cP, p) => {
+          if (cP !== p) {
+            setFormError(fE => ({ ...fE, confirmPassword: "The password should be matched" }))
+            return true;
+          } else {
+            setFormError(fE => ({ ...fE, confirmPassword: "" }))
+            return false;
+          }
+        },
+      }))
+    } else {
+      if (forgetPassword) {
+        setRequiredFields(['email']);
+        setFormData({ email: formData.email });
+        setFormError({ emali: formErrors.email });
+      } else {
+        setRequiredFields(pF => pF.filter(f => !signUpRequired.includes(f)));
+        signUpRequired.forEach((f) => {
+          const newData = formData;
+          delete newData[f];
+          setFormData(newData);
+
+          const newFormErrors = formErrors;
+          delete newFormErrors[f];
+          setFormError(newFormErrors);
+        })
+      }
+    }
+
+    // eslint-disable-next-line
+  }, [isSignUp])
+
   if (localStorage.getItem('token')) {
     return (
       <LogoutPage />
     )
   }
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
-
   // eslint-disable-next-line
   const emailPattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$";
-
-  const validateEmail = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
 
   const handleSubmit = async (e) => {
     await e.preventDefault();
     console.log(formData);
 
-    if (isSignUp) {
-      if (!formData.email || !formData.name || formData.confirmPassword !== formData.password) {
-        setMessage({ type: 'error', message: 'Please complete all form data' });
+    const dataEntries = Object.entries(formData);
+    const errors = Object.entries(formErrors).filter(([k, v]) => v.length > 0);
+    dataEntries.forEach(([k, v]) => {
+      if (v === '' && requiredFields.includes(k)) {
+        errors.push([k, 'This is required']);
+        setFormError(fep => ({ ...fep, [k]: 'This is required' }));
+      }
+
+      if (!k.includes('confirm')) {
+        if (validations[k](v)) {
+          errors.push([k, `invalid ${k}`]);
+        }
       } else {
+        if (validations[k](v)) {
+          errors.push([k, `invalid ${k}`]);
+        }
+      }
+    });
+
+    if (isSignUp) {
+      if (errors.length === 0) {
         dispatch(authForm(formData, 'sign up', setMessage, navigate));
       }
     } else if (forgetPassword) {
-      if (!formData.email) {
-        setMessage({ type: 'error', message: 'Please complete all form data' });
-      } else {
+      if (errors.length === 0) {
         dispatch(authForm({ email: formData.email }, 'forget password', setMessage, navigate));
       }
     } else {
-      if (!formData.email || !formData.password) {
-        setMessage({ type: 'error', message: 'Please complete all form data' });
-      } else {
+      if (errors.length === 0) {
         dispatch(authForm({ password: formData.password, email: formData.email }, 'sign in', setMessage, navigate));
       }
     }
@@ -74,6 +160,15 @@ const Auth = () => {
     return (
       <NetworkError />
     )
+  }
+
+  const requiredForEveryInput = {
+    formErrors: formErrors,
+    setFormError: setFormError,
+    validations: validations,
+    formData: formData,
+    setFormData: setFormData,
+    requiredFields: requiredFields,
   }
 
   return (
@@ -103,31 +198,35 @@ const Auth = () => {
                 <h1>{isSignUp ? "create account" : forgetPassword ? "foget password" : "sing in"}</h1>
                 <div className="block">
                   {isSignUp && (
-                    <input
+                    <Input
+                      {...requiredForEveryInput}
                       name="name"
-                      type="name"
+                      type="text"
                       placeholder="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className={!formData.name ? 'error' : undefined}
+                      validations={validations}
                     />
                   )}
-                  <input
+                  <Input
                     name="email"
                     type="email"
                     pattern={emailPattern}
-                    required
                     placeholder="email"
-                    value={formData.email}
-                    className={(!formData.email || (validateEmail.test(formData.email) === false)) ? 'error' : undefined}
-                    onChange={handleChange}
+                    {...requiredForEveryInput}
                   />
                   {!forgetPassword && (
-                    <Password
-                      formData={formData}
+                    <Input
+                      {...requiredForEveryInput}
                       name="password"
+                      type="password"
                       placeholder="password"
-                      handleChange={handleChange}
+                    />
+                  )}
+                  {isSignUp && (
+                    <Input
+                      {...requiredForEveryInput}
+                      name="confirmPassword"
+                      type="password"
+                      placeholder="confirm password"
                     />
                   )}
                   {!isSignUp && (
@@ -141,14 +240,6 @@ const Auth = () => {
                       >forget password</Button>
                     </div>
                   )}
-                  {isSignUp && (
-                    <Password
-                      formData={formData}
-                      name="confirmPassword"
-                      handleChange={handleChange}
-                      placeholder="confirm password"
-                    />
-                  )}
                 </div>
                 <div className="block">
                   <GoogleLogin
@@ -160,9 +251,8 @@ const Auth = () => {
                   <Button
                     aria-label="submit auth data"
                     type="submit"
-                    disabled={isLoading || isSignUp ?
-                      (!formData.name || !formData.email || !formData.password || (formData.password !== formData.confirmPassword)) :
-                      forgetPassword ? (!formData.email) : (!formData.email || !formData.password)
+                    disabled={
+                      isLoading || Object.values(formErrors).filter(fE => fE.length > 0).length > 0
                     }
                     style={{ paddingBlock: isLoading && 5, color: '#fff', backgroud: 'var(--main-color)', textTransform: 'uppercase' }}
                   >
