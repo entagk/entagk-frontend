@@ -54,6 +54,13 @@
   border-radius: 8px;
 }
 
+.task-form input:focus,
+.task-form textarea:focus,
+.task-form input.name:focus  {
+  padding: 9px;
+  border: 2px solid;
+}
+
 .task-form input.name {
   outline: none;
   font-size: 25px;
@@ -172,7 +179,6 @@ button.more-details {
   padding: 8px 14px;
   border-radius: 8px;
   border: 2px solid;
-  width: 150px;
   justify-content: space-between;
 }
 
