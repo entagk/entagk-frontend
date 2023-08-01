@@ -8,12 +8,12 @@ import Message from '../../utils/Message';
 import LogoutPage from '../Auth/LogoutPage/LogoutPage';
 
 import './../Auth/Auth.css';
-import NotValidToken from './NotValidToken';
+import NotValidToken from './NotValidToken/NotValidToken';
 import NetworkError from '../NetworkError/NetworkError';
 import Button from '../../utils/Button/Button';
 
 const NavBar = lazy(() => import('./../NavBar/NavBar'));
-const Password = lazy(() => import('./../Auth/Password/Password'))
+const Input = lazy(() => import('../../utils/Input/Input'));
 
 function Reset() {
   const { tokenId } = useParams();
@@ -22,9 +22,30 @@ function Reset() {
   const [validate, setValidate] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ password: '', confirmPassword: '' })
-  const [passowordShow, setPasswordShow] = useState({
-    password: false, confirmPassword: false
-  });
+
+  const requiredFields = ['confirmPassword', 'password'];
+  const [formErrors, setFormError] = useState({});
+
+  const validations = {
+    password: (p) => {
+      if (p.length < 8) {
+        setFormError(fE => ({ ...fE, password: "The password must be at least 8 letters and numbers" }));
+        return true;
+      } else {
+        setFormError(fE => ({ ...fE, password: "" }));
+        return false;
+      }
+    },
+    confirmPassword: (cP, p) => {
+      if (cP !== p) {
+        setFormError(fE => ({ ...fE, confirmPassword: "The password should be matched" }))
+        return true;
+      } else {
+        setFormError(fE => ({ ...fE, confirmPassword: "" }))
+        return false;
+      }
+    },
+  };
 
   useEffect(() => {
     localStorage.setItem('reset-token', tokenId);
@@ -56,14 +77,6 @@ function Reset() {
     )
   }
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
-
-  const handlePasswordShowing = (type) => {
-    setPasswordShow({ ...passowordShow, [type]: !passowordShow[type] });
-  }
-
   const handleSubmit = async (e) => {
     await e.preventDefault();
     console.log(formData);
@@ -74,6 +87,15 @@ function Reset() {
 
     await resetPassword(formData, setMessage, setIsLoading);
     await navigate('/auth');
+  }
+
+  const requiredForEveryInput = {
+    formErrors: formErrors,
+    setFormError: setFormError,
+    validations: validations,
+    formData: formData,
+    setFormData: setFormData,
+    requiredFields: requiredFields,
   }
 
   return (
@@ -107,19 +129,19 @@ function Reset() {
             <form onSubmit={handleSubmit}>
               <h1>reset password</h1>
               <div className='block'>
-                <Password
-                  passowordShow={passowordShow}
-                  formData={formData}
+                <Input
+                  name="password"
                   type="password"
-                  handleChange={handleChange}
-                  onClick={handlePasswordShowing}
+                  placeholder="password"
+                  aria-label="password"
+                  {...requiredForEveryInput}
                 />
-                <Password
-                  passowordShow={passowordShow}
-                  formData={formData}
-                  type="confirmPassword"
-                  handleChange={handleChange}
-                  onClick={handlePasswordShowing}
+                <Input
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="confirm password"
+                  aria-label="confirm password"
+                  {...requiredForEveryInput}
                 />
               </div>
               <div className="block">
@@ -128,9 +150,7 @@ function Reset() {
                   type="submit"
                   disabled={
                     isLoading ||
-                    !formData.password ||
-                    !formData.confirmPassword ||
-                    formData.password !== formData.confirmPassword
+                    Object.values(formErrors).filter(fE => fE.length > 0).length > 0
                   }>
                   {
                     isLoading ?

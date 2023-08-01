@@ -30,7 +30,6 @@ const Auth = () => {
   const [forgetPassword, setForgetPassword] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
 
-
   const [formErrors, setFormError] = useState({});
   const [validations, setValidations] = useState({
     email: (e) => {
@@ -48,15 +47,9 @@ const Auth = () => {
         setFormError(fE => ({ ...fE, password: "The password must be at least 8 letters and numbers" }));
         return true;
       } else {
-        if (p === cP) {
-          if (formErrors['confirmPassword'] === "The password should be matched") {
-            setFormError(fE => ({ ...fE, 'confirmPassword': "" }))
-          }
-        }
         setFormError(fE => ({ ...fE, password: "" }));
         return false;
       }
-
     },
   });
 

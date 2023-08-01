@@ -3,7 +3,7 @@ import { MdError } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 import './NotValidTokenPage.css';
-import Button from '../../utils/Button/Button';
+import Button from '../../../utils/Button/Button';
 
 function NotValidToken({ message }) {
   return (

@@ -17,6 +17,8 @@ function Input({
     if (value) {
       if (field === 'confirmPassword') {
         validateFun(value, formData['password']);
+      } else if (field === 'confirmNewPassword') {
+        validateFun(value, formData['newPassword']);
       } else {
         validateFun(value);
       }
@@ -34,10 +36,8 @@ function Input({
     ) {
       setFormError(fep => ({ ...fep, [e.target.name]: '' }));
     }
-
-    console.log(formData)
   }
-  
+
   const handleBlur = (e) => {
     const { name, value } = e.target;
     if (value === '' && requiredFields.includes(name)) {
