@@ -63,7 +63,6 @@
   width: max-content;
   left: 0;
   backdrop-filter: blur(10px);
-  color: #fff;
 }
 
 .tasks .header h2 {
