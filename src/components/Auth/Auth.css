@@ -26,10 +26,11 @@
 div.form-container.reset-form {
   width: fit-content;
   margin: 20px;
-  padding: 20px;
+  padding: 0;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 20px;
   box-shadow: 0 0 10px #8f8f8f;
+  min-width: 512px;
 }
 
 .auth-page .form-container form,
@@ -59,7 +60,8 @@ div.form-container.reset-form {
   flex-direction: column;
 }
 
-.auth-page .form-container .block .input-block {
+.auth-page .form-container .block .input-block,
+.reset-form form .block .input-block {
   padding: 0;
   margin-inline: 12px;
 }
@@ -191,6 +193,11 @@ div.form-container.reset-form {
     height: 70%;
     left: 0;
   }
+
+  div.reset-form.form-container {
+    min-width: 100%;
+  }
+
   .auth-page.right-panel-active .form-container {
     top: 26%;
   }
@@ -242,5 +249,10 @@ div.form-container.reset-form {
 
   .auth-page .form-container .block .input-block {
     margin: 6px 5px;
+  }
+
+  .form-container button[type="submit"]:not(:disabled) {
+    font-size: 16px;
+    margin: 10px;
   }
 }
