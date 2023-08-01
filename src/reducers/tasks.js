@@ -465,10 +465,9 @@ export default (
             newActive.name = null;
           }
         } else {
-          const all = state.tasks.filter((t) => t._id !== action.data._id);
+          all = state.tasks.filter((t) => t._id !== action.data._id);
           if (newTask.check) {
             all.push(newTask);
-            console.log(all)
             if (state.autoStartNextTask) {
               newActive._id = all.filter((t) => !t.check)[0]?._id || null;
               newActive.name = all.filter((t) => !t.check)[0]?.name || null;
