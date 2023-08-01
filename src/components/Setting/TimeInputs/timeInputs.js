@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
-
-import { BiDownArrow, BiUpArrow } from 'react-icons/bi';
+import React, { useState, lazy } from 'react';
 
 import "./style.css";
 
-function TimeInputs({ name, data, setData }) {
+const PlusMinusArrow = lazy(() => import('./PlusMinusArrow'));
+
+function TimeInputs({
+  name,
+  data,
+  setData,
+  formErrors,
+  setFormErrors,
+  validations,
+}) {
   const [min, setMin] = useState(Number(data?.time[name]) >= 60 ? Math.floor(Number(data?.time[name]) / 60) : 0);
   const [sec, setSec] = useState(Number(data?.time[name]) % 60);
 
@@ -36,6 +43,17 @@ function TimeInputs({ name, data, setData }) {
       }
       console.log(name, realValue);
     }
+
+    if (formErrors.time[name]) {
+      setFormErrors(pFE => ({ ...pFE, time: { ...pFE.time, [name]: "" } }))
+    }
+  }
+
+  const handleBlur = (e) => {
+    if (e.target.name === 'min')
+      validations.time[name](Number(e.target.value) * 60 + sec);
+    else
+      validations.time[name](Number(e.target.value) + min * 60);
   }
 
   const plus = (btnName) => {
@@ -77,76 +95,71 @@ function TimeInputs({ name, data, setData }) {
   }
 
   return (
-    <div className='time-input' style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "flex-end",
-    }}>
-      <div className='min-sec-input' style={{ width: 'fit-content' }}>
-        <input
-          name='min'
-          type="number"
-          min="0"
-          max="60"
-          placeholder='min'
-          className={min > 60 ? `error ${name}-min` : `${name}-min`}
-          value={min}
-          onChange={onChange}
-        />
-        <div className='plus-minus-arrows'>
-          <button
-            aria-label='plus arrow'
-            className='plus-arrow'
-            type="button"
-            onClick={(e) => plus('min')}
-            disabled={min > 60}
-          >
-            <BiUpArrow />
-          </button>
-          <button
-            aria-label='minus arrow'
-            className='minus-arrow'
-            type="button"
-            onClick={() => minus('min')}
-            disabled={min === 0}
-          >
-            <BiDownArrow />
-          </button>
+    <div className='time'>
+      <div style={{
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}>
+        <h4>{name === 'PERIOD' ? 'Pomodoro' : name.toLocaleLowerCase()}</h4>
+        <div className='time-input' style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+        }}>
+          <div className='min-sec-input' style={{ width: 'fit-content' }}>
+            <input
+              name='min'
+              type="number"
+              min="0"
+              max="60"
+              placeholder='min'
+              className={formErrors?.time[name] ? `error ${name}-min` : `${name}-min`}
+              value={min}
+              onChange={onChange}
+              onBlur={handleBlur}
+            />
+            <PlusMinusArrow
+              value={min}
+              minus={minus}
+              plus={plus}
+              min={0}
+              max={60}
+              name='min'
+            />
+          </div>
+          <p style={{ marginInline: 10, fontSize: 18 }}>:</p>
+          <div className='min-sec-input' style={{ width: 'fit-content' }}>
+            <input
+              name='sec'
+              type="number"
+              min="0"
+              max="59"
+              placeholder="sec"
+              className={formErrors?.time[name] ? `error ${name}-sec` : `${name}-sec`}
+              value={sec}
+              onChange={onChange}
+              onBlur={handleBlur}
+            />
+            <PlusMinusArrow
+              value={min}
+              name='sec'
+              minus={minus}
+              plus={plus}
+              min={0}
+              max={59}
+            />
+          </div>
         </div>
       </div>
-      <p style={{ marginInline: 10, fontSize: 18 }}>:</p>
-      <div className='min-sec-input' style={{ width: 'fit-content' }}>
-        <input
-          name='sec'
-          type="number"
-          min="0"
-          max="59"
-          placeholder="sec"
-          className={!min && !sec ? `error ${name}-sec` : `${name}-sec`}
-          value={sec}
-          onChange={onChange}
-        />
-        <div className='plus-minus-arrows'>
-          <button
-            aria-label='plus arrow'
-            className='plus-arrow'
-            type="button"
-            onClick={() => plus('sec')}
-            disabled={sec > 59}
-          >
-            <BiUpArrow />
-          </button>
-          <button
-            aria-label='minus arrow'
-            className='minus-arrow'
-            type="button"
-            onClick={() => minus('sec')}
-            disabled={sec === 0}
-          >
-            <BiDownArrow />
-          </button>
-        </div>
-      </div>
+      {
+        formErrors?.time[name] && (
+          <>
+            <span className='error-text'>{formErrors?.time[name]}</span>
+          </>
+        )
+      }
     </div>
   );
 }

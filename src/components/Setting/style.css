@@ -106,8 +106,9 @@
   font-size: 16px;
 }
 
-.setting .block.notification {
-  flex-direction: row;
+.setting .block input:focus {
+  border: 2px solid;
+  padding: 9px;
 }
 
 .block.notification .notification-data {

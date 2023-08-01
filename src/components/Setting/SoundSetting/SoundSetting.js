@@ -4,7 +4,13 @@ import Loading from '../../../utils/Loading/Loading';
 
 const Sound = lazy(() => import('./Sound/Sound'));
 
-const SoundSetting = ({ handleChange, data, setData }) => {
+const SoundSetting = ({
+  handleChange,
+  handleBlur,
+  formErrors,
+  data,
+  setData,
+}) => {
   return (
     <>
       <div className='block'>
@@ -19,9 +25,11 @@ const SoundSetting = ({ handleChange, data, setData }) => {
         }>
           <Sound
             type="alarm"
-            handleChange={handleChange}
+            handleRepetChange={handleChange}
+            handleBlur={handleBlur}
             data={data}
             setData={setData}
+            formErrors={formErrors}
           />
         </Suspense>
       </div>

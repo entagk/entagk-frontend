@@ -128,14 +128,6 @@ a {
   color: #fff;
 }
 
-.block input.error,
-.input-block input.error,
-.task-form input.error {
-  background: #ff646482;
-  color: #d81c1c;
-  border: 1px solid;
-}
-
 /*start tasks */
 .tasks-container {
   margin: 20px;
@@ -156,6 +148,25 @@ a {
   justify-content: space-around;
 }
 /*end tasks */
+
+/* start error handling */
+
+.block input.error,
+.input-block input.error,
+.task-form input.error {
+  background: #ff646482;
+  color: #d81c1c;
+  border: 1px solid;
+}
+
+.error-text {
+  width: 100%;
+  margin-block: 5px;
+  color: #d81c1c;
+  font-size: 14px;
+}
+
+/* end error handling */
 
 @import url("./utils/style.css");
 

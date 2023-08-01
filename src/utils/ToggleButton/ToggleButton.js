@@ -14,7 +14,7 @@ function ToggleButton({ type, data, setData }) {
   const open = () => typeof data === 'boolean' ? data : data[type]
 
   return (
-    <div className='toggle-button-container'>
+    <div className='toggle-button-container' style={{ width: 'fit-content' }}>
       <div
         className='toggle-button'
         onClick={handleChange}

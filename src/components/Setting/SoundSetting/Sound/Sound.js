@@ -8,7 +8,14 @@ import "./style.css";
 
 const Select = lazy(() => import("../../Select/Select"));
 
-function Sound({ type, data, setData }) {
+function Sound({
+  type,
+  data,
+  setData,
+  handleBlur,
+  handleRepetChange,
+  formErrors
+}) {
   const sounds = type === 'alarm' ? alarmSounds : type === 'ticking' ? tickingSounds : clickSounds;
   const audioChanging = useRef(audioPlayer({ src: data[`${type}Type`].src, volume: data[`${type}Volume`] }));
   const [change, setChange] = useState(null);
@@ -62,21 +69,32 @@ function Sound({ type, data, setData }) {
       )}
       {type === "alarm" && (
         <div className="sound-type" style={{
-          flexDirection: "row"
+          flexDirection: "column"
         }}>
-          <h4>Repeat</h4>
-          <div className='notification-min'>
-            <input
-              style={{ marginInline: "10px 0" }}
-              className={(data?.alarmRepet < 0 || data?.alarmRepet > 60) ? 'error' : undefined}
-              type="number"
-              min="0"
-              max="60"
-              defaultValue={data?.alarmRepet}
-              name="alarmRepet"
-              onChange={handleChange} />
-            <p style={{ marginLeft: 10 }}>Sec</p>
+          <div className='sound-type'>
+            <h4>Repeat</h4>
+            <div className='notification-min'>
+              <input
+                style={{ marginInline: "10px 0" }}
+                className={formErrors.alarmRepet ? 'error' : undefined}
+                type="number"
+                min="0"
+                max="60"
+                defaultValue={data?.alarmRepet}
+                name="alarmRepet"
+                onChange={handleRepetChange}
+                onBlur={handleBlur}
+              />
+              <p style={{ marginLeft: 10 }}>Sec</p>
+            </div>
           </div>
+          {
+            formErrors?.alarmRepet && (
+              <>
+                <span className='error-text'>{formErrors?.alarmRepet}</span>
+              </>
+            )
+          }
         </div>
       )}
     </div>

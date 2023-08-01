@@ -44,9 +44,9 @@ function Input({
       setFormError(fep => ({ ...fep, [name]: 'This is required' }));
     } else {
       handleFieldError(
-        e.target.name,
-        e.target.value,
-        validations[e.target.name]
+        name,
+        value,
+        validations[name]
       );
     }
   };

@@ -3,7 +3,22 @@ import { CgClose } from 'react-icons/cg';
 import { BsArrowLeft } from 'react-icons/bs';
 import Button from '../../../utils/Button/Button';
 
-function Header({ linkClick, status, setStatus }) {
+function Header({
+  linkClick,
+  status,
+  setStatus,
+  formErrors,
+  handleErrors
+}) {
+  const handleBack = () => {
+    const errors = handleErrors();
+    console.log(errors)
+
+    if (errors.length === 0) {
+      setStatus('');
+    }
+  }
+
   return (
     <div className='setting-header'>
       {status !== '' && (
@@ -13,10 +28,11 @@ function Header({ linkClick, status, setStatus }) {
           variant='single-icon'
           color="white"
           style={{ marginLeft: 0 }}
-          onClick={() => setStatus('')}
+          onClick={handleBack}
           startIcon={
             <BsArrowLeft />
           }
+          disabled={Object.values(formErrors).filter(fE => fE.length > 0).length > 0}
         />
       )}
       <h2>{status === '' ? 'Setting' : `${status} setting`}</h2>

@@ -8,7 +8,15 @@ const Select = lazy(() => import('../Select/Select'));
 const TimeInputs = lazy(() => import('../TimeInputs/timeInputs'));
 const ToggleButton = lazy(() => import('../../../utils/ToggleButton/ToggleButton'));
 
-const TimerSetting = ({ handleChange, data, setData }) => {
+const TimerSetting = ({
+  handleChange,
+  handleBlur,
+  formErrors,
+  setFormErrors,
+  data,
+  setData,
+  validations
+}) => {
   const automations = [
     {
       type: "autoBreaks",
@@ -51,8 +59,7 @@ const TimerSetting = ({ handleChange, data, setData }) => {
       <div className='block'>
         <div className='time-inputs'>
           {[PERIOD, SHORT, LONG].map((item, index) => (
-            <div className='time' key={index}>
-              <h4>{index === 0 ? 'Pomodoro' : item.toLocaleLowerCase()}</h4>
+            <>
               <Suspense fallback={
                 <Loading
                   size="small"
@@ -65,30 +72,45 @@ const TimerSetting = ({ handleChange, data, setData }) => {
                   name={item}
                   data={data}
                   setData={setData}
+                  formErrors={formErrors}
+                  setFormErrors={setFormErrors}
+                  validations={validations}
                 />
               </Suspense>
-            </div>
+            </>
           ))}
         </div>
       </div>
-      <div className='block' style={{ flexDirection: "row" }}>
-        <h3>Long Break Interval</h3>
+      <div className='block'>
         <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          width: 'fit-content'
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
         }}>
-          <input
-            className={data?.longInterval <= 0 ? 'error' : undefined}
-            name='longInterval'
-            type="number"
-            min="1"
-            max="100"
-            defaultValue={data?.longInterval}
-            onChange={handleChange}
-          />
+          <h3>Long Break Interval</h3>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            width: 'fit-content'
+          }}>
+            <input
+              className={formErrors?.longInterval ? 'error' : undefined}
+              name='longInterval'
+              type="number"
+              min="1"
+              max="100"
+              defaultValue={data?.longInterval}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+          </div>
         </div>
+        {formErrors.longInterval && (
+          <div>
+            <span className='error-text'>{formErrors.longInterval}</span>
+          </div>
+        )}
       </div>
       <div className='block'>
         {automations.map((auto, index) => (
