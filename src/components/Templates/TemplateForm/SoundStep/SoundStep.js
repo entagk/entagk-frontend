@@ -2,12 +2,10 @@ import React, { lazy } from 'react';
 
 const SoundSetting = lazy(() => import('../../../Setting/SoundSetting/SoundSetting'));
 
-function SoundStep({ data, setData, handleChange }) {
+function SoundStep(props) {
   return (
     <SoundSetting
-      data={data}
-      setData={setData}
-      handleChange={handleChange}
+      {...props}
     />
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState, lazy, Suspense, useEffect } from 'react';
 
 import { CgClose, CgTimelapse } from 'react-icons/cg';
 import { AiOutlineInfo, AiFillSound } from 'react-icons/ai';
@@ -55,7 +55,99 @@ function TemplateForm({
   const dispatch = useDispatch();
   const [activeStep, setActiveStep] = useState(0);
   const [data, setData] = useState(oldData === null ? initialData : oldData);
-  const [message, setMessage] = useState({ message: '', type: '' })
+  const [message, setMessage] = useState({ message: '', type: '' });
+  const [required, setRequired] = useState(["name", "desc"]);
+  const [formErrors, setFormErrors] = useState({});
+  const [validations, setValidations] = useState({
+    name: (v) => {
+      setFormErrors(pFE => (
+        {
+          ...pFE,
+          name: v.trim().length === 0 ?
+            "This field is required" :
+            v.trim().length > 50 ? "The name length is more than 50 characters." : ""
+        }));
+      return v.trim().length === 0 || v.trim().length > 50
+    },
+    desc: (v) => {
+      setFormErrors(pFE => (
+        {
+          ...pFE,
+          desc: v.trim().length === 0 ?
+            "This field is required" :
+            v.trim().length > 500 ?
+              "The description length is more than 500 characters." :
+              ""
+        }
+      ))
+      return v.trim().length > 500 || v.trim().length === 0;
+    }
+  });
+
+  useEffect(() => {
+    if (activeStep === 0) {
+      setRequired(['name', 'desc']);
+    } else if (activeStep === 2) {
+      setFormErrors((pFE) => ({
+        ...pFE,
+        time: {
+          "LONG": "",
+          "PERIOD": "",
+          "SHORT": "",
+        }
+      }));
+      setRequired([["LONG", "PERIOD", "SHORT"], "longInterval"]);
+      ["LONG", "PERIOD", "SHORT"].forEach(t => {
+        setValidations((pV) => ({
+          ...pV,
+          time: {
+            ...pV?.time,
+            [t]: (tL) => {
+              setFormErrors(pFE => ({
+                ...pFE,
+                time: {
+                  ...pFE?.time,
+                  [t]: tL < 1 || tL > 3600 ?
+                    'invalid time' :
+                    ""
+                }
+              }))
+              return tL < 1 || tL > 3600;
+            },
+          },
+        }));
+      });
+      setValidations((pV) => ({
+        ...pV,
+        "longInterval": (pLI) => {
+          setFormErrors(pFE => ({
+            ...pFE,
+            "longInterval":
+              pLI < 2 ?
+                "The long interval must be more than 2" :
+                ""
+          }))
+          return pLI < 2;
+        },
+      }));
+    } else if (activeStep === 3) {
+      setRequired(["alarmRepet"]);
+      setValidations((pV) => ({
+        ...pV,
+        'alarmRepet': (ar) => {
+          setFormErrors(pFE => ({
+            ...pFE,
+            'alarmRepet': ar < 0 || ar > 60 ?
+              "Alarm repet should be in range 0-60 seconds" :
+              ""
+          }))
+          return ar < 0 || ar > 60;
+        }
+      }));
+    }
+
+    // eslint-disable-next-line
+  }, [activeStep])
 
   const steps = [
     {
@@ -84,16 +176,58 @@ function TemplateForm({
     }
   }
 
+  const handleErrors = () => {
+    const errors = Object.entries(formErrors).filter(([k, v]) => v.length > 0);
+    required.forEach((f) => {
+      if (!Array.isArray(f)) {
+        if (validations?.[f]?.(data[f])) {
+          errors.push([f])
+        };
+      } else {
+        f.forEach(t => {
+          if (validations?.time?.[t]?.(data.time[t])) {
+            errors.push([f]);
+          };
+        })
+      }
+    })
+
+    return errors;
+  }
+
   const handleNextButton = (e) => {
     console.log('next')
-    if (activeStep < 3) {
-      setActiveStep(as => ++as);
+    const errors = handleErrors();
+
+    if (errors.length === 0) {
+      if (activeStep < 3) {
+        setActiveStep(as => ++as);
+      }
     }
   }
 
   const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setData({ ...data, [name]: value });
+
+    if (
+      value !== ''
+    ) {
+      setFormErrors(fep => ({ ...fep, [name]: '' }));
+    }
   }
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    if (value === '' && required.includes(name)) {
+      setFormErrors(fep => ({ ...fep, [name]: 'This field is required' }));
+      console.log(validations[name](value));
+    } else {
+      validations[name](value);
+      console.log(validations[name](value))
+    }
+  }
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -128,19 +262,22 @@ function TemplateForm({
     }
   }
 
-  const disableNextOrSubmit = () => {
-    switch (activeStep) {
-      case 0:
-        return !data.name || !data.desc;
-      case 1:
-        return data.tasks?.length === 0;
-      case 2:
-        return Object.values(data.time).includes(0);
-      case 3:
-        return data.longInterval === 0;
-      default:
-        return false;
-    }
+  const requiredForEveryStatus = {
+    data,
+    setData,
+    handleChange,
+    handleBlur,
+    formErrors,
+    setFormErrors,
+    validations,
+  }
+
+  const requiedForFooter = {
+    formErrors,
+    handleCancelOrPrev,
+    handleNextButton,
+    activeStep,
+    data,
   }
 
   return (
@@ -186,15 +323,10 @@ function TemplateForm({
                   />
                 }>
                   <SoundStep
-                    data={data}
-                    setData={setData}
-                    handleChange={handleChange}
+                    {...requiredForEveryStatus}
                   />
                   <FormFooter
-                    disableNextOrSubmit={disableNextOrSubmit}
-                    handleCancelOrPrev={handleCancelOrPrev}
-                    handleNextButton={handleNextButton}
-                    activeStep={activeStep}
+                    {...requiedForFooter}
                   />
                 </Suspense>
               </div>
@@ -210,33 +342,24 @@ function TemplateForm({
               }>
                 {activeStep === 0 ? (
                   <InfoStep
-                    data={data}
-                    setData={setData}
-                    handleChange={handleChange}
+                    {...requiredForEveryStatus}
                   />
                 ) :
                   activeStep === 1 ? (
                     <TasksStep
-                      data={data}
-                      setData={setData}
-                      handleChange={handleChange}
+                      {...requiredForEveryStatus}
                       message={message}
                       setMessage={setMessage}
                     />
                   ) : (
                     <TimerStep
-                      data={data}
-                      setData={setData}
-                      handleChange={handleChange}
+                      {...requiredForEveryStatus}
                     />
                   )
                 }
               </Suspense>
               <FormFooter
-                disableNextOrSubmit={disableNextOrSubmit}
-                handleCancelOrPrev={handleCancelOrPrev}
-                handleNextButton={handleNextButton}
-                activeStep={activeStep}
+                {...requiedForFooter}
               />
             </div>
           ) : (

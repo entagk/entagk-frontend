@@ -153,7 +153,8 @@ a {
 
 .block input.error,
 .input-block input.error,
-.task-form input.error {
+.task-form input.error,
+.block textarea.error {
   background: #ff646482;
   color: #d81c1c;
   border: 1px solid;

@@ -5,7 +5,8 @@ function FormFooter({
   activeStep,
   handleCancelOrPrev,
   handleNextButton,
-  disableNextOrSubmit
+  formErrors,
+  data,
 }) {
   return (
     <div className='form-footer'>
@@ -22,7 +23,11 @@ function FormFooter({
         type={activeStep <= 2 ? "button" : "submit"}
         onClick={handleNextButton}
         className="save"
-        disabled={disableNextOrSubmit()}
+        disabled={
+          activeStep === 1 ?
+            data?.tasks?.length === 0 :
+            Object.values(formErrors).filter(fE => fE.length > 0).length > 0
+        }
         variant='contained'
         color="main"
       >

@@ -69,12 +69,12 @@ const TaskForm = ({
       setFormErrors(pFE => (
         {
           ...pFE,
-          notes: v > 500 ?
+          notes: v.trim().length > 500 ?
             "The notes length is more than 500 characters." :
             ""
         }
       ))
-      return v > 500;
+      return v.trim().length > 500;
     }
   };
 
@@ -120,7 +120,7 @@ const TaskForm = ({
             return pLI < 2;
           },
           'alarmRepet': (ar) => {
-            setFormErrors(pFE => ({
+            setSettingErrors(pFE => ({
               ...pFE,
               'alarmRepet': ar < 0 || ar > 60 ?
                 "Alarm repet should be in range 0-60 seconds" :
