@@ -62,7 +62,7 @@ export const getTasks = (setMessage, page) => async dispatch => {
   }
 }
 
-export const addNewTask = (taskData, setIsLoading, setMessage) => async dispatch => {
+export const addNewTask = (taskData, setIsLoading, setMessage, setFormErrors) => async dispatch => {
   try {
     setIsLoading('new');
     if (!taskData.name || !taskData.est) {
@@ -84,7 +84,11 @@ export const addNewTask = (taskData, setIsLoading, setMessage) => async dispatch
     // dispatch({ type: END_LOADING, data: 'tasks' });
   } catch (err) {
     setIsLoading(null);
-    setMessage({ message: err?.response?.data?.message || err.message, type: "error" })
+    if (err?.response?.data?.errors) {
+      setFormErrors(pFE => ({ ...pFE, ...err.response.data.errors }))
+    } else {
+      setMessage({ message: err?.response?.data?.message || err.message, type: "error" })
+    }
     console.error(err);
     if (err.response?.status === 401 || err.response.status === 500) {
       dispatch({ type: LOGOUT });
@@ -92,7 +96,7 @@ export const addNewTask = (taskData, setIsLoading, setMessage) => async dispatch
   }
 }
 
-export const addMultipleTasks = (tasksData, setMessage) => async dispatch => {
+export const addMultipleTasks = (tasksData, setMessage, setFormErrors) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'tasks' });
 
@@ -103,6 +107,11 @@ export const addMultipleTasks = (tasksData, setMessage) => async dispatch => {
     dispatch({ type: END_LOADING, data: 'tasks' });
   } catch (error) {
     dispatch({ type: END_LOADING, data: 'tasks' })
+    if (error?.response?.data?.errors) {
+      setFormErrors(pFE => ({ ...pFE, ...error.response.data.errors }));
+    } else {
+      setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    }
     setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
     console.error(error);
     if (error.response?.status === 401 || error.response?.status === 500) {
@@ -143,7 +152,7 @@ export const deleteTask = (id, template, setIsLoading, setMessage) => async disp
     if (!id) {
       setMessage({ message: "invalid task", type: "error" })
     }
-
+    
     if (!localStorage.getItem('token')) {
       dispatch({ type: DELETE_TASK, data: id });
     } else {
@@ -166,13 +175,13 @@ export const deleteTask = (id, template, setIsLoading, setMessage) => async disp
   }
 };
 
-export const modifyTask = (formData, id, setIsLoading, setMessage) => async dispatch => {
+export const modifyTask = (formData, id, setIsLoading, setMessage, setFormErrors) => async dispatch => {
   try {
     setIsLoading(id);
     if (!formData.name || !formData.est) {
       setMessage({ message: "Please enter the task name and est", type: "error" })
     }
-
+    
     if (!localStorage.getItem('token')) {
       dispatch({ type: MODIFY_TASK, data: { ...formData, _id: id } });
     } else {
@@ -186,9 +195,11 @@ export const modifyTask = (formData, id, setIsLoading, setMessage) => async disp
     setIsLoading(null);
   } catch (error) {
     setIsLoading(null);
-    console.log(formData, id, setIsLoading, setMessage);
-    // setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
-    console.error(error);
+    if (error?.response?.data?.errors) {
+      setFormErrors(pFE => ({ ...pFE, ...error.response.data.errors }));
+    } else {
+      setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    }
     if (error.response?.status === 401 || error.response.status === 500) {
       dispatch({ type: LOGOUT });
     }

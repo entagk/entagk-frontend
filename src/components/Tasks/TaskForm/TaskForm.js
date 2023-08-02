@@ -200,9 +200,9 @@ const TaskForm = ({
       setOpen(ot => !ot);
       if (template !== 'new') {
         if (!oldData) {
-          dispatch(addNewTask(data, setIsLoading, setMessage));
+          dispatch(addNewTask(data, setIsLoading, setMessage, setFormErrors));
         } else {
-          dispatch(modifyTask({ ...data, setting }, oldData._id, setIsLoading, setMessage));
+          dispatch(modifyTask({ ...data, setting }, oldData._id, setIsLoading, setMessage, setFormErrors));
         }
       } else {
         if (!oldData) {

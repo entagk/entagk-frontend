@@ -31,7 +31,7 @@ export const authForm = (formData, type, setMessage, navigate, setFormErrors) =>
       }
 
       if (tasks?.length >= 0) {
-        dispatch(addMultipleTasks(tasks, setMessage));
+        dispatch(addMultipleTasks(tasks, setMessage, () => {}));
       }
       if (type !== 'sign up') {
         dispatch(getTasks(setMessage, 1));
