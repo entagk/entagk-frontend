@@ -254,11 +254,13 @@ const TaskForm = ({
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                <div className="text-counter" style={{ color: `${50 - data?.name?.length > 10 ? "#0effe9" : "#ff002f"}` }}>
-                  <p
-                    style={{ fontSize: "16px", fontWeight: "500", marginBottom: "15px" }}
-                  >{50 - data?.name?.length}</p>
-                </div>
+                {data?.name?.length > 30 && (
+                  <div className="text-counter" style={{ color: `${50 - data?.name?.length > 10 ? "#0effe9" : "#ff002f"}` }}>
+                    <p
+                      style={{ fontSize: "16px", fontWeight: "500", marginBottom: "15px" }}
+                    >{50 - data?.name?.length}</p>
+                  </div>
+                )}
               </div>
               {formErrors.name && (
                 <span className="error-text">
@@ -325,9 +327,11 @@ const TaskForm = ({
                     onChange={handleChange}
                     value={data.notes}
                   ></textarea>
-                  <div className="text-counter" style={{ color: `${500 - data?.notes?.length > 100 ? "#0effe9" : "#ff002f"}` }}>
-                    <p style={{ fontSize: "16px", fontWeight: "500" }}>{500 - data?.notes?.length}</p>
-                  </div>
+                  {data?.notes?.length > 400 && (
+                    <div className="text-counter" style={{ color: `${500 - data?.notes?.length > 100 ? "#0effe9" : "#ff002f"}` }}>
+                      <p style={{ fontSize: "16px", fontWeight: "500" }}>{500 - data?.notes?.length}</p>
+                    </div>
+                  )}
                   {formErrors.notes && (
                     <span className="error-text">
                       {formErrors.notes}

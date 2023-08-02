@@ -6,7 +6,6 @@ function InfoStep({
   handleBlur,
   formErrors
 }) {
-
   return (
     <div className='step-inputs'>
       <div className="block">
@@ -23,9 +22,11 @@ function InfoStep({
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          <div className="text-counter" style={{ color: `${50 - data?.name?.length > 10 ? "#0effe9" : "#ff002f"}` }}>
-            <p>{50 - data?.name?.length}</p>
-          </div>
+          {data?.name?.length > 30 && (
+            <div className="text-counter">
+              <p>{50 - data?.name?.length}</p>
+            </div>
+          )}
         </div>
         {formErrors.name && (
           <span className='error-text'>{formErrors.name}</span>
@@ -44,18 +45,18 @@ function InfoStep({
             className={`${formErrors.desc && 'error'} name`}
             required
           ></textarea>
-          <div
-            className="text-counter"
-            style={{
-              color: `${500 - data?.desc?.length > 100 ? "#0effe9" : "#ff002f"}`
-            }}>
-            <p
-              style={{
-                fontSize: "16px",
-                fontWeight: "500"
-              }}
-            >{500 - data?.desc?.length}</p>
-          </div>
+          {data?.desc?.length > 400 && (
+            <div
+              className="text-counter"
+            >
+              <p
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "500"
+                }}
+              >{500 - data?.desc?.length}</p>
+            </div>
+          )}
         </div>
         {formErrors.desc && (
           <span className='error-text'>{formErrors.desc}</span>
