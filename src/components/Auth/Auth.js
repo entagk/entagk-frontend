@@ -136,15 +136,15 @@ const Auth = () => {
 
     if (isSignUp) {
       if (errors.length === 0) {
-        dispatch(authForm(formData, 'sign up', setMessage, navigate));
+        dispatch(authForm(formData, 'sign up', setMessage, navigate, setFormError));
       }
     } else if (forgetPassword) {
       if (errors.length === 0) {
-        dispatch(authForm({ email: formData.email }, 'forget password', setMessage, navigate));
+        dispatch(authForm({ email: formData.email }, 'forget password', setMessage, navigate, setFormError));
       }
     } else {
       if (errors.length === 0) {
-        dispatch(authForm({ password: formData.password, email: formData.email }, 'sign in', setMessage, navigate));
+        dispatch(authForm({ password: formData.password, email: formData.email }, 'sign in', setMessage, navigate, setFormError));
       }
     }
   }

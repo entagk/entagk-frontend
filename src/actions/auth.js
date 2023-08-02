@@ -14,7 +14,7 @@ export const REFRESH_TOKEN = 'REFRESH_TOKEN';
 export const LOGOUT = 'LOGOUT';
 export const ERROR = 'ERROR';
 
-export const authForm = (formData, type, setMessage, navigate) => async dispatch => {
+export const authForm = (formData, type, setMessage, navigate, setFormErrors) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'auth' });
     if (type !== 'forget password') {
@@ -45,7 +45,12 @@ export const authForm = (formData, type, setMessage, navigate) => async dispatch
 
     dispatch({ type: END_LOADING, data: 'auth' });
   } catch (error) {
-    setMessage({ type: 'error', message: error?.response?.data?.message || error.message })
+    if (error?.response?.data?.errors) {
+      setFormErrors(pFE => ({ ...pFE, ...error.response.data.errors }))
+    } else {
+      setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    }
+
     dispatch({ type: END_LOADING, data: 'auth' });
     console.error(error);
   }
@@ -94,7 +99,6 @@ export const deleteUser = (setMessage) => async dispatch => {
   }
 }
 
-// todo at profile editing page
 export const updateUser = (formData, setFormError, setMessage, setClose) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'auth' })
