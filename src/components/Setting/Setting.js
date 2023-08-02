@@ -179,7 +179,7 @@ function Setting({ setOpenSetting }) {
     });
 
     if (Object.entries(dataSent).length !== 0 && errors.length === 0) {
-      await dispatch(modifySetting(dataSent, setMessage));
+      await dispatch(modifySetting(dataSent, setMessage, setFormErrors));
     }
 
     setOpenSetting(false);

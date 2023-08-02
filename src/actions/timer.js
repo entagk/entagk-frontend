@@ -215,7 +215,7 @@ export const changeActive = (active, activeId, setIsLoading, setMessage) => asyn
   }
 }
 
-export const modifySetting = (formData, setMessage) => async dispatch => {
+export const modifySetting = (formData, setMessage, setFormErrors) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'setting' });
     if (!localStorage.getItem("token")) {

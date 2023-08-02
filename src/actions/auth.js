@@ -25,7 +25,7 @@ export const authForm = (formData, type, setMessage, navigate, setFormErrors) =>
       const setting = JSON.parse(localStorage.getItem('setting'));
       const tasks = JSON.parse(localStorage.getItem('tasks'));
       if (setting !== initialSetting && Boolean(setting)) {
-        dispatch(modifySetting(setting, setMessage));
+        dispatch(modifySetting(setting, setMessage, () => {}));
       } else {
         dispatch(getSetting(setMessage));
       }
