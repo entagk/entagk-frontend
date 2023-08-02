@@ -96,7 +96,7 @@ export const deleteTemplate = (id, pageLen, currentPage, numberOfPages, setIsLoa
     if (currentPage !== numberOfPages) {
       dispatch(getTemplatesForUser(sort, search, currentPage, setMessage))
     } else if (pageLen === 1) {
-      dispatch(getTemplatesForUser(sort, search, currentPage-1, setMessage))
+      dispatch(getTemplatesForUser(sort, search, currentPage - 1, setMessage))
     }
 
     setIsLoading(null);
@@ -136,7 +136,7 @@ export const addToTodo = (id, setIsLoading, setMessage) => async dispatch => {
   }
 }
 
-export const addTemplate = (formData, setIsLoading, setMessage) => async dispatch => {
+export const addTemplate = (formData, setIsLoading, setMessage, setFormErrors) => async dispatch => {
   try {
     setIsLoading('new');
 
@@ -146,10 +146,14 @@ export const addTemplate = (formData, setIsLoading, setMessage) => async dispatc
     setIsLoading(null);
   } catch (error) {
     setIsLoading(null);
-    setMessage({
-      message: error?.response?.data?.message || error?.message,
-      type: 'error'
-    })
+    if (error?.response?.data?.errors) {
+      setFormErrors(pFE => ({ ...pFE, ...error.response.data.errors }))
+    } else {
+      setMessage({
+        message: error?.response?.data?.message || error?.message,
+        type: 'error'
+      })
+    }
 
     if (error.response?.status === 401 || error.response?.status === 500) {
       dispatch({ type: LOGOUT });
@@ -157,7 +161,7 @@ export const addTemplate = (formData, setIsLoading, setMessage) => async dispatc
   }
 }
 
-export const modifyTemplate = (id, formData, setIsLoading, setMessage) => async dispatch => {
+export const modifyTemplate = (id, formData, setIsLoading, setMessage, setFormErrors) => async dispatch => {
   try {
     setIsLoading(id);
 
@@ -167,10 +171,14 @@ export const modifyTemplate = (id, formData, setIsLoading, setMessage) => async 
     setIsLoading(null);
   } catch (error) {
     setIsLoading(null);
-    setMessage({
-      message: error?.response?.data?.message || error?.message,
-      type: 'error'
-    })
+    if (error?.response?.data?.errors) {
+      setFormErrors(pFE => ({ ...pFE, ...error.response.data.errors }))
+    } else {
+      setMessage({
+        message: error?.response?.data?.message || error?.message,
+        type: 'error'
+      })
+    }
 
     if (error.response?.status === 401 || error.response?.status === 500) {
       dispatch({ type: LOGOUT });

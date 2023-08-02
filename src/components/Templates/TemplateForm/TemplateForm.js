@@ -244,7 +244,7 @@ function TemplateForm({
       setMessage({ message: "Please enter long break interval", type: 'error' });
     } else {
       if (!oldData) {
-        dispatch(addTemplate(data, setIsLoading, setActiveStep, setMessage));
+        dispatch(addTemplate(data, setIsLoading, setActiveStep, setMessage, setFormErrors));
       } else {
         if (oldData !== data) {
           dispatch(modifyTemplate(data._id, {
@@ -253,7 +253,8 @@ function TemplateForm({
           },
             setIsLoading,
             setActiveStep,
-            setMessage
+            setMessage,
+            setFormErrors
           ));
         }
       }
