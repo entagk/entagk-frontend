@@ -1,4 +1,5 @@
 import { LOGOUT, START_LOADING, END_LOADING, DELETE_USER } from "../actions/auth";
+import { CHANGE_ACTIVE_TASK } from "../actions/tasks";
 import {
   CHANGE_ACTIVE,
   PERIOD,
@@ -6,6 +7,7 @@ import {
   LONG,
   GET_SETTING,
   MODITY_SETTING,
+  CHANGE_TO_TEMPLATE_SETTING,
   START_TIMER,
   STOP_TIMER,
   initialSetting
@@ -48,7 +50,17 @@ export default (state = {
       return { ...state, isLoading: action.data === 'setting' ? false : state.isLoading }
 
     case GET_SETTING:
-      return { ...state, setting: action.data };
+      return {
+        ...state,
+        setting: action.data,
+        originalSetting: action.data
+      };
+
+    case CHANGE_TO_TEMPLATE_SETTING:
+      return { ...state, setting: { ...state.setting, ...action.data } };
+
+    case CHANGE_ACTIVE_TASK:
+      return { ...state, setting: state.setting.applyTaskSetting && !action.data?._id ? state.originalSetting : state.setting }
 
     case START_TIMER:
       localStorage.setItem('restOfTime', action.data);
@@ -74,6 +86,7 @@ export default (state = {
 
       return { ...state, active: newActive, periodNum };
 
+
     case MODITY_SETTING:
       if (!localStorage.getItem("token")) {
         const oldSetting = state.setting;
@@ -83,12 +96,12 @@ export default (state = {
       } else {
         const oldSetting = state.setting;
         const newSetting = Object.assign(oldSetting, action.data);
-        return { ...state, setting: newSetting }
+        return { ...state, setting: newSetting, originalSetting: newSetting }
       }
 
     case LOGOUT:
     case DELETE_USER:
-      return { ...state, setting: initialSetting };
+      return { ...state, setting: initialSetting, originalSetting: initialSetting };
     default:
       return state;
   }

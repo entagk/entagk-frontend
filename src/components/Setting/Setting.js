@@ -18,10 +18,10 @@ const NotificationSetting = lazy(() => import('./NotificationSetting/Notificatio
 const FocusSetting = lazy(() => import('./FocusSetting/FocusSetting'));
 
 function Setting({ setOpenSetting }) {
-  const { setting, isLoading } = useSelector(state => state.timer);
+  const { originalSetting, isLoading } = useSelector(state => state.timer);
 
   const [message, setMessage] = useState({ type: '', message: "" });
-  const [data, setData] = useState(setting);
+  const [data, setData] = useState(originalSetting);
   const [status, setStatus] = useState('');
   const dispatch = useDispatch();
   const [required, setRequired] = useState([]);
@@ -97,14 +97,14 @@ function Setting({ setOpenSetting }) {
   }, [status]);
 
   useEffect(() => {
-    if (setting === undefined && !isLoading) {
+    if (originalSetting === undefined && !isLoading) {
       dispatch(getSetting(setMessage));
     }
-    setData(setting);
+    setData(originalSetting);
     // eslint-disable-next-line
-  }, [setting, isLoading]);
+  }, [originalSetting, isLoading]);
 
-  if (setting === undefined) {
+  if (originalSetting === undefined) {
     return (
       <Loading
         size="big"
@@ -136,27 +136,20 @@ function Setting({ setOpenSetting }) {
 
   const handleErrors = () => {
     const errors = Object.entries(formErrors).filter(([k, v]) => v.length > 0);
-    if (status === 'timer') {
-      required.forEach((f) => {
-        if (f === 'longInterval') {
-          if (validations[f](data[f])) {
-            errors.push([f])
+
+    required.forEach((f) => {
+      if (f instanceof Array) {
+        f.forEach(t => {
+          if (validations.time[t](data.time[t])) {
+            errors.push([f]);
           };
-        } else {
-          f.forEach(t => {
-            if (validations.time[t](data.time[t])) {
-              errors.push([f]);
-            };
-          })
-        }
-      })
-    } else {
-      required.forEach((f) => {
+        })
+      } else {
         if (validations[f](data[f])) {
           errors.push([f])
         };
-      })
-    }
+      }
+    })
 
     return errors;
   }
@@ -171,7 +164,7 @@ function Setting({ setOpenSetting }) {
     const dataSent = { ...data };
 
     Object.entries(data).forEach(([key, value]) => {
-      if (data[key] === setting[key]) {
+      if (data[key] === originalSetting[key]) {
         delete dataSent[key];
       } else {
         console.log(key, value);
@@ -216,7 +209,7 @@ function Setting({ setOpenSetting }) {
         )
       }
       <form className='glass-effect setting zoom-in' onSubmit={handleSubmit} >
-        {(setting && isLoading) && (
+        {(originalSetting && isLoading) && (
           <Loading
             size="big"
             color={"var(--main-color)"}

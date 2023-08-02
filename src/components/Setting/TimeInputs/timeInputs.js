@@ -15,6 +15,8 @@ function TimeInputs({
   const [min, setMin] = useState(Number(data?.time[name]) >= 60 ? Math.floor(Number(data?.time[name]) / 60) : 0);
   const [sec, setSec] = useState(Number(data?.time[name]) % 60);
 
+  console.log(formErrors)
+
   const onChange = (e) => {
     if (e.target.name === 'min') {
       const realValue = Number(e.target.value) * 60 + sec;
@@ -44,7 +46,7 @@ function TimeInputs({
       console.log(name, realValue);
     }
 
-    if (formErrors.time[name]) {
+    if (formErrors?.time?.[name]) {
       setFormErrors(pFE => ({ ...pFE, time: { ...pFE.time, [name]: "" } }))
     }
   }
@@ -115,7 +117,7 @@ function TimeInputs({
               min="0"
               max="60"
               placeholder='min'
-              className={formErrors?.time[name] ? `error ${name}-min` : `${name}-min`}
+              className={formErrors?.time?.[name] ? `error ${name}-min` : `${name}-min`}
               value={min}
               onChange={onChange}
               onBlur={handleBlur}
@@ -137,7 +139,7 @@ function TimeInputs({
               min="0"
               max="59"
               placeholder="sec"
-              className={formErrors?.time[name] ? `error ${name}-sec` : `${name}-sec`}
+              className={formErrors?.time?.[name] ? `error ${name}-sec` : `${name}-sec`}
               value={sec}
               onChange={onChange}
               onBlur={handleBlur}
@@ -154,9 +156,9 @@ function TimeInputs({
         </div>
       </div>
       {
-        formErrors?.time[name] && (
+        formErrors?.time?.[name] && (
           <>
-            <span className='error-text'>{formErrors?.time[name]}</span>
+            <span className='error-text'>{formErrors?.time?.[name]}</span>
           </>
         )
       }

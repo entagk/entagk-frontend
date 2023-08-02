@@ -29,6 +29,10 @@ const TimerSetting = ({
     {
       type: "autoStartNextTask",
       name: "Auto start next task"
+    },
+    {
+      type: "applyTaskSetting",
+      name: "Apply task setting"
     }
   ]
 

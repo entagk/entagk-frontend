@@ -14,6 +14,8 @@ export const LONG = "LONG";
 export const GET_SETTING = "GET_SETTING";
 export const MODITY_SETTING = "MODITY_SETTING";
 
+export const CHANGE_TO_TEMPLATE_SETTING = 'CHANGE_TO_TEMPLATE_SETTING';
+
 export const alarmSounds = [
   {
     name: "alarm 1",

@@ -166,7 +166,7 @@ const TaskForm = ({
     if (oldData?.tasks?.length > 0) {
       requiredSetting?.forEach((f) => {
         console.log(f);
-        if (Array.isArrray(f)) {
+        if (f instanceof Array) {
           f.forEach(t => {
             if (settingValidations.time[t](setting.time[t])) {
               errors.push([f]);
