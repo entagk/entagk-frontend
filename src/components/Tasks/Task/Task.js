@@ -33,7 +33,7 @@ const Task = ({
   const dispatch = useDispatch();
   const { activeId } = useSelector(state => state.tasks);
   const { setting } = useSelector(state => state.timer);
-  const template = useSelector(state => state.tasks.tasks.filter(t => t._id === props?.template?._id)[0]);
+  const template = useSelector(state => state.tasks?.tasks?.filter(t => t._id === props?.template?._id)[0]);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
@@ -70,9 +70,9 @@ const Task = ({
           dispatch({ type: CHANGE_ACTIVE_TASK, data: {} });
         } else if (activeId !== props._id) {
           dispatch({ type: CHANGE_ACTIVE_TASK, data: { ...props, _id: props.template?._id ? props.template?._id + "," + props._id : props._id } });
-          // if (setting.applyTaskSetting) {
+          if (setting.applyTaskSetting) {
             dispatch({ type: CHANGE_TO_TEMPLATE_SETTING, data: template?.setting })
-          // }
+          }
         }
       }
     }
