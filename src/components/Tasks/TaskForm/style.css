@@ -47,12 +47,12 @@
   justify-content: center;
 }
 
-.task-form input {
+/* .task-form input {
   width: 100%;
   font-size: 15px;
   padding: 10px;
-  border-radius: 8px;
-}
+  border-radius: 10px;
+} */
 
 .task-form input:focus,
 .task-form textarea:focus,

@@ -126,6 +126,7 @@ a {
   box-shadow: 0px 5px 11px 3px rgb(0 0 0 / 15%);
   background-color: rgb(224 224 224 / 42%);
   color: #fff;
+  border: 2px solid;
 }
 
 /*start tasks */

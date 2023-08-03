@@ -13,7 +13,6 @@
 .nav-bar .user-menu {
   padding: 5px;
   border: 2px solid #fff;
-  border-radius: 10px;
   font-size: 20px;
   color: #fff;
   background: #dadada99;
@@ -31,17 +30,6 @@
 .nav-bar .user-menu .name {
   margin-inline: 8px;
   font-size: 18px;
-}
-
-.nav-bar .user-logo {
-  background: #cbcbcbc4;
-  backdrop-filter: blur(5px);
-  padding: 10px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid;
 }
 
 .nav-bar .user-menu .img {
