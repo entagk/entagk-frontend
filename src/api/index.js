@@ -1,7 +1,9 @@
 import axios from "axios";
 import jwt_decode from 'jwt-decode';
 
-const API = axios.create({ baseURL: "http://localhost:5500/api" }); // http://localhost:5500/api
+export const baseURL = "https://pomodoro-backend-6j65.onrender.com/api";
+
+const API = axios.create({ baseURL: baseURL }); // http://localhost:5500/api
 
 // Add a request interceptor
 API.interceptors.request.use((config) => {

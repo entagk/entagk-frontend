@@ -10,6 +10,8 @@ import { UPDATE_USER } from '../../../actions/auth';
 import Loading from '../../../utils/Loading/Loading';
 import './style.css';
 
+import { baseURL } from '../../../api';
+
 function ChangeAvatar() {
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.auth);
@@ -23,7 +25,7 @@ function ChangeAvatar() {
     const logoFormData = new FormData()
     logoFormData.set('avatar', e.target.files[0]);
     const uploadedData = await fetch(
-      'http://localhost:5500/api/upload/image/avatar/',
+      `${baseURL}/upload/image/avatar/`,
       {
         method: 'POST',
         body: logoFormData,
