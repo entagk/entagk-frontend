@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { RiFullscreenFill, RiFullscreenExitFill } from 'react-icons/ri';
+import Button from '../../../utils/Button/Button';
 
 const FullscreenBtn = () => {
   const [full, setFull] = useState(false);
@@ -9,28 +10,39 @@ const FullscreenBtn = () => {
 
     if (!full) {
       document.documentElement.requestFullscreen();
-    } else { 
+    } else {
       document.exitFullscreen();
     }
   }, [full]);
 
   useEffect(() => {
     window.onkeydown = (event) => {
-      if(event.code.toLowerCase() === 'keyf') {
+      if (event.code.toLowerCase() === 'keyf') {
         handleFull();
       }
     }
   })
 
   return (
-    <button aria-label='full screen' className='timer-button' type="button" onClick={handleFull} style={{ left: '65px' }}>
-      {(!full) ?
-        <RiFullscreenFill />
-        : <>
-          <RiFullscreenExitFill />
+    <Button
+      aria-label='full screen'
+      className='timer-button'
+      type="button"
+      onClick={handleFull}
+      style={{ left: '65px' }}
+      color='main'
+      variant='single-icon'
+      startIcon={
+        <>
+          {(!full) ?
+            <RiFullscreenFill />
+            : <>
+              <RiFullscreenExitFill />
+            </>
+          }
         </>
       }
-    </button>
+    />
   );
 };
 

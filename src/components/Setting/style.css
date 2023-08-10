@@ -1,6 +1,7 @@
 /* Start the setting */
 .setting {
-  margin-block: 30px;
+  margin-block: 20px;
+  margin-inline: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8,7 +9,8 @@
   box-shadow: 1px 1px 10px 0px #858585;
   position: absolute;
   top: 0px;
-  border-radius: 45px 45px 10px 10px;
+  border-radius: 20px;
+  border: 2px solid;
 }
 
 .setting-header {
@@ -20,23 +22,28 @@
   flex-wrap: nowrap;
   flex-direction: row;
   padding: 20px;
-  border: 2px solid;
-  border-radius: 45px;
-  box-shadow: 0 0 4px #5a5a5a;
+  border: none;
+  border-radius: inherit;
 }
 
-.setting-header .close-setting {
-  font-size: 20px;
+.setting-header button {
   padding: 10px;
   border-radius: 50%;
   color: #fff;
-  font-size: 20px;
+  font-size: 25px;
   min-width: 0;
+}
+.setting-header .close-setting {
   background: red;
 }
 
 .setting-header .close-setting:hover {
   box-shadow: 0 0 5px #0000008f;
+}
+
+.setting-header .close-setting .icon {
+  width: inherit;
+  height: inherit;
 }
 
 .setting-header h2 {
@@ -46,11 +53,11 @@
   justify-content: center;
   font-size: 30px;
   text-transform: capitalize;
-  margin-inline: 20px;
+  margin-right: 20px;
 }
 
 .setting-menu {
-  margin-top: 10px;
+  margin-top: 0px;
   width: 100%;
 }
 
@@ -82,7 +89,7 @@
 }
 
 .setting .block h2,
-.setting .block div,
+.setting .block > div,
 .setting .block h3 {
   width: 100%;
 }
@@ -90,262 +97,18 @@
 .setting .block h3 {
   margin-right: 20px;
   width: fit-content;
-}
-
-.setting .block .time {
-  width: fit-content;
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.setting .time-inputs {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* margin-top: 10px; */
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.setting .time-inputs h4 {
   font-size: 18px;
-  text-transform: capitalize;
-  margin-right: 20px;
 }
 
-.min-sec-input {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  position: relative;
-}
-
-.setting .block .min-sec-input input {
-  padding-right: 20px;
-  width: 90px;
-}
-
-.min-sec-input div.plus-minus-arrows {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-flow: column;
-  position: absolute;
-  right: 10px;
-  height: 100%;
-  width: fit-content;
-}
-
-.min-sec-input .plus-minus-arrows button {
-  font-size: 15px;
-}
-
-.min-sec-input .plus-minus-arrows button.plus-arrow:hover,
-.min-sec-input .plus-minus-arrows button.minus-arrow:hover {
-  background-color: #79797994;
-}
-
-.min-sec-input .plus-minus-arrows button.plus-arrow,
-.min-sec-input .plus-minus-arrows button.minus-arrow {
-  padding-inline: 4px;
-  background: #c8c8c8ab;
-  color: #fff;
-}
-
-.min-sec-input .plus-minus-arrows button.plus-arrow {
-  padding-bottom: 2px;
-  border-radius: 0px 5px 0px 0;
-  border-bottom: 1px solid #dbdbdb;
-}
-
-.min-sec-input .plus-minus-arrows button.minus-arrow {
-  padding-top: 2px;
-  border-radius: 0px 0px 5px 0;
-  border-top: 1px solid #dbdbdb;
-}
-
-/* removing default arrows from input number */
-.time-input input::-webkit-outer-spin-button,
-.time-input input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-.time-input input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-.setting .block input {
+.setting .block > input {
   width: 75px;
   padding: 10px;
   font-size: 16px;
 }
 
-.setting .block div.toggle-button-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  width: fit-content;
-}
-
-.setting .block div.toggle-button {
-  width: 60px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  padding: 2px;
-  border-radius: 30px;
-  cursor: pointer;
-  border: 1px solid;
-}
-
-.setting .block div.toggle-point {
-  width: 50%;
-  height: 100%;
-  background: white;
-  border-radius: 50px;
-}
-
-.alarm-details {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.alarm-type {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.alarm-type h4 {
-  width: fit-content;
-  font-size: 18px;
-
-  margin-right: 20px;
-}
-
-div.select-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  width: fit-content;
-}
-
-.setting .block .select-container {
-  width: fit-content;
-}
-
-.select-menu {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  width: 200px;
-  position: relative;
-}
-
-.select-menu .menu-content {
-  top: 35px;
-  background: #afafaf8f;
-  backdrop-filter: blur(8px);
-  width: 100%;
-  color: #fff;
-  width: 100%;
-}
-
-.select-menu .menu-content .row button {
-  font-size: 16px;
-  /* width: 200px; */
-
-  color: #fff;
-}
-
-.select-menu button.open-menu {
-  border-radius: 6px;
-  font-size: 16px;
-  padding: 10px 16px;
-  width: fit-content;
-  justify-content: space-between;
-  width: max-content;
-
-  background: transparent;
-  color: #fff;
-  border: 1px solid;
-  width: 100%;
-}
-
-.select-menu button.open-menu .arrow {
-  margin-left: 10px;
-}
-
-.select-menu button.active {
-  background-color: rgb(0 0 0 / 26%);
-}
-
-.alarm-details input {
-  margin-right: 0;
-}
-
-.block div.range-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.range-container .range-value {
-  margin-right: 10px;
-}
-
-.range-container input[type="range"] {
-  width: 80%;
-  padding: 0;
-  appearance: none;
-  background-color: #d3d3d3;
-  height: 10px;
-}
-
-.range {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 15px;
-  outline: none;
-  opacity: 0.7;
-  -webkit-transition: 0.2s;
-  transition: opacity 0.2s;
-}
-
-.range:hover {
-  opacity: 1;
-}
-
-.range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 30px;
-  height: 30px;
-  background: #ffffff;
-  cursor: pointer;
-  border-radius: 50%;
-  box-shadow: 0px 0px 4px rgb(50, 50, 50);
-}
-
-.range::-moz-range-thumb {
-  width: 30px;
-  height: 30px;
-  background: #ffffff;
-  cursor: pointer;
-  border-radius: 50%;
-  box-shadow: 0px 0px 4px rgb(50, 50, 50);
-}
-
-.setting .block.notification {
-  flex-direction: row;
+.setting .block input:focus {
+  border: 2px solid;
+  padding: 9px;
 }
 
 .block.notification .notification-data {
@@ -367,53 +130,71 @@ div.select-container {
 }
 
 .setting .footer {
-  margin-top: 10px;
-  padding-block: 20px 30px;
+  margin-top: 0px;
+  padding: 20px;
   background: #ececec38;
   width: 100%;
-  padding-inline: 30px;
-  border-radius: 0 0 10px 10px;
+  border-radius: inherit;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.setting .footer button {
-  font-size: 20px;
-  padding: 10px 15px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px #989898;
-  color: #fff;
-}
-.setting .footer button:first-child {
-  border: 2px solid;
+.setting .footer button.cancel:hover {
+  background-color: var(--main-light-black);
 }
 
-.setting .footer button.save {
-  background-color: var(--main-color);
+@media (max-width: 768px) {
+  .setting {
+    max-width: calc(100% - 40px);
+  }
+
+  .setting-header h2 {
+    font-size: 28px;
+  }
+
+  .setting-menu button {
+    font-size: 22px;
+  }
 }
 
-.setting .footer button.save:disabled {
-  cursor: no-drop;
-  background-color: rgba(0, 0, 0, 0.12);
-  box-shadow: none;
-  color: rgba(0, 0, 0, 0.26);
+@media (max-width: 500px) {
+  .setting-header {
+    padding: 15px;
+  }
+
+  .setting-header h2 {
+    font-size: 24px;
+  }
+
+  .setting-menu button {
+    padding: 10px 15px;
+    margin: 0;
+  }
+
+  .setting .footer {
+    padding: 15px;
+  }
 }
 
 @media (max-width: 450px) {
+  .setting-header,
+  .setting .footer {
+    padding: 10px;
+  }
+
   .setting-header h2 {
     margin-inline: 10px;
     font-size: 24px;
   }
 
   .setting .block,
-  .setting-header {
-    padding-inline: 12px;
+  .setting-header button {
+    padding-inline: 10px;
   }
 
   .setting .block {
     border: none;
-    /* flex-flow: wrap; */
     flex-direction: row;
     width: min-content;
   }
@@ -427,15 +208,16 @@ div.select-container {
     width: 100%;
     justify-content: center;
   }
+
+  .setting .footer {
+    padding: 10px;
+  }
 }
 
 @media (max-width: 400px) {
   .setting-menu button {
-    font-size: 20px;
-  }
-
-  .setting-header {
-    padding-top: 20px;
+    font-size: 18px;
+    padding: 8px 10px;
   }
 
   .setting-header h2 {
@@ -444,64 +226,17 @@ div.select-container {
 
   .setting-header .close-setting {
     font-size: 15px;
-    padding: 5px;
+    padding: 10px;
   }
 
   .setting .block:not(:last-of-type) {
-    padding-inline: 20px;
+    padding-inline: 10px;
   }
 
   .setting .block h3 {
-    /* width: 100%; */
     text-align: inherit;
     font-size: 18px;
     margin-right: 0;
-  }
-
-  .setting .time-inputs h4 {
-    font-size: 16px;
-  }
-
-  .setting .block .select-container {
-    margin-top: 10px;
-  }
-
-  .setting .block .notification-data .select-container {
-    margin: 0;
-  }
-
-  .setting .block input[type="number"] {
-    margin-inline: 10px 0px;
-    width: 60px;
-    padding: 8px 10px;
-  }
-
-  .setting .block .min-sec-input input[type="number"] {
-    margin-inline: 10px;
-  }
-
-  .min-sec-input .plus-minus-arrows button.plus-arrow,
-  .min-sec-input .plus-minus-arrows button.minus-arrow {
-    font-size: 12px;
-    padding-top: 3.4px;
-  }
-
-  .select-menu button.open-menu {
-    padding: 8px 10px;
-  }
-
-  .alarm-type h4 {
-    font-size: 16px;
-  }
-
-  .alarm-details .alarm-type p:first-of-type {
-    margin-bottom: 10px;
-    width: 100%;
-    font-weight: 500;
-  }
-
-  .alarm-details .alarm-type .select-menu button.open-menu {
-    width: 100%;
   }
 
   .setting .block,
@@ -513,27 +248,8 @@ div.select-container {
     flex-direction: column;
   }
 
-  .setting .block.focus div.toggle-button-container {
-    margin-top: 10px;
-  }
-
   .setting .block.notification {
     flex-direction: column;
-  }
-
-  .setting .block div.toggle-button {
-    width: 50px;
-    height: 28px;
-  }
-
-  .setting .footer {
-    padding-inline: 20px;
-    padding-bottom: 20px;
-  }
-
-  .setting .footer button {
-    font-size: 16px;
-    padding: 8px 10px;
   }
 }
 

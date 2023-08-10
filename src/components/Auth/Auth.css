@@ -7,7 +7,7 @@
   margin-block: 34px;
   background: #fff;
   box-shadow: 0px 0px 10px #4c4c4c;
-  border-radius: 10px;
+  border-radius: 20px;
   overflow: hidden;
   position: relative;
 }
@@ -26,10 +26,11 @@
 div.form-container.reset-form {
   width: fit-content;
   margin: 20px;
-  padding: 20px;
+  padding: 0;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 20px;
   box-shadow: 0 0 10px #8f8f8f;
+  min-width: 512px;
 }
 
 .auth-page .form-container form,
@@ -59,60 +60,24 @@ div.form-container.reset-form {
   flex-direction: column;
 }
 
-.auth-page .form-container .block input,
-.form-container.reset-form .block input {
-  width: 100%;
-  margin: 12px 10px;
-}
-
-.auth-page .form-container .block input::placeholder ,
-.form-container.reset-form .block input::placeholder {
-  text-transform: capitalize;
-}
-
-.form-container .password {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 12px 10px;
-  position: relative;
-}
-
-.form-container .block .password input {
-  margin: 0;
-}
-
-.form-container .block .password button.icon {
-  position: absolute;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  color: inherit;
+.auth-page .form-container .block .input-block,
+.reset-form form .block .input-block {
   padding: 0;
-  box-shadow: none;
-  border-radius: 50%;
-  width: 35px;
-  height: 35px;
-  right: 0;
-}
-
-.form-container .block .password button.icon:hover {
-  background: #0000002b;
+  margin-inline: 12px;
 }
 
 .auth-page button,
 .reset-form button {
   margin: 20px;
-  color: #fff;
-  padding: 10px 30px;
-  font-size: 16px;
-  border-radius: 20px;
-  box-shadow: 0 0 5px #615f60;
   text-transform: uppercase;
   font-weight: 600;
+}
+
+.auth-page .forget-password-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .auth-page .forget-password {
@@ -130,6 +95,7 @@ div.form-container.reset-form {
 
 .form-container button[type="submit"]:not(:disabled) {
   background-color: var(--main-color);
+  color: #fff;
 }
 
 .form-container.sign-in,
@@ -227,6 +193,11 @@ div.form-container.reset-form {
     height: 70%;
     left: 0;
   }
+
+  div.reset-form.form-container {
+    min-width: 100%;
+  }
+
   .auth-page.right-panel-active .form-container {
     top: 26%;
   }
@@ -276,14 +247,12 @@ div.form-container.reset-form {
     font-size: 35px;
   }
 
-  .auth-page .form-container .block input {
-    margin: 6px 5px;
-  }
-  .auth-page .password {
+  .auth-page .form-container .block .input-block {
     margin: 6px 5px;
   }
 
-  .auth-page .block .password input {
-    margin: 0;
+  .form-container button[type="submit"]:not(:disabled) {
+    font-size: 16px;
+    margin: 10px;
   }
 }

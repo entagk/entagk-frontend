@@ -1,0 +1,124 @@
+.template {
+  border-radius: 20px;
+  border: 2px solid #fff;
+  padding: 15px;
+  text-align: left;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  flex-direction: column;
+  cursor: pointer;
+  background: transparent;
+  color: #fff;
+  width: 100%;
+}
+
+.template:not(:last-of-type) {
+  margin-bottom: 20px;
+}
+
+.template:hover {
+  box-shadow: rgb(0 0 0 / 20%) 0px 0px 10px 4px;
+  background-color: var(--main-light-black);
+}
+
+.template > .loading-container,
+.template-form > .loading-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  right: 0px;
+  top: 0px;
+  background: #ffffffad;
+  z-index: 102;
+  visibility: visible;
+}
+
+.template .loading-container {
+  border-radius: inherit;
+}
+
+.template .temp-upper,
+.template .temp-desc,
+.template .temp-lower {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.template .temp-upper {
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.template .temp-lower,
+.template .temp-desc {
+  color: #f1f1f1;
+  margin-top: 10px;
+}
+
+.template .temp-desc {
+  font-size: 18px;
+}
+
+.template .temp-desc .show-more {
+  color: rgb(255 255 255 / 60%);
+  font-size: 16px;
+  font-weight: 600;
+  display: inline;
+  margin-inline: 5px;
+}
+
+.template .temp-desc .show-more:hover {
+  color: #fff;
+}
+
+.template .temp-lower {
+  font-size: 16px;
+}
+
+.template .toggle-menu .start.icon {
+  width: inherit;
+  height: inherit;
+}
+
+.template .toggle-menu:hover {
+  background-color: #b5b5b582;
+}
+
+.template .menu {
+  position: relative;
+}
+
+.template .menu .menu-content {
+  backdrop-filter: blur(10px);
+  padding: 8px;
+  right: 5px;
+  z-index: 1002;
+}
+
+.template .menu .menu-content .row button {
+  border-radius: 10px;
+  font-size: 18px;
+  padding: 8px;
+}
+
+.template .menu .menu-content .row button.delete:hover {
+  background-color: #ff00002b;
+}
+
+.temp-est {
+  margin-inline: 10px;
+}
+
+@media (max-width: 768px) {
+  .template .temp-upper {
+    font-size: 22px;
+  }
+}

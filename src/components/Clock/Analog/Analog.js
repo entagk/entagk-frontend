@@ -1,7 +1,7 @@
-import React, { lazy } from "react";
+import React from "react";
 
-const AnalogControllers = lazy(() => import("../Analog/Controllers/AnalogControllers"));
-const Arrows = lazy(() => import("../Analog/Arrows"));
+import AnalogControllers from "../Analog/Controllers/AnalogControllers"
+import Arrows from "../Analog/Arrows"
 
 const AnalogTimer = ({ time, setTime, handleReset, toggleStart, handleSkip }) => {
   const nums = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];

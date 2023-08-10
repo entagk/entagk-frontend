@@ -1,0 +1,73 @@
+div.select-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: fit-content;
+}
+
+.setting .block .select-container {
+  width: fit-content;
+}
+
+.select-menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 200px;
+  position: relative;
+}
+
+.select-menu .menu-content {
+  top: 35px;
+  background: #afafaf8f;
+  backdrop-filter: blur(8px);
+  color: #fff;
+  width: 100%;
+
+  max-height: 150px;
+  overflow: auto;
+  justify-content: flex-start;
+}
+
+.select-menu .menu-content .row button {
+  font-size: 16px;
+  /* width: 200px; */
+
+  color: #fff;
+}
+
+.select-menu button.toggle-menu {
+  font-size: 16px;
+  padding: 10px;
+  justify-content: space-between;
+
+  border: 1px solid;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.select-menu button.toggle-menu:hover,
+.select-menu button.toggle-menu.open {
+  background-color: var(--main-light-black);
+}
+
+.select-menu button.toggle-menu.open {
+  border: 2px solid;
+}
+
+.select-menu button.toggle-menu .arrow {
+  margin-left: 10px;
+}
+
+.select-menu button.active {
+  background-color: rgb(0 0 0 / 26%);
+}
+
+@media (max-width: 400px) {
+  .select-menu button.toggle-menu {
+    padding: 8px;
+  }
+  .sound-details .sound-type .select-menu button.toggle-menu {
+    width: 100%;
+  }
+}

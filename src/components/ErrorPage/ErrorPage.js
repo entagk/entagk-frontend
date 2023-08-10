@@ -1,23 +1,21 @@
 import React from 'react';
 import { useRouteError, Link } from 'react-router-dom';
 
-import './syle.css'
+import './style.css'
+import Button from '../../utils/Button/Button';
 
 function ErrorPage() {
   const error = useRouteError();
   console.error(error);
 
+  const reload = () => {
+    window.location.reload();
+  }
+
   return (
     <div className='error-page'>
       <h1>Opps!</h1>
-      <div style={{
-        width: '100%',
-        textAlign: 'center',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-      }}>
+      <div>
         {error.status === 404 && (
           <div>
             <h1 className='error-404'>404</h1>
@@ -33,12 +31,34 @@ function ErrorPage() {
           </>
         )}
         <div className='buttons'>
-          <Link to="/">
-            go to home
-          </Link>
-          <Link to={-1}>
-            go to back
-          </Link>
+          {window.location.pathname === '/' ? (
+            <Button
+              variant='contained'
+              onClick={reload}
+              style={{
+                marginInline: 20
+              }}
+            >
+              reload
+            </Button>
+          ) : (
+            <Button
+              component={Link}
+              to="/"
+              variant='contained'
+            >
+              go home
+            </Button>
+          )}
+          {(window.location.pathname === '/' || window.history.length > 2) && (
+            <Button
+              component={Link}
+              to={-1}
+              variant='outlined'
+            >
+              go back
+            </Button>
+          )}
         </div>
       </div>
     </div>

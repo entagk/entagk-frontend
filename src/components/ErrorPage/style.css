@@ -1,0 +1,74 @@
+.error-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #fff;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.error-page > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  flex-direction: column;
+}
+
+.error-page h1 {
+  font-size: 50px;
+  margin-block: 16px;
+}
+
+h1.error-404 {
+  font-size: 200px;
+  font-family: cursive;
+  letter-spacing: 20px;
+}
+
+.error-page h2 {
+  font-size: 50px;
+}
+
+.error-page .buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.error-page a:first-of-type {
+  margin-right: 20px;
+}
+
+.error-page a,
+.error-page button {
+  margin-block: 20px;
+  text-transform: capitalize;
+}
+
+.error-page a:hover {
+  box-shadow: 0 0 11px 1px #cecece59;
+}
+
+@media (max-width: 550px) {
+  .error-page h1.error-404 {
+    font-size: 150px;
+  }
+
+  .error-page h2 {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 400px) {
+  .error-page h1.error-404 {
+    font-size: 130px;
+    letter-spacing: 10px;
+  }
+}

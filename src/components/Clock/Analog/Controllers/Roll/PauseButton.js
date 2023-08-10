@@ -1,15 +1,19 @@
 import React from "react";
 
 import { TbPlayerPause } from "react-icons/tb";
+import Button from "../../../../../utils/Button/Button";
 
 const Pause = ({ handleClick }) => {
   return (
-    <button aria-label="stop on roll"
-      className="pause-side" id="pause-side"
+    <Button
+      aria-label="stop on roll"
+      className="pause-side"
+      id="pause-side"
       onClick={handleClick}
+      variant="none"
     >
       <TbPlayerPause />
-    </button>
+    </Button>
   )
 }
 

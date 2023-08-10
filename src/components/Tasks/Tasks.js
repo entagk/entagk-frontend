@@ -1,26 +1,26 @@
-import React, { lazy, Suspense, useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 
-import { AiOutlinePlus } from 'react-icons/ai';
-import { CgClose } from "react-icons/cg";
 import { useDispatch, useSelector } from "react-redux";
+
 import { getTasks } from "../../actions/tasks";
-import Loading from "../../utils/Loading";
+
+import Loading from "../../utils/Loading/Loading";
 import Message from "../../utils/Message";
 import NetworkError from "../NetworkError/NetworkError";
 
 import "./style.css";
+import { onScroll } from "../../utils/helper";
 
 const TaskForm = lazy(() => import("./TaskForm/TaskForm"));
-const Footer = lazy(() => import("./TaskFooter/TaskFooter"));
-const Menu = lazy(() => import("./TasksMenu/TasksMenu"));
 const Task = lazy(() => import("./Task/Task"));
+const AddTaskButton = lazy(() => import('./AddTaskButton/AddTaskButton'))
 
-const Tasks = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) => {
+const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate, activeTemplate }) => {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const tasks = useSelector(state => state.tasks);
-  const { active, activites } = useSelector(state => state.timer);
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
+  console.log(tasks);
 
   useEffect(() => {
     if (tasks.tasks === undefined && tasks?.total === undefined) {
@@ -39,21 +39,7 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) =>
   }, [page])
 
   useEffect(() => {
-    const onScroll = () => {
-      let scrollTop = document.querySelector('.tasks-container')?.scrollTop;
-      let scrollHeight = document.querySelector('.tasks-list')?.scrollHeight;
-      let clientHeight = document.querySelector('.tasks-container')?.clientHeight;
-
-      if (scrollTop + clientHeight >= scrollHeight && Number(localStorage.getItem('total')) > Number(localStorage.getItem('tasksLen'))) {
-        setPage(Number(localStorage.getItem('currentPage')) + 1);
-      }
-    }
-
-    // console.log(tasks.tasks);
-
-    document.querySelector('.tasks-container')?.addEventListener('scroll', onScroll);
-    return () => document.querySelector('.tasks-container')?.removeEventListener('scroll', onScroll);
-
+    onScroll(setPage, 'total', 'tasksLen', 'currentPage');
     // eslint-disable-next-line
   }, [tasks.tasks, tasks.total])
 
@@ -65,10 +51,9 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) =>
           (
             <>
               <Loading
-                size="200"
-                strokeWidth="2"
-                backgroud="white"
-                color={activites[active]?.color}
+                size="big"
+                color="white"
+                backgroud="transparent"
               />
             </>
           ) : (
@@ -87,115 +72,107 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) =>
 
   return (
     <>
-      <Suspense fallback={
-        <Loading
-          size="200"
-          strokeWidth="5"
-          color="white"
-          backgroud="transparent"
-        />
-      }>
-        <div className="tasks glass-effect zoom-in">
-          <div className="close-button-container">
-          </div>
-          <div className="header">
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexWrap: 'nowrap',
-              flexDirection: 'row',
-            }}>
-              <div className="header-buttons">
-                <Menu setMessage={setMessage} />
-              </div>
-              <h2 style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginLeft: "10px",
-              }}>
-                Tasks
-              </h2>
-            </div>
-            <button aria-label='close tasks' className="close-tasks" type='button' onClick={() => setOpenTodo(false)}>
-              <CgClose />
-            </button>
-          </div>
-          <div className="tasks-container">
-            {tasks.tasks?.length > 0 && (
-              <div className="tasks-list">
-                {isLoading === 'new' ? (
-                  <>
-                    {tasks.tasks?.filter(t => !t.check)?.map((task, index) => (
-                      <Suspense fallback={
-                        <div className="loading-container">
-                          <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                        </div>
-                      } key={task._id}>
-                        <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
-                      </Suspense>
-                    ))}
-                    {
-                      <div className="loading-container">
-                        <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                      </div>
-                    }
-                    {tasks.tasks?.filter(t => t.check)?.map((task, index) => (
-                      <Suspense fallback={
-                        <div className="loading-container">
-                          <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                        </div>
-                      } key={task._id}>
-                        <Task key={task._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
-                      </Suspense>
-                    ))}
-                  </>
-                ) : (
-                  <>
-                    {tasks.tasks?.map((task, index) => (
-                      <Suspense fallback={
-                        <div className="loading-container">
-                          <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                        </div>
-                      } key={task?._id}>
-                        <Task key={task?._id} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} {...task} />
-                      </Suspense>
-                    ))}
-                  </>
-                )}
-              </div>
-            )}
-            <> {/* This is for loading while bringing the tasks */}
-              {(tasks.isLoading && tasks.tasks.length > 0) && (
-                <div className="loading-container">
-                  <Loading size="50" strokeWidth="3" color={"#fff"} backgroud="transparent" />
-                </div>
-              )}
+      {tasks.tasks?.length > 0 && (
+        <div className="tasks-list">
+          {isLoading === 'new' ? (
+            <>
+              {tasks.tasks?.filter(t => !t.check)?.map((task, index) => (
+                <Suspense fallback={
+                  <Loading
+                    size="medium"
+                    color={"#fff"}
+                    backgroud="transparent"
+                    style={{}}
+                  />
+                }>
+                  <Task
+                    key={task._id}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    setMessage={setMessage}
+                    setActiveTemplate={setActiveTemplate}
+                    activeTemplate={activeTemplate}
+                    {...task}
+                  />
+                </Suspense>
+              ))}
+              {
+                <Loading
+                  size="medium"
+                  color={"#fff"}
+                  backgroud="transparent"
+                  style={{ marginTop: 0 }}
+                />
+              }
+              {tasks.tasks?.filter(t => t.check)?.map((task, index) => (
+                <Task
+                  key={task._id}
+                  isLoading={isLoading}
+                  setIsLoading={setIsLoading}
+                  setMessage={setMessage}
+                  setActiveTemplate={setActiveTemplate}
+                  activeTemplate={activeTemplate}
+                  {...task}
+                />
+              ))}
             </>
-            {!openFormForNew ? (
-              <button aria-label="add task button" className="add-task-button" onClick={() => setOpenFormForNew(p => !p)}>
-                <AiOutlinePlus size="25px" />
-                <p style={{ marginLeft: 10 }}>
-                  add task
-                </p>
-              </button>
-            ) : (
-              <Suspense fallback={
-                <div className="loading-container">
-                  <Loading size="60" strokeWidth="5" color={"#fff"} backgroud="transparent" />
-                </div>
-              }>
-                <TaskForm setOpen={setOpenFormForNew} oldData={null} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} />
-              </Suspense>
-            )}
-          </div>
-          {tasks.tasks?.length > 0 && (
-            <div className="footer-container">
-              <Footer />
-            </div>
+          ) : (
+            <>
+              {tasks.tasks?.map((task, index) => (
+                <Task
+                  key={task._id}
+                  isLoading={isLoading}
+                  setIsLoading={setIsLoading}
+                  setMessage={setMessage}
+                  setActiveTemplate={setActiveTemplate}
+                  activeTemplate={activeTemplate}
+                  {...task}
+                />
+              ))}
+            </>
           )}
         </div>
+      )}
+      <> {/* This is for loading while bringing the tasks */}
+        {(tasks.isLoading && tasks.tasks.length > 0) && (
+          <Loading
+            size="medium"
+            color={"#fff"}
+            backgroud="transparent"
+            style={{ marginTop: 0 }}
+          />
+        )}
+      </>
+      {!openFormForNew && (
+        <Suspense fallback={
+          <Loading
+            size="small"
+            strokeWidth="5px"
+            color={"#fff"}
+            backgroud="transparent"
+            style={{ margin: 0 }}
+          />
+        }>
+          <AddTaskButton setOpenFormForNew={setOpenFormForNew} />
+        </Suspense>
+      )}
+      <Suspense fallback={
+        <Loading
+          size="big"
+          color={"#fff"}
+          backgroud="transparent"
+          className="center-fullpage"
+        />
+      }>
+        {openFormForNew && (
+          <TaskForm
+            setOpen={setOpenFormForNew}
+            oldData={null}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            setMessage={setMessage}
+          />
+        )}
       </Suspense>
     </>
   )

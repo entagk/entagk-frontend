@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState, useCallback, useRef } from "react";
+import React, { Suspense, useEffect, useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux"; // 2
 
 import { changeActive, PERIOD, START_TIMER, STOP_TIMER, CHANGE_ACTIVE } from "../../actions/timer";
@@ -6,19 +6,19 @@ import { changeActive, PERIOD, START_TIMER, STOP_TIMER, CHANGE_ACTIVE } from "..
 import { pushNotification } from "../../utils/helper";
 import audioPlayer from "../../utils/audioPlayer";
 
-import Loading from "../../utils/Loading";
+import Loading from "../../utils/Loading/Loading";
 
 import "./style.css";
 import SmallWinBtn from "./SmallWinBtn/SmallWinBtn";
 import SettingOpen from "./SettingOpen/SettingOpen";
 import FullscreenBtn from "./FullscreenBtn/FullscreenBtn";
 
-const AnalogTimer = lazy(() => import("./Analog/Analog"));
-const DigitalTimer = lazy(() => import("./Digital/Digital"));
+import AnalogTimer from "./Analog/Analog";
+import DigitalTimer from "./Digital/Digital";
 
 const worker = new window.Worker('worker.js');
 const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
-    const { active, activites, setting, started, periodNum } = useSelector((state) => state.timer);
+    const { active, setting, started, periodNum } = useSelector((state) => state.timer);
     const { activeId } = useSelector(state => state.tasks);
     const [time, setTime] = useState(localStorage.getItem("restOfTime") === null ? 0 : Number(localStorage.getItem("restOfTime")))
 
@@ -26,13 +26,14 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
     const dispatch = useDispatch();
 
     /** All sounds that we use it in timer.*/
-    const tickingSound = useRef(setting?.tickingType?.name !== "none" ?
-        audioPlayer({
-            src: setting?.tickingType?.src,
-            volume: setting?.tickingVolume,
-            loop: true
-        }) :
-        null
+    const tickingSound = useRef(
+        setting?.tickingType?.name !== "none" ?
+            audioPlayer({
+                src: setting?.tickingType?.src,
+                volume: setting?.tickingVolume,
+                loop: true
+            }) :
+            null
     );
 
     const alarmSound = useRef(
@@ -60,8 +61,6 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
     }, []);
 
     useEffect(() => {
-        document.body.style.backgroundColor = activites[active].color;
-
         if (setting.time !== undefined) {
             if (setting?.time[active] - Number(localStorage.getItem('restOfTime')) > 1) {
                 setTime(setting?.time[active] - Number(localStorage.getItem("restOfTime")));
@@ -123,7 +122,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
         } else {
             document.body.onbeforeunload = null;
             if (setting.focusMode) {
-                document.body.style.backgroundColor = activites[active].color;
+                document.body.style.backgroundColor = 'var(--main-color)';
                 document.body.style.overflow = "auto";
             }
         }
@@ -184,21 +183,25 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
         }
     }
 
-    const handleKeys = (event) => {
-        if (event.code.toLowerCase() === 'space') {
-            toggleStart();
-        }
-
-        if (event.code.toLowerCase() === 'arrowright' && !started) {
-            handleSkip();
-        }
-
-        if(event.code.toLowerCase() === 'keyc' && !started) {
-            handleReset();
-        }
-    };
-
     useEffect(() => {
+        const handleKeys = (event) => {
+            const inputsItems = ['input', 'textarea']
+            const activeElement = document.activeElement.tagName.toLowerCase();
+            if (!inputsItems.includes(activeElement)) {
+                if (event.code.toLowerCase() === 'space') {
+                    toggleStart();
+                }
+
+                if (event.code.toLowerCase() === 'arrowright' && !started) {
+                    handleSkip();
+                }
+
+                if (event.code.toLowerCase() === 'keyc' && !started) {
+                    handleReset();
+                }
+            }
+        };
+
         window.onkeydown = handleKeys;
     })
 
@@ -242,7 +245,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
 
     return (
         <>
-            <div className="clock-container" style={{ background: activites[active].timerBorder }}>
+            <div className="clock-container" style={{ background: 'var(--secondary-color)' }}>
                 {!started && (
                     <>
                         <SmallWinBtn />
@@ -251,7 +254,16 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                     </>
                 )}
                 <div className="clock">
-                    <Suspense fallback={<Loading color={activites[active].color} backgroud="transparent" size="200" strokeWidth="2.5" />}>
+                    <Suspense fallback={
+                        <>
+                            <Loading
+                                color="var(--main-color)"
+                                backgroud="transparent"
+                                size="175"
+                                strokeWidth={4}
+                            />
+                        </>
+                    }>
                         {setting.format === "digital" ? (
                             <>
                                 <DigitalTimer
@@ -275,7 +287,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                         )}
                     </Suspense>
                 </div>
-            </div>
+            </div >
         </>
     )
 }

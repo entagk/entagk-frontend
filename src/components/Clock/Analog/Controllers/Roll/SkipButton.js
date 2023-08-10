@@ -1,14 +1,18 @@
 import React from 'react';
 import { TbPlayerSkipForward } from "react-icons/tb";
+import Button from '../../../../../utils/Button/Button';
 
 function SkipButton({ handleClick, time }) {
   return (
-    <button aria-label="clear button on roll"
-    className="down-side" id="down" disabled={time === 0}
+    <Button
+      aria-label="clear button on roll"
+      className="down-side"
+      id="down" disabled={time === 0}
       onClick={handleClick}
+      variant='none'
     >
       <TbPlayerSkipForward />
-    </button>
+    </Button>
   );
 }
 

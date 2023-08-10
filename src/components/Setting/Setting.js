@@ -2,44 +2,112 @@ import React, { useState, useEffect, lazy } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSetting, modifySetting } from '../../actions/timer';
 
-import { AiFillSound } from 'react-icons/ai';
-import { BsArrowRight } from 'react-icons/bs';
-import { CgTimelapse } from 'react-icons/cg';
-import { MdNotifications } from 'react-icons/md';
-import { TbFocus } from 'react-icons/tb';
-
-import Loading from '../../utils/Loading';
+import Loading from '../../utils/Loading/Loading';
 import Message from '../../utils/Message';
 import NetworkError from '../NetworkError/NetworkError';
 
 import "./style.css";
+
+const Button = lazy(() => import('../../utils/Button/Button'));
+
 const Header = lazy(() => import('./SettingHeader/header'));
+const SettingMenu = lazy(() => import('./SettingMenu'));
 const TimerSetting = lazy(() => import('./TimerSetting/TimerSetting'));
 const SoundSetting = lazy(() => import('./SoundSetting/SoundSetting'));
 const NotificationSetting = lazy(() => import('./NotificationSetting/NotificationSetting'));
 const FocusSetting = lazy(() => import('./FocusSetting/FocusSetting'));
 
 function Setting({ setOpenSetting }) {
-  const { setting, isLoading, activites, active } = useSelector(state => state.timer);
+  const { originalSetting, isLoading } = useSelector(state => state.timer);
 
   const [message, setMessage] = useState({ type: '', message: "" });
-  const [data, setData] = useState(setting);
+  const [data, setData] = useState(originalSetting);
   const [status, setStatus] = useState('');
   const dispatch = useDispatch();
+  const [required, setRequired] = useState([]);
+  const [formErrors, setFormErrors] = useState({});
+  const [validations, setValidations] = useState({});
+  const timerRequired = [["LONG", "PERIOD", "SHORT"], "longInterval"];
 
   useEffect(() => {
-    if (setting === undefined && !isLoading) {
+    if (status === 'timer') {
+      setFormErrors((pFE) => ({
+        ...pFE,
+        time: {
+          "LONG": "",
+          "PRIOD": "",
+          "SHORT": ""
+        }
+      }))
+      setRequired(timerRequired);
+      timerRequired[0].forEach((t) => {
+        setValidations((pV) => ({
+          ...pV,
+          time: {
+            ...pV?.time,
+            [t]: (tL) => {
+              setFormErrors(pFE => ({
+                ...pFE,
+                time: {
+                  ...pFE?.time,
+                  [t]: tL < 1 || tL > 3600 ?
+                    'invalid time' :
+                    ""
+                }
+              }))
+              return tL < 1 || tL > 3600;
+            },
+          }
+        }));
+      });
+      setValidations((pV) => ({
+        ...pV,
+        [timerRequired[1]]: (pLI) => {
+          setFormErrors(pFE => ({ ...pFE, [timerRequired[1]]: pLI < 2 ? "The long interval must be more than 2" : "" }))
+          return pLI < 2;
+        }
+      }));
+    } else if (status === 'sounds') {
+      setRequired(["alarmRepet"])
+      setValidations((pV) => ({
+        ...pV,
+        'alarmRepet': (ar) => {
+          setFormErrors(pFE => ({ ...pFE, 'alarmRepet': ar < 0 || ar > 60 ? "Alarm repet should be in range 0-60 seconds" : "" }))
+          return ar < 0 || ar > 60;
+        }
+      }));
+    } else if (status === 'notifications') {
+      setRequired(["notificationInterval"])
+      setValidations((pV) => ({
+        ...pV,
+        'notificationInterval': (nI) => {
+          setFormErrors(pFE => ({
+            ...pFE,
+            'notificationInterval': nI < 1 || nI > 60 ?
+              "Invalid notification interval between 1 and 60" : ""
+          }))
+          return nI < 1;
+        }
+      }));
+    } else {
+      setRequired([]);
+    }
+
+    // eslint-disable-next-line
+  }, [status]);
+
+  useEffect(() => {
+    if (originalSetting === undefined && !isLoading) {
       dispatch(getSetting(setMessage));
     }
-    setData(setting);
+    setData(originalSetting);
     // eslint-disable-next-line
-  }, [setting, isLoading]);
+  }, [originalSetting, isLoading]);
 
-  if (setting === undefined) {
+  if (originalSetting === undefined) {
     return (
       <Loading
-        size="200"
-        strokeWidth="2.5"
+        size="big"
         color="#ffffff"
         backgroud="transperent"
       />
@@ -47,7 +115,43 @@ function Setting({ setOpenSetting }) {
   }
 
   const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: Number(e.target.value) })
+    const { name, value } = e.target;
+    setData({ ...data, [name]: Number(value) });
+
+    if (
+      value !== ''
+    ) {
+      setFormErrors(fep => ({ ...fep, [name]: '' }));
+    }
+  }
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    if (value === '' && required.includes(name)) {
+      setFormErrors(fep => ({ ...fep, [name]: 'This field is required' }));
+    } else {
+      validations[name](value);
+    }
+  }
+
+  const handleErrors = () => {
+    const errors = Object.entries(formErrors).filter(([k, v]) => v.length > 0);
+
+    required.forEach((f) => {
+      if (f instanceof Array) {
+        f.forEach(t => {
+          if (validations.time[t](data.time[t])) {
+            errors.push([f]);
+          };
+        })
+      } else {
+        if (validations[f](data[f])) {
+          errors.push([f])
+        };
+      }
+    })
+
+    return errors;
   }
 
   const handleSubmit = async (e) => {
@@ -55,152 +159,130 @@ function Setting({ setOpenSetting }) {
 
     console.log(data);
 
-    if (Object.values(data.time).includes(0)) {
-      setMessage({ message: "Please enter valid time data", type: 'error' });
-    }
-
-    if (!data.longInterval) {
-      setMessage({ message: "Please enter long break interval", type: 'error' });
-    }
-
-    if (!data.notificationInterval) {
-      setMessage({ message: "Please enter long break interval", type: 'error' });
-    }
+    const errors = handleErrors();
 
     const dataSent = { ...data };
 
     Object.entries(data).forEach(([key, value]) => {
-      if (data[key] === setting[key]) {
+      if (data[key] === originalSetting[key]) {
         delete dataSent[key];
-        // setData(data);
       } else {
         console.log(key, value);
       }
     });
 
-    if (Object.entries(dataSent).length !== 0) {
-      await dispatch(modifySetting(dataSent, setMessage));
+    if (Object.entries(dataSent).length !== 0 && errors.length === 0) {
+      await dispatch(modifySetting(dataSent, setMessage, setFormErrors));
     }
 
     setOpenSetting(false);
   }
 
+  const requiredForEveryStatus = {
+    data: data,
+    setData: setData,
+    handleChange: handleChange,
+    handleBlur: handleBlur,
+    formErrors: formErrors,
+    setFormErrors: setFormErrors,
+    validations: validations,
+  }
+
   return (
     <React.Suspense fallback={
       <Loading
-        size="200"
-        strokeWidth="5px"
+        size="big"
         color="#ffffff"
-        backgroud="transperent"
+        backgroud="transparant"
+        className="center-fullpage"
       />
     }>
-      {message.message && (
-        <>
-          {(!message.message.includes('Network Error')) ? (
-            <Message {...message} setMessage={setMessage} />
-          ) : (
-            <NetworkError />
-          )}
-        </>
-      )}
-      {(setting && isLoading) && (
-        <div className="loading-container" style={{
-          position: 'fixed',
-          top: '0',
-          right: '0',
-          background: '#ffffff73',
-          width: '100%',
-          height: '100%',
-          zIndex: '1000',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+      {
+        message.message && (
+          <>
+            {(!message.message.includes('Network Error')) ? (
+              <Message {...message} setMessage={setMessage} />
+            ) : (
+              <NetworkError />
+            )}
+          </>
+        )
+      }
+      <form className='glass-effect setting zoom-in' onSubmit={handleSubmit} >
+        {(originalSetting && isLoading) && (
           <Loading
-            size="200"
-            strokeWidth="5"
-            color={activites[active].color}
-            backgroud="transperent"
+            size="big"
+            color={"var(--main-color)"}
+            backgroud="transparant"
+            style={{
+              backgroud: "#ffffff73",
+              margin: 0,
+              background: '#ffffff30',
+              borderRadius: 'inherit',
+              border: 'inherit',
+            }}
+            className="center-fullpage"
           />
-        </div>
-      )}
-      <form className='glass-effect setting zoom-in' onSubmit={handleSubmit}>
-        <Header linkClick={handleSubmit} status={status} setStatus={setStatus} />
+        )
+        }
+        <Header
+          linkClick={handleSubmit}
+          status={status}
+          setStatus={setStatus}
+          formErrors={formErrors}
+          handleErrors={handleErrors}
+        />
         <>
           {status === '' ? (
             <>
-              <div className='setting-menu'>
-                <button
-                  aria-label='timer setting button'
-                  type='button'
-                  onClick={() => setStatus('timer')}>
-                  <span style={{ marginRight: "40px" }}>
-                    <CgTimelapse />
-                    <span className='text'>Timer Setting </span>
-                  </span> <BsArrowRight />
-                </button>
-                <button
-                  aria-label='sounds setting button'
-                  type='button'
-                  onClick={() => setStatus('sounds')}>
-                  <span style={{ marginRight: "40px" }}>
-                    <AiFillSound />
-                    <span className='text'>Sounds Setting</span>
-                  </span> <BsArrowRight />
-                </button>
-                {"Notification" in window && (
-                  <button
-                    aria-label='notifications setting button'
-                    type='button'
-                    onClick={() => setStatus('notifications')}>
-                    <span style={{ marginRight: "40px" }}>
-                      <MdNotifications />
-                      <span className='text'>Notifications Setting</span>
-                    </span> <BsArrowRight />
-                  </button>
-                )}
-                <button
-                  aria-label='focus setting button'
-                  type='button'
-                  onClick={() => setStatus('focus')}>
-                  <span style={{ marginRight: "40px" }}>
-                    <TbFocus />
-                    <span className='text'>Focus Setting</span>
-                  </span> <BsArrowRight />
-                </button>
-              </div>
+              <SettingMenu setStatus={setStatus} />
             </>
           ) : status === 'timer' ? (
             <>
-              <TimerSetting data={data} setData={setData} handleChange={handleChange} />
+              <TimerSetting
+                {...requiredForEveryStatus}
+              />
             </>
           ) : status === 'sounds' ? (
             <>
-              <SoundSetting data={data} setData={setData} handleChange={handleChange} />
+              <SoundSetting
+                {...requiredForEveryStatus}
+              />
             </>
           ) : (status === 'notifications' && "Notification" in window) ? (
             <>
-              <NotificationSetting data={data} setData={setData} handleChange={handleChange} />
+              <NotificationSetting
+                {...requiredForEveryStatus}
+              />
             </>
           ) : (
             <>
-              <FocusSetting data={data} setData={setData} handleChange={handleChange} />
+              <FocusSetting
+                data={data}
+                setData={setData}
+                handleChange={handleChange}
+              />
             </>
           )}
         </>
-
         <div className='footer'>
-          <button type='button' aria-label='cancel form' onClick={() => setOpenSetting(false)}>cancel</button>
-          <button
+          <Button
             className='save'
             type='submit'
             aria-label='submit form'
-            disabled={
-              (data && Object.values(data?.time).includes(0)) ||
-              data?.notificationInterval <= 0 ||
-              data?.longInterval <= 0 ||
-              (data?.alarmRepet < 0 || data?.alarmRepet > 60)
-            }>ok</button>
+            disabled={Object.values(formErrors).filter(fE => fE.length > 0).length > 0}
+            variant='contained'
+            color="main"
+          >Ok</Button>
+          <Button
+            type='button'
+            aria-label='cancel form'
+            onClick={() => setOpenSetting(false)}
+            variant='outlined'
+            className="cancel"
+          >
+            Cancel
+          </Button>
         </div>
       </form>
     </React.Suspense>

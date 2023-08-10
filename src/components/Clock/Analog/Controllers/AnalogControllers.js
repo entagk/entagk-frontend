@@ -1,8 +1,9 @@
-import React, { lazy } from "react";
+import React, { Suspense, lazy } from "react";
 import { useSelector } from "react-redux";
 
 /* some attachments for redux action */
 import { PERIOD } from "../../../../actions/timer";
+import Loading from "../../../../utils/Loading/Loading";
 
 const StartButton = lazy(() => import("./Roll/StartButton"));
 const ClearButton = lazy(() => import("./Roll/ClearButton"));
@@ -12,7 +13,6 @@ const SkipButton = lazy(() => import("./Roll/SkipButton"));
 const AnalogControllers = ({ time, toggleStart, handleReset, handleSkip }) => {
   const {
     active,
-    activites,
     setting,
     started,
   } = useSelector((state) => state.timer);
@@ -27,13 +27,13 @@ const AnalogControllers = ({ time, toggleStart, handleReset, handleSkip }) => {
                     linear-gradient(
                         ${time / 60 <= 30 ? 270 : (time / 60 - 30) * 6 + 90}deg, 
                         transparent 50%, 
-                        ${time / 60 <= 30 ? "white" : activites[active].color} 50%), 
+                        ${time / 60 <= 30 ? "white" : "var(--main-color)"} 50%), 
                     linear-gradient(
                         ${(time / 60 > 0 && time / 60 <= 30) ? (time / 60) * 6 + 90 : (time / 60) > 30 ? "270" : "90"}deg, 
                         transparent 50%, 
                         white 50%)
                     `,
-          backgroundColor: activites[active].color
+          backgroundColor: "var(--main-color)"
         }}
       ></div>
       <div
@@ -43,17 +43,23 @@ const AnalogControllers = ({ time, toggleStart, handleReset, handleSkip }) => {
                     linear-gradient(
                         ${time / 60 <= 30 ? 270 : (time / 60 - 30) * 6 + 90}deg, 
                         transparent 50%, 
-                        ${time / 60 <= 30 ? "white" : activites[active].color} 50%
+                        ${time / 60 <= 30 ? "white" : "var(--main-color)"} 50%
                     ), 
                     linear-gradient(
                         ${(time / 60 > 0 && time / 60 <= 30) ? (time / 60) * 6 + 90 : time / 60 > 30 ? "270" : "90"}deg, 
-                        ${activites[active].color} 50%, 
+                        ${"var(--main-color)"} 50%, 
                         white 50%
                     )`
         }}
       >
-        <div className="roll" style={{ flexDirection: "column" }}>
-          <>
+        <div className="roll" style={{ flexDirection: "column", overflow: "hidden" }}>
+          <Suspense fallback={
+            <Loading
+              size="big"
+              color={"var(--main-color)"}
+              backgroud="transparant"
+            />
+          }>
             {started ? (
               <>
                 <PauseButton
@@ -95,7 +101,7 @@ const AnalogControllers = ({ time, toggleStart, handleReset, handleSkip }) => {
                 )}
               </>
             )}
-          </>
+          </Suspense>
         </div>
       </div>
     </>

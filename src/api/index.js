@@ -1,7 +1,9 @@
 import axios from "axios";
 import jwt_decode from 'jwt-decode';
 
-const API = axios.create({ baseURL: "https://pomodoro-backend-6j65.onrender.com/api" });
+export const baseURL = "https://pomodoro-backend-6j65.onrender.com/api";
+
+const API = axios.create({ baseURL: baseURL }); // http://localhost:5500/api
 
 // Add a request interceptor
 API.interceptors.request.use((config) => {
@@ -18,7 +20,7 @@ API.interceptors.request.use((config) => {
   if (token && config.url !== '/user/verify_reset_id') {
     config.headers.Authorization = `Bearer ${token}`;
   } else {
-    if (localStorage.getItem("rest-token")) {
+    if (localStorage.getItem("reset-token")) {
       config.headers.Authorization = `Bearer ${localStorage.getItem("reset-token")}`;
     }
   }
@@ -94,3 +96,19 @@ export const getAllSetting = () => API.get("/setting/");
 export const updateSetting = (settingData) => API.post("/setting/update/", settingData);
 /* end the setting api */
 
+/* start the template api */
+export const getTempsForUser = (sort, page, query) => API.get(`/template/user/?sort=${sort}&page=${page}&search=${query}`);
+
+export const getTasksForOne = (id, page) => API.get(`/template/one/tasks/private/${id}?page=${page}`);
+
+export const getTasksForTodoTemp = (id, page) => API.get(`/template/todo/tasks/${id}?page=${page}`);
+
+export const deleteTemplate = (id) => API.delete(`/template/${id}`);
+
+export const addToTodo = (id) => API.post(`/template/todo/${id}`);
+
+export const addTemplate = (formData) => API.post(`/template/add/`, formData);
+
+export const modifyTemplate = (id, formData) => API.patch(`/template/${id}`, formData);
+
+/* end the template api */

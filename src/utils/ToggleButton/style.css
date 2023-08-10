@@ -1,0 +1,35 @@
+.block div.toggle-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: fit-content;
+}
+
+.block div.toggle-button {
+  width: 60px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: 30px;
+  cursor: pointer;
+  border: 1px solid;
+}
+
+.block div.toggle-point {
+  width: 50%;
+  height: 100%;
+  background: white;
+  border-radius: 50px;
+}
+
+@media (max-width: 400px) {
+  .setting .block.focus div.toggle-button-container {
+    margin-top: 10px;
+  }
+
+  .setting .block div.toggle-button {
+    width: 50px;
+    height: 28px;
+  }
+}

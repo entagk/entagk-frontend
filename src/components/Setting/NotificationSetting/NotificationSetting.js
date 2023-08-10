@@ -1,25 +1,54 @@
-import React, {lazy} from 'react';
+import React, { Suspense, lazy } from 'react';
 
-const Select = lazy(() => import('../Select'));
+import Loading from '../../../utils/Loading/Loading';
 
-const NotificationSetting = ({ data, setData, handleChange }) => {
+const Select = lazy(() => import('../Select/Select'));
+
+const NotificationSetting = ({ data, setData, handleChange, formErrors, handleBlur }) => {
   return (
     <div className='block notification' style={{ border: "none" }}>
-      <h3>Notification</h3>
-      <div className='notification-data'>
-        <Select options={["every", "last"]} data={data} type="notificationType" setData={setData} width="100px" setChange={() => { }} />
-        <div className='notification-min'>
-          <input
-            style={{ marginInline: "10px 0" }}
-            className={data?.notificationInterval <= 0 ? 'error' : undefined}
-            type="number"
-            min="1"
-            defaultValue={data?.notificationInterval}
-            name="notificationInterval"
-            onChange={handleChange} />
-          <p style={{ marginLeft: 10 }}>Min</p>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }}>
+        <h3>Notification</h3>
+        <div className='notification-data'>
+          <Suspense fallback={
+            <Loading
+              size="small"
+              color={"#fff"}
+              backgroud="transparent"
+              paddingBlock='0'
+            />
+          }>
+            <Select
+              options={["every", "last"]}
+              data={data}
+              type="notificationType"
+              setData={setData}
+              width="100px"
+              setChange={() => { }}
+            />
+          </Suspense>
+          <div className='notification-min'>
+            <input
+              style={{ marginInline: "10px 0" }}
+              className={formErrors.notificationInterval ? 'error' : undefined}
+              type="number"
+              min="1"
+              defaultValue={data?.notificationInterval}
+              onBlur={handleBlur}
+              name="notificationInterval"
+              onChange={handleChange}
+            />
+            <p style={{ marginLeft: 10 }}>Min</p>
+          </div>
         </div>
       </div>
+      {formErrors.notificationInterval && (
+        <span className='error-text'>{formErrors.notificationInterval}</span>
+      )}
     </div>
   );
 };

@@ -1,76 +1,146 @@
-import React, { useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-// import { AiOutlinePlus } from 'react-icons/ai';
 import { HiMenu } from "react-icons/hi";
 import { MdDelete } from 'react-icons/md';
 import { BsCheckLg } from 'react-icons/bs';
-// import { FiSave } from "react-icons/fi";
 import { clearFinishedTasks, clearAct, clearAllTasks } from "../../../actions/tasks";
 
-const Menu = ({ setMessage }) => {
+import Loading from "../../../utils/Loading/Loading";
+
+const Menu = lazy(() => import("../../../utils/Menu/Menu"));
+const Button = lazy(() => import('../../../utils/Button/Button'))
+
+const DeletePopup = lazy(() => import("./../../../utils/DeletePopup/DeletePopup"));
+
+const TasksMenu = ({ setMessage }) => {
   const { tasks } = useSelector(state => state.tasks);
-  const [openMenu, setOpenMenu] = useState(false);
   const dispatch = useDispatch();
-  // const [message, setMessage] = useState({ type: '', message: '' })
+  const [clear, setClear] = useState("");
+  const [openMenu, setOpenMenu] = useState(false);
 
   const handleClearFinishedTasks = () => {
-    setOpenMenu(om => !om);
+    setClear('');
     dispatch(clearFinishedTasks(setMessage));
   }
 
   const handleClearAct = () => {
-    setOpenMenu(om => !om);
+    setClear('');
     dispatch(clearAct(setMessage));
   }
 
   const handleClearTasks = () => {
-    setOpenMenu(om => !om);
+    setClear('');
     dispatch(clearAllTasks(setMessage));
+  }
+
+  const handleClear = (type) => {
+    setClear(type)
+    setOpenMenu(false);
   }
 
   return (
     <>
-      <div className="menu">
-        <button
-          aria-label="toggle the task list menu"
-          className="toggle-menu"
-          onClick={() => setOpenMenu(om => !om)}
-          style={{ fontSize: 25, color: "#fff" }}
-          disabled={tasks?.length === 0}>
-          <HiMenu />
-        </button>
-        {openMenu && (
-          <div className="menu-content">
-            <div className="row">
-              <button
-                aria-label="delete all finished tasks"
-                onClick={handleClearFinishedTasks} type='button'
-                disabled={tasks.filter(t => t.check).length === 0}
-              ><MdDelete /> <p>clear finished tasks</p></button>
-              <button
-                aria-label="clear all act pomodoros tasks"
-                onClick={handleClearAct} type='button'
-                disabled={tasks.filter(t => t.act > 0).length === 0}
-              ><BsCheckLg /> <p>clear act pomodoros</p></button>
-              {/* <button
-                aria-label="save the task list as templete"
-              ><FiSave /> <p><mark>save as templete</mark></p></button>
-              <button
-                aria-label="add task from templets"
-              ><AiOutlinePlus /> <p><mark>add from templetes</mark></p></button> */}
-              <button
-                type='button'
-                aria-label="clear all tasks"
-                onClick={handleClearTasks}
-              ><MdDelete /> <p>clear all tasks</p></button>
-            </div>
-          </div>
+      <Suspense fallback={
+        <Loading
+          size="big"
+          strokeWidth="5"
+          color={"var(--main-color)"}
+          backgroud="transparent"
+        />
+      }>
+        {clear !== "" && (
+          <DeletePopup
+            type={
+              <>
+                <span>
+                  {
+                    clear === 'finished' ?
+                      'all finished tasks' :
+                      clear === 'act' ?
+                        'act promodors' :
+                        'all tasks'
+                  }
+                </span>
+              </>
+            }
+            onOk={
+              clear === 'finished' ?
+                handleClearFinishedTasks :
+                clear === 'act' ?
+                  handleClearAct :
+                  handleClearTasks
+            }
+            onCancel={
+              () => setClear("")
+            }
+          />
         )}
-      </div>
+      </Suspense>
+      <Suspense fallback={
+        <Loading
+          size="small"
+          strokeWidth="5px"
+          color={"#fff"}
+          backgroud="transparent"
+          style={{ margin: 0 }}
+        />
+      }>
+        <Menu
+          open={openMenu}
+          setOpen={setOpenMenu}
+          MainButton={
+            <Button
+              aria-label="toggle the task list menu"
+              className="toggle-menu"
+              disabled={tasks?.length === 0}
+              startIcon={
+                <HiMenu />
+              }
+              variant="single-icon"
+            />
+          }
+        >
+          <Button
+            type='button'
+            onClick={() => handleClear('act')}
+            aria-label="clear all act pomodoros tasks"
+            disabled={tasks?.filter(t => t.act > 0).length === 0}
+            startIcon={
+              <BsCheckLg />
+            }
+            variant="none"
+          >
+            <>clear act pomodoros</>
+          </Button>
+          <Button
+            type='button'
+            onClick={() => handleClear('finished')}
+            aria-label="delete all finished tasks"
+            disabled={tasks?.filter(t => t.check).length === 0}
+            startIcon={
+              <MdDelete />
+            }
+            variant="none"
+          >
+            <>clear finished tasks</>
+          </Button>
+          <Button
+            type='button'
+            aria-label="clear all tasks"
+            onClick={() => handleClear('all')}
+            startIcon={
+              <MdDelete />
+            }
+            variant="none"
+          >
+            <>clear all tasks</>
+          </Button>
+        </Menu>
+      </Suspense>
     </>
   )
 }
 
-export default Menu;
+export default TasksMenu;

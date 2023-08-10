@@ -14,6 +14,8 @@ export const LONG = "LONG";
 export const GET_SETTING = "GET_SETTING";
 export const MODITY_SETTING = "MODITY_SETTING";
 
+export const CHANGE_TO_TEMPLATE_SETTING = 'CHANGE_TO_TEMPLATE_SETTING';
+
 export const alarmSounds = [
   {
     name: "alarm 1",
@@ -215,7 +217,7 @@ export const changeActive = (active, activeId, setIsLoading, setMessage) => asyn
   }
 }
 
-export const modifySetting = (formData, setMessage) => async dispatch => {
+export const modifySetting = (formData, setMessage, setFormErrors) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'setting' });
     if (!localStorage.getItem("token")) {

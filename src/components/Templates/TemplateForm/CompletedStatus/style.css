@@ -1,0 +1,23 @@
+.completed-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  margin: 20px;
+}
+
+.completed-status .icon {
+  font-size: 100px;
+  color: lime;
+  display: flex;
+}
+
+.completed-status h3 {
+  font-size: 30px;
+}
+
+.completed-status p {
+  font-size: 20px;
+  margin-block: 10px;
+}

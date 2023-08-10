@@ -1,12 +1,22 @@
-import React, { lazy } from 'react';
+import React, { Suspense, lazy } from 'react';
 
 import { LONG, PERIOD, SHORT } from "../../../actions/timer";
 
-const Select = lazy(() => import('../Select'));
-const TimeInputs = lazy(() => import('../timeInputs'));
-const ToggleButton = lazy(() => import('../ToggleButton'));
+import Loading from '../../../utils/Loading/Loading';
 
-const TimerSetting = ({ handleChange, data, setData }) => {
+const Select = lazy(() => import('../Select/Select'));
+const TimeInputs = lazy(() => import('../TimeInputs/timeInputs'));
+const ToggleButton = lazy(() => import('../../../utils/ToggleButton/ToggleButton'));
+
+const TimerSetting = ({
+  handleChange,
+  handleBlur,
+  formErrors,
+  setFormErrors,
+  data,
+  setData,
+  validations
+}) => {
   const automations = [
     {
       type: "autoBreaks",
@@ -19,73 +29,124 @@ const TimerSetting = ({ handleChange, data, setData }) => {
     {
       type: "autoStartNextTask",
       name: "Auto start next task"
+    },
+    {
+      type: "applyTaskSetting",
+      name: "Apply task setting"
     }
   ]
 
   return (
     <>
-      <div className='block' style={{ flexDirection: "row" }}>
-        <h3>Timer format</h3>
-        <Select
-          options={["analog", "digital"]}
-          type="format"
-          data={data}
-          setData={setData}
-          setChange={() => { }}
-          width="106px"
-        />
-      </div>
+      {data?.format && (
+        <div className='block' style={{ flexDirection: "row" }}>
+          <h3>Timer format</h3>
+          <Suspense fallback={
+            <Loading
+              size="small"
+              color={"#fff"}
+              backgroud="transparent"
+              paddingBlock='0'
+            />
+          }>
+            <Select
+              options={["analog", "digital"]}
+              type="format"
+              data={data}
+              setData={setData}
+              setChange={() => { }}
+              width="106px"
+            />
+          </Suspense>
+        </div>
+      )}
       <div className='block'>
-        <h3>Time</h3>
         <div className='time-inputs'>
           {[PERIOD, SHORT, LONG].map((item, index) => (
-            <div className='time' key={index}>
-              <h4>{index === 0 ? 'Pomodoro' : item.toLocaleLowerCase()}</h4>
-              <TimeInputs
-                name={item}
-                data={data}
-                setData={setData}
-              />
-            </div>
+            <>
+              <Suspense fallback={
+                <Loading
+                  size="small"
+                  color={"#fff"}
+                  backgroud="transparent"
+                  paddingBlock='0'
+                />
+              }>
+                <TimeInputs
+                  name={item}
+                  data={data}
+                  setData={setData}
+                  formErrors={formErrors}
+                  setFormErrors={setFormErrors}
+                  validations={validations}
+                />
+              </Suspense>
+            </>
           ))}
         </div>
       </div>
-      <div className='block' style={{ flexDirection: "row" }}>
-        <h3>Long Break Interval</h3>
+      <div className='block'>
         <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          width: 'fit-content'
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
         }}>
-          <input
-            className={data?.longInterval <= 0 ? 'error' : undefined}
-            name='longInterval'
-            type="number"
-            min="1"
-            max="100"
-            defaultValue={data?.longInterval}
-            onChange={handleChange}
-          />
-        </div>
-      </div>
-      {automations.map((auto, index) => (
-        <div className='block' style={{ border: index === automations.length-1 ? 'none' : '' }} key={index}>
+          <h3>Long Break Interval</h3>
           <div style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
+            justifyContent: "flex-end",
+            width: 'fit-content'
           }}>
-            <h3 style={{ width: 'fit-content' }}>{auto.name}</h3>
-            <ToggleButton
-              type={auto.type}
-              data={data}
-              setData={setData}
+            <input
+              className={formErrors?.longInterval ? 'error' : undefined}
+              name='longInterval'
+              type="number"
+              min="1"
+              max="100"
+              defaultValue={data?.longInterval}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
           </div>
         </div>
-      ))}
+        {formErrors.longInterval && (
+          <div>
+            <span className='error-text'>{formErrors.longInterval}</span>
+          </div>
+        )}
+      </div>
+      <div className='block'>
+        {automations.map((auto, index) => (
+          <div style={{
+            border: index === automations.length - 1 ? 'none' : '',
+            marginBottom: index + 1 !== automations.length ? '10px' : "0"
+          }} key={index}>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+            }}>
+              <h3 style={{ width: 'fit-content' }}>{auto.name}</h3>
+              <Suspense fallback={
+                <Loading
+                  size="small"
+                  color={"#fff"}
+                  backgroud="transparent"
+                  paddingBlock='0'
+                />
+              }>
+                <ToggleButton
+                  type={auto.type}
+                  data={data}
+                  setData={setData}
+                />
+              </Suspense>
+            </div>
+          </div>
+        ))}
+      </div>
     </>
   );
 };

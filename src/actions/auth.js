@@ -14,7 +14,7 @@ export const REFRESH_TOKEN = 'REFRESH_TOKEN';
 export const LOGOUT = 'LOGOUT';
 export const ERROR = 'ERROR';
 
-export const authForm = (formData, type, setMessage, navigate) => async dispatch => {
+export const authForm = (formData, type, setMessage, navigate, setFormErrors) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'auth' });
     if (type !== 'forget password') {
@@ -25,13 +25,13 @@ export const authForm = (formData, type, setMessage, navigate) => async dispatch
       const setting = JSON.parse(localStorage.getItem('setting'));
       const tasks = JSON.parse(localStorage.getItem('tasks'));
       if (setting !== initialSetting && Boolean(setting)) {
-        dispatch(modifySetting(setting, setMessage));
+        dispatch(modifySetting(setting, setMessage, () => {}));
       } else {
         dispatch(getSetting(setMessage));
       }
 
       if (tasks?.length >= 0) {
-        dispatch(addMultipleTasks(tasks, setMessage));
+        dispatch(addMultipleTasks(tasks, setMessage, () => {}));
       }
       if (type !== 'sign up') {
         dispatch(getTasks(setMessage, 1));
@@ -45,7 +45,12 @@ export const authForm = (formData, type, setMessage, navigate) => async dispatch
 
     dispatch({ type: END_LOADING, data: 'auth' });
   } catch (error) {
-    setMessage({ type: 'error', message: error?.response?.data?.message || error.message })
+    if (error?.response?.data?.errors) {
+      setFormErrors(pFE => ({ ...pFE, ...error.response.data.errors }))
+    } else {
+      setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    }
+
     dispatch({ type: END_LOADING, data: 'auth' });
     console.error(error);
   }
@@ -94,18 +99,23 @@ export const deleteUser = (setMessage) => async dispatch => {
   }
 }
 
-// todo at profile editing page
-export const updateUser = (formData, setMessage) => async dispatch => {
+export const updateUser = (formData, setFormError, setMessage, setClose) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'auth' })
     const { data } = await api.updateUser(formData);
     dispatch({ type: UPDATE_USER, data: data.afterUpdatae });
+    setMessage({ message: data.message, type: 'success' });
     dispatch({ type: END_LOADING, data: 'auth' })
   } catch (error) {
-    setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    if (error?.response?.data?.errors) {
+      setFormError(pFE => ({ ...pFE, ...error.response.data.errors }))
+    } else {
+      setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    }
     if (error.response?.status === 401 || error.response.status === 500) {
       dispatch({ type: LOGOUT });
     }
+    dispatch({ type: END_LOADING, data: 'auth' })
     console.error(error);
   }
 }

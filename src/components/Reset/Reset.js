@@ -1,65 +1,80 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { resetPassword, verifyResetToken } from '../../actions/auth';
-import Loading from '../../utils/Loading';
+import Loading from '../../utils/Loading/Loading';
 import Message from '../../utils/Message';
-import LogoutPage from '../Auth/LogoutPage';
+import LogoutPage from '../Auth/LogoutPage/LogoutPage';
 
 import './../Auth/Auth.css';
-import NotValidToken from './NotValidToken';
+import NotValidToken from './NotValidToken/NotValidToken';
 import NetworkError from '../NetworkError/NetworkError';
+import Button from '../../utils/Button/Button';
 
 const NavBar = lazy(() => import('./../NavBar/NavBar'));
-const Password = lazy(() => import('./../Auth/Password'))
+const Input = lazy(() => import('../../utils/Input/Input'));
 
 function Reset() {
   const { tokenId } = useParams();
-  const { user } = useSelector(state => state.auth);
   const navigate = useNavigate();
-  const { active, activites } = useSelector(state => state.timer);
   const [message, setMessage] = useState({ message: '', type: '' });
   const [validate, setValidate] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ password: '', confirmPassword: '' })
-  const [passowordShow, setPasswordShow] = useState({
-    password: false, confirmPassword: false
-  });
+
+  const requiredFields = ['confirmPassword', 'password'];
+  const [formErrors, setFormError] = useState({});
+
+  const validations = {
+    password: (p) => {
+      if (p.length < 8) {
+        setFormError(fE => ({ ...fE, password: "The password must be at least 8 letters and numbers" }));
+        return true;
+      } else {
+        setFormError(fE => ({ ...fE, password: "" }));
+        return false;
+      }
+    },
+    confirmPassword: (cP, p) => {
+      if (cP !== p) {
+        setFormError(fE => ({ ...fE, confirmPassword: "The password should be matched" }))
+        return true;
+      } else {
+        setFormError(fE => ({ ...fE, confirmPassword: "" }))
+        return false;
+      }
+    },
+  };
 
   useEffect(() => {
     localStorage.setItem('reset-token', tokenId);
     verifyResetToken(setMessage, setValidate, setIsLoading)
   }, [tokenId]);
 
-  if (user) {
+  if (localStorage.getItem('token')) {
     return (
       <LogoutPage />
     )
   }
 
   if (validate === false) {
-    return (<NotValidToken message={message.message} />)
+    return (
+      <NotValidToken
+        message={message.message}
+      />
+    )
   }
 
   if (validate === undefined && isLoading) {
     return (
       <Loading
-        size="200"
-        strokeWidth="5"
-        color="#ffffff"
+        size="verybig"
         backgroud="transperent"
+        color="#ffffff"
+        className="center-fullpage"
       />
     )
-  }
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
-
-  const handlePasswordShowing = (type) => {
-    setPasswordShow({ ...passowordShow, [type]: !passowordShow[type] });
   }
 
   const handleSubmit = async (e) => {
@@ -74,86 +89,83 @@ function Reset() {
     await navigate('/auth');
   }
 
+  const requiredForEveryInput = {
+    formErrors: formErrors,
+    setFormError: setFormError,
+    validations: validations,
+    formData: formData,
+    setFormData: setFormData,
+    requiredFields: requiredFields,
+  }
+
   return (
     <Suspense fallback={
       <Loading
-        size="200"
-        strokeWidth="5"
-        color="#ffffff"
+        size="verybig"
         backgroud="transperent"
+        color="#ffffff"
+        className="center-fullpage"
       />
     }>
-      {isLoading && (
-        <div className="loading-container" style={{
-          position: 'fixed',
-          top: '0',
-          right: '0',
-          background: '#ffffff73',
+      <div className="container">
+        <NavBar setMessage={setMessage} />
+        {message.message && (
+          <>
+            {(!message.message.includes('Network Error')) ? (
+              <Message {...message} setMessage={setMessage} />
+            ) : (
+              <NetworkError />
+            )}
+          </>
+        )}
+        <div style={{
           width: '100%',
-          height: '100%',
-          zIndex: '1000',
           display: 'flex',
-          alignItems: 'center',
           justifyContent: 'center',
+          alignItems: 'center',
+          marginBlock: '25px',
         }}>
-          <Loading
-            size="200"
-            strokeWidth="5"
-            color={activites[active].color}
-            backgroud="transperent"
-          />
-        </div>
-      )}
-      <div>
-        <div className="container">
-          <NavBar setMessage={setMessage} />
-          {message.message && (
-            <>
-              {(!message.message.includes('Network Error')) ? (
-                <Message {...message} setMessage={setMessage} />
-              ) : (
-                <NetworkError />
-              )}
-            </>
-          )}
-          <div style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginBlock: '25px',
-          }}>
-            <div className='form-container reset-form'>
-              <form onSubmit={handleSubmit}>
-                <h1>reset password</h1>
-                <div className='block'>
-                  <Password
-                    passowordShow={passowordShow}
-                    formData={formData}
-                    type="password"
-                    handleChange={handleChange}
-                    onClick={handlePasswordShowing}
-                  />
-                  <Password
-                    passowordShow={passowordShow}
-                    formData={formData}
-                    type="confirmPassword"
-                    handleChange={handleChange}
-                    onClick={handlePasswordShowing}
-                  />
-                </div>
-                <div className="block">
-                  <button
-                    aria-label="submit auth data"
-                    type="submit"
-                    disabled={
-                      !formData.password ||
-                      !formData.confirmPassword ||
-                      formData.password !== formData.confirmPassword
-                    }>{isLoading ? "loading..." : 'reset password'}</button>
-                </div>
-              </form>
-            </div>
+          <div className='form-container reset-form'>
+            <form onSubmit={handleSubmit}>
+              <h1>reset password</h1>
+              <div className='block'>
+                <Input
+                  name="password"
+                  type="password"
+                  placeholder="password"
+                  aria-label="password"
+                  {...requiredForEveryInput}
+                />
+                <Input
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="confirm password"
+                  aria-label="confirm password"
+                  {...requiredForEveryInput}
+                />
+              </div>
+              <div className="block">
+                <Button
+                  aria-label="submit auth data"
+                  type="submit"
+                  disabled={
+                    isLoading ||
+                    Object.values(formErrors).filter(fE => fE.length > 0).length > 0
+                  }>
+                  {
+                    isLoading ?
+                      <Loading
+                        size="small"
+                        strokeWidth="5px"
+                        color={"#fff"}
+                        backgroud="transparent"
+                        style={{ margin: 0 }}
+                      />
+                      : 'reset password'
+                  }
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

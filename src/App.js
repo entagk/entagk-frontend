@@ -6,9 +6,9 @@ import 'aos/dist/aos.css'; // You can also use <link> for styles
 import Auth from './components/Auth/Auth';
 import Reset from './components/Reset/Reset';
 import Profile from './components/Profile/Profile';
-import Subsecription from './components/Subsecription/Subsecription';
 import Report from './components/Report/Report';
 import ErrorPage from './components/ErrorPage/ErrorPage';
+import Templates from './components/Templates/Templates';
 
 import {
   createBrowserRouter,
@@ -42,12 +42,12 @@ const router = createBrowserRouter(
         element={<Profile />}
       />
       <Route
-        path="/subsecription"
-        element={<Subsecription />}
-      />
-      <Route
         path="/report"
         element={<Report />}
+      />
+      <Route
+        path='/templates/you'
+        element={<Templates />}
       />
     </Route>
   )

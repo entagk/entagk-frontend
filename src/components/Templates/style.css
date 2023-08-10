@@ -1,0 +1,65 @@
+.templates-container {
+  margin: 20px;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.search-result {
+  color: #fff;
+  width: 100%;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.search-result span {
+  font-weight: bold;
+}
+
+.no-templates {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 20px;
+  color: #fff;
+}
+
+.no-templates h2 {
+  font-size: 40px;
+}
+
+.no-templates p {
+  margin-block: 20px;
+  font-size: 20px;
+}
+
+button.add-temp {
+  border: 2px solid;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+
+@media (max-width: 768px) {
+  button.add-temp {
+    margin-top: 10px;
+    width: 100%;
+    font-size: 18px;
+    padding: 8px;
+  }
+}
+
+@import url("./TemplateTasks/style.css");
+
+@media (max-width: 550px) {
+  .templates.container {
+    padding: 0;
+  }
+}

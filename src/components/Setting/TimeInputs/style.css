@@ -1,0 +1,121 @@
+.block .time {
+  width: fit-content;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  flex-direction: column;
+}
+
+.time-inputs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* margin-top: 10px; */
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.time-inputs h4 {
+  font-size: 18px;
+  text-transform: capitalize;
+  margin-right: 20px;
+}
+
+.min-sec-input {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.block .min-sec-input input {
+  padding-right: 20px;
+  width: 90px;
+}
+
+.min-sec-input div.plus-minus-arrows {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column;
+  position: absolute;
+  height: 100%;
+  width: fit-content;
+}
+
+.min-sec-input .plus-minus-arrows button {
+  font-size: 15px;
+}
+
+.min-sec-input .plus-minus-arrows button.plus-arrow:hover,
+.min-sec-input .plus-minus-arrows button.minus-arrow:hover {
+  background-color: #79797994;
+}
+
+.min-sec-input .plus-minus-arrows button.plus-arrow,
+.min-sec-input .plus-minus-arrows button.minus-arrow {
+  padding-inline: 4px;
+  background: #c8c8c8ab;
+  color: #fff;
+}
+
+.min-sec-input .plus-minus-arrows button.plus-arrow {
+  padding-block: 3px;
+  border-radius: 0px 10px 0px 0;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.min-sec-input .plus-minus-arrows button.minus-arrow {
+  padding-block: 3px;
+  border-radius: 0px 0px 10px 0;
+  border-top: 1px solid #dbdbdb;
+}
+
+/* removing default arrows from input number */
+.time-input input::-webkit-outer-spin-button,
+.time-input input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.time-input input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+@media (max-width: 400px) {
+  .block .min-sec-input input {
+    padding: 6px;
+    width: 60px;
+  }
+
+  .setting .time-inputs h4 {
+    font-size: 16px;
+  }
+
+  .setting .block .select-container {
+    margin-top: 10px;
+  }
+
+  .setting .block .notification-data .select-container {
+    margin: 0;
+  }
+
+  .setting .block input[type="number"] {
+    margin-inline: 10px 0px;
+    width: 60px;
+    padding: 8px;
+  }
+
+  /* .setting .block .min-sec-input input[type="number"] {
+    margin-inline: 10px;
+  } */
+
+  .min-sec-input .plus-minus-arrows button.plus-arrow,
+  .min-sec-input .plus-minus-arrows button.minus-arrow {
+    font-size: 12px;
+    padding-top: 3.4px;
+  }
+}

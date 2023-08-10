@@ -5,6 +5,7 @@ import { CHANGE_ACTIVE_TASK } from "../../actions/tasks";
 import { FiEdit3 } from "react-icons/fi";
 
 import "./style.css";
+import Button from "../../utils/Button/Button";
 
 const ActiveTask = () => {
   const { periodNum } = useSelector(state => state.timer);
@@ -16,14 +17,18 @@ const ActiveTask = () => {
   }
 
   return (
-    <div className="active-task" style={{ marginBlock: 15 }}>
+    <div className="active-task">
       <span className="row1">#{periodNum + 1}</span>
       <span className="row2">
         {!Boolean(activeId) ? "please focus on what you are doing now" : activeName}
         {Boolean(activeId) && (
-          <button className="unactive" onClick={unactive} aria-label="unactive the task">
-            <FiEdit3 />
-          </button>
+          <Button
+            variant="single-icon"
+            className="unactive"
+            onClick={unactive}
+            aria-label="unactive the task"
+            startIcon={<FiEdit3 />}
+          />
         )}
       </span>
     </div>
