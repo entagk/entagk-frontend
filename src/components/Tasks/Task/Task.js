@@ -251,7 +251,7 @@ const Task = ({
                             {!props.check ? (
                               <>
                                 {
-                                  (props.template !== null) ? (
+                                  (props?.template !== null) ? (
                                     <>
                                       <RiCheckboxCircleFill />
                                     </>
