@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { FiEdit3 } from 'react-icons/fi';
 import { GrAchievement } from 'react-icons/gr';
-import { MdLogout, MdDelete } from "react-icons/md";
+import {
+  MdLogout,
+  MdDelete,
+  MdOutlineLeaderboard
+} from "react-icons/md";
 
 import { LOGOUT } from '../../actions/auth';
 
@@ -86,6 +90,17 @@ function UserMenu({ setOpenDelete, setOpenEditAccount }) {
         <span className="user-name">{getUserName()}</span>
         <span className="user-email">{user.email}</span>
       </div>
+      <Button
+        component={Link}
+        to="/leaderboard"
+        aria-label="leaderborad link in user menu"
+        variant='none'
+        startIcon={
+          <MdOutlineLeaderboard />
+        }
+      >
+        Leaderboard
+      </Button>
       <Button
         component={Link}
         to="/user/achievements"

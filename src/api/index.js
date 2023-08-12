@@ -113,3 +113,10 @@ export const addTemplate = (formData) => API.post(`/template/add/`, formData);
 export const modifyTemplate = (id, formData) => API.patch(`/template/${id}`, formData);
 
 /* end the template api */
+
+
+/* start leaderboard */
+
+export const getLeaderboard = (page) => API.get(`/leaderboard/?page=${page}`);
+
+/* end leaderboard */

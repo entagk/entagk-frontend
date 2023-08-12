@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
 import './style.css';
-import { getPages } from '../../../utils/helper';
-import Button from '../../../utils/Button/Button';
+import { getPages } from '../helper';
+import Button from '../Button/Button';
 
 function PaginationBar({ numberOfPages, currentPage, changePage }) {
   const [pages, setPages] = useState(getPages(currentPage, numberOfPages))

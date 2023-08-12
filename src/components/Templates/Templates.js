@@ -1,4 +1,9 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react';
+import React, {
+  lazy,
+  Suspense,
+  useEffect,
+  useState
+} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
@@ -20,7 +25,7 @@ const Template = lazy(() => import('./Template/Template.js'));
 const TemplateTasks = lazy(() => import('./TemplateTasks/TemplateTasks'))
 const TemplateForm = lazy(() => import('./TemplateForm/TemplateForm.js'))
 const SearchBar = lazy(() => import('./SearchBar/SearchBar'));
-const PaginationBar = lazy(() => import('./PaginationBar/PaginationBar'));
+const PaginationBar = lazy(() => import('../../utils/PaginationBar/PaginationBar'));
 
 function Templates() {
   const dispatch = useDispatch();
@@ -29,7 +34,15 @@ function Templates() {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [showTodo, setShowTodo] = useState('');
-  const { userTemplates: { templates, total, numberOfPages, currentPage }, isLoading } = useSelector(state => state?.templates) || { userTemplates: {} };
+  const {
+    userTemplates: {
+      templates,
+      total,
+      numberOfPages,
+      currentPage
+    },
+    isLoading
+  } = useSelector(state => state?.templates) || { userTemplates: {} };
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -56,7 +69,10 @@ function Templates() {
             </>
           ) : (
             <>
-              {(message.message && !message.message.includes('Network Error')) ? (
+              {(
+                message.message &&
+                !message.message.includes('Network Error')
+              ) ? (
                 <Message {...message} setMessage={setMessage} />
               ) : (
                 <NetworkError />
@@ -76,9 +92,19 @@ function Templates() {
 
   const changePage = (page) => {
     if (!templates[page - 1] || searchParams.get('search')) {
-      dispatch(getTemplatesForUser(searchParams.get('sort'), searchParams.get('search'), page, setMessage));
+      dispatch(
+        getTemplatesForUser(
+          searchParams.get('sort'),
+          searchParams.get('search'),
+          page,
+          setMessage
+        )
+      );
     } else {
-      dispatch({ type: CHANGE_CURRENT_PAGE, data: { type: "userTemplates", page } })
+      dispatch({
+        type: CHANGE_CURRENT_PAGE,
+        data: { type: "userTemplates", page }
+      })
     }
   }
 

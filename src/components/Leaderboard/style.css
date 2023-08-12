@@ -1,0 +1,98 @@
+.inner-container {
+  width: 100%;
+  padding-block: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #fff;
+}
+
+.inner-container .users,
+.inner-container .users .user {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.inner-container .users {
+  margin-bottom: 20px;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.inner-container .users .user {
+  flex-direction: row;
+  justify-content: flex-start;
+
+  padding: 20px;
+  border-radius: 20px;
+  font-size: 25px;
+}
+
+.inner-container .users .user:hover,
+.inner-container .users .user.active {
+  background: #00000015;
+}
+
+.users .user .num {
+  padding-right: 15px;
+}
+
+.users .user .icon {
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.users .user .icon.first {
+  color: #fed84e;
+}
+
+.users .user .icon.second {
+  color: #d6e4ef;
+}
+
+.users .user .icon.third {
+  color: #f7be8b;
+}
+
+.users .user .avatar {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+}
+
+.users .user .avatar img {
+  border-radius: inherit;
+}
+
+.users .user .inner-data {
+  height: max-content;
+  margin-left: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.users .user .name {
+  font-size: 30px;
+}
+
+.no-users {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.no-users h1 {
+  margin-block: 20px;
+}

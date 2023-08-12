@@ -10,7 +10,11 @@ import {
 } from "../actions/auth";
 
 // eslint-disable-next-line
-export default (state = { user: undefined, authData: undefined, isLoading: false }, action) => {
+export default (state = {
+  user: undefined,
+  authData: undefined,
+  isLoading: false
+}, action) => {
   switch (action.type) {
     case START_LOADING:
       if (action.data === 'auth')

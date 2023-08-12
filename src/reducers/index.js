@@ -4,5 +4,12 @@ import timer from "./timer";
 import tasks from "./tasks";
 import auth from './auth';
 import templates from "./templates";
+import leaderboard from './leaderboard';
 
-export default combineReducers({ timer, tasks, auth, templates });
+export default combineReducers({
+  timer,
+  tasks,
+  auth,
+  templates,
+  leaderboard
+});
