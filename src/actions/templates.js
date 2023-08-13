@@ -96,7 +96,8 @@ export const deleteTemplate = (id, pageLen, currentPage, numberOfPages, setIsLoa
     if (currentPage !== numberOfPages) {
       dispatch(getTemplatesForUser(sort, search, currentPage, setMessage))
     } else if (pageLen === 1) {
-      dispatch(getTemplatesForUser(sort, search, currentPage - 1, setMessage))
+      if (currentPage !== 1)
+        dispatch(getTemplatesForUser(sort, search, currentPage - 1, setMessage))
     }
 
     setIsLoading(null);

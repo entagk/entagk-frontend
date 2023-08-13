@@ -98,19 +98,20 @@ export default (state = initialState, action) => {
       }
 
     case GET_USER_TEMPLATES:
-      const templates = state.userTemplates.templates || [];
+      const templates = state.userTemplates.templates || {};
       templates[action.data.currentPage - 1] = action.data.templates;
 
       if (!(new URLSearchParams(document.location.search).get('search'))) {
+        console.log(templates);
         return {
           ...state,
-          userTemplates: { ...action.data, templates: templates },
+          userTemplates: { ...action.data, templates: templates, hasTemps: action.data.currentPage === 1 && action.data.templates.length === 0 ? false : true, },
           tempTasks: action.data.templates.reduce((all, c) => ({ ...all, [c._id]: {} }), state.tempTasks)
         };
       } else {
         return {
           ...state,
-          userTemplates: { ...action.data, templates: templates },
+          userTemplates: { ...action.data, templates: templates, hasTemps: state.userTemplates.hasTemps },
           tempTasks: action.data.templates.reduce((all, c) => ({ ...all, [c._id]: {} }), state.tempTasks)
         };
       }
@@ -144,7 +145,8 @@ export default (state = initialState, action) => {
           ...state,
           userTemplates: {
             ...state.userTemplates,
-            total: state.userTemplates.total + 1
+            total: state.userTemplates.total + 1,
+            hasTemps: true,
           }
         }
       } else {
@@ -154,12 +156,13 @@ export default (state = initialState, action) => {
         } else if (state.userTemplates.templates[state.userTemplates.numberOfPages - 1]) {
           state.userTemplates.templates[state.userTemplates.numberOfPages - 1].push(action.data);
         }
-
+        
         return {
           ...state,
           userTemplates: {
             ...state.userTemplates,
-            total: state.userTemplates.total + 1
+            total: state.userTemplates.total + 1,
+            hasTemps: true,
           }
         }
       }
@@ -175,25 +178,29 @@ export default (state = initialState, action) => {
       const tempId = action.data.deletedTemplate._id
       const tempTasks = Object.entries(state.tempTasks).filter(t => t[0] !== tempId);
       if (state.userTemplates.currentPage === state.userTemplates.numberOfPages) {
-        state.userTemplates.templates[state.userTemplates.currentPage - 1] = state.userTemplates.templates[state.userTemplates.currentPage - 1].filter((t) => t._id !== tempId);
+        const page = state.userTemplates.currentPage;
+        console.log(state.userTemplates.templates[page - 1].filter((t) => t._id !== tempId));
+        state.userTemplates.templates[page - 1] = state.userTemplates.templates[page - 1].filter((t) => t._id !== tempId);
 
         return {
           ...state,
           userTemplates: {
             ...state.userTemplates,
             total: state.userTemplates.total - 1,
-            currentPage: state.userTemplates.templates[state.userTemplates.currentPage - 1].length === 0 ? state.userTemplates.currentPage - 1 : state.userTemplates.currentPage,
-            numberOfPages: state.userTemplates.templates[state.userTemplates.currentPage - 1].length === 0 ? state.userTemplates.numberOfPages - 1 : state.userTemplates.numberOfPages
+            currentPage: state.userTemplates.templates[page - 1].length === 0 ? page === 1 ? 1 : page - 1 : page,
+            numberOfPages: state.userTemplates.templates[page - 1].length === 0 ? state.userTemplates.numberOfPages - 1 : state.userTemplates.numberOfPages
           },
           tempTasks: tempTasks.reduce((a, e) => ({ ...a, [e[0]]: e[1] }), {}),
         }
       } else {
+        const page = state.userTemplates.currentPage;
+
         return {
           ...state,
           userTemplates: {
             ...state.userTemplates,
             total: state.userTemplates.total - 1,
-            numberOfPages: state.userTemplates.templates[state.userTemplates.currentPage - 1].length === 0 ? state.userTemplates.numberOfPages - 1 : state.userTemplates.numberOfPages
+            numberOfPages: state.userTemplates.templates[page - 1].length === 0 ? state.userTemplates.numberOfPages - 1 : state.userTemplates.numberOfPages
           },
           tempTasks: tempTasks.reduce((a, e) => ({ ...a, [e[0]]: e[1] }), {}),
         }
@@ -201,7 +208,7 @@ export default (state = initialState, action) => {
 
     case SEARCH_USER_TEMPLATRES:
       const keys = action.data.query.split(" ");
-      const result = state.userTemplates.templates.filter(item => {
+      const result = state.userTemplates.templates[0].filter(item => {
         let found = false;
         keys.forEach(key => {
           found = found || item.name.includes(key) || item.desc.includes(key);
@@ -242,7 +249,7 @@ export default (state = initialState, action) => {
         ...state,
         userTemplates: {
           ...state.userTemplates,
-          templates: state.userTemplates?.templates?.sort(sortCallback)
+          templates: state.userTemplates?.templates[0]?.sort(sortCallback)
         }
       }
 

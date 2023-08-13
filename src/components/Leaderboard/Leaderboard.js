@@ -9,13 +9,10 @@ import Loading from '../../utils/Loading/Loading';
 import Message from '../../utils/Message';
 import NetworkError from '../NetworkError/NetworkError';
 
-import PaginationBar from '../../utils/PaginationBar/PaginationBar';
-
 import './style.css';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getLeaderboard } from '../../actions/leaderboard';
-import { CHANGE_CURRENT_PAGE } from '../../actions/templates';
 
 import User from './User';
 import Button from '../../utils/Button/Button';

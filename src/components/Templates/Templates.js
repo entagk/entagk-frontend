@@ -40,7 +40,8 @@ function Templates() {
       templates,
       total,
       numberOfPages,
-      currentPage
+      currentPage,
+      hasTemps
     },
     isLoading
   } = useSelector(state => state?.templates) || { userTemplates: {} };
@@ -156,7 +157,28 @@ function Templates() {
       }>
         <div className='templates container'>
           <NavBar />
-          {(templates[currentPage - 1]?.length > 0 || searchParams.get('search')) ? (
+          {!hasTemps || (!hasTemps && !isLoading) ? (
+            <div className='no-templates'>
+              <h2>
+                No templates
+              </h2>
+              <p>Add your first template</p>
+              <Button
+                aria-label='New template'
+                className='add-temp'
+                onClick={() => setOpenFormForNew(true)}
+                startIcon={
+                  <AiOutlinePlus />
+                }
+                variant='contained'
+                style={{
+                  border: 'none'
+                }}
+              >
+                Add Template
+              </Button>
+            </div>
+          ) : (
             <>
               <SearchBar
                 searchParams={searchParams}
@@ -202,27 +224,6 @@ function Templates() {
                 />
               )}
             </>
-          ) : templates[currentPage - 1]?.length > 0 && !searchParams.get('search') && (
-            <div className='no-templates'>
-              <h2>
-                No templates
-              </h2>
-              <p>Add your first template</p>
-              <Button
-                aria-label='New template'
-                className='add-temp'
-                onClick={() => setOpenFormForNew(true)}
-                startIcon={
-                  <AiOutlinePlus />
-                }
-                variant='contained'
-                style={{
-                  border: 'none'
-                }}
-              >
-                Add Template
-              </Button>
-            </div>
           )}
         </div>
       </Suspense>
