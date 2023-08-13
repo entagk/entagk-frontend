@@ -9,6 +9,7 @@ import Profile from './components/Profile/Profile';
 import Leaderboard from './components/Leaderboard/Leaderboard';
 import ErrorPage from './components/ErrorPage/ErrorPage';
 import Templates from './components/Templates/Templates';
+import Achievements from './components/Achievements/Achievements';
 
 import {
   createBrowserRouter,
@@ -47,6 +48,10 @@ const router = createBrowserRouter(
       <Route
         path='/templates/you'
         element={<Templates />}
+      />
+      <Route 
+        path='/achievements'
+        element={<Achievements />}
       />
     </Route>
   )

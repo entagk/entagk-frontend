@@ -103,7 +103,7 @@ function UserMenu({ setOpenDelete, setOpenEditAccount }) {
       </Button>
       <Button
         component={Link}
-        to="/user/achievements"
+        to="/achievements"
         aria-label="achievments link in user menu"
         variant='none'
         startIcon={
