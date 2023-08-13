@@ -8,6 +8,36 @@ const Select = lazy(() => import('../Select/Select'));
 const TimeInputs = lazy(() => import('../TimeInputs/timeInputs'));
 const ToggleButton = lazy(() => import('../../../utils/ToggleButton/ToggleButton'));
 
+const AutomaticOption = ({ data, index, automations, auto, setData }) => (
+  <div style={{
+    border: index === automations.length - 1 ? 'none' : '',
+    marginBottom: index + 1 !== automations.length ? '10px' : "0"
+  }} key={index}>
+    <div style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      flexWrap: "wrap",
+    }}>
+      <h3 style={{ width: 'fit-content' }}>{auto.name}</h3>
+      <Suspense fallback={
+        <Loading
+          size="small"
+          color={"#fff"}
+          backgroud="transparent"
+          paddingBlock='0'
+        />
+      }>
+        <ToggleButton
+          type={auto.type}
+          data={data}
+          setData={setData}
+        />
+      </Suspense>
+    </div>
+  </div>
+)
+
 const TimerSetting = ({
   handleChange,
   handleBlur,
@@ -118,33 +148,31 @@ const TimerSetting = ({
       </div>
       <div className='block'>
         {automations.map((auto, index) => (
-          <div style={{
-            border: index === automations.length - 1 ? 'none' : '',
-            marginBottom: index + 1 !== automations.length ? '10px' : "0"
-          }} key={index}>
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-            }}>
-              <h3 style={{ width: 'fit-content' }}>{auto.name}</h3>
-              <Suspense fallback={
-                <Loading
-                  size="small"
-                  color={"#fff"}
-                  backgroud="transparent"
-                  paddingBlock='0'
-                />
-              }>
-                <ToggleButton
-                  type={auto.type}
-                  data={data}
-                  setData={setData}
-                />
-              </Suspense>
-            </div>
-          </div>
+          <>
+            {index === 3 ? (
+              <>
+                {
+                  "focusMode" in data && index === 3 && (
+                    <AutomaticOption
+                      index={index}
+                      data={data}
+                      automations={automations}
+                      auto={auto}
+                      setData={setData}
+                    />
+                  )
+                }
+              </>
+            ) : (
+              <AutomaticOption
+                index={index}
+                data={data}
+                automations={automations}
+                auto={auto}
+                setData={setData}
+              />
+            )}
+          </>
         ))}
       </div>
     </>
