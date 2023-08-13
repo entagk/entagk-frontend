@@ -27,7 +27,7 @@
 
   padding: 20px;
   border-radius: 20px;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .inner-container .users .user:hover,
@@ -58,13 +58,25 @@
   color: #f7be8b;
 }
 
-.users .user .avatar {
+.users .user .avatar,
+.users .user .text-avatar {
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 50px;
   height: 50px;
+  margin-left: 10px;
+}
+
+.users .user .avatar img {
+  width: inherit;
+  height: inherit;
+}
+
+.users .user .text-avatar {
+  padding: 25px;
+  font-size: 25px;
 }
 
 .users .user .avatar img {
@@ -73,8 +85,7 @@
 
 .users .user .inner-data {
   height: max-content;
-  margin-left: 20px;
-
+  
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -82,7 +93,24 @@
 }
 
 .users .user .name {
-  font-size: 30px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 25px;
+  font-weight: 500;
+  margin-inline: 10px;
+}
+
+.users .user .total-hours {
+  font-size: 20px;
+}
+
+.users .user .total-hours span {
+  font-size: 25px;
+  font-weight: 500;
+  margin-right: 5px;
 }
 
 .no-users {
@@ -95,4 +123,80 @@
 
 .no-users h1 {
   margin-block: 20px;
+}
+
+@media (max-width: 768px) {
+  .inner-container .users .user {
+    padding: 15px;
+    border-radius: 15px;
+    font-size: 20px;
+  }
+  
+  .users .user .icon {
+    font-size: 30px;
+  }
+  
+  .users .user .name {
+    font-size: 22px;
+  }
+  
+  .users .user .total-hours {
+    font-size: 18px;
+  }
+
+  .users .user .total-hours span {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 500px) {
+  .inner-container .users .user {
+    font-size: 20px;
+  }
+
+  .users .user .icon {
+    font-size: 20px;
+  }
+
+  .users .user .avatar,
+  .users .user .text-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .users .user .text-avatar {
+    padding: 20px;
+    font-size: 20px;
+  }
+
+  .users .user .name {
+    font-size: 18px;
+  }
+
+  .users .user .total-hours {
+    font-size: 16px;
+  }
+
+  .users .user .total-hours span {
+    font-size: 18px;
+    margin-right: 3px;
+  }
+}
+
+@media (max-width: 425px) {
+  .users .user .icon {
+    font-size: 18px;
+  }
+
+  .users .user .name {
+    font-size: 16px;
+  }
+
+  .users .user .total-hours {
+    font-size: 14px;
+  }
+
+  .users .user .total-hours span {
+    font-size: 16px;
+  }
 }
