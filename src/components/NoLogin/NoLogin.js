@@ -17,34 +17,22 @@ function NoLogin() {
           <h1>Please, Login to use this feature</h1>
         </div>
         <div className='buttons'>
-          {window.location.pathname === '/' ? (
-            <Button
-              variant='contained'
-              onClick={reload}
-              style={{
-                marginInline: 20
-              }}
-            >
-              reload
-            </Button>
-          ) : (
-            <Button
-              component={Link}
-              to="/"
-              variant='contained'
-            >
-              go home
-            </Button>
-          )}
-          {(window.location.pathname === '/' || window.history.length > 2) && (
-            <Button
-              component={Link}
-              to={-1}
-              variant='outlined'
-            >
-              go back
-            </Button>
-          )}
+          <Button
+            component={Link}
+            to="/auth"
+            style={{
+              marginInline: 20
+            }}
+          >
+            login
+          </Button>
+          <Button
+            variant='outlined'
+            component={Link}
+            to="/"
+          >
+            go home
+          </Button>
         </div>
       </div>
     </div>
