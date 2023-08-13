@@ -10,14 +10,16 @@ import NetworkError from '../NetworkError/NetworkError';
 import NoLogin from '../NoLogin/NoLogin';
 
 import './style.css';
+import { useSelector } from 'react-redux';
 
 const NavBar = lazy(() => import('../NavBar/NavBar'));
 const Summary = lazy(() => import('./Summary'));
 
 const Achievements = () => {
   const [message, setMessage] = useState({ message: "", type: "" });
+  const { user } = useSelector(state => state.auth);
 
-  if (!localStorage.getItem('token')) {
+  if (!localStorage.getItem('token') || (!user?._id && !localStorage.getItem('token'))) {
     return (
       <NoLogin />
     )

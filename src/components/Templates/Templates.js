@@ -34,6 +34,7 @@ function Templates() {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [showTodo, setShowTodo] = useState('');
+  const { user } = useSelector(state => state.auth);
   const {
     userTemplates: {
       templates,
@@ -84,7 +85,7 @@ function Templates() {
     )
   }
 
-  if (!localStorage.getItem('token')) {
+  if (!localStorage.getItem('token') || (!user?._id && !localStorage.getItem('token'))) {
     return (
       <NoLogin />
     )
