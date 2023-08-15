@@ -19,6 +19,7 @@ import { addActivity } from "../../actions/activities";
 
 const worker = new window.Worker('worker.js');
 const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
+    const {user} = useSelector(state => state.auth);
     const { active, setting, started, periodNum } = useSelector((state) => state.timer);
     const { activeId } = useSelector(state => state.tasks);
     const [time, setTime] = useState(localStorage.getItem("restOfTime") === null ? 0 : Number(localStorage.getItem("restOfTime")))
@@ -173,7 +174,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                 console.log("alarm repet")
             }
 
-            if (active === PERIOD) {
+            if (active === PERIOD && user) {
                 dispatch(
                     addActivity({
                         activeTask: activeId,
@@ -231,7 +232,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
         alarmSound.current.handleStop();
 
         if (started) {
-            if (active === PERIOD) {
+            if (active === PERIOD && user) {
                 dispatch(
                     addActivity({
                         activeTask: activeId,
