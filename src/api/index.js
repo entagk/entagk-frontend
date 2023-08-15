@@ -120,3 +120,9 @@ export const modifyTemplate = (id, formData) => API.patch(`/template/${id}`, for
 export const getLeaderboard = (page) => API.get(`/leaderboard/?page=${page}`);
 
 /* end leaderboard */
+
+/* start acivity api */
+
+export const addActivity = (data) => API.post(`/active/`, data);
+
+/* end acivity api */

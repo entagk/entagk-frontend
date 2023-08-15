@@ -15,12 +15,14 @@ import FullscreenBtn from "./FullscreenBtn/FullscreenBtn";
 
 import AnalogTimer from "./Analog/Analog";
 import DigitalTimer from "./Digital/Digital";
+import { addActivity } from "../../actions/activities";
 
 const worker = new window.Worker('worker.js');
 const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
     const { active, setting, started, periodNum } = useSelector((state) => state.timer);
     const { activeId } = useSelector(state => state.tasks);
     const [time, setTime] = useState(localStorage.getItem("restOfTime") === null ? 0 : Number(localStorage.getItem("restOfTime")))
+    const startTime = useRef();
 
     const activePeriod = setting?.time[active];
     const dispatch = useDispatch();
@@ -97,6 +99,9 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                 if (setting.tickingType.name !== "none") {
                     tickingSound.current.handlePlay();
                 }
+                if (active === PERIOD) {
+                    startTime.current = Date.now();
+                }
                 worker.postMessage({ started: !started, count: setting.time[active] });
                 dispatch({ type: START_TIMER, data: 0 });
                 console.log(time, 0, "autoBreaks autoPomodors");
@@ -168,6 +173,19 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                 console.log("alarm repet")
             }
 
+            if (active === PERIOD) {
+                dispatch(
+                    addActivity({
+                        activeTask: activeId,
+                        time: {
+                            start: startTime.current,
+                            end: Date.now()
+                        }
+                    })
+                );
+                startTime.current = Date.now();
+            }
+
             dispatch(changeActive(active, activeId, setIsLoadingTask, setMessage));
 
             // eslint-disable-next-line
@@ -213,12 +231,27 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
         alarmSound.current.handleStop();
 
         if (started) {
+            if (active === PERIOD) {
+                dispatch(
+                    addActivity({
+                        activeTask: activeId,
+                        time: {
+                            start: startTime.current,
+                            end: Date.now()
+                        }
+                    })
+                )
+            }
+
             worker.postMessage("stop");
             if (setting.tickingType.name !== "none") {
                 tickingSound.current.handleStop();
             }
             dispatch({ type: STOP_TIMER, data: setting.time[active] - time });
         } else {
+            if (active === PERIOD) {
+                startTime.current = Date.now();
+            }
             if (setting.tickingType.name !== "none") {
                 tickingSound.current.handlePlay();
             }

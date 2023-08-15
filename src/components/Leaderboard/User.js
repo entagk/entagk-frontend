@@ -38,7 +38,7 @@ const User = ({ user, number }) => {
           </span>
         )}
         <p className='name' title={user.name}>
-          {user.name + user.name}
+          {user.name}
         </p>
         <p className='total-hours'>
           <span>
