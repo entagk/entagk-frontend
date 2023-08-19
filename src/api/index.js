@@ -125,4 +125,8 @@ export const getLeaderboard = (page) => API.get(`/leaderboard/?page=${page}`);
 
 export const addActivity = (data) => API.post(`/active/`, data);
 
+export const getDay = (day) => API.get(`/active/${day}`);
+
+export const getDays = (start, end) => API.get(`/active/?start=${start}&end=${end}`)
+
 /* end acivity api */

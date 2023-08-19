@@ -13,7 +13,8 @@ import './style.css';
 import { useSelector } from 'react-redux';
 
 const NavBar = lazy(() => import('../NavBar/NavBar'));
-const Summary = lazy(() => import('./Summary'));
+const Summary = lazy(() => import('./Summary/Summary'));
+const Analytics = lazy(() => import('./Analytics/Analytics'));
 
 const Achievements = () => {
   const [message, setMessage] = useState({ message: "", type: "" });
@@ -48,6 +49,7 @@ const Achievements = () => {
           <NavBar />
           <div className='achievements-container'>
             <Summary />
+            <Analytics setMessage={setMessage} />
           </div>
         </div>
       </Suspense>

@@ -1,0 +1,35 @@
+svg text {
+  color: #fff;
+}
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  font: 16px sans-serif;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  left: -300px;
+  top: -100x;
+  background: rgb(255, 255, 255);
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+  color: #000;
+}
+
+.tooltip p {
+  margin: 0;
+}
+
+.tooltip .name {
+  font-weight: 600;
+}
+
+.tooltip .number {
+  margin-block: 10px;
+}

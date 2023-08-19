@@ -1,3 +1,5 @@
+import * as d3 from 'd3';
+
 export const formatTime = (t) => {
   const sec = t % 60;
   const min = Math.floor(t / 60);
@@ -122,3 +124,58 @@ export const stringToColor = (string) => {
   }
   return color;
 };
+
+export function wrapText(selection) {
+  selection.each(function () {
+    const node = d3.select(this);
+    const rectWidth = +node.attr("data-width");
+    let word;
+    const words = node.text().split(" ").reverse();
+    let line = [];
+    const x = node.attr("x");
+    const y = node.attr("y");
+    let tspan = node.text("").append("tspan").attr("x", x).attr("y", y);
+    let lineNumber = 0;
+    while (words.length > 1) {
+      word = words.pop();
+      line.push(word);
+      tspan.text(line.join(" "));
+      const tspanLength = tspan.node().getComputedTextLength();
+      if (tspanLength > rectWidth && line.length !== 1) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = addTspan(word);
+      }
+    }
+
+    addTspan(words.pop());
+
+    function addTspan(text) {
+      const fontSize = 12;
+      lineNumber += 1;
+      return node
+        .append("tspan")
+        .attr("x", x)
+        .attr("y", y)
+        .attr("dy", `${lineNumber * 2 + fontSize}px`)
+        .text(text);
+    }
+  });
+}
+
+export function getWeekStartAndEnd(date) {
+  const day = date ? new Date(date) : new Date();
+
+  const start = new Date(day.setDate((day.getDate() - day.getDay() + 1))).toJSON().split('T')[0];
+  const end = new Date(day.setDate(day.getDate() + 6)).toJSON().split('T')[0];
+
+  return [start, end];
+}
+
+export function getMonthRange(year, month) {
+  const start = `${year}-${month + 1}-1`;
+  const end = `${year}-${month + 1}-${new Date(year, month, 0).getDate()}`;
+
+  return [start, end];
+}

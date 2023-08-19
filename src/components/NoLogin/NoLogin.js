@@ -6,10 +6,6 @@ import Button from '../../utils/Button/Button';
 import './style.css';
 
 function NoLogin() {
-  const reload = () => {
-    window.location.reload();
-  }
-
   return (
     <div className='no-login'>
       <div className='container'>

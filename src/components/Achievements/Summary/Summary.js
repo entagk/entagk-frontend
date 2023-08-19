@@ -1,10 +1,12 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import Loading from '../../utils/Loading/Loading';
+import Loading from '../../../utils/Loading/Loading';
 
 import { CgTimelapse } from 'react-icons/cg';
 import { MdFlashOn } from 'react-icons/md';
 import { BsCalendar3 } from 'react-icons/bs';
+
+import './style.css';
 
 const Summary = () => {
   const { user, isLoading } = useSelector(state => state.auth);
@@ -26,7 +28,7 @@ const Summary = () => {
             </span>
             <div>
               <h3>
-                {user?.totalHours}
+                {user?.totalHours.toFixed(2)}
               </h3>
               <p>
                 Total Hours
