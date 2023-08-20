@@ -15,7 +15,6 @@ const Analytics = ({ setMessage }) => {
   const [dateType, setDateType] = useState(dateTypes[0]);
   const [dataType, setDataType] = useState('tasks');
   const [date, setDate] = useState({ startDate: new Date().toJSON().split('T')[0], endDate: new Date().toJSON().split('T')[0], display: 'today' });
-  const [chartData, setChartData] = useState([]);
 
   return (
     <div className='analytics'>

@@ -9,11 +9,11 @@ function Chart({ data }) {
   const maxMins = Math.ceil(d3.max(data, (d) => d?.totalMins) / 10) * 10;
 
   const width = window.innerWidth,
-    height = 40 * data.length + 50,
-    marginTop = 30,
-    marginRight = 30,
-    marginBottom = 20,
-    marginLeft = 80;
+  marginTop = 30,
+  marginRight = 30,
+  marginBottom = 20,
+  marginLeft = 80,
+  height = (50 * data.length) + marginTop + marginBottom;
 
   const gx = useRef(),
     gy = useRef(),
@@ -40,9 +40,9 @@ function Chart({ data }) {
     .range([marginLeft, width - marginRight]);
 
   useEffect(
-    () =>
-      void d3
-        .select(gx.current)
+    () => {
+
+      void d3.select(gx.current)
         .call(d3.axisTop(x).ticks(width / 80, "m"))
         .call((g) =>
           g
@@ -60,28 +60,31 @@ function Chart({ data }) {
             .attr("text-anchor", "start")
             .text("Time (min)")
         )
-        .call((g) => g.select(".domain").remove()),
+        .call((g) => g.select(".domain").remove());
+    },
     // eslint-disable-next-line
-    [gx, x]
+    [gx, x, data]
   );
 
-  useEffect(() =>
-    void d3
-      .select(gy.current)
+  useEffect(() => {
+    const gyRef = d3.select(gy.current);
+    void gyRef
       .call(d3.axisLeft(y).tickSizeOuter(10).tickPadding(5))
       .selectAll("text")
-      .call(wrapText),
-    [gy, y]);
+      .call(wrapText);
+  },
+    [gy, y, data]);
 
   useEffect(() => {
-    const labels = document.querySelectorAll('.labels text');
+    const labelsText = document.querySelectorAll('.labels text');
 
-    labels.forEach((l) => {
+    labelsText.forEach((l) => {
       l.remove();
     })
 
-    return void d3.select(labelsRef.current)
-      .selectAll()
+    const labels = d3.select(labelsRef.current);
+
+    labels.selectAll()
       .data(data)
       .join("text")
       .attr("x", (d) => x(d?.totalMins))
@@ -94,10 +97,10 @@ function Chart({ data }) {
           .filter((d) => x(d?.totalMins) - x(0) < maxMins / 2) // short bars
           .attr("dx", +4)
           .attr("text-anchor", "start")
-      )
+      );
   }
     // eslint-disable-next-line
-    , [labelsRef, x, y, data]);
+    , [x, y, data]);
 
   useEffect(() => {
     const tooltip = d3
@@ -124,7 +127,6 @@ function Chart({ data }) {
       .on("mouseout", function () {
         return tooltip.style("visibility", "hidden");
       });
-
     // eslint-disable-next-line
   }, [barsRef, data]);
 
@@ -132,13 +134,16 @@ function Chart({ data }) {
     <>
       <svg
         viewBox={[0, 0, width, height]}
+        width={width + marginLeft + marginRight}
+        height={height + marginTop + marginBottom}
         style={{
           maxWidth: "100%",
           background: "var(--main-light-black)",
           height: "auto",
           width: "100%",
           font: "10px sans-serif",
-          color: "#fff"
+          color: "#fff",
+          borderRadius: '20px'
         }}
       >
         <g
@@ -157,7 +162,9 @@ function Chart({ data }) {
               x={x(0)}
               width={x(item.totalMins) - x(0)}
               height={y.bandwidth()}
-              ry="10px"
+              style={{
+                marginRight: '10px'
+              }}
             ></rect>
           ))}
         </g>

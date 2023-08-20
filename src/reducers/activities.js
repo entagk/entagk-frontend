@@ -1,15 +1,5 @@
-import { ADD_ACTIVITY, GET_DAY, GET_DAYS } from "../actions/activities";
+import { ADD_ACTIVITY, GET_DAY, GET_DAYS, initToday } from "../actions/activities";
 import { END_LOADING, START_LOADING } from "../actions/auth";
-
-
-const initToday = {
-  "types": [],
-  "templates": [],
-  "tasks": [],
-  "totalMins": 0,
-  "userId": "",
-  "day": new Date().toJSON().split('T')[0],
-};
 
 // eslint-disable-next-line
 export default (state = {
@@ -38,27 +28,38 @@ export default (state = {
       return { ...state, today: action.date };
     case GET_DAY:
       const date = new Date().toJSON().split('T')[0];
-      if (action.data?.day === date) {
+      if (action.data?.day === date && !state.today) {
+        const dayData = !action.data ? { ...initToday, day: date } : action.data;
+        const all = state.days.concat([dayData]);
         return {
           ...state,
-          today:
-            !action.data ?
-              { ...initToday, day: date } :
-              action.data
+          today: dayData,
+          days: !state.today ? all.filter((d, i) => {
+            return !all.findIndex(day => day.day === d.day);
+          }) : state.days,
+          total: state.total + 1
         };
       } else {
+        const all = state.days.concat([action.data]);
         return {
           ...state,
-          days: state.days.concat([action.data])
+          days: all.filter((d, i) => {
+            return !all.findIndex(day => day.day === d.day);
+          }),
+          total: state.total + 1
         };
       }
     case GET_DAYS:
-      const all = state.days.concat(action.data);
+      const daysData = action.data.days;
+
+      const all = state.days.concat(daysData).sort((a, b) => a.day.localeCompare(b.day));
+      console.log(all);
       return {
         ...state,
         days: all,
         total: all.length
       };
+
     default:
       return state;
   }

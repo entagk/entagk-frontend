@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 export const formatTime = (t) => {
   const sec = t % 60;
   const min = Math.floor(t / 60);
-  // console.log(min, sec);
+
   return `${min >= 10 ? min : '0' + min}:${sec >= 10 ? sec : '0' + sec}`
 };
 
@@ -130,7 +130,7 @@ export function wrapText(selection) {
     const node = d3.select(this);
     const rectWidth = +node.attr("data-width");
     let word;
-    const words = node.text().split(" ").reverse();
+    const words = node.text().length > 12 ? node.text().split(" ").reverse() : [node.text()];
     let line = [];
     const x = node.attr("x");
     const y = node.attr("y");
@@ -178,4 +178,20 @@ export function getMonthRange(year, month) {
   const end = `${year}-${month + 1}-${new Date(year, month, 0).getDate()}`;
 
   return [start, end];
+}
+
+export const calcDays = (start, end) => {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  const different = (endDate - startDate) / 1000 / 60 / 60 / 24;
+
+  const days = [startDate.toJSON().split('T')[0], endDate.toJSON().split('T')[0],];
+  for (let i = 1; i < different; i++) {
+    const date = new Date(start);
+    date.setDate(date.getDate() + i);
+    days.push(date.toJSON().split('T')[0]);
+  }
+
+  return days;
 }

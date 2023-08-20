@@ -3,6 +3,7 @@ import React, { lazy, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getDay, getDays } from '../../../actions/activities';
+import { calcDays } from '../../../utils/helper';
 
 const Charts = lazy(() => import('./Charts'));
 const DateAndData = lazy(() => import('./DateAndData'));
@@ -66,10 +67,53 @@ const AnalyticsChart = ({
         } else {
           if (day?.[dataType])
             setData(day?.[dataType]);
+          else setData([]);
         }
       }
-    } else if (date.startDate !== date.endDate) {
-      
+    } else if (dateType === 'week') {
+      const daysData = days.filter((d) => {
+        if (new Date(d.day) - new Date(date.startDate) === 0 || new Date(d.day) - new Date(date.endDate) === 0) {
+          return true;
+        } else if (new Date(date.startDate) - new Date(d.day) < 0 && new Date(date.endDate) - new Date(d.day) > 0) {
+          return true;
+        } else return false;
+      });
+
+      if (daysData.length < 7) {
+        console.log(days);
+        const start =
+          daysData.length === 0 ?
+            date.startDate :
+            new Date(date.endDate) - new Date(daysData.at(-1).day) === 0 ?
+              date.startDate :
+              new Date(
+                new Date(daysData.at(-1)?.day).setDate(
+                  new Date(daysData.at(-1)?.day).getDate() + 1
+                )
+              ).toJSON().split('T')[0];
+
+        const end =
+          daysData.length === 0 ?
+            date.endDate :
+            new Date(date.endDate) - new Date(daysData.at(-1).day) === 0 ?
+              new Date(
+                new Date(daysData.at(-1)?.day).setDate(
+                  new Date(daysData.at(-1)?.day).getDate() - 1
+                )
+              ).toJSON().split('T')[0] : date.endDate;
+
+        dispatch(
+          getDays(
+            start,
+            end,
+            daysData,
+            setData,
+            setMessage
+          )
+        );
+      } else {
+        setData(daysData)
+      }
     }
     // eslint-disable-next-line
   }, [dateType, date, dataType]);
@@ -84,7 +128,12 @@ const AnalyticsChart = ({
         date={date}
         setDate={setDate}
       />
-      <Charts data={data} isLoading={isLoading} dataType={dataType} />
+      <Charts
+        data={data}
+        isLoading={isLoading}
+        dataType={dataType}
+        dateType={dateType}
+      />
     </>
   )
 }
