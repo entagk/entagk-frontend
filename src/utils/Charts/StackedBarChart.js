@@ -20,8 +20,6 @@ function StackedBarChart({ daysData, dataType }) {
     return { day: d.day, ...requiredData };
   });
 
-  console.log(data);
-
   const width = window.innerWidth,
     marginTop = 30,
     marginRight = 30,
@@ -43,7 +41,6 @@ function StackedBarChart({ daysData, dataType }) {
   const stackedData = d3.stack().keys(keys)(data);
 
   const height = days.length * 50 + marginTop + marginBottom;
-  console.log(height);
 
   // Declare the y (vertical position) scale.
   const y = d3
@@ -93,7 +90,40 @@ function StackedBarChart({ daysData, dataType }) {
       .selectAll("text")
       .call((text) => text.text((t) => t?.replaceAll("-", "/")))
       .call((g) => g.select(".domain").remove());
-  }, [gy, y]);
+  }, [gy, y, data]);
+
+  useEffect(() => {
+    const labelsText = document.querySelectorAll('.labels text');
+
+    labelsText.forEach((l) => {
+      l.remove();
+    })
+
+    const labels = d3.select(labelsRef.current).selectAll('g').data(stackedData).join('g');
+
+    labels.each(function (_, i) {
+      d3.select(this)
+        .selectAll('text')
+        .data(d => d)
+        .join('text')
+        .attr("x", (d) => x(d[1]))
+        .attr("y", (d) => y(d.data.day) + y.bandwidth() / 2)
+        .attr("dy", "0.35em")
+        .attr("dx", -4)
+        .text((d) => {
+          console.log(d);
+          return (d[1] - d[0])?.toFixed(2) + " m"
+        })
+        .call((text) =>
+          text
+            .filter((d) => x(d[1]) - x(d[0]) < xMax / 2) // short bars
+            .attr("dx", +4)
+            .attr("text-anchor", "start")
+        );
+    })
+  }
+    // eslint-disable-next-line
+    , [x, y, data]);
 
   useEffect(() => {
     const layers = d3
@@ -102,7 +132,6 @@ function StackedBarChart({ daysData, dataType }) {
       .data(stackedData)
       .join("g")
       .attr("fill", (d) => {
-        console.log(d);
         return stringToColor(taskName(d.key));
       });
 
@@ -116,7 +145,6 @@ function StackedBarChart({ daysData, dataType }) {
         .join("rect")
         .attr("x", (d) => x(d[0]))
         .attr("y", (d) => {
-          console.log(d);
           return y(d.data.day)
         })
         .attr("height", y.bandwidth())
@@ -166,7 +194,7 @@ function StackedBarChart({ daysData, dataType }) {
           textAnchor="middle"
           ref={barsRef}
         ></g>
-        <g fill="white" textAnchor="end" ref={labelsRef}></g>
+        <g fill="white" textAnchor="end" ref={labelsRef} className="labels"></g>
         <g ref={gx} transform={`translate(0,${marginTop})`}></g>
         <g ref={gy} transform={`translate(${marginLeft},0)`} />
       </svg>

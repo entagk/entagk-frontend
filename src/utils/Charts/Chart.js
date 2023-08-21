@@ -40,7 +40,6 @@ function Chart({ data }) {
 
   useEffect(
     () => {
-
       void d3.select(gx.current)
         .call(d3.axisTop(x).ticks(width / 80, "m"))
         .call((g) =>
