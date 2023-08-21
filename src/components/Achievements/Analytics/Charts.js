@@ -28,13 +28,15 @@ const Charts = ({ isLoading, data, dataType, dateType }) => {
             </>
           ) : dateType === 'week' ? (
             <>
-              {data.map(d => d[dataType]).flat(Infinity).length === 0 ? (
+              {/* {data.map(d => d[dataType]).flat(Infinity).length === 0 ? (
                 <p>No activities at this time</p>
-              ) : (
+              ) : ( */}
                 <StackedBarChart daysData={data} dataType={dataType} />
-              )}
+              {/* )} */}
             </>
-          ) : (<></>)}
+          ) : (<>
+
+          </>)}
         </>
       )}
     </div>

@@ -3,7 +3,6 @@ import React, { lazy, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getDay, getDays } from '../../../actions/activities';
-import { calcDays } from '../../../utils/helper';
 
 const Charts = lazy(() => import('./Charts'));
 const DateAndData = lazy(() => import('./DateAndData'));

@@ -28,11 +28,12 @@ export default (state = {
       return { ...state, today: action.date };
     case GET_DAY:
       const date = new Date().toJSON().split('T')[0];
-      if (action.data?.day === date && !state.today) {
+      if (action.data?.day === date) {
         const dayData = !action.data ? { ...initToday, day: date } : action.data;
         const all =
           !state.days.find(d => d.day === action.data.day) ?
             state.days.concat([dayData]) : state.days;
+        console.log(all);
         return {
           ...state,
           today: dayData,
@@ -42,14 +43,11 @@ export default (state = {
           total: state.total + 1
         };
       } else {
-        const all =
-          !state.days.find(d => d.day === action.data.day) ?
-            state.days.concat([action.data]) : state.days;
+        const all = state.days.concat([action.data]);
+        console.log(all);
         return {
           ...state,
-          days: all.filter((d, i) => {
-            return !all.findIndex(day => day.day === d.day);
-          }),
+          days: all,
           total: state.total + 1
         };
       }

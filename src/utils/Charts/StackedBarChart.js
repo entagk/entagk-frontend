@@ -3,8 +3,6 @@ import * as d3 from "d3";
 import { stringToColor } from "../helper";
 
 function StackedBarChart({ daysData, dataType }) {
-  console.log(daysData);
-
   const data = daysData?.map((d) => {
     const requiredData = d?.[dataType]?.reduce(
       (obj, item) =>
@@ -110,10 +108,7 @@ function StackedBarChart({ daysData, dataType }) {
         .attr("y", (d) => y(d.data.day) + y.bandwidth() / 2)
         .attr("dy", "0.35em")
         .attr("dx", -4)
-        .text((d) => {
-          console.log(d);
-          return (d[1] - d[0])?.toFixed(2) + " m"
-        })
+        .text((d) => (d[1] - d[0])?.toFixed(2) + " m")
         .call((text) =>
           text
             .filter((d) => x(d[1]) - x(d[0]) < xMax / 2) // short bars

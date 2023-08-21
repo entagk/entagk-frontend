@@ -61,7 +61,7 @@ function Chart({ data }) {
         .call((g) => g.select(".domain").remove());
     },
     // eslint-disable-next-line
-    [gx, x, data]
+    [gx, x]
   );
 
   useEffect(() => {
@@ -71,7 +71,7 @@ function Chart({ data }) {
       .selectAll("text")
       .call(wrapText);
   },
-    [gy, y, data]);
+    [gy, y]);
 
   useEffect(() => {
     const labelsText = document.querySelectorAll('.labels text');
@@ -96,6 +96,10 @@ function Chart({ data }) {
           .attr("dx", +4)
           .attr("text-anchor", "start")
       );
+
+    return () => {
+      labels.selectAll('text').remove();
+    }
   }
     // eslint-disable-next-line
     , [x, y, data]);
@@ -118,6 +122,10 @@ function Chart({ data }) {
       .transition(t)
       .delay((d, i) => i * duration)
       .attr('width', (d) => x(d.totalMins) - x(0));
+
+    return () => {
+      selectedBarsRef.selectAll('rect').remove();
+    }
 
     // eslint-disable-next-line
   }, [barsRef, data]);
