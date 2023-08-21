@@ -28,7 +28,10 @@ const Charts = ({ isLoading, data, dataType, dateType }) => {
             </>
           ) : dateType === 'week' ? (
             <>
-              <StackedBarChart daysData={data} dataType={dataType} />
+              <StackedBarChart
+                daysData={data}
+                dataType={dataType}
+              />
             </>
           ) : (<></>)}
         </>

@@ -87,7 +87,7 @@ export const getDays = (start, end, lastData, setData, setMessage) => async disp
 
     const startDate = new Date(start);
     const endDate = new Date(end);
-    if (data.length !== (endDate - startDate) / 1000 / 60 / 60 / 24) {
+    if (data.length !== ((endDate - startDate) / 1000 / 60 / 60 / 24) + 1) {
       const days = calcDays(startDate, endDate).map(d => {
         if (!data.find(dd => dd.day === d)) {
           console.log(d);

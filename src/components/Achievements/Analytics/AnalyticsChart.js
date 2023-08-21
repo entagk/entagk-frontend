@@ -80,19 +80,18 @@ const AnalyticsChart = ({
         } else return false;
       });
 
-      if (new Date(date.endDate) - todayDate < 0) {
-        if (daysData.length < 7) {
+      if (daysData.length < 7) {
+        if (new Date(date.endDate) - todayDate < 0) {
           console.log(days);
           const start =
             daysData.length === 0 ?
               date.startDate :
               new Date(date.endDate) - new Date(daysData.at(-1).day) === 0 ?
-                date.startDate :
                 new Date(
                   new Date(daysData.at(-1)?.day).setDate(
-                    new Date(daysData.at(-1)?.day).getDate() + 1
+                    new Date(daysData.at(-1)?.day).getDate() - 1
                   )
-                ).toJSON().split('T')[0];
+                ).toJSON().split('T')[0] : date.startDate;
 
           const end =
             daysData.length === 0 ?
@@ -100,9 +99,14 @@ const AnalyticsChart = ({
               new Date(date.endDate) - new Date(daysData.at(-1).day) === 0 ?
                 new Date(
                   new Date(daysData.at(-1)?.day).setDate(
+                    new Date(daysData.at(-1)?.day).getDate() + 1
+                  )
+                ).toJSON().split('T')[0] :
+                new Date(
+                  new Date(daysData.at(-1)?.day).setDate(
                     new Date(daysData.at(-1)?.day).getDate() - 1
                   )
-                ).toJSON().split('T')[0] : date.endDate;
+                ).toJSON().split('T')[0];
 
           dispatch(
             getDays(
@@ -114,18 +118,18 @@ const AnalyticsChart = ({
             )
           );
         } else {
-          setData(daysData)
+          const neededDays = calcDays(
+            new Date(
+              todayDate.setDate(todayDate.getDate() + 1)
+            ).toJSON().split('T')[0],
+            date.endDate
+          ).map((d) => ({ day: d }));
+          const all = daysData.concat(neededDays).sort((a, b) => a?.day?.localeCompare(b?.day));
+
+          setData(all);
         }
       } else {
-        const neededDays = calcDays(
-          new Date(
-            todayDate.setDate(todayDate.getDate() + 1)
-          ).toJSON().split('T')[0],
-          date.endDate
-        ).map((d) => ({ day: d }));
-        const all = daysData.concat(neededDays).sort((a, b) => a?.day?.localeCompare(b?.day));
-
-        setData(all);
+        setData(daysData)
       }
     }
     // eslint-disable-next-line
