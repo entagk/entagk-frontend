@@ -5,15 +5,14 @@ import { wrapText, stringToColor } from "../helper";
 import './style.css';
 
 function Chart({ data }) {
-  const max = d3.max(data, (d) => d?.totalMins);
   const maxMins = Math.ceil(d3.max(data, (d) => d?.totalMins) / 10) * 10;
 
   const width = window.innerWidth,
-  marginTop = 30,
-  marginRight = 30,
-  marginBottom = 20,
-  marginLeft = 80,
-  height = (50 * data.length) + marginTop + marginBottom;
+    marginTop = 30,
+    marginRight = 30,
+    marginBottom = 20,
+    marginLeft = 80,
+    height = (50 * data.length) + marginTop + marginBottom;
 
   const gx = useRef(),
     gy = useRef(),
@@ -103,30 +102,24 @@ function Chart({ data }) {
     , [x, y, data]);
 
   useEffect(() => {
-    const tooltip = d3
-      .select("div.chart-container")
-      .append("div")
-      .attr("class", "tooltip");
+    const selectedBarsRef = d3.select(barsRef.current);
 
-    void d3.select(barsRef.current)
+    const duration = 1000;
+    const t = d3.transition().duration(duration).ease(d3.easeLinear);
+
+    selectedBarsRef
       .selectAll("rect")
-      .on("mouseover", function () {
-        return tooltip.style("visibility", "visible");
-      })
-      .on("mousemove", function (event, d) {
-        const index = Number(this.getAttribute("value"));
-        const item = data[index];
-        return tooltip
-          .style("top", event.pageY + 30 + "px")
-          .style("left", event.pageX + 20 + "px").html(`
-              <p class="name">${item.name}</p>
-              <p class="number">${item.totalMins.toFixed(2)} min</p>
-              <p class='rate'>${((max / item.totalMins) * 100).toFixed()}%</p>
-          `);
-      })
-      .on("mouseout", function () {
-        return tooltip.style("visibility", "hidden");
-      });
+      .data(data)
+      .enter()
+      .append('rect')
+      .attr('y', (d) => y(d.name))
+      .attr('x', (d) => x(0))
+      .attr("fill", (d) => stringToColor(d.name))
+      .attr('height', y.bandwidth())
+      .transition(t)
+      .delay((d, i) => i * duration)
+      .attr('width', (d) => x(d.totalMins) - x(0));
+
     // eslint-disable-next-line
   }, [barsRef, data]);
 
@@ -153,20 +146,6 @@ function Chart({ data }) {
           textAnchor="middle"
           ref={barsRef}
         >
-          {data.map((item, index) => (
-            <rect
-              key={index}
-              value={index}
-              fill={stringToColor(item.name)}
-              y={y(item.name)}
-              x={x(0)}
-              width={x(item.totalMins) - x(0)}
-              height={y.bandwidth()}
-              style={{
-                marginRight: '10px'
-              }}
-            ></rect>
-          ))}
         </g>
         <g fill="white" textAnchor="end" ref={labelsRef} className="labels"></g>
         <g ref={gx} transform={`translate(0,${marginTop})`}></g>
