@@ -22,9 +22,24 @@ const AnalyticsChart = ({
 
   const [data, setData] = useState([]);
 
+  const newDate = (date, type = '+', num) => {
+    const oldDate = new Date(date);
+
+    return new Date(
+      new oldDate.setDate(
+        type === '+' ?
+        oldDate.getDate() + num :
+        oldDate.getDate() - num
+      )
+    ).toJSON().split('T')[0]
+  }
+
   useEffect(() => {
     if (dateType === 'day') {
-      const day = date.display === 'today' ? today : days.filter(d => d.day === date.startDate)[0];
+      const day =
+        date.display === 'today' ?
+          today :
+          days.filter(d => d.day === date.startDate)[0];
 
       if (!day?.day) {
         if (date.display === 'today' && !today) {
@@ -71,7 +86,7 @@ const AnalyticsChart = ({
         }
       }
     } else if (dateType === 'week') {
-      const todayDate = new Date(today.day);
+      const todayDate = new Date(today?.day);
       const daysData = days.filter((d) => {
         if (new Date(d.day) - new Date(date.startDate) === 0 || new Date(d.day) - new Date(date.endDate) === 0) {
           return true;
@@ -83,30 +98,11 @@ const AnalyticsChart = ({
       if (daysData.length < 7) {
         if (new Date(date.endDate) - todayDate < 0) {
           console.log(days);
-          const start =
-            daysData.length === 0 ?
-              date.startDate :
-              new Date(date.endDate) - new Date(daysData.at(-1).day) === 0 ?
-                new Date(
-                  new Date(daysData.at(-1)?.day).setDate(
-                    new Date(daysData.at(-1)?.day).getDate() - 1
-                  )
-                ).toJSON().split('T')[0] : date.startDate;
+          const start = date.startDate;
 
           const end =
-            daysData.length === 0 ?
-              date.endDate :
-              new Date(date.endDate) - new Date(daysData.at(-1).day) === 0 ?
-                new Date(
-                  new Date(daysData.at(-1)?.day).setDate(
-                    new Date(daysData.at(-1)?.day).getDate() + 1
-                  )
-                ).toJSON().split('T')[0] :
-                new Date(
-                  new Date(daysData.at(-1)?.day).setDate(
-                    new Date(daysData.at(-1)?.day).getDate() - 1
-                  )
-                ).toJSON().split('T')[0];
+            (daysData.length === 0) || (new Date(date.startDate) - new Date(daysData.at(-1)?.day) <= 0) ?
+              date.endDate : newDate(daysData.at(-1)?.day, '-', 1);
 
           dispatch(
             getDays(
@@ -121,7 +117,7 @@ const AnalyticsChart = ({
           const neededDays = calcDays(
             new Date(
               todayDate.setDate(todayDate.getDate() + 1)
-            ).toJSON().split('T')[0],
+            ).toJSON()?.split('T')[0],
             date.endDate
           ).map((d) => ({ day: d }));
           const all = daysData.concat(neededDays).sort((a, b) => a?.day?.localeCompare(b?.day));

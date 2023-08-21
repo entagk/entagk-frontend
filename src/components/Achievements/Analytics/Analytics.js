@@ -54,7 +54,7 @@ const Analytics = ({ setMessage }) => {
               onClick={() => {
                 setDateType(item)
                 if (item === 'day') {
-                  setDate({ startDate: 'today', endDate: 'today', display: 'today' })
+                  setDate({ startDate: new Date().toJSON().split('T')[0], endDate: new Date().toJSON().split('T')[0], display: 'today' })
                 } else if (item === 'week') {
                   const [start, end] = getWeekStartAndEnd();
                   setDate({ startDate: start, endDate: end, display: 'this week' })
