@@ -115,10 +115,15 @@ function StackedBarChart({ daysData, dataType }) {
             .attr("dx", +4)
             .attr("text-anchor", "start")
         );
+
     })
+    
+    return () => {
+      labels.selectAll('text').remove();
+    }
   }
     // eslint-disable-next-line
-    , [x, y, data]);
+    , [x, y, daysData, dataType]);
 
   useEffect(() => {
     const layers = d3
@@ -147,7 +152,14 @@ function StackedBarChart({ daysData, dataType }) {
         .delay(i * duration)
         .attr("width", (d) => x(d[1]) - x(d[0]));
     });
-  });
+
+
+    return () => {
+      layers.remove();
+    }
+
+    // eslint-disable-next-line
+  }, [barsRef, daysData, dataType]);
 
   const taskName = (key) => {
     const words = key.split(" ");
