@@ -3,6 +3,7 @@ import React, { lazy, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getDay, getDays } from '../../../actions/activities';
+import { calcDays } from '../../../utils/helper';
 
 const Charts = lazy(() => import('./Charts'));
 const DateAndData = lazy(() => import('./DateAndData'));
@@ -70,6 +71,7 @@ const AnalyticsChart = ({
         }
       }
     } else if (dateType === 'week') {
+      const todayDate = new Date(today.day);
       const daysData = days.filter((d) => {
         if (new Date(d.day) - new Date(date.startDate) === 0 || new Date(d.day) - new Date(date.endDate) === 0) {
           return true;
@@ -78,40 +80,52 @@ const AnalyticsChart = ({
         } else return false;
       });
 
-      if (daysData.length < 7) {
-        console.log(days);
-        const start =
-          daysData.length === 0 ?
-            date.startDate :
-            new Date(date.endDate) - new Date(daysData.at(-1).day) === 0 ?
+      if (new Date(date.endDate) - todayDate < 0) {
+        if (daysData.length < 7) {
+          console.log(days);
+          const start =
+            daysData.length === 0 ?
               date.startDate :
-              new Date(
-                new Date(daysData.at(-1)?.day).setDate(
-                  new Date(daysData.at(-1)?.day).getDate() + 1
-                )
-              ).toJSON().split('T')[0];
+              new Date(date.endDate) - new Date(daysData.at(-1).day) === 0 ?
+                date.startDate :
+                new Date(
+                  new Date(daysData.at(-1)?.day).setDate(
+                    new Date(daysData.at(-1)?.day).getDate() + 1
+                  )
+                ).toJSON().split('T')[0];
 
-        const end =
-          daysData.length === 0 ?
-            date.endDate :
-            new Date(date.endDate) - new Date(daysData.at(-1).day) === 0 ?
-              new Date(
-                new Date(daysData.at(-1)?.day).setDate(
-                  new Date(daysData.at(-1)?.day).getDate() - 1
-                )
-              ).toJSON().split('T')[0] : date.endDate;
+          const end =
+            daysData.length === 0 ?
+              date.endDate :
+              new Date(date.endDate) - new Date(daysData.at(-1).day) === 0 ?
+                new Date(
+                  new Date(daysData.at(-1)?.day).setDate(
+                    new Date(daysData.at(-1)?.day).getDate() - 1
+                  )
+                ).toJSON().split('T')[0] : date.endDate;
 
-        dispatch(
-          getDays(
-            start,
-            end,
-            daysData,
-            setData,
-            setMessage
-          )
-        );
+          dispatch(
+            getDays(
+              start,
+              end,
+              daysData,
+              setData,
+              setMessage
+            )
+          );
+        } else {
+          setData(daysData)
+        }
       } else {
-        setData(daysData)
+        const neededDays = calcDays(
+          new Date(
+            todayDate.setDate(todayDate.getDate() + 1)
+          ).toJSON().split('T')[0],
+          date.endDate
+        ).map((d) => ({ day: d }));
+        const all = daysData.concat(neededDays).sort((a, b) => a?.day?.localeCompare(b?.day));
+
+        setData(all);
       }
     }
     // eslint-disable-next-line

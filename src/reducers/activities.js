@@ -33,7 +33,6 @@ export default (state = {
         const all =
           !state.days.find(d => d.day === action.data.day) ?
             state.days.concat([dayData]) : state.days;
-        console.log(all);
         return {
           ...state,
           today: dayData,
@@ -44,7 +43,6 @@ export default (state = {
         };
       } else {
         const all = state.days.concat([action.data]);
-        console.log(all);
         return {
           ...state,
           days: all,
@@ -55,7 +53,6 @@ export default (state = {
       const daysData = action.data.days;
 
       const all = state.days.concat(daysData).sort((a, b) => a.day.localeCompare(b.day));
-      console.log(all);
       return {
         ...state,
         days: all,
