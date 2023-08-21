@@ -30,17 +30,21 @@ export default (state = {
       const date = new Date().toJSON().split('T')[0];
       if (action.data?.day === date && !state.today) {
         const dayData = !action.data ? { ...initToday, day: date } : action.data;
-        const all = state.days.concat([dayData]);
+        const all =
+          !state.days.find(d => d.day === action.data.day) ?
+            state.days.concat([dayData]) : state.days;
         return {
           ...state,
           today: dayData,
-          days: !state.today ? all.filter((d, i) => {
+          days: all.filter((d, i) => {
             return !all.findIndex(day => day.day === d.day);
-          }) : state.days,
+          }),
           total: state.total + 1
         };
       } else {
-        const all = state.days.concat([action.data]);
+        const all =
+          !state.days.find(d => d.day === action.data.day) ?
+            state.days.concat([action.data]) : state.days;
         return {
           ...state,
           days: all.filter((d, i) => {

@@ -6,7 +6,6 @@ function StackedBarChart({ daysData, dataType }) {
   console.log(daysData);
 
   const data = daysData?.map((d) => {
-    console.log(d.day);
     const requiredData = d?.[dataType]?.reduce(
       (obj, item) =>
         Object.assign(obj, { [`${item?.name} ${d?.day}`]: item?.totalMins }),
@@ -24,7 +23,6 @@ function StackedBarChart({ daysData, dataType }) {
   console.log(data);
 
   const width = window.innerWidth,
-    // height = 40 * data.length + 50,
     marginTop = 30,
     marginRight = 30,
     marginBottom = 20,
@@ -44,7 +42,8 @@ function StackedBarChart({ daysData, dataType }) {
 
   const stackedData = d3.stack().keys(keys)(data);
 
-  const height = stackedData[0]?.length * 50 + marginTop + marginBottom;
+  const height = days.length * 50 + marginTop + marginBottom;
+  console.log(height);
 
   // Declare the y (vertical position) scale.
   const y = d3
@@ -53,11 +52,11 @@ function StackedBarChart({ daysData, dataType }) {
     .range([marginTop, height - marginBottom])
     .padding(0.1);
 
-  const xMax = stackedData.length ? d3.max(stackedData[stackedData.length - 1], (d) => d[1]) : 0;
+  const xMax = stackedData.length ? d3.max(stackedData[stackedData.length - 1], (d) => d[1]) : 10;
   // Declare the x (horizontal position) scale.
   const x = d3
     .scaleLinear()
-    .domain([0, xMax + xMax / 4]) //
+    .domain([0, xMax + (xMax / 4)]) //
     .range([marginLeft, width]);
 
   useEffect(
@@ -103,6 +102,7 @@ function StackedBarChart({ daysData, dataType }) {
       .data(stackedData)
       .join("g")
       .attr("fill", (d) => {
+        console.log(d);
         return stringToColor(taskName(d.key));
       });
 
@@ -115,7 +115,10 @@ function StackedBarChart({ daysData, dataType }) {
         .data((d) => d)
         .join("rect")
         .attr("x", (d) => x(d[0]))
-        .attr("y", (d) => y(d.data.day))
+        .attr("y", (d) => {
+          console.log(d);
+          return y(d.data.day)
+        })
         .attr("height", y.bandwidth())
         .transition(t)
         .delay(i * duration)
@@ -143,7 +146,7 @@ function StackedBarChart({ daysData, dataType }) {
     <>
       <svg
         viewBox={[0, 0, width, height]}
-        width={width + marginLeft + marginRight}
+        width={width + marginRight}
         height={height + marginTop + marginBottom}
         style={{
           maxWidth: "100%",
