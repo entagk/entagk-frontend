@@ -48,9 +48,6 @@ function StackedBarChart({ daysData, dataType }) {
     .padding(0.1);
 
   const xMax = stackedData.length ? Math.max(...stackedData.flat(Infinity).filter(n => !isNaN(n))) : 10;
-  console.log(stackedData);
-  console.log("max: ", Math.max(...stackedData.flat(Infinity).filter(n => !isNaN(n))));
-  console.log(xMax);
   // Declare the x (horizontal position) scale.
   const x = d3
     .scaleLinear()
@@ -120,7 +117,7 @@ function StackedBarChart({ daysData, dataType }) {
         );
 
     })
-    
+
     return () => {
       labels.selectAll('text').remove();
     }
@@ -188,12 +185,12 @@ function StackedBarChart({ daysData, dataType }) {
         height={height + marginTop + marginBottom}
         style={{
           maxWidth: "100%",
-          background: "var(--main-light-black)",
+          backgroundColor: "#ffffff",
           height: "auto",
           width: "100%",
           font: "10px sans-serif",
-          color: "#fff",
-          borderRadius: '20px'
+          color: "#ccc",
+          borderRadius: '20px',
         }}
         ref={svgRef}
       >

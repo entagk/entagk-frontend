@@ -80,6 +80,7 @@ const Analytics = ({ setMessage }) => {
         setMessage={setMessage}
         date={date}
         setDate={setDate}
+        chart={chart}
       />
     </div>
   )

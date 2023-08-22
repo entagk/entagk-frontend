@@ -136,15 +136,6 @@ function Chart({ data }) {
         viewBox={[0, 0, width, height]}
         width={width + marginLeft + marginRight}
         height={height + marginTop + marginBottom}
-        style={{
-          maxWidth: "100%",
-          background: "var(--main-light-black)",
-          height: "auto",
-          width: "100%",
-          font: "10px sans-serif",
-          color: "#fff",
-          borderRadius: '20px'
-        }}
       >
         <g
           fill="currentColor"

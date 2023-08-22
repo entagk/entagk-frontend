@@ -15,7 +15,8 @@ const AnalyticsChart = ({
   setDateType,
   setMessage,
   date,
-  setDate
+  setDate,
+  chart
 }) => {
   const dispatch = useDispatch();
   const { days, isLoading, today } = useSelector(state => state.activities);
@@ -91,7 +92,6 @@ const AnalyticsChart = ({
           date.endDate
         ).map((d) => ({ day: d }));
         daysData.push(...neededDays);
-        console.log(neededDays);
       }
 
       if (daysData.length < 7) {
@@ -152,6 +152,7 @@ const AnalyticsChart = ({
         isLoading={isLoading}
         dataType={dataType}
         dateType={dateType}
+        chart={chart}
       />
     </>
   )

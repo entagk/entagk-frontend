@@ -4,8 +4,11 @@ import Loading from '../../../utils/Loading/Loading';
 import StackedBarChart from '../../../utils/Charts/StackedBarChart';
 
 const Chart = lazy(() => import('../../../utils/Charts/Chart'));
+const Pie = lazy(() => import('../../../utils/Charts/Pie'));
 
-const Charts = ({ isLoading, data, dataType, dateType }) => {
+const Charts = ({ isLoading, data, dataType, chart, dateType }) => {
+  console.log(chart);
+
   return (
     <div className='chart-container' style={{ marginBlock: '20px', width: "100%", textAlign: "center" }}>
       {isLoading ? (
@@ -22,16 +25,24 @@ const Charts = ({ isLoading, data, dataType, dateType }) => {
                 <p>No activities at this time</p>
               ) : (
                 <>
-                  <Chart data={data} />
+                  {chart === 'pie' ? (
+                    <Pie data={data} />
+                  ) : (
+                    <Chart data={data} />
+                  )}
                 </>
               )}
             </>
           ) : dateType === 'week' ? (
             <>
-              <StackedBarChart
-                daysData={data}
-                dataType={dataType}
-              />
+              {chart === 'pie' ? (
+                <Pie data={data} />
+              ) : (
+                <StackedBarChart
+                  daysData={data}
+                  dataType={dataType}
+                />
+              )}
             </>
           ) : (<></>)}
         </>

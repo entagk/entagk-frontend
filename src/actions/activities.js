@@ -97,14 +97,11 @@ export const getDays = (start, end, lastData, setData, setMessage) => async disp
       });
 
       const all = days.concat(lastData);
-      console.log(all);
       
       setData(all?.sort((a, b) => a?.day?.localeCompare(b?.day)));
       dispatch({ type: GET_DAYS, data: { days: days, start, end } })
     }else {
       const all = data.concat(lastData);
-
-      console.log(all);
 
       setData(all.sort((a, b) => a.day.localeCompare(b.day)));
       dispatch({ type: GET_DAYS, data: { days: data, start, end } })
