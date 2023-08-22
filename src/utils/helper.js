@@ -195,3 +195,29 @@ export const calcDays = (start, end) => {
 
   return days;
 }
+
+export const newDate = (date="", type = '+', num = 0) => {
+  const oldDate = date ? new Date(date) : new Date();
+
+  return new Date(
+    oldDate.setDate(
+      type === '+' ?
+      oldDate.getDate() + num :
+      oldDate.getDate() - num
+    )
+  ).toJSON()?.split('T')[0]
+}
+
+export const filterDuplicatedData = (data, property) => {
+  const seen = new Set();
+
+  return data.filter(ele => {
+    const propValue = ele[property];
+    if (seen.has(propValue)) {
+      return false;
+    } else {
+      seen.add(propValue);
+      return true;
+    }
+  })
+}

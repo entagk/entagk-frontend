@@ -3,7 +3,7 @@ import React, { lazy, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getDay, getDays } from '../../../actions/activities';
-import { calcDays } from '../../../utils/helper';
+import { calcDays, newDate } from '../../../utils/helper';
 
 const Charts = lazy(() => import('./Charts'));
 const DateAndData = lazy(() => import('./DateAndData'));
@@ -22,18 +22,6 @@ const AnalyticsChart = ({
 
   const [data, setData] = useState([]);
 
-  const newDate = (date, type = '+', num) => {
-    const oldDate = new Date(date);
-
-    return new Date(
-      new oldDate.setDate(
-        type === '+' ?
-        oldDate.getDate() + num :
-        oldDate.getDate() - num
-      )
-    ).toJSON().split('T')[0]
-  }
-
   useEffect(() => {
     if (dateType === 'day') {
       const day =
@@ -43,7 +31,7 @@ const AnalyticsChart = ({
 
       if (!day?.day) {
         if (date.display === 'today' && !today) {
-          const todayDate = new Date().toJSON().split('T')[0];
+          const todayDate = newDate();
           dispatch(getDay(
             todayDate,
             dateType,
@@ -95,14 +83,32 @@ const AnalyticsChart = ({
         } else return false;
       });
 
+      if (new Date(date.endDate) - todayDate > 0) {
+        const neededDays = calcDays(
+          newDate(
+            todayDate, "+", 1
+          ),
+          date.endDate
+        ).map((d) => ({ day: d }));
+        daysData.push(...neededDays);
+        console.log(neededDays);
+      }
+
       if (daysData.length < 7) {
-        if (new Date(date.endDate) - todayDate < 0) {
-          console.log(days);
-          const start = date.startDate;
+        const sortedDays = daysData.sort((a, b) => a?.day?.localeCompare(b?.day));
+        // if the week is start with today
+        if (new Date(date.startDate) - todayDate <= 0) {
+          const start =
+            (sortedDays.length === 0 || (sortedDays.at(-1).day === date.endDate)) ?
+              date.startDate :
+              newDate(sortedDays.at(-1).day, '+', 1);
 
           const end =
-            (daysData.length === 0) || (new Date(date.startDate) - new Date(daysData.at(-1)?.day) <= 0) ?
-              date.endDate : newDate(daysData.at(-1)?.day, '-', 1);
+            sortedDays.length === 0 ?
+              date.endDate :
+              sortedDays.at(-1).day === date.endDate ?
+                newDate(sortedDays[0].day, '-', 1) :
+                newDate(sortedDays.at(-1).day, '-', 1);
 
           dispatch(
             getDays(
@@ -115,9 +121,9 @@ const AnalyticsChart = ({
           );
         } else {
           const neededDays = calcDays(
-            new Date(
-              todayDate.setDate(todayDate.getDate() + 1)
-            ).toJSON()?.split('T')[0],
+            newDate(
+              todayDate, "+", 1
+            ),
             date.endDate
           ).map((d) => ({ day: d }));
           const all = daysData.concat(neededDays).sort((a, b) => a?.day?.localeCompare(b?.day));

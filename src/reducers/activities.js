@@ -1,6 +1,8 @@
 import { ADD_ACTIVITY, GET_DAY, GET_DAYS, initToday } from "../actions/activities";
 import { END_LOADING, START_LOADING } from "../actions/auth";
 
+import {newDate} from "../utils/helper";
+
 // eslint-disable-next-line
 export default (state = {
   isLoading: false,
@@ -27,7 +29,7 @@ export default (state = {
     case ADD_ACTIVITY:
       return { ...state, today: action.date };
     case GET_DAY:
-      const date = new Date().toJSON().split('T')[0];
+      const date = newDate();
       if (action.data?.day === date) {
         const dayData = !action.data ? { ...initToday, day: date } : action.data;
         const all =

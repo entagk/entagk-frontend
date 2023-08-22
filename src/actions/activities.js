@@ -1,6 +1,6 @@
 import * as api from '../api';
 import { END_LOADING, LOGOUT, START_LOADING } from "./auth";
-import { calcDays } from '../utils/helper';
+import { calcDays, newDate } from '../utils/helper';
 
 export const ADD_ACTIVITY = 'ADD_ACTIVITY';
 export const GET_DAY = 'GET_DAY';
@@ -12,7 +12,7 @@ export const initToday = {
   "tasks": [],
   "totalMins": 0,
   "userId": "",
-  "day": new Date().toJSON().split('T')[0],
+  "day": newDate(),
 };
 
 export const addActivity = (activityData, setMessage) => async dispatch => {
@@ -90,7 +90,6 @@ export const getDays = (start, end, lastData, setData, setMessage) => async disp
     if (data.length !== ((endDate - startDate) / 1000 / 60 / 60 / 24) + 1) {
       const days = calcDays(startDate, endDate).map(d => {
         if (!data.find(dd => dd.day === d)) {
-          console.log(d);
           return { ...initToday, day: d, }
         } else {
           return { day: d, ...data.find(dd => dd.day === d) }

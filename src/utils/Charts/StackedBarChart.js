@@ -1,9 +1,9 @@
 import { useRef, useEffect } from "react";
 import * as d3 from "d3";
-import { stringToColor } from "../helper";
+import { stringToColor, filterDuplicatedData } from "../helper";
 
 function StackedBarChart({ daysData, dataType }) {
-  const data = daysData?.sort((a, b) => a?.day?.localeCompare(b?.day))?.map((d) => {
+  const data = filterDuplicatedData(daysData, 'day').sort((a, b) => a?.day?.localeCompare(b?.day))?.map((d) => {
     const requiredData = d?.[dataType]?.reduce(
       (obj, item) =>
         Object.assign(obj, { [`${item?.name} ${d?.day}`]: item?.totalMins }),
