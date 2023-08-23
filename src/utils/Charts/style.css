@@ -13,6 +13,7 @@
   background-color: inherit;
 }
 
+.chart-container svg .tick text,
 svg text {
   color: #000;
 }

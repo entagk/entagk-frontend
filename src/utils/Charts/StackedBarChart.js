@@ -151,7 +151,10 @@ function StackedBarChart({ daysData, dataType }) {
 
       rect
         .append('title')
-        .text(d => d.name);
+        .text(d => {
+          const name = Object.keys(d.data).filter((f) => f !== 'day')[0]?.split(d.data.day)[0].trim();
+          return name;
+        });
 
       rect
         .transition(t)

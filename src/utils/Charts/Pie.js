@@ -92,7 +92,7 @@ const Pie = ({ data }) => {
 
     centerText
       .append('tspan')
-      .text(formatTime(data, 'hh:mm:ss'))
+      .text(formatTime(data.reduce((p, c) => p + c.totalMins, 0), 'hh:mm:ss'))
       .attr('dy', 20)
       .attr('x', 0);
 
