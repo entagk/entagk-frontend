@@ -41,10 +41,10 @@ const changeDayData = (dateType, dataType, today, setData, data) => {
           ...data[dataType],
           {
             name: dataType === 'tasks' ?
-              'no task' :
+              'unknown task' :
               dataType === 'templates' ?
-                'no templates' :
-                'types',
+                'unknown templates' :
+                'unknown types',
             totalMins: data.totalMins - max
           }
         ])

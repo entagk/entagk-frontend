@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import { wrapText, stringToColor } from "../helper";
 
 import './style.css';
+import ChartReport from "./ChartReport";
 
 function Chart({ data }) {
   const maxMins = Math.ceil(d3.max(data, (d) => d?.totalMins) / 10) * 10;
@@ -124,7 +125,7 @@ function Chart({ data }) {
       .transition(t)
       .delay((d, i) => i * duration)
       .attr('width', (d) => x(d.totalMins) - x(0));
-      
+
     selectedBarsRef
       .append('title')
       .text((d) => d.name);
@@ -155,6 +156,7 @@ function Chart({ data }) {
         <g ref={gx} transform={`translate(0,${marginTop})`}></g>
         <g ref={gy} transform={`translate(${marginLeft},0)`} />
       </svg>
+      <ChartReport rows={data} totalTime={d3.max(data, (d) => d?.totalMins)} />
     </>
   );
 }

@@ -1,12 +1,9 @@
 .chart-container svg {
   max-width: 100%;
-  background-color: rgb(255, 255, 255);
   height: auto;
   width: 100%;
   font: 10px sans-serif;
   color: rgb(204, 204, 204);
-  border-radius: 20px;
-  padding: 20px;
 }
 
 .chart-container .circle svg {
@@ -16,4 +13,52 @@
 .chart-container svg .tick text,
 svg text {
   color: #000;
+}
+
+.chart-container .chart-report {
+  background: #fff;
+  border-radius: 20px;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: 20px;
+  font-size: 18px;
+}
+
+.chart-container .chart-report .rows {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.chart-container .chart-report .row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 10px;
+}
+
+.chart-container .chart-report .row > div {
+  display: flex;
+}
+
+.chart-container .chart-report .row .row-color {
+  width: 20px;
+  height: 20px;
+  display: block;
+  margin-right: 10px;
+}
+
+.rows .row.head-row {
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+}
+
+.chart-container .chart-report .row.head-row p {
+  font-weight: 600;
 }

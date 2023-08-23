@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import { stringToColor, formatTime } from "../helper";
 
 import './style.css';
+import ChartReport from "./ChartReport";
 
 const Pie = ({ data }) => {
   const width = window.innerWidth;
@@ -75,7 +76,7 @@ const Pie = ({ data }) => {
       .append("title")
       .text(
         (d) =>
-          `${d.data.name}: ${d.data.totalMins.toFixed(2).toLocaleString()} Mins`
+          `${d.data.name}: ${d.data.totalMins?.toFixed(2)?.toLocaleString()} Mins`
       );
 
     const centerText = svg
@@ -132,12 +133,15 @@ const Pie = ({ data }) => {
   }, [data]);
 
   return (
+    <>
     <svg
-      viewBox={[-radius, -radius, width, height]}
+      viewBox={[-width/2, -height/2, width, height]}
       ref={svgRef}
       width={width}
       height={height}
     ></svg>
+    <ChartReport rows={data} totalTime={maxTotalMins} />
+    </>
   );
 };
 

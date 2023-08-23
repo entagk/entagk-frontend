@@ -4,6 +4,8 @@ import Loading from '../../../utils/Loading/Loading';
 
 import { filterDuplicatedData } from '../../../utils/helper';
 
+import './style.css';
+
 const Chart = lazy(() => import('../../../utils/Charts/Chart'));
 const Pie = lazy(() => import('../../../utils/Charts/Pie'));
 const StackedBarChart = lazy(() => import('../../../utils/Charts/StackedBarChart'));
@@ -51,7 +53,7 @@ const Charts = ({ isLoading, data, dataType, chart, dateType }) => {
       }}>
       {isLoading ? (
         <Loading
-          color="white"
+          color="var(--main-color)"
           backgroud="transparent"
           size="big"
         />

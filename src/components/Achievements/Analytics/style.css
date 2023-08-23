@@ -61,3 +61,11 @@
   align-items: center;
   justify-content: center;
 }
+
+.chart-container {
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px;
+  padding: 20px;
+  color: #000;
+  font-size: 18px;
+}

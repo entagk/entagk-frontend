@@ -2,14 +2,14 @@ import * as d3 from 'd3';
 
 export const formatTime = (t, format = "mm:ss") => {
   if (format === 'mm:ss') {
-    const sec = t % 60;
-    const min = Math.floor(t / 60);
+    const sec = (t % 60).toFixed();
+    const min = Math.floor(t / 60).toFixed();
     
     return `${min >= 10 ? min : '0' + min}:${sec >= 10 ? sec : '0' + sec}`
   } else {
-    const hours = Math.floor(t / 60);
-    const minutes = Math.floor(t % 60);
-    const seconds = Math.floor((t - hours * 60 - minutes) * 60);
+    const hours = Math.floor(t / 60).toFixed();
+    const minutes = Math.floor(t % 60).toFixed();
+    const seconds = Math.floor((t - hours * 60 - minutes) * 60).toFixed();
 
     const hDisplay = hours < 10 ? '0' + hours : hours;
     const mDisplay = minutes < 10 ? '0' + minutes : minutes;
