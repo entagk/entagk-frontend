@@ -61,10 +61,10 @@ const AnalyticsChart = ({
             ...day?.[dataType],
             {
               name: dataType === 'tasks' ?
-                'no task' :
+                'unknown task' :
                 dataType === 'templates' ?
-                  'no templates' :
-                  'no types',
+                  'unknown templates' :
+                  'unknown types',
               totalMins: day.totalMins - max
             }
           ])

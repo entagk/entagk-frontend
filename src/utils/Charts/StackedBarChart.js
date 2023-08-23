@@ -139,7 +139,7 @@ function StackedBarChart({ daysData, dataType }) {
     const t = d3.transition().duration(duration).ease(d3.easeLinear);
 
     layers.each(function (_, i) {
-      d3.select(this)
+      const rect = d3.select(this)
         .selectAll("rect")
         .data((d) => d)
         .join("rect")
@@ -148,6 +148,12 @@ function StackedBarChart({ daysData, dataType }) {
           return y(d.data.day)
         })
         .attr("height", y.bandwidth())
+
+      rect
+        .append('title')
+        .text(d => d.name);
+
+      rect
         .transition(t)
         .delay(i * duration)
         .attr("width", (d) => x(d[1]) - x(d[0]));

@@ -1,21 +1,8 @@
 import { useLayoutEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
-import { stringToColor } from "../helper";
+import { stringToColor, formatTime } from "../helper";
 
 import './style.css';
-
-const calcTime = (d) => {
-  const time = d.reduce((p, t) => p + t.totalMins, 0)
-  const hours = Math.floor(time / 60);
-  const minutes = Math.floor(time % 60);
-  const seconds = Math.floor((time - hours * 60 - minutes) * 60);
-
-  const hDisplay = hours < 10 ? '0' + hours : hours;
-  const mDisplay = minutes < 10 ? '0' + minutes : minutes;
-  const sDisplay = seconds < 10 ? '0' + seconds : seconds;
-
-  return `${hDisplay}:${mDisplay}:${sDisplay}`;
-}
 
 const Pie = ({ data }) => {
   const width = window.innerWidth;
@@ -105,7 +92,7 @@ const Pie = ({ data }) => {
 
     centerText
       .append('tspan')
-      .text(calcTime(data))
+      .text(formatTime(data, 'hh:mm:ss'))
       .attr('dy', 20)
       .attr('x', 0);
 

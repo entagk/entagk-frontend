@@ -2,6 +2,11 @@ import * as d3 from 'd3';
 
 export const formatTime = (t, format = "mm:ss") => {
   if (format === 'mm:ss') {
+    const sec = t % 60;
+    const min = Math.floor(t / 60);
+    
+    return `${min >= 10 ? min : '0' + min}:${sec >= 10 ? sec : '0' + sec}`
+  } else {
     const hours = Math.floor(t / 60);
     const minutes = Math.floor(t % 60);
     const seconds = Math.floor((t - hours * 60 - minutes) * 60);
@@ -11,11 +16,6 @@ export const formatTime = (t, format = "mm:ss") => {
     const sDisplay = seconds < 10 ? '0' + seconds : seconds;
 
     return `${hDisplay}:${mDisplay}:${sDisplay}`;
-  } else {
-    const sec = t % 60;
-    const min = Math.floor(t / 60);
-
-    return `${min >= 10 ? min : '0' + min}:${sec >= 10 ? sec : '0' + sec}`
   }
 };
 

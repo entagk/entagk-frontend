@@ -105,23 +105,29 @@ function Chart({ data }) {
     , [x, y, data]);
 
   useEffect(() => {
-    const selectedBarsRef = d3.select(barsRef.current);
+    const selectedBarsRef =
+      d3
+        .select(barsRef.current)
+        .selectAll("rect")
+        .data(data)
+        .enter()
+        .append('rect')
+        .attr('y', (d) => y(d.name))
+        .attr('x', (d) => x(0))
+        .attr("fill", (d) => stringToColor(d.name))
+        .attr('height', y.bandwidth());
 
     const duration = 1000;
     const t = d3.transition().duration(duration).ease(d3.easeLinear);
 
     selectedBarsRef
-      .selectAll("rect")
-      .data(data)
-      .enter()
-      .append('rect')
-      .attr('y', (d) => y(d.name))
-      .attr('x', (d) => x(0))
-      .attr("fill", (d) => stringToColor(d.name))
-      .attr('height', y.bandwidth())
       .transition(t)
       .delay((d, i) => i * duration)
       .attr('width', (d) => x(d.totalMins) - x(0));
+      
+    selectedBarsRef
+      .append('title')
+      .text((d) => d.name);
 
     return () => {
       selectedBarsRef.selectAll('rect').remove();
