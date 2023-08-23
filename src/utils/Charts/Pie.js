@@ -2,6 +2,21 @@ import { useLayoutEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
 import { stringToColor } from "../helper";
 
+import './style.css';
+
+const calcTime = (d) => {
+  const time = d.reduce((p, t) => p + t.totalMins, 0)
+  const hours = Math.floor(time / 60);
+  const minutes = Math.floor(time % 60);
+  const seconds = Math.floor((time - hours * 60 - minutes) * 60);
+
+  const hDisplay = hours < 10 ? '0' + hours : hours;
+  const mDisplay = minutes < 10 ? '0' + minutes : minutes;
+  const sDisplay = seconds < 10 ? '0' + seconds : seconds;
+
+  return `${hDisplay}:${mDisplay}:${sDisplay}`;
+}
+
 const Pie = ({ data }) => {
   const width = window.innerWidth;
   const height = Math.min(width, 500);
@@ -48,11 +63,12 @@ const Pie = ({ data }) => {
       pie.endAngle()()
     )
 
-    g
+    const path = g
       .enter()
       .append("path")
       .attr("fill", (d) => stringToColor(d?.data.name))
-      .transition()
+
+    path.transition()
       .duration(1000)
       .attrTween("d", (d) => {
         let originalEnd = d.endAngle;
@@ -68,12 +84,30 @@ const Pie = ({ data }) => {
         };
       });
 
-    g
+    path
       .append("title")
       .text(
         (d) =>
           `${d.data.name}: ${d.data.totalMins.toFixed(2).toLocaleString()} Mins`
       );
+
+    const centerText = svg
+      .append('g')
+      .attr("text-anchor", "middle")
+      .append('text')
+      .attr('transform', `translate(50%, 50%)`)
+      .style('font', '18px sans-serif');
+
+    centerText
+      .append('tspan')
+      .text('Total Time:')
+      .attr('font-weight', 'bold');
+
+    centerText
+      .append('tspan')
+      .text(calcTime(data))
+      .attr('dy', 20)
+      .attr('x', 0);
 
     svg
       .append("g")

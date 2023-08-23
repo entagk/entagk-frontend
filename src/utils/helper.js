@@ -1,10 +1,22 @@
 import * as d3 from 'd3';
 
-export const formatTime = (t) => {
-  const sec = t % 60;
-  const min = Math.floor(t / 60);
+export const formatTime = (t, format = "mm:ss") => {
+  if (format === 'mm:ss') {
+    const hours = Math.floor(t / 60);
+    const minutes = Math.floor(t % 60);
+    const seconds = Math.floor((t - hours * 60 - minutes) * 60);
 
-  return `${min >= 10 ? min : '0' + min}:${sec >= 10 ? sec : '0' + sec}`
+    const hDisplay = hours < 10 ? '0' + hours : hours;
+    const mDisplay = minutes < 10 ? '0' + minutes : minutes;
+    const sDisplay = seconds < 10 ? '0' + seconds : seconds;
+
+    return `${hDisplay}:${mDisplay}:${sDisplay}`;
+  } else {
+    const sec = t % 60;
+    const min = Math.floor(t / 60);
+
+    return `${min >= 10 ? min : '0' + min}:${sec >= 10 ? sec : '0' + sec}`
+  }
 };
 
 export const updatedAt = (t) => {
@@ -196,14 +208,14 @@ export const calcDays = (start, end) => {
   return days;
 }
 
-export const newDate = (date="", type = '+', num = 0) => {
+export const newDate = (date = "", type = '+', num = 0) => {
   const oldDate = date ? new Date(date) : new Date();
 
   return new Date(
     oldDate.setDate(
       type === '+' ?
-      oldDate.getDate() + num :
-      oldDate.getDate() - num
+        oldDate.getDate() + num :
+        oldDate.getDate() - num
     )
   ).toJSON()?.split('T')[0]
 }

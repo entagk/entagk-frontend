@@ -1,16 +1,54 @@
-import React, { lazy } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 
 import Loading from '../../../utils/Loading/Loading';
-import StackedBarChart from '../../../utils/Charts/StackedBarChart';
+
+import { filterDuplicatedData } from '../../../utils/helper';
 
 const Chart = lazy(() => import('../../../utils/Charts/Chart'));
 const Pie = lazy(() => import('../../../utils/Charts/Pie'));
+const StackedBarChart = lazy(() => import('../../../utils/Charts/StackedBarChart'));
 
 const Charts = ({ isLoading, data, dataType, chart, dateType }) => {
-  console.log(chart);
+  const [pieData, setPieData] = useState([]);
+
+  useEffect(() => {
+    if (chart === 'pie') {
+      if (dateType === 'week') {
+        console.log(dataType);
+        const newTasks = [];
+        const tasks = filterDuplicatedData(data, 'day').sort((a, b) => a?.day?.localeCompare(b?.day))?.map((d) => {
+          const dayTasks = d?.[dataType] || [];
+          const totalMins = dayTasks ? dayTasks?.reduce((p, c) => p + c?.totalMins, 0) : 0;
+          if (d.totalMins !== totalMins && d.totalMins > 0) {
+            const unknownName = dataType === 'tasks' ? "unknown task" : dataType === 'templates' ? 'unknown template' : 'unknown type';
+            dayTasks.push({ name: unknownName, totalMins: d.totalMins - totalMins });
+          }
+
+          return dayTasks;
+        }).flat(Infinity);
+
+        tasks.forEach((t, i) => {
+          const founded = newTasks.find((task) => t.name === task.name);
+          if (founded) {
+            founded.totalMins += t.totalMins;
+          } else newTasks.push(t);
+        });
+
+        setPieData(newTasks);
+      } else {
+        setPieData(data);
+      }
+    }
+  }, [data, dataType, dateType, chart]);
 
   return (
-    <div className='chart-container' style={{ marginBlock: '20px', width: "100%", textAlign: "center" }}>
+    <div
+      className='chart-container'
+      style={{
+        marginBlock: '20px',
+        width: "100%",
+        textAlign: "center"
+      }}>
       {isLoading ? (
         <Loading
           color="white"
@@ -36,7 +74,11 @@ const Charts = ({ isLoading, data, dataType, chart, dateType }) => {
           ) : dateType === 'week' ? (
             <>
               {chart === 'pie' ? (
-                <Pie data={data} />
+                <Pie
+                  data={pieData}
+                  dateType={dateType}
+                  dataType={dataType}
+                />
               ) : (
                 <StackedBarChart
                   daysData={data}
