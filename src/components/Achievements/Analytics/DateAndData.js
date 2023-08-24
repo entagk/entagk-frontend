@@ -50,7 +50,6 @@ const DateAndData = ({ dataType, setDataType, dateType, setDateType, date, setDa
           new Date(date.display);
 
       current.setMonth(type === 'back' ? current.getMonth() - 1 : current.getMonth() + 1);
-      console.log(current.getMonth());
 
       const [start, end] = getMonthRange(
         current.getFullYear(),

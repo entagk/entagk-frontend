@@ -133,6 +133,8 @@ const AnalyticsChart = ({
       } else {
         setData(daysData)
       }
+    } else if (dateType === 'month') {
+      
     }
     // eslint-disable-next-line
   }, [dateType, date, dataType]);
@@ -153,6 +155,7 @@ const AnalyticsChart = ({
         dataType={dataType}
         dateType={dateType}
         chart={chart}
+        date={date}
       />
     </>
   )

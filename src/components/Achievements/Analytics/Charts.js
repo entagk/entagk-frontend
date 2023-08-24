@@ -9,8 +9,16 @@ import './style.css';
 const Chart = lazy(() => import('../../../utils/Charts/Chart'));
 const Pie = lazy(() => import('../../../utils/Charts/Pie'));
 const StackedBarChart = lazy(() => import('../../../utils/Charts/StackedBarChart'));
+const MonthChart = lazy(() => import('../../../utils/Charts/MonthChart/MonthChart'));
 
-const Charts = ({ isLoading, data, dataType, chart, dateType }) => {
+const Charts = ({
+  isLoading,
+  data,
+  dataType,
+  chart,
+  dateType,
+  date
+}) => {
   const [pieData, setPieData] = useState([]);
 
   useEffect(() => {
@@ -85,7 +93,9 @@ const Charts = ({ isLoading, data, dataType, chart, dateType }) => {
                 />
               )}
             </>
-          ) : (<></>)}
+          ) : (<>
+            <MonthChart date={date} />
+          </>)}
         </>
       )}
     </div>

@@ -179,7 +179,7 @@ export function wrapText(selection) {
 export function getWeekStartAndEnd(date) {
   const day = date ? new Date(date) : new Date();
 
-  const start = new Date(day.setDate((day.getDate() - day.getDay() + 1))).toJSON().split('T')[0];
+  const start = new Date(day.setDate((day.getDate() - day.getDay() + 0))).toJSON().split('T')[0];
   const end = new Date(day.setDate(day.getDate() + 6)).toJSON().split('T')[0];
 
   return [start, end];
