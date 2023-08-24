@@ -1,18 +1,31 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, lazy } from "react";
 import * as d3 from "d3";
 import { stringToColor, filterDuplicatedData } from "../helper";
 
+import './style.css';
+
+const ChartReport = lazy(() => import("./ChartReport"));
+
 function StackedBarChart({ daysData, dataType }) {
+  const colorRows = [];
   const data = filterDuplicatedData(daysData, 'day').sort((a, b) => a?.day?.localeCompare(b?.day))?.map((d) => {
-    const requiredData = d?.[dataType]?.reduce(
-      (obj, item) =>
-        Object.assign(obj, { [`${item?.name} ${d?.day}`]: item?.totalMins }),
-      {}
-    );
+    const requiredData = {};
+    d?.[dataType]?.forEach((item) => {
+      requiredData[`${item?.name} ${d?.day}`] = item?.totalMins;
+
+      const found = colorRows.find(cr => cr.name === item?.name);
+      if (found) found.totalMins += item?.totalMins;
+      else colorRows.push(item);
+    });
     const dayTotalMins = requiredData ? Object?.values(requiredData).reduce((p, t) => p + t, 0) : 0;
-    if (d.totalMins !== dayTotalMins && requiredData) {
-      const unknownName = dataType === 'tasks' ? "unknown task" : dataType === 'templates' ? 'unknown template' : 'unknown type';
+    if (d.totalMins !== dayTotalMins && d.totalMins) {
+      const unknownName = `unknown ${dataType.slice(0, -1)}`;
       requiredData[unknownName + " " + d.day] = d.totalMins - dayTotalMins;
+
+      const foundInColorRows = colorRows.find((cr) => cr.name === unknownName);
+      if (foundInColorRows) {
+        foundInColorRows.totalMins += d.totalMins - dayTotalMins;
+      } else colorRows.push({ name: unknownName, totalMins: d.totalMins - dayTotalMins });
     }
 
     return { day: d.day, ...requiredData };
@@ -51,7 +64,7 @@ function StackedBarChart({ daysData, dataType }) {
   // Declare the x (horizontal position) scale.
   const x = d3
     .scaleLinear()
-    .domain([0, xMax + (xMax / 4)]) //
+    .domain([0, Math.ceil(xMax / 10) * 10])
     .range([marginLeft, width]);
 
   useEffect(
@@ -114,6 +127,7 @@ function StackedBarChart({ daysData, dataType }) {
             .filter((d) => x(d[1]) - x(d[0]) < xMax / 2) // short bars
             .attr("dx", +4)
             .attr("text-anchor", "start")
+            .style('fill', '#000')
         );
 
     })
@@ -176,15 +190,6 @@ function StackedBarChart({ daysData, dataType }) {
     return words.join(" ");
   };
 
-  const filteredTasks = () => {
-    const newTasks = keys.map((t) => taskName(t));
-
-    return newTasks.filter((item, index) => {
-      return newTasks.indexOf(item) === index;
-    });
-  };
-
-  console.log(filteredTasks());
 
   return (
     <>
@@ -214,23 +219,7 @@ function StackedBarChart({ daysData, dataType }) {
         <g ref={gx} transform={`translate(0,${marginTop})`}></g>
         <g ref={gy} transform={`translate(${marginLeft},0)`} />
       </svg>
-      {/* <div className="colors-container">
-        {filteredTasks().map((key) => (
-          <div
-            className="color-row"
-          >
-            <div
-              style={{
-                background: `${stringToColor(key)}`,
-                width: "20px",
-                height: "20px",
-                margin: '10px'
-              }}
-            ></div>
-            {key}
-          </div>
-        ))}
-      </div> */}
+      <ChartReport rows={colorRows} totalTime={colorRows.reduce((p, c) => p + c.totalMins, 0)} />
     </>
   );
 }

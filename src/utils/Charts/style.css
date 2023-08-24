@@ -3,7 +3,7 @@
   height: auto;
   width: 100%;
   font: 10px sans-serif;
-  color: rgb(204, 204, 204);
+  fill: rgb(204, 204, 204);
 }
 
 .chart-container .circle svg {
@@ -12,7 +12,10 @@
 
 .chart-container svg .tick text,
 svg text {
-  color: #000;
+  fill: #000;
+}
+.chart-container svg g.labels text{
+fill: #fff;
 }
 
 .chart-container .chart-report {

@@ -1,15 +1,15 @@
 import React from 'react'
 import { formatTime, stringToColor } from '../helper'
 
-const ChartReport = ({ rows, totalTime }) => {
+const ChartReport = ({ rows, totalTime = 0 }) => {
   return (
     <div className='chart-report'>
       <div className='rows'>
         <div className='row head-row'>
           <p className="name">Total time</p>
-          <p className='rate'>{formatTime(totalTime.toFixed(2))} (HH:MM)</p>
+          <p className='rate'>{formatTime(totalTime?.toFixed(2), 'hh:mm:ss')}</p>
         </div>
-        {rows.map((row, index) => (
+        {rows.sort((a, b) => b.totalMins - a.totalMins).map((row, index) => (
           <div className='row' key={index}>
             <div>
               <span
@@ -19,7 +19,7 @@ const ChartReport = ({ rows, totalTime }) => {
                 }}></span>
               <p className="name">{row.name}</p>
             </div>
-            <p className='rate'>{formatTime(row?.totalMins?.toFixed(2))}</p>
+            <p className='rate'>{formatTime(row?.totalMins, 'hh:mm:ss')}</p>
           </div>
         ))}
       </div>

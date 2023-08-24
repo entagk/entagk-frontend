@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useLayoutEffect } from "react";
 import * as d3 from "d3";
 import { wrapText, stringToColor } from "../helper";
 
@@ -105,10 +105,11 @@ function Chart({ data }) {
     // eslint-disable-next-line
     , [x, y, data]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const bars = d3.select(barsRef.current);
+
     const selectedBarsRef =
-      d3
-        .select(barsRef.current)
+      bars
         .selectAll("rect")
         .data(data)
         .enter()
@@ -131,11 +132,11 @@ function Chart({ data }) {
       .text((d) => d.name);
 
     return () => {
-      selectedBarsRef.selectAll('rect').remove();
+      bars.selectAll('*').remove();
     }
 
     // eslint-disable-next-line
-  }, [barsRef, data]);
+  }, [barsRef, data, x, y]);
 
   return (
     <>
@@ -156,7 +157,7 @@ function Chart({ data }) {
         <g ref={gx} transform={`translate(0,${marginTop})`}></g>
         <g ref={gy} transform={`translate(${marginLeft},0)`} />
       </svg>
-      <ChartReport rows={data} totalTime={d3.max(data, (d) => d?.totalMins)} />
+      <ChartReport rows={data} totalTime={data.reduce((p, t) => p + t.totalMins, 0)} />
     </>
   );
 }

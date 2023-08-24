@@ -16,9 +16,8 @@ const Charts = ({ isLoading, data, dataType, chart, dateType }) => {
   useEffect(() => {
     if (chart === 'pie') {
       if (dateType === 'week') {
-        console.log(dataType);
         const newTasks = [];
-        const tasks = filterDuplicatedData(data, 'day').sort((a, b) => a?.day?.localeCompare(b?.day))?.map((d) => {
+        filterDuplicatedData(data, 'day').sort((a, b) => a?.day?.localeCompare(b?.day))?.map((d) => {
           const dayTasks = d?.[dataType] || [];
           const totalMins = dayTasks ? dayTasks?.reduce((p, c) => p + c?.totalMins, 0) : 0;
           if (d.totalMins !== totalMins && d.totalMins > 0) {
@@ -27,9 +26,7 @@ const Charts = ({ isLoading, data, dataType, chart, dateType }) => {
           }
 
           return dayTasks;
-        }).flat(Infinity);
-
-        tasks.forEach((t, i) => {
+        }).flat(Infinity).forEach((t, i) => {
           const founded = newTasks.find((task) => t.name === task.name);
           if (founded) {
             founded.totalMins += t.totalMins;
