@@ -134,7 +134,67 @@ const AnalyticsChart = ({
         setData(daysData)
       }
     } else if (dateType === 'month') {
-      
+      console.log(date);
+      const todayDate = new Date(today?.day);
+      const daysData = days.filter((d) => {
+        if (new Date(d.day) - new Date(date.startDate) === 0 || new Date(d.day) - new Date(date.endDate) === 0) {
+          return true;
+        } else if (new Date(date.startDate) - new Date(d.day) < 0 && new Date(date.endDate) - new Date(d.day) > 0) {
+          return true;
+        } else return false;
+      });
+
+      if (new Date(date.endDate) - todayDate > 0) {
+        const neededDays = calcDays(
+          newDate(
+            todayDate, "+", 1
+          ),
+          date.endDate
+        ).map((d) => ({ day: d }));
+        daysData.push(...neededDays);
+      }
+
+      // 2023-08-31
+      if (daysData.length < Number(date.endDate.slice(8))) {
+        const sortedDays = daysData.sort((a, b) => a?.day?.localeCompare(b?.day));
+
+        // if the month is start with today
+        if (new Date(date.startDate) - todayDate <= 0) {
+          const start =
+            (sortedDays.length === 0 || (sortedDays.at(-1).day === date.endDate)) ?
+              date.startDate :
+              newDate(sortedDays.at(-1).day, '+', 1);
+
+          const end =
+            sortedDays.length === 0 ?
+              date.endDate :
+              sortedDays.at(-1).day === date.endDate ?
+                newDate(sortedDays[0].day, '-', 1) :
+                newDate(sortedDays.at(-1).day, '-', 1);
+
+          dispatch(
+            getDays(
+              start,
+              end,
+              daysData,
+              setData,
+              setMessage
+            )
+          );
+        } else {
+          const neededDays = calcDays(
+            newDate(
+              todayDate, "+", 1
+            ),
+            date.endDate
+          ).map((d) => ({ day: d }));
+          const all = daysData.concat(neededDays).sort((a, b) => a?.day?.localeCompare(b?.day));
+
+          setData(all);
+        }
+      } else {
+        setData(daysData)
+      }
     }
     // eslint-disable-next-line
   }, [dateType, date, dataType]);

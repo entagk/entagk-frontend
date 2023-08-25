@@ -4,7 +4,7 @@ export const formatTime = (t, format = "mm:ss") => {
   if (format === 'mm:ss') {
     const sec = (t % 60).toFixed();
     const min = Math.floor(t / 60).toFixed();
-    
+
     return `${min >= 10 ? min : '0' + min}:${sec >= 10 ? sec : '0' + sec}`
   } else {
     const hours = Math.floor(t / 60).toFixed();
@@ -186,8 +186,8 @@ export function getWeekStartAndEnd(date) {
 }
 
 export function getMonthRange(year, month) {
-  const start = `${year}-${month + 1}-1`;
-  const end = `${year}-${month + 1}-${new Date(year, month, 0).getDate()}`;
+  const start = `${year}-${month + 1 < 10 ? "0" + (month + 1) : month + 1}-01`;
+  const end = `${year}-${month + 1 < 10 ? "0" + (month + 1) : month + 1}-${new Date(year, month+1, 0).getDate()}`;
 
   return [start, end];
 }
@@ -198,7 +198,7 @@ export const calcDays = (start, end) => {
 
   const different = (endDate - startDate) / 1000 / 60 / 60 / 24;
 
-  const days = [startDate.toJSON().split('T')[0], endDate.toJSON().split('T')[0],];
+  const days = [start, end,];
   for (let i = 1; i < different; i++) {
     const date = new Date(start);
     date.setDate(date.getDate() + i);

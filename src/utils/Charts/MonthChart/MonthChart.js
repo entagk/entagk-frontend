@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 
 import './style.css';
 
@@ -6,7 +6,7 @@ const getMonthDaysNum = (day) => {
   const month = new Date(day).getMonth();
   const year = new Date(day).getFullYear();
 
-  return new Date(year, month, 0).getDate();
+  return new Date(year, month + 1, 0).getDate();
 }
 
 const getMonth = (day) => {
@@ -30,19 +30,35 @@ const getMonth = (day) => {
   })
 }
 
-const MonthChart = ({ date }) => {
-  const [month, setMonth] = useState(getMonth(date?.startDate || new Date().toJSON().split('T')[0]));
-
-  useEffect(() => {
-    setMonth(getMonth(date.startDate));
-    // eslint-disable-next-line
-  }, [date]);
-
+const MonthChart = ({ date, data }) => {
   const dayNames = [
     'Sun', 'Mon',
     'Tue', 'Wed',
     'Thu', 'Fri', 'Sat'
   ];
+
+  const month = useMemo(
+    () =>
+      getMonth(date.startDate || new Date.toJSON().split('T')[0]),
+    [date]
+  );
+
+  const generateDayClass = (dayNum) => {
+    const day = new Date(new Date(date.startDate).setDate(dayNum)).toJSON()?.split('T')[0];
+
+    const dayData = data.find(d => d.day === day);
+    let className = '';
+
+    if (dayData?.totalMins / 40 >= 1 && dayData?.totalMins / 40 < 4) {
+      className = 'small';
+    } else if (dayData?.totalMins / 40 >= 4 && dayData?.totalMins / 40 < 9) {
+      className = 'medium'
+    } else if (dayData?.totalMins / 40 >= 9) {
+      className = 'larg'
+    }
+
+    return className;
+  }
 
   return (
     <>
@@ -65,12 +81,11 @@ const MonthChart = ({ date }) => {
                     <td
                       key={index}
                       className={
-                        `${day > 0 ? "num" : ""}  ${
-                          new Date(new Date(date?.startDate).setDate(day+1)).toJSON().split('T')[0] ===
+                        `${day > 0 ? "num" : ""}  ${new Date(new Date(date?.startDate).setDate(day)).toJSON().split('T')[0] ===
                           new Date().toJSON().split('T')[0] ?
                           'active' :
                           ''
-                        }`
+                        } ${generateDayClass(day)}`
                       }
                     >
                       {day > 0 ? day : ""}

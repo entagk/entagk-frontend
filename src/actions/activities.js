@@ -88,7 +88,7 @@ export const getDays = (start, end, lastData, setData, setMessage) => async disp
     const startDate = new Date(start);
     const endDate = new Date(end);
     if (data.length !== ((endDate - startDate) / 1000 / 60 / 60 / 24) + 1) {
-      const days = calcDays(startDate, endDate).map(d => {
+      const days = calcDays(start, end).map(d => {
         if (!data.find(dd => dd.day === d)) {
           return { ...initToday, day: d, }
         } else {
@@ -97,10 +97,9 @@ export const getDays = (start, end, lastData, setData, setMessage) => async disp
       });
 
       const all = days.concat(lastData);
-      
       setData(all?.sort((a, b) => a?.day?.localeCompare(b?.day)));
       dispatch({ type: GET_DAYS, data: { days: days, start, end } })
-    }else {
+    } else {
       const all = data.concat(lastData);
 
       setData(all.sort((a, b) => a.day.localeCompare(b.day)));

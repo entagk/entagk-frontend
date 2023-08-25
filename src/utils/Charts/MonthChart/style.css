@@ -21,6 +21,21 @@
   background-color: #ebedf082;
 }
 
+#calender tbody td.num.small {
+  background-color: #00ff4e61;
+  color: #fff;
+}
+
+#calender tbody td.num.medium {
+  background-color: #00ff4c;
+  color: #fff;
+}
+
+#calender tbody td.num.larg {
+  background-color: #18ec58;
+  color: #fff;
+}
+
 #calender tbody td.num.active {
   border: 1px solid #ddd;
 }

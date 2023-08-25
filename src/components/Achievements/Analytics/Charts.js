@@ -94,7 +94,9 @@ const Charts = ({
               )}
             </>
           ) : (<>
-            <MonthChart date={date} />
+            <MonthChart
+              date={date}
+              data={data} />
           </>)}
         </>
       )}
