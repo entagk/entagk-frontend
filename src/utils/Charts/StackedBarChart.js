@@ -6,7 +6,12 @@ import './style.css';
 
 const ChartReport = lazy(() => import("./ChartReport"));
 
-function StackedBarChart({ daysData, dataType }) {
+function StackedBarChart({
+  daysData,
+  dataType,
+  setDateType,
+  setDate
+}) {
   const colorRows = [];
   const data = filterDuplicatedData(daysData, 'day').sort((a, b) => a?.day?.localeCompare(b?.day))?.map((d) => {
     const requiredData = {};
@@ -99,8 +104,18 @@ function StackedBarChart({ daysData, dataType }) {
       .select(gy.current)
       .call(d3.axisLeft(y).tickSizeOuter(0).tickPadding(5))
       .selectAll("text")
+      .on("click", (d) => {
+        setDateType("day");
+        setDate({
+          startDate: d.target.__data__,
+          endDate: d.target.__data__,
+          display: d.target.__data__ === new Date().toJSON().split('T')[0] ? 'today' : d.target.__data__
+        })
+      })
       .call((text) => text.text((t) => t?.replaceAll("-", "/")))
       .call((g) => g.select(".domain").remove());
+
+    // eslint-disable-next-line
   }, [gy, y, data]);
 
   useEffect(() => {

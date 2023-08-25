@@ -30,7 +30,7 @@ const getMonth = (day) => {
   })
 }
 
-const MonthChart = ({ date, data }) => {
+const MonthChart = ({ date, data, setDate, setDateType }) => {
   const dayNames = [
     'Sun', 'Mon',
     'Tue', 'Wed',
@@ -46,7 +46,7 @@ const MonthChart = ({ date, data }) => {
   const generateDayClass = (dayNum) => {
     const day = new Date(new Date(date.startDate).setDate(dayNum)).toJSON()?.split('T')[0];
 
-    const dayData = data.find(d => d.day === day);
+    const dayData = data?.find(d => d.day === day);
     let className = '';
 
     if (dayData?.totalMins / 40 >= 1 && dayData?.totalMins / 40 < 4) {
@@ -58,6 +58,12 @@ const MonthChart = ({ date, data }) => {
     }
 
     return className;
+  }
+
+  const newDateByDay = (day) => {
+    if (day)
+      return new Date(new Date(date?.startDate).setDate(day)).toJSON().split('T')[0];
+    else return new Date().toJSON().split('T')[0];
   }
 
   return (
@@ -81,12 +87,16 @@ const MonthChart = ({ date, data }) => {
                     <td
                       key={index}
                       className={
-                        `${day > 0 ? "num" : ""}  ${new Date(new Date(date?.startDate).setDate(day)).toJSON().split('T')[0] ===
-                          new Date().toJSON().split('T')[0] ?
-                          'active' :
-                          ''
-                        } ${generateDayClass(day)}`
+                        `${day > 0 ? "num" : ""}  ${newDateByDay(day) === newDateByDay() ? 'active' : ''} ${generateDayClass(day)}`
                       }
+                      onClick={() => {
+                        setDateType("day");
+                        setDate({
+                          startDate: newDateByDay(day),
+                          endDate: newDateByDay(day),
+                          display: newDateByDay(day) === newDateByDay() ? 'today' : newDateByDay(day)
+                        })
+                      }}
                     >
                       {day > 0 ? day : ""}
                     </td>

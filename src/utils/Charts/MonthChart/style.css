@@ -19,6 +19,7 @@
 
 #calender tbody td.num {
   background-color: #ebedf082;
+  cursor: pointer;
 }
 
 #calender tbody td.num.small {

@@ -216,6 +216,8 @@ const AnalyticsChart = ({
         dateType={dateType}
         chart={chart}
         date={date}
+        setDate={setDate}
+        setDateType={setDateType}
       />
     </>
   )

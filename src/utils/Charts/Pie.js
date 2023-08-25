@@ -5,7 +5,7 @@ import { stringToColor, formatTime } from "../helper";
 import './style.css';
 import ChartReport from "./ChartReport";
 
-const Pie = ({ data }) => {
+const Pie = ({ data, dateType, dataType }) => {
   const width = window.innerWidth;
   const height = Math.min(width, 500);
 

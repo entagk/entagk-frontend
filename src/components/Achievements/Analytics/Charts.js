@@ -17,7 +17,9 @@ const Charts = ({
   dataType,
   chart,
   dateType,
-  date
+  date,
+  setDate,
+  setDateType
 }) => {
   const [pieData, setPieData] = useState([]);
 
@@ -90,13 +92,17 @@ const Charts = ({
                 <StackedBarChart
                   daysData={data}
                   dataType={dataType}
+                  setDateType={setDateType}
+                  setDate={setDate}
                 />
               )}
             </>
           ) : (<>
             <MonthChart
               date={date}
-              data={data} />
+              data={data}
+              setDateType={setDateType}
+              setDate={setDate} />
           </>)}
         </>
       )}
