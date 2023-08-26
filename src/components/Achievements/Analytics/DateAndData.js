@@ -3,6 +3,7 @@ import React, { Suspense, lazy, useState } from 'react';
 import { RiArrowDownSLine } from 'react-icons/ri';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import { getMonthRange, getWeekStartAndEnd } from '../../../utils/helper';
+import Loading from '../../../utils/Loading/Loading';
 
 const Menu = lazy(() => import('../../../utils/Menu/Menu'));
 const Button = lazy(() => import('../../../utils/Button/Button'));
@@ -103,46 +104,55 @@ const DateAndData = ({ dataType, setDataType, dateType, setDateType, date, setDa
           variant='single-icon'
         />
       </div>
-      <div className='data-type'>
-        <Suspense>
-          <Menu
-            open={openMenu}
-            setOpen={setOpenMenu}
-            MainButton={
-              <Button
-                type='button'
-                aria-label='open menu'
-                endIcon={
-                  <RiArrowDownSLine className='arrow' />
-                }
-                style={{
-                  borderRadius: "10px",
-                  textTransform: "capitalize"
-                }}
-              >
-                {dataType}
-              </Button>
-            }
-          >
-            {dataTypes.map((item, index) => (
-              <Button
-                key={index}
-                aria-label={item}
-                type='button'
-                onClick={() => setDataType(item)}
-                value={index}
-                variant='none'
-                style={{
-                  textTransform: "capitalize",
-                  background: item === dataType && "var(--main-light-black)"
-                }}
-              >
-                {item}
-              </Button>
-            ))}
-          </Menu>
-        </Suspense>
-      </div>
+      {(dateType === 'day' || dateType === 'week') && (
+        <div className='data-type'>
+          <Suspense fallback={
+            <Loading
+              size="small"
+              color={"#fff"}
+              backgroud="transparent"
+              paddingBlock='0'
+            />
+          }>
+            <Menu
+              open={openMenu}
+              setOpen={setOpenMenu}
+              MainButton={
+                <Button
+                  type='button'
+                  aria-label='open menu'
+                  endIcon={
+                    <RiArrowDownSLine className='arrow' />
+                  }
+                  style={{
+                    borderRadius: "10px",
+                    textTransform: "capitalize"
+                  }}
+                >
+                  {dataType}
+                </Button>
+              }
+            >
+              {dataTypes.map((item, index) => (
+                <Button
+                  key={index}
+                  aria-label={item}
+                  type='button'
+                  onClick={() => setDataType(item)}
+                  value={index}
+                  variant='none'
+                  style={{
+                    textTransform: "capitalize",
+                    background: item === dataType && "var(--main-light-black)"
+                  }}
+                >
+                  {item}
+                </Button>
+              ))}
+            </Menu>
+          </Suspense>
+        </div>
+      )}
     </div>
   )
 }

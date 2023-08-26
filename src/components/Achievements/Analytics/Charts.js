@@ -5,6 +5,7 @@ import Loading from '../../../utils/Loading/Loading';
 import { filterDuplicatedData } from '../../../utils/helper';
 
 import './style.css';
+import YearChart from '../../../utils/Charts/YearChart/YearChart';
 
 const Chart = lazy(() => import('../../../utils/Charts/Chart'));
 const Pie = lazy(() => import('../../../utils/Charts/Pie'));
@@ -97,13 +98,22 @@ const Charts = ({
                 />
               )}
             </>
-          ) : (<>
-            <MonthChart
-              date={date}
-              data={data}
-              setDateType={setDateType}
-              setDate={setDate} />
-          </>)}
+          ) : dateType === 'month' ? (
+            <>
+              <MonthChart
+                date={date}
+                data={data}
+                setDateType={setDateType}
+                setDate={setDate}
+              />
+            </>
+          ) : (
+            <>
+              {data.every((d) => ('day' in d)) && (
+                <YearChart data={data} />
+              )}
+            </>
+          )}
         </>
       )}
     </div>

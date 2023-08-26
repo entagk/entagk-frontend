@@ -11,7 +11,7 @@ const Button = lazy(() => import('../../../utils/Button/Button'));
 
 const Analytics = ({ setMessage }) => {
   const [chart, setChart] = useState('bar');
-  const dateTypes = ['day', 'week', 'month'];
+  const dateTypes = ['day', 'week', 'month', 'year'];
   const [dateType, setDateType] = useState(dateTypes[0]);
   const [dataType, setDataType] = useState('tasks');
   const [date, setDate] = useState({ startDate: new Date().toJSON().split('T')[0], endDate: new Date().toJSON().split('T')[0], display: 'today' });
@@ -20,31 +20,33 @@ const Analytics = ({ setMessage }) => {
     <div className='analytics'>
       <div className='header'>
         <h2>Analytics</h2>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <div className='horizontal-bar'>
-            <Button
-              variant={chart === 'bar' ? "contained" : 'outlined'}
-              startIcon={
-                <BsBarChart />
-              }
-              onClick={() => setChart('bar')}
-            >
-            </Button>
-            <Button
-              variant={chart === 'pie' ? "contained" : 'outlined'}
-              startIcon={
-                <BsPieChart />
-              }
-              onClick={() => setChart('pie')}
-              type="button"
-            >
-            </Button>
+        {(dateType === 'day' || dateType === 'week') && (
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <div className='horizontal-bar'>
+              <Button
+                variant={chart === 'bar' ? "contained" : 'outlined'}
+                startIcon={
+                  <BsBarChart />
+                }
+                onClick={() => setChart('bar')}
+              >
+              </Button>
+              <Button
+                variant={chart === 'pie' ? "contained" : 'outlined'}
+                startIcon={
+                  <BsPieChart />
+                }
+                onClick={() => setChart('pie')}
+                type="button"
+              >
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
       <div className='analytics-type'>
         <div className='horizontal-bar'>
@@ -63,7 +65,7 @@ const Analytics = ({ setMessage }) => {
                   setDate({ startDate: start, endDate: end, display: 'this month' })
                 }
               }}
-              style={{ borderRight: index !== 2 ? '2px solid' : "none" }}
+              style={{ borderRight: index !== 3 ? '2px solid' : "none" }}
               type="button"
               key={index}
             >

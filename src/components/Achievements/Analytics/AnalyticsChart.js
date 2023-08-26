@@ -2,7 +2,7 @@ import React, { lazy, useEffect, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getDay, getDays } from '../../../actions/activities';
+import { getDay, getDays, getYear } from '../../../actions/activities';
 import { calcDays, newDate } from '../../../utils/helper';
 
 const Charts = lazy(() => import('./Charts'));
@@ -195,6 +195,8 @@ const AnalyticsChart = ({
       } else {
         setData(daysData)
       }
+    } else {
+      dispatch(getYear('2023', setData, setMessage))
     }
     // eslint-disable-next-line
   }, [dateType, date, dataType]);
