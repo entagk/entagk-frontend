@@ -122,21 +122,21 @@ function generateYearDays(year, daysData) {
   const allDays = [];
 
   // Get start and end dates
-  const start = new Date(year, 0, 0); 
-  const end = new Date(year, 12, 2);
+  const start = new Date(`${year}-01-01`);
+  const end = new Date(`${year}-12-31`);
 
   // Loop each day
   let current = start;
-  while(current <= end) {
+  while (current <= end) {
     // Default day object
     let day = {
-      day: current.toISOString().slice(0,10), 
+      day: current.toISOString().slice(0, 10),
       totalMins: 0
     };
 
     // Check if actual data
     const data = daysData.find(d => d.day === day.day);
-    if(data) {
+    if (data) {
       day = data;
     }
 

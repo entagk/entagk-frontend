@@ -44,7 +44,7 @@ const DateAndData = ({ dataType, setDataType, dateType, setDateType, date, setDa
           'this week' :
           start.replaceAll('-', '/') + " - " + end.replaceAll('-', '/')
       });
-    } else {
+    } else if (dateType === 'month') {
       const current =
         date.display === 'this month' ?
           new Date() :
@@ -66,13 +66,32 @@ const DateAndData = ({ dataType, setDataType, dateType, setDateType, date, setDa
           'this month' :
           current.toLocaleString('default', { month: 'long', year: 'numeric' })
       });
+    } else {
+      const current =
+        date.display === new Date().toLocaleString('default', { year: 'numeric' }) ?
+          new Date() :
+          new Date(date.display);
+
+      current.setFullYear(type === 'back' ? current.getFullYear() - 1 : current.getFullYear() + 1);
+
+      const [start, end] = [new Date(current.getFullYear(), 0), new Date(current.getFullYear(), 12, 0)];
+
+      const todayDate = new Date();
+
+      setDate({
+        startDate: start.toJSON().split('T')[0],
+        endDate: end.toJSON().split('T')[0],
+        display: end - todayDate > 0 ?
+          new Date().toLocaleString('default', { year: 'numeric' }) :
+          current.toLocaleString('default', { year: 'numeric' })
+      });
     }
   }
 
   return (
     <div className='date-data'>
       <div className='date'>
-        {!date.display.includes('this') && date.display !== 'today' && (
+        {!date?.display?.includes('this') && date?.display !== 'today' && date?.display !== new Date().toLocaleString('default', { year: 'numeric' }) && (
           <Button
             aria-label='next arrow button'
             style={{

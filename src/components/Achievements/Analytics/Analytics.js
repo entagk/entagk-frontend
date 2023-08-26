@@ -60,9 +60,12 @@ const Analytics = ({ setMessage }) => {
                 } else if (item === 'week') {
                   const [start, end] = getWeekStartAndEnd();
                   setDate({ startDate: start, endDate: end, display: 'this week' })
-                } else {
+                } else if (item === 'month') {
                   const [start, end] = getMonthRange(new Date().getFullYear(), new Date().getMonth());
                   setDate({ startDate: start, endDate: end, display: 'this month' })
+                } else {
+                  const [start, end] = [new Date(new Date().getFullYear(), 0), new Date(new Date().getFullYear(), 12, 0)];
+                  setDate({ startDate: start, endDate: end, display: new Date().toLocaleString('default', { year: 'numeric' }) })
                 }
               }}
               style={{ borderRight: index !== 3 ? '2px solid' : "none" }}

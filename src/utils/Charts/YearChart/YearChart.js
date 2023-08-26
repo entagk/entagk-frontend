@@ -11,14 +11,12 @@ function Calendar(
   {
     data,
     title, // given d in data, returns the title text
-    width = 928, // width of the chart, in pixels
-    formatMonth = "%b", // format specifier string for months (above the chart)
   }
 ) {
   console.log(data);
-
   const svgRef = useRef();
   const yearRef = useRef();
+  const width = window.innerWidth;
 
   const X = d3.map(data, d => new Date(d.day));
   const Y = d3.map(data, d => d.totalMins / 60);
@@ -33,7 +31,7 @@ function Calendar(
   const color = d3.scaleSequential(["#ebedf082", '#66bd63', '#1a9850', "#006837"]);
 
   // Construct formats.
-  formatMonth = d3.utcFormat(formatMonth);
+  const formatMonth = d3.utcFormat("%b");
 
   // Compute titles.
   const formatDate = d3.utcFormat("%B %-d, %Y");
@@ -96,7 +94,7 @@ function Calendar(
       width={width}
       height={height}
       viewBox={[0, 0, width, height]}
-      style={{ maxWidth: "100%", height: "auto" }}
+      style={{ maxWidth: "100%", height: "auto", width: '100%' }}
       fontFamily={"sans-serif"}
       fontSize={10}
       ref={svgRef}>

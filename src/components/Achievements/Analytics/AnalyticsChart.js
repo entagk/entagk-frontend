@@ -196,7 +196,7 @@ const AnalyticsChart = ({
         setData(daysData)
       }
     } else {
-      dispatch(getYear('2023', setData, setMessage))
+      dispatch(getYear(date.display, setData, setMessage))
     }
     // eslint-disable-next-line
   }, [dateType, date, dataType]);
