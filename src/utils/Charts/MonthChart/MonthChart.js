@@ -50,7 +50,7 @@ const MonthChart = ({ date, data, setDate, setDateType }) => {
     const dayData = data?.find(d => d.day === day);
     const background = d3.scaleSequential(["#ebedf082", '#66bd63', '#1a9850', "#006837"]);
 
-    return background(dayData?.totalMins / 60);
+    return { background: background(dayData?.totalMins / 60), color: dayData?.totalMins > 40 ? '#fff' : 'inhrite' };
   }
 
   const newDateByDay = (day) => {
@@ -83,7 +83,8 @@ const MonthChart = ({ date, data, setDate, setDateType }) => {
                         `${day > 0 ? "num" : ""} ${newDateByDay(day) === newDateByDay() ? 'active' : ''}`
                       }
                       style={{
-                        background: generateDaycolor(day)
+                        background: generateDaycolor(day).background,
+                        color: generateDaycolor(day).color,
                       }}
                       onClick={() => {
                         setDateType("day");

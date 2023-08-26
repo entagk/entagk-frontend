@@ -1,4 +1,3 @@
-import { filter } from "d3";
 import { ADD_ACTIVITY, GET_DAY, GET_DAYS, GET_YEAR, initToday } from "../actions/activities";
 import { END_LOADING, START_LOADING } from "../actions/auth";
 
