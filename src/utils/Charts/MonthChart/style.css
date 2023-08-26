@@ -23,17 +23,17 @@
 }
 
 #calender tbody td.num.small {
-  background-color: #00ff4e61;
+  background-color: #66bd63;
   color: #fff;
 }
 
 #calender tbody td.num.medium {
-  background-color: #00ff4c;
+  background-color: #1a9850;
   color: #fff;
 }
 
 #calender tbody td.num.larg {
-  background-color: #18ec58;
+  background-color: #006837;
   color: #fff;
 }
 

@@ -91,7 +91,7 @@ const DateAndData = ({ dataType, setDataType, dateType, setDateType, date, setDa
           }}
         >
           {
-            date.display?.replaceAll('-', '/')
+            date.startDate === date.endDate ? date.display?.replaceAll('-', '/') : date.display
           }
         </p>
         <Button

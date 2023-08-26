@@ -129,4 +129,6 @@ export const getDay = (day) => API.get(`/active/${day}`);
 
 export const getDays = (start, end) => API.get(`/active/?start=${start}&end=${end}`)
 
+export const getYear = (year) => API.get(`/active/year?year=${year}`);
+
 /* end acivity api */

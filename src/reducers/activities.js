@@ -1,7 +1,8 @@
-import { ADD_ACTIVITY, GET_DAY, GET_DAYS, initToday } from "../actions/activities";
+import { filter } from "d3";
+import { ADD_ACTIVITY, GET_DAY, GET_DAYS, GET_YEAR, initToday } from "../actions/activities";
 import { END_LOADING, START_LOADING } from "../actions/auth";
 
-import {newDate} from "../utils/helper";
+import { filterDuplicatedData, newDate } from "../utils/helper";
 
 // eslint-disable-next-line
 export default (state = {
@@ -38,28 +39,34 @@ export default (state = {
         return {
           ...state,
           today: dayData,
-          days: all.filter((d, i) => {
-            return !all.findIndex(day => day.day === d.day);
-          }),
+          days: filterDuplicatedData(all, 'day'),
           total: state.total + 1
         };
       } else {
         const all = state.days.concat([action.data]);
         return {
           ...state,
-          days: all,
+          days: filterDuplicatedData(all, 'day'),
           total: state.total + 1
         };
       }
     case GET_DAYS:
       const daysData = action.data.days;
 
-      const all = state.days.concat(daysData).sort((a, b) => a.day.localeCompare(b.day));
+      const all = filterDuplicatedData(state.days.concat(daysData), 'day').sort((a, b) => a.day.localeCompare(b.day));
       return {
         ...state,
         days: all,
         total: all.length
       };
+
+    case GET_YEAR:
+      const yearData = filterDuplicatedData(state.days.concat(action.data), 'day').sort((a, b) => a.day.localeCompare(b.day));
+      return {
+        ...state,
+        days: yearData,
+        total: yearData.length
+      }
 
     default:
       return state;

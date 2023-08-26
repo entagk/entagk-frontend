@@ -205,6 +205,9 @@ function StackedBarChart({
     return words.join(" ");
   };
 
+  if (data.map(day => Object.keys(day).filter(f => f !== 'day')).flat(Infinity).length === 0) {
+    return <p>No activities during this period</p>;
+  }
 
   return (
     <>

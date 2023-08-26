@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react'
+import React, { useMemo } from 'react';
+import * as d3 from 'd3';
 
 import './style.css';
 
@@ -43,21 +44,13 @@ const MonthChart = ({ date, data, setDate, setDateType }) => {
     [date]
   );
 
-  const generateDayClass = (dayNum) => {
+  const generateDaycolor = (dayNum) => {
     const day = new Date(new Date(date.startDate).setDate(dayNum)).toJSON()?.split('T')[0];
 
     const dayData = data?.find(d => d.day === day);
-    let className = '';
+    const background = d3.scaleSequential(["#ebedf082", '#66bd63', '#1a9850', "#006837"]);
 
-    if (dayData?.totalMins / 40 >= 1 && dayData?.totalMins / 40 < 4) {
-      className = 'small';
-    } else if (dayData?.totalMins / 40 >= 4 && dayData?.totalMins / 40 < 9) {
-      className = 'medium'
-    } else if (dayData?.totalMins / 40 >= 9) {
-      className = 'larg'
-    }
-
-    return className;
+    return background(dayData?.totalMins / 60);
   }
 
   const newDateByDay = (day) => {
@@ -87,8 +80,11 @@ const MonthChart = ({ date, data, setDate, setDateType }) => {
                     <td
                       key={index}
                       className={
-                        `${day > 0 ? "num" : ""}  ${newDateByDay(day) === newDateByDay() ? 'active' : ''} ${generateDayClass(day)}`
+                        `${day > 0 ? "num" : ""} ${newDateByDay(day) === newDateByDay() ? 'active' : ''}`
                       }
+                      style={{
+                        background: generateDaycolor(day)
+                      }}
                       onClick={() => {
                         setDateType("day");
                         setDate({

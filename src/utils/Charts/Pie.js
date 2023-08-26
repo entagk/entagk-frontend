@@ -132,15 +132,19 @@ const Pie = ({ data, dateType, dataType }) => {
     // eslint-disable-next-line
   }, [data]);
 
+  if (data.length === 0) {
+    return <p>No activities during this period</p>;
+  }
+
   return (
     <>
-    <svg
-      viewBox={[-width/2, -height/2, width, height]}
-      ref={svgRef}
-      width={width}
-      height={height}
-    ></svg>
-    <ChartReport rows={data} totalTime={maxTotalMins} />
+      <svg
+        viewBox={[-width / 2, -height / 2, width, height]}
+        ref={svgRef}
+        width={width}
+        height={height}
+      ></svg>
+      <ChartReport rows={data} totalTime={maxTotalMins} />
     </>
   );
 };

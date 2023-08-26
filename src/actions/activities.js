@@ -5,6 +5,7 @@ import { calcDays, newDate } from '../utils/helper';
 export const ADD_ACTIVITY = 'ADD_ACTIVITY';
 export const GET_DAY = 'GET_DAY';
 export const GET_DAYS = 'GET_DAYS';
+export const GET_YEAR = 'GET_YEAR';
 
 export const initToday = {
   "types": [],
@@ -105,6 +106,58 @@ export const getDays = (start, end, lastData, setData, setMessage) => async disp
       setData(all.sort((a, b) => a.day.localeCompare(b.day)));
       dispatch({ type: GET_DAYS, data: { days: data, start, end } })
     }
+  } catch (error) {
+    setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    if (error.response?.status === 401 || error.response?.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
+    console.error(error);
+  } finally {
+    dispatch({ type: END_LOADING, data: "activity" });
+  }
+}
+
+function generateYearDays(year, daysData) {
+  // Array to hold all days
+  const allDays = [];
+
+  // Get start and end dates
+  const start = new Date(year, 0, 0); 
+  const end = new Date(year, 12, 2);
+
+  // Loop each day
+  let current = start;
+  while(current <= end) {
+    // Default day object
+    let day = {
+      day: current.toISOString().slice(0,10), 
+      totalMins: 0
+    };
+
+    // Check if actual data
+    const data = daysData.find(d => d.day === day.day);
+    if(data) {
+      day = data;
+    }
+
+    // Add to all days
+    allDays.push(day);
+
+    // Next day
+    current.setDate(current.getDate() + 1);
+  }
+
+  return allDays;
+}
+
+export const getYear = (year, setData, setMessage) => async dispatch => {
+  try {
+    dispatch({ type: START_LOADING, data: 'activity' });
+
+    const { data } = await api.getYear(year);
+    const allDays = generateYearDays(year, data);
+    setData(allDays);
+    dispatch({ type: GET_YEAR, data: allDays });
   } catch (error) {
     setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
     if (error.response?.status === 401 || error.response?.status === 500) {

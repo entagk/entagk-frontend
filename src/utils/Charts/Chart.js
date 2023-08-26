@@ -96,6 +96,7 @@ function Chart({ data }) {
           .filter((d) => x(d?.totalMins) - x(0) < maxMins / 2) // short bars
           .attr("dx", +4)
           .attr("text-anchor", "start")
+          .style('fill', '#000')
       );
 
     return () => {

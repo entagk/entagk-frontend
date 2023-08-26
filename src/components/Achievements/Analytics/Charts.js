@@ -69,7 +69,7 @@ const Charts = ({
           {dateType === 'day' ? (
             <>
               {data.length === 0 ? (
-                <p>No activities at this time</p>
+                <p>No activities during this period</p>
               ) : (
                 <>
                   {chart === 'pie' ? (
