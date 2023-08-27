@@ -1,5 +1,6 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import * as d3 from 'd3';
+import { formatTime } from '../../helper';
 
 const dayNames = [
   'Sun', 'Mon',
@@ -9,20 +10,17 @@ const dayNames = [
 
 function Calendar(
   {
-    data,
-    title, // given d in data, returns the title text
+    data
   }
 ) {
-  console.log(data);
   const svgRef = useRef();
-  const yearRef = useRef();
   const width = window.innerWidth;
 
   const X = d3.map(data, d => new Date(d.day));
   const Y = d3.map(data, d => d.totalMins / 60);
   const I = d3.range(X.length);
 
-  const cellSize = 17;
+  const cellSize = 21;
 
   const timeWeek = d3.utcSunday;
   const weekDays = 7;
@@ -35,8 +33,7 @@ function Calendar(
 
   // Compute titles.
   const formatDate = d3.utcFormat("%B %-d, %Y");
-  const formatValue = color.tickFormat(100);
-  title = i => `${formatDate(X[i])}\n${formatValue(Y[i])}`;
+  const title = i => `${formatDate(X[i])}\n${formatTime(Y[i] * 60)} (HH:MM)`;
 
   const yearData = d3.groups(I, i => X[i].getUTCFullYear()).reverse();
 
@@ -46,7 +43,7 @@ function Calendar(
     const year = svg.selectAll("g")
       .data(yearData)
       .join("g")
-      .attr("transform", (d, i) => `translate(40.5,${height * i + cellSize * 1.5})`);
+      .attr("transform", `translate(25,20)`);
 
     year.append("g")
       .attr("text-anchor", "end")
@@ -97,9 +94,7 @@ function Calendar(
       style={{ maxWidth: "100%", height: "auto", width: '100%' }}
       fontFamily={"sans-serif"}
       fontSize={10}
-      ref={svgRef}>
-      <g ref={yearRef}></g>
-    </svg>
+      ref={svgRef}></svg>
   )
 }
 

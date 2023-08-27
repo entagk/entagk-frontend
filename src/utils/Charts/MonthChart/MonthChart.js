@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import * as d3 from 'd3';
+import { formatTime } from '../../helper';
 
 import './style.css';
 
@@ -31,6 +32,39 @@ const getMonth = (day) => {
   })
 }
 
+const Day = ({ dayNum, monthData, date, setDateType, setDate }) => {
+  const day = new Date(new Date(date?.startDate).setDate(dayNum)).toJSON()?.split('T')[0];
+
+  const dayData = monthData?.find(d => d.day === day);
+
+  const background = d3.scaleSequential(["#ebedf082", '#66bd63', '#1a9850', "#006837"]);
+
+  const formatDate = d3.utcFormat("%B %-d, %Y");
+
+  return (
+    <td
+      className={
+        `${dayNum > 0 ? "num" : ""} ${day === new Date().toJSON().split('T')[0] ? 'active' : ''}`
+      }
+      style={{
+        background: background(dayData?.totalMins / 60),
+        color: dayData?.totalMins >= 40 ? "#fff" : "inhrite",
+      }}
+      title={`${formatDate(new Date(day))}\n${formatTime(dayData?.totalMins)} (HH:MM)`}
+      onClick={() => {
+        setDateType("day");
+        setDate({
+          startDate: day,
+          endDate: day,
+          display: day === new Date().toJSON().split('T')[0] ? 'today' : day
+        })
+      }}
+    >
+      {dayNum > 0 ? dayNum : ""}
+    </td>
+  )
+}
+
 const MonthChart = ({ date, data, setDate, setDateType }) => {
   const dayNames = [
     'Sun', 'Mon',
@@ -43,21 +77,6 @@ const MonthChart = ({ date, data, setDate, setDateType }) => {
       getMonth(date.startDate || new Date.toJSON().split('T')[0]),
     [date]
   );
-
-  const generateDaycolor = (dayNum) => {
-    const day = new Date(new Date(date.startDate).setDate(dayNum)).toJSON()?.split('T')[0];
-
-    const dayData = data?.find(d => d.day === day);
-    const background = d3.scaleSequential(["#ebedf082", '#66bd63', '#1a9850', "#006837"]);
-
-    return { background: background(dayData?.totalMins / 60), color: dayData?.totalMins > 40 ? '#fff' : 'inhrite' };
-  }
-
-  const newDateByDay = (day) => {
-    if (day)
-      return new Date(new Date(date?.startDate).setDate(day)).toJSON().split('T')[0];
-    else return new Date().toJSON().split('T')[0];
-  }
 
   return (
     <>
@@ -77,26 +96,16 @@ const MonthChart = ({ date, data, setDate, setDateType }) => {
               {week ? (
                 <>{
                   week?.map((day, index) => (
-                    <td
-                      key={index}
-                      className={
-                        `${day > 0 ? "num" : ""} ${newDateByDay(day) === newDateByDay() ? 'active' : ''}`
-                      }
-                      style={{
-                        background: generateDaycolor(day).background,
-                        color: generateDaycolor(day).color,
-                      }}
-                      onClick={() => {
-                        setDateType("day");
-                        setDate({
-                          startDate: newDateByDay(day),
-                          endDate: newDateByDay(day),
-                          display: newDateByDay(day) === newDateByDay() ? 'today' : newDateByDay(day)
-                        })
-                      }}
-                    >
-                      {day > 0 ? day : ""}
-                    </td>
+                    <>
+                      <Day
+                        key={index}
+                        date={date}
+                        dayNum={day}
+                        monthData={data}
+                        setDateType={setDateType}
+                        setDate={setDate}
+                      />
+                    </>
                   ))
                 }</>
               ) : (<></>)}
