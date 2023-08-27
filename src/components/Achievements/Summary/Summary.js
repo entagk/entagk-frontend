@@ -6,6 +6,8 @@ import { CgTimelapse } from 'react-icons/cg';
 import { MdFlashOn } from 'react-icons/md';
 import { BsCalendar3 } from 'react-icons/bs';
 
+import {formatTime} from '../../../utils/helper'
+
 import './style.css';
 
 const Summary = () => {
@@ -28,10 +30,10 @@ const Summary = () => {
             </span>
             <div>
               <h3>
-                {user?.totalHours.toFixed(2)}
+                {formatTime(user?.totalHours * 60)}
               </h3>
               <p>
-                Total Hours
+                Total time
               </p>
             </div>
           </div>
