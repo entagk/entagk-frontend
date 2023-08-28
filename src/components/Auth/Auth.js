@@ -128,7 +128,7 @@ const Auth = () => {
           errors.push([k, `invalid ${k}`]);
         }
       } else {
-        if (validations[k](v)) {
+        if (validations[k](v, formData.password)) {
           errors.push([k, `invalid ${k}`]);
         }
       }
