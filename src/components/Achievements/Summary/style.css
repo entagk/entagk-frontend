@@ -55,6 +55,7 @@
 @media (max-width: 500px) {
   .summary-numbers {
     gap: 15px;
+    margin-top: 15px;
   }
 
   .summary-number:not(:last-of-type) {

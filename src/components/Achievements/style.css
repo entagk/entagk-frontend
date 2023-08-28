@@ -9,3 +9,9 @@
   flex-direction: column;
 }
 
+@media (max-width: 500px) {
+  .achievements-container {
+    margin-block: 15px;
+  }
+}
+

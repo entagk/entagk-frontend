@@ -53,7 +53,7 @@ function Calendar(
       .attr("x", -5)
       .attr("y", i => (i + 0.5) * cellSize)
       .attr("dy", "0.31em")
-      .attr('font-size', '14px')
+      .attr('font-size', '1.2rm')
       .text(i => dayNames[i]);
 
     const cell = year.append("g")
@@ -78,7 +78,7 @@ function Calendar(
     month.append("text")
       .attr("x", d => timeWeek.count(d3.utcYear(d), timeWeek.ceil(d)) * cellSize + 2)
       .attr("y", -5)
-      .attr('font-size', '14px')
+      .attr('font-size', '1.2rm')
       .text(formatMonth);
 
 

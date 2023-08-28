@@ -209,6 +209,10 @@ a {
 }
 
 @media (max-width: 550px) {
+  .container {
+    padding: 0;
+  }
+
   .glass-effect {
     min-width: calc(100% - 40px);
   }
@@ -258,4 +262,7 @@ a {
   100% {
     transform: scale(1, 1);
   }
+}
+
+@media (max-width: 550px) {
 }

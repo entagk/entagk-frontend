@@ -65,3 +65,10 @@ svg text {
 .chart-container .chart-report .row.head-row p {
   font-weight: 600;
 }
+
+@media (max-width: 768px) {
+  .chart-container .chart-report .row .name {
+    font-size: 16px;
+    margin-right: 10px;
+  }
+}

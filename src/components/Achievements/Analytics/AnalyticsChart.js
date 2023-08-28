@@ -25,6 +25,8 @@ const AnalyticsChart = ({
 
   useEffect(() => {
     if (dateType === 'day') {
+      console.log(dateType);
+      console.log(date);
       const day =
         date.display === 'today' ?
           today :
@@ -33,6 +35,7 @@ const AnalyticsChart = ({
       if (!day?.day) {
         if (date.display === 'today' && !today) {
           const todayDate = newDate();
+          console.log(todayDate);
           dispatch(getDay(
             todayDate,
             dateType,
@@ -200,6 +203,8 @@ const AnalyticsChart = ({
     }
     // eslint-disable-next-line
   }, [dateType, date, dataType]);
+
+  console.log(data);
 
   return (
     <>

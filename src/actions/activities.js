@@ -36,7 +36,6 @@ const changeDayData = (dateType, dataType, today, setData, data) => {
     const day = data;
     if (day) {
       const max = day?.[dataType]?.reduce((p, c) => p + c?.totalMins, 0);
-
       if (max !== data?.totalMins) {
         setData([
           ...data[dataType],
@@ -50,8 +49,8 @@ const changeDayData = (dateType, dataType, today, setData, data) => {
           }
         ])
       } else {
-        if (today?.[dataType])
-          setData(today?.[dataType]);
+        if (data?.[dataType])
+          setData(data?.[dataType]);
       }
     } else {
       setData([]);

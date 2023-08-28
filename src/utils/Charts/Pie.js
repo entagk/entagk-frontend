@@ -84,7 +84,7 @@ const Pie = ({ data, dateType, dataType }) => {
       .attr("text-anchor", "middle")
       .append('text')
       .attr('transform', `translate(50%, 50%)`)
-      .style('font', '18px sans-serif');
+      .style('font', '1.4rm sans-serif');
 
     centerText
       .append('tspan')
@@ -121,7 +121,7 @@ const Pie = ({ data, dateType, dataType }) => {
                 .toFixed(0)
                 .toLocaleString("en-US")}%`
           )
-          .style("font", "16px sans-serif")
+          .style("font", "1.4rm sans-serif")
           .style("font-weight", "bold")
           .style("text-anchor", "middle")
           .style("text-align", "center")
@@ -133,7 +133,7 @@ const Pie = ({ data, dateType, dataType }) => {
   }, [data]);
 
   if (data.length === 0) {
-    return <p>No activities during this period</p>;
+    return <p className="on-activities">No activities during this period</p>;
   }
 
   return (

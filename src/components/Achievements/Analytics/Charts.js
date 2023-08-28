@@ -51,14 +51,12 @@ const Charts = ({
     }
   }, [data, dataType, dateType, chart]);
 
+  console.log(data);
+
   return (
     <div
       className='chart-container'
-      style={{
-        marginBlock: '20px',
-        width: "100%",
-        textAlign: "center"
-      }}>
+    >
       {isLoading ? (
         <Loading
           color="var(--main-color)"
@@ -70,7 +68,7 @@ const Charts = ({
           {dateType === 'day' ? (
             <>
               {data.length === 0 ? (
-                <p>No activities during this period</p>
+                <p className='no-activities'>No activities during this period</p>
               ) : (
                 <>
                   {chart === 'pie' ? (

@@ -206,7 +206,7 @@ function StackedBarChart({
   };
 
   if (data.map(day => Object.keys(day).filter(f => f !== 'day')).flat(Infinity).length === 0) {
-    return <p>No activities during this period</p>;
+    return <p className="no-activites">No activities during this period</p>;
   }
 
   return (

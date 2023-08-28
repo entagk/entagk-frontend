@@ -105,10 +105,7 @@ const DateAndData = ({ dataType, setDataType, dateType, setDateType, date, setDa
           />
         )}
         <p
-          style={{
-            fontSize: '22px',
-            textTransform: 'capitalize',
-          }}
+          className='date-text'
         >
           {
             date.startDate === date.endDate ? date.display?.replaceAll('-', '/') : date.display
