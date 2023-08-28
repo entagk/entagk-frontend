@@ -19,7 +19,7 @@ import { addActivity } from "../../actions/activities";
 
 const worker = new window.Worker('worker.js');
 const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
-    const {user} = useSelector(state => state.auth);
+    const { user } = useSelector(state => state.auth);
     const { active, setting, started, periodNum } = useSelector((state) => state.timer);
     const { activeId } = useSelector(state => state.tasks);
     const [time, setTime] = useState(localStorage.getItem("restOfTime") === null ? 0 : Number(localStorage.getItem("restOfTime")))
@@ -78,17 +78,33 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
     // For sounds of timer
     useEffect(() => {
         if (setting?.tickingType.name !== 'none') {
-            tickingSound.current.chengeVolume(setting?.tickingVolume);
-            tickingSound.current.changeFile(setting?.tickingType.src);
+            if (tickingSound.current) {
+                tickingSound?.current?.chengeVolume(setting?.tickingVolume);
+                tickingSound?.current?.changeFile(setting?.tickingType.src);
+            } else {
+                tickingSound.current = audioPlayer({
+                    src: setting?.tickingType?.src,
+                    volume: setting?.tickingVolume,
+                    loop: true
+                })
+            }
         }
-
+        
         alarmSound.current.chengeVolume(setting?.alarmVolume);
         alarmSound.current.changeFile(setting?.alarmType.src);
         alarmSound.current.changeLoop(setting?.alarmRepet);
-
+        
         if (setting.clickType.name !== 'none') {
-            clickSound.current.chengeVolume(setting.clickVolume);
-            clickSound.current.changeFile(setting.clickType.src);
+            if (clickSound.current) {
+                clickSound.current.chengeVolume(setting.clickVolume);
+                clickSound.current.changeFile(setting.clickType.src);
+            } else {
+                clickSound.current = audioPlayer({
+                    src: setting?.clickType?.src,
+                    volume: setting?.clickVolume,
+                    loop: true
+                })
+            }
         }
     }, [setting]);
 
@@ -158,7 +174,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
             console.log(event.data, time, 0, "worker stop");
 
             if (setting.tickingType.name !== "none") {
-                tickingSound.current.handleStop();
+                tickingSound?.current?.handleStop();
             }
             alarmSound.current.handlePlay();
 
@@ -246,7 +262,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
 
             worker.postMessage("stop");
             if (setting.tickingType.name !== "none") {
-                tickingSound.current.handleStop();
+                tickingSound?.current?.handleStop();
             }
             dispatch({ type: STOP_TIMER, data: setting.time[active] - time });
         } else {
@@ -254,7 +270,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                 startTime.current = Date.now();
             }
             if (setting.tickingType.name !== "none") {
-                tickingSound.current.handlePlay();
+                tickingSound?.current?.handlePlay();
             }
             if (!started) {
                 worker.postMessage({ started: !started, count: time });
