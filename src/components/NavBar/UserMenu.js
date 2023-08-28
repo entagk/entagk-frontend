@@ -52,17 +52,19 @@ function UserMenu({ setOpenDelete, setOpenEditAccount }) {
         <Button
           aria-label="user button"
           className={`user-menu ${user?.avatar ? 'img' : ''}`}
-          style={{ background: stringToColor(user?.name), padding: user?.avatar && 0 }}
+          style={{
+            backgroundColor: stringToColor(user?.name),
+            padding: user?.avatar && 0,
+            background: user && user?.avatar ? `url(${user?.avatar})` : stringToColor(user?.name),
+            backgroundOrigin: 'border-box',
+            backgroundPosition: 'center',
+            backgroundClip: 'border-box',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+          }}
           variant='none'
         >
-          {user?.avatar ? (
-            <img
-              src={user?.avatar}
-              alt="avatar"
-              width=""
-              height=""
-            />
-          ) : (
+          {!user?.avatar && (
             <span>
               {user.name[0].toUpperCase()}
             </span>
