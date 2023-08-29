@@ -26,16 +26,8 @@
   margin-right: 20px;
 }
 
-.no-login a {
+.no-login a,
+.no-login button {
   margin-block: 20px;
-  font-size: 20px;
-  color: #fff;
-  padding: 10px 16px;
-  background: #4a4a4a26;
-  border-radius: 5px;
   text-transform: capitalize;
-}
-
-.no-login a:hover {
-  box-shadow: 0 0 11px 1px #cecece59;
 }

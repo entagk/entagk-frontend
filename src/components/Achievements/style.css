@@ -1,0 +1,17 @@
+.achievements-container {
+  margin-block: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  color: #fff;
+  border-radius: 20px;
+  flex-direction: column;
+}
+
+@media (max-width: 500px) {
+  .achievements-container {
+    margin-block: 15px;
+  }
+}
+

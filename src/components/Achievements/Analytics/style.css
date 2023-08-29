@@ -1,0 +1,158 @@
+.analytics {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.analytics .toggle-menu {
+  border-radius: 10px;
+  border: 2px solid;
+  font-size: 18px;
+  text-transform: capitalize;
+}
+
+.analytics .menu .active {
+  background-color: rgba(0, 0, 0, 0.092);
+}
+
+.analytics .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.analytics .analytics-type {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.analytics .horizontal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 2px solid;
+  overflow: hidden;
+}
+
+.analytics .horizontal-bar button {
+  box-shadow: none;
+  border: none;
+  border-radius: 0px;
+  text-transform: capitalize;
+}
+
+.analytics .date-data {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.analytics .date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+}
+
+.analytics .date-text {
+  font-size: 22px;
+  text-transform: capitalize;
+  text-align: center;
+}
+
+.chart-container {
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px;
+  padding: 20px;
+  color: #000;
+  font-size: 18px;
+  margin-block: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+.chart-container .no-activities {
+  font-size: 25px;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .analytics .horizontal-bar button {
+    padding: 8px 20px;
+  }
+
+  .analytics .data-type .menu-content {
+    width: fit-content;
+  }
+}
+
+@media (max-width: 500px) {
+  .analytics,
+  .analytics .analytics-type,
+  .analytics .date-data,
+  .analytics .data-type .menu {
+    margin-top: 15px;
+  }
+  
+  .analytics .date-data {
+    flex-direction: column;
+  }
+  
+  .analytics .horizontal-bar button {
+    font-size: 16px;
+  }
+  
+  .analytics .date {
+    margin-left: 15px;
+    
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .analytics .data-type {
+    width: 100%;
+  }
+
+  .analytics .data-type .menu,
+  .analytics .data-type .menu > button {
+    width: 100%;
+  }
+  
+  .analytics .data-type .menu > button {
+    justify-content: space-between;
+  }
+  
+  .analytics .data-type .menu-content {
+    width: 100%;
+  }
+  
+  .chart-container {
+    margin-block: 15px;
+    padding: 15px;
+  }
+  
+  .chart-container .no-activities {
+    font-size: 22px;
+    border-radius: 15px;
+  }
+}
+
+@media (max-width: 375px) {
+  .analytics .horizontal-bar button {
+    padding: 6px 18px;
+  }
+
+  .analytics .date-text {
+    font-size: 18px;
+  }
+}

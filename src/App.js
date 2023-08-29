@@ -6,9 +6,10 @@ import 'aos/dist/aos.css'; // You can also use <link> for styles
 import Auth from './components/Auth/Auth';
 import Reset from './components/Reset/Reset';
 import Profile from './components/Profile/Profile';
-import Report from './components/Report/Report';
+import Leaderboard from './components/Leaderboard/Leaderboard';
 import ErrorPage from './components/ErrorPage/ErrorPage';
 import Templates from './components/Templates/Templates';
+import Achievements from './components/Achievements/Achievements';
 
 import {
   createBrowserRouter,
@@ -18,7 +19,6 @@ import {
 } from 'react-router-dom';
 
 import Home from './components/Home/Home';
-
 
 AOS.init();
 
@@ -42,12 +42,16 @@ const router = createBrowserRouter(
         element={<Profile />}
       />
       <Route
-        path="/report"
-        element={<Report />}
+        path="/leaderboard"
+        element={<Leaderboard />}
       />
       <Route
         path='/templates/you'
         element={<Templates />}
+      />
+      <Route 
+        path='/achievements'
+        element={<Achievements />}
       />
     </Route>
   )

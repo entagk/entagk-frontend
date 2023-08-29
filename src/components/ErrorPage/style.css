@@ -52,10 +52,6 @@ h1.error-404 {
   text-transform: capitalize;
 }
 
-.error-page a:hover {
-  box-shadow: 0 0 11px 1px #cecece59;
-}
-
 @media (max-width: 550px) {
   .error-page h1.error-404 {
     font-size: 150px;

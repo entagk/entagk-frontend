@@ -1,7 +1,8 @@
 import axios from "axios";
 import jwt_decode from 'jwt-decode';
 
-export const baseURL = "https://pomodoro-backend-6j65.onrender.com/api";
+// export const baseURL = "https://pomodoro-backend-6j65.onrender.com/api";
+export const baseURL = 'http://localhost:5500/api';
 
 const API = axios.create({ baseURL: baseURL }); // http://localhost:5500/api
 
@@ -112,3 +113,22 @@ export const addTemplate = (formData) => API.post(`/template/add/`, formData);
 export const modifyTemplate = (id, formData) => API.patch(`/template/${id}`, formData);
 
 /* end the template api */
+
+
+/* start leaderboard */
+
+export const getLeaderboard = (page) => API.get(`/leaderboard/?page=${page}`);
+
+/* end leaderboard */
+
+/* start acivity api */
+
+export const addActivity = (data) => API.post(`/active/`, data);
+
+export const getDay = (day) => API.get(`/active/${day}`);
+
+export const getDays = (start, end) => API.get(`/active/?start=${start}&end=${end}`)
+
+export const getYear = (year) => API.get(`/active/year?year=${year}`);
+
+/* end acivity api */

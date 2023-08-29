@@ -25,13 +25,13 @@ export const authForm = (formData, type, setMessage, navigate, setFormErrors) =>
       const setting = JSON.parse(localStorage.getItem('setting'));
       const tasks = JSON.parse(localStorage.getItem('tasks'));
       if (setting !== initialSetting && Boolean(setting)) {
-        dispatch(modifySetting(setting, setMessage, () => {}));
+        dispatch(modifySetting(setting, setMessage, () => { }));
       } else {
         dispatch(getSetting(setMessage));
       }
 
       if (tasks?.length >= 0) {
-        dispatch(addMultipleTasks(tasks, setMessage, () => {}));
+        dispatch(addMultipleTasks(tasks, setMessage, () => { }));
       }
       if (type !== 'sign up') {
         dispatch(getTasks(setMessage, 1));
@@ -42,8 +42,6 @@ export const authForm = (formData, type, setMessage, navigate, setFormErrors) =>
       const { data } = await api.forgetPassword(formData);
       setMessage({ type: 'success', message: data.message });
     }
-
-    dispatch({ type: END_LOADING, data: 'auth' });
   } catch (error) {
     if (error?.response?.data?.errors) {
       setFormErrors(pFE => ({ ...pFE, ...error.response.data.errors }))
@@ -51,8 +49,9 @@ export const authForm = (formData, type, setMessage, navigate, setFormErrors) =>
       setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
     }
 
-    dispatch({ type: END_LOADING, data: 'auth' });
     console.error(error);
+  } finally {
+    dispatch({ type: END_LOADING, data: 'auth' });
   }
 }
 
@@ -74,13 +73,14 @@ export const getUserData = (setMessage) => async dispatch => {
     await dispatch({ type: START_LOADING, data: 'auth' });
     const { data } = await api.getUserData();
     dispatch({ type: GET_USER, data: data });
-    await dispatch({ type: END_LOADING, data: 'auth' });
   } catch (error) {
     setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
     if (error.response?.status === 401 || error.response.status === 500) {
       dispatch({ type: LOGOUT });
     }
     console.error(error);
+  } finally {
+    dispatch({ type: END_LOADING, data: 'auth' });
   }
 }
 
@@ -105,7 +105,6 @@ export const updateUser = (formData, setFormError, setMessage, setClose) => asyn
     const { data } = await api.updateUser(formData);
     dispatch({ type: UPDATE_USER, data: data.afterUpdatae });
     setMessage({ message: data.message, type: 'success' });
-    dispatch({ type: END_LOADING, data: 'auth' })
   } catch (error) {
     if (error?.response?.data?.errors) {
       setFormError(pFE => ({ ...pFE, ...error.response.data.errors }))
@@ -115,8 +114,9 @@ export const updateUser = (formData, setFormError, setMessage, setClose) => asyn
     if (error.response?.status === 401 || error.response.status === 500) {
       dispatch({ type: LOGOUT });
     }
-    dispatch({ type: END_LOADING, data: 'auth' })
     console.error(error);
+  } finally {
+    dispatch({ type: END_LOADING, data: 'auth' })
   }
 }
 
@@ -128,12 +128,12 @@ export const verifyResetToken = async (setMessage, setValidate, setIsLoading) =>
     console.log(data);
 
     setMessage({ message: data?.message, type: 'success' });
-    setIsLoading(false);
   } catch (error) {
-    setIsLoading(false);
     setMessage({ message: error?.response?.data?.message || error?.message, type: 'error' });
     setValidate(false);
     console.error(error);
+  } finally {
+    setIsLoading(false);
   }
 }
 
@@ -142,10 +142,10 @@ export const resetPassword = async (formData, setMessage, setIsLoading) => {
     setIsLoading(true);
     const { data } = await api.resetPassword(formData);
     setMessage({ message: data.message, type: 'success' });
-    setIsLoading(false);
   } catch (error) {
-    setIsLoading(false);
     setMessage({ type: 'error', message: error?.response?.data?.message || error.message })
     console.error(error);
+  } finally {
+    setIsLoading(false);
   }
 }

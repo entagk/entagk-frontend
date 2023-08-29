@@ -1,8 +1,22 @@
-export const formatTime = (t) => {
-  const sec = t % 60;
-  const min = Math.floor(t / 60);
-  // console.log(min, sec);
-  return `${min >= 10 ? min : '0' + min}:${sec >= 10 ? sec : '0' + sec}`
+import * as d3 from 'd3';
+
+export const formatTime = (t, format = "mm:ss") => {
+  if (format === 'mm:ss') {
+    const sec = (t % 60).toFixed();
+    const min = Math.floor(t / 60).toFixed();
+
+    return `${min >= 10 ? min : '0' + min}:${sec >= 10 ? sec : '0' + sec}`
+  } else {
+    const hours = Math.floor(t / 60).toFixed();
+    const minutes = Math.floor(t % 60).toFixed();
+    const seconds = Math.floor((t - hours * 60 - minutes) * 60).toFixed();
+
+    const hDisplay = hours < 10 ? '0' + hours : hours;
+    const mDisplay = minutes < 10 ? '0' + minutes : minutes;
+    const sDisplay = seconds < 10 ? '0' + seconds : seconds;
+
+    return `${hDisplay}:${mDisplay}:${sDisplay}`;
+  }
 };
 
 export const updatedAt = (t) => {
@@ -122,3 +136,100 @@ export const stringToColor = (string) => {
   }
   return color;
 };
+
+export function wrapText(selection) {
+  selection.each(function () {
+    const node = d3.select(this);
+    const rectWidth = +node.attr("data-width");
+    let word;
+    const words = node.text().length > 12 ? node.text().split(" ").reverse() : [node.text()];
+    let line = [];
+    const x = node.attr("x");
+    const y = node.attr("y");
+    let tspan = node.text("").append("tspan").attr("x", x).attr("y", y);
+    let lineNumber = 0;
+    while (words.length > 1) {
+      word = words.pop();
+      line.push(word);
+      tspan.text(line.join(" "));
+      const tspanLength = tspan.node().getComputedTextLength();
+      if (tspanLength > rectWidth && line.length !== 1) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = addTspan(word);
+      }
+    }
+
+    addTspan(words.pop());
+
+    function addTspan(text) {
+      const fontSize = 12;
+      lineNumber += 1;
+      return node
+        .append("tspan")
+        .attr("x", x)
+        .attr("y", y)
+        .attr("dy", `${lineNumber * 2 + fontSize}px`)
+        .text(text);
+    }
+  });
+}
+
+export function getWeekStartAndEnd(date) {
+  const day = date ? new Date(date) : new Date();
+
+  const start = new Date(day.setDate((day.getDate() - day.getDay() + 0))).toJSON().split('T')[0];
+  const end = new Date(day.setDate(day.getDate() + 6)).toJSON().split('T')[0];
+
+  return [start, end];
+}
+
+export function getMonthRange(year, month) {
+  const start = `${year}-${month + 1 < 10 ? "0" + (month + 1) : month + 1}-01`;
+  const end = `${year}-${month + 1 < 10 ? "0" + (month + 1) : month + 1}-${new Date(year, month+1, 0).getDate()}`;
+
+  return [start, end];
+}
+
+export const calcDays = (start, end) => {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  const different = (endDate - startDate) / 1000 / 60 / 60 / 24;
+
+  const days = [start, end,];
+  for (let i = 1; i < different; i++) {
+    const date = new Date(start);
+    date.setDate(date.getDate() + i);
+    days.push(date.toJSON().split('T')[0]);
+  }
+
+  return days;
+}
+
+export const newDate = (date = "", type = '+', num = 0) => {
+  const oldDate = date ? new Date(date) : new Date();
+
+  return new Date(
+    oldDate.setDate(
+      type === '+' ?
+        oldDate.getDate() + num :
+        oldDate.getDate() - num
+    )
+  ).toJSON()?.split('T')[0]
+}
+
+export const filterDuplicatedData = (data, property) => {
+  const seen = new Set();
+
+  return data.filter(ele => {
+    const propValue = ele[property];
+    if (seen.has(propValue)) {
+      return false;
+    } else {
+      seen.add(propValue);
+      return true;
+    }
+  })
+}

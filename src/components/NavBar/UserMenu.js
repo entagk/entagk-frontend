@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { FiEdit3 } from 'react-icons/fi';
 import { GrAchievement } from 'react-icons/gr';
-import { MdLogout, MdDelete } from "react-icons/md";
+import {
+  MdLogout,
+  MdDelete,
+  MdOutlineLeaderboard
+} from "react-icons/md";
 
 import { LOGOUT } from '../../actions/auth';
 
@@ -48,17 +52,19 @@ function UserMenu({ setOpenDelete, setOpenEditAccount }) {
         <Button
           aria-label="user button"
           className={`user-menu ${user?.avatar ? 'img' : ''}`}
-          style={{ background: stringToColor(user?.name), padding: user?.avatar && 0 }}
+          style={{
+            backgroundColor: stringToColor(user?.name),
+            padding: user?.avatar && 0,
+            background: user && user?.avatar ? `url(${user?.avatar})` : stringToColor(user?.name),
+            backgroundOrigin: 'border-box',
+            backgroundPosition: 'center',
+            backgroundClip: 'border-box',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+          }}
           variant='none'
         >
-          {user?.avatar ? (
-            <img
-              src={user?.avatar}
-              alt="avatar"
-              width=""
-              height=""
-            />
-          ) : (
+          {!user?.avatar && (
             <span>
               {user.name[0].toUpperCase()}
             </span>
@@ -88,7 +94,18 @@ function UserMenu({ setOpenDelete, setOpenEditAccount }) {
       </div>
       <Button
         component={Link}
-        to="/user/achievements"
+        to="/leaderboard"
+        aria-label="leaderborad link in user menu"
+        variant='none'
+        startIcon={
+          <MdOutlineLeaderboard />
+        }
+      >
+        Leaderboard
+      </Button>
+      <Button
+        component={Link}
+        to="/achievements"
         aria-label="achievments link in user menu"
         variant='none'
         startIcon={

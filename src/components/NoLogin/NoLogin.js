@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import Button from '../../utils/Button/Button';
+
 import './style.css';
 
 function NoLogin() {
@@ -11,12 +13,22 @@ function NoLogin() {
           <h1>Please, Login to use this feature</h1>
         </div>
         <div className='buttons'>
-          <Link to="/">
+          <Button
+            component={Link}
+            to="/auth"
+            style={{
+              marginInline: 20
+            }}
+          >
+            login
+          </Button>
+          <Button
+            variant='outlined'
+            component={Link}
+            to="/"
+          >
             go home
-          </Link>
-          <Link to="/auth">
-            Login
-          </Link>
+          </Button>
         </div>
       </div>
     </div>

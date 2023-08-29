@@ -239,7 +239,7 @@ const Task = ({
                     variant="single-icon"
                   />
                 }>
-                {((props.template?.todo && props.template) || (!props.template && props.tasks.length === 0)) ? (
+                {((props?.template?.todo && props?.template) || (!props?.template && props?.tasks?.length === 0)) ? (
                   <>
                     {(!setting?.autoStartNextTask) ? (
                       <Button
@@ -251,7 +251,7 @@ const Task = ({
                             {!props.check ? (
                               <>
                                 {
-                                  (props.template !== null) ? (
+                                  (props?.template !== null) ? (
                                     <>
                                       <RiCheckboxCircleFill />
                                     </>
