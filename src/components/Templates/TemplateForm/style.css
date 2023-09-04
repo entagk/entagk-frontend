@@ -1,336 +1,277 @@
 .temp-form {
-  border-radius: 20px;
-  border: 2px solid;
-  min-width: 650px;
-  max-width: 650px;
+	border-radius: 20px;
+	border: 2px solid;
+	min-width: 650px;
+	max-width: 650px;
 }
-
-/* start form header */
-
-.temp-form .form-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 22px;
-  text-align: center;
-  padding: 20px;
-}
-
-.temp-form .form-header h2 {
-  text-transform: capitalize;
-}
-
-.form-header .close-temp-form {
-  padding: 10px;
-  border-radius: 50%;
-  color: #fff;
-  font-size: 25px;
-  min-width: 0;
-
-  background: red;
-}
-
-.form-header .close-temp-form:hover {
-  box-shadow: 0 0 5px #0000008f;
-}
-/* end form header */
 
 /* start form middle */
 .form-middle {
-  padding: 0px 20px;
+	padding: 0px 20px;
 }
 
 .temp-form .steps {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-inline: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-inline: 20px;
 }
 
 .steps .step {
-  display: flex;
-  align-items: center;
-  font-size: 24px;
-  width: 100%;
-  color: #ccc;
+	display: flex;
+	align-items: center;
+	font-size: 24px;
+	width: 100%;
+	color: #ccc;
 }
 
 .steps .step.active {
-  color: #fff;
+	color: #fff;
 }
 
 .steps .step.completed {
-  color: lime;
+	color: lime;
 }
 
 .steps .step:last-of-type {
-  width: fit-content;
+	width: fit-content;
 }
 
 .steps .step:last-of-type .text {
-  margin-inline: 10px 0;
+	margin-inline: 10px 0;
 }
 
 .steps .step .line {
-  border: 2px solid;
-  width: 100%;
-  border-radius: 2px;
+	border: 2px solid;
+	width: 100%;
+	border-radius: 2px;
 }
 
 .steps .step .text {
-  font-size: 18px;
-  display: flex;
-  width: fit-content;
-  margin-inline: 10px;
-  text-transform: capitalize;
+	font-size: 18px;
+	display: flex;
+	width: fit-content;
+	margin-inline: 10px;
+	text-transform: capitalize;
 }
 
 .steps .step .icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  border: 2px solid;
-  padding: 6px;
-  font-size: 28px;
-  margin-inline: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	border: 2px solid;
+	padding: 6px;
+	font-size: 28px;
+	margin-inline: 0;
 }
 
 .steps .step.completed .icon {
-  background: lime;
-  color: #fff;
+	background: lime;
+	color: #fff;
 }
 
 .steps .step:not(:first-of-type) .icon {
-  margin-left: 5px;
+	margin-left: 5px;
 }
 
 .steps .step.active .icon {
-  box-shadow: 0 0 5px 1px #0006;
+	box-shadow: 0 0 5px 1px #0006;
 }
 
 .form-middle .step-data {
-  margin-top: 20px;
+	margin-top: 20px;
 }
 
 .form-middle .block {
-  width: 100%;
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+	width: 100%;
+	margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .form-middle input {
-  width: 100%;
-  font-size: 15px;
-  padding: 10px;
-  border-radius: 8px;
+	width: 100%;
+	font-size: 15px;
+	padding: 10px;
+	border-radius: 8px;
 }
 
 .form-middle input.name {
-  outline: none;
-  font-size: 25px;
-  padding: 10px;
-  width: 100%;
+	outline: none;
+	font-size: 25px;
+	padding: 10px;
+	width: 100%;
 }
 
 .form-middle input.name::placeholder,
 .form-middle textarea::placeholder {
-  font-style: italic;
-  padding-left: 3px;
-  color: #fff;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	font-style: italic;
+	padding-left: 3px;
+	color: #fff;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .form-middle .text-counter p {
-  text-transform: capitalize;
-  margin-bottom: 10px;
-  font-weight: 500;
-  font-size: 16px;
-  margin-right: 10px;
+	text-transform: capitalize;
+	margin-bottom: 10px;
+	font-weight: 500;
+	font-size: 16px;
+	margin-right: 10px;
 }
 
 .block input,
 .desc textarea {
-  background-color: #9f9f9f33;
-  border-radius: 10px;
-  font-size: 16px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
+	background-color: #9f9f9f33;
+	border-radius: 10px;
+	font-size: 16px;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	margin: 0;
 }
 
 .block input:focus,
 .desc textarea:focus {
-  border: 2px solid;
-  padding: 9px;
+	border: 2px solid;
+	padding: 9px;
 }
 
 .desc {
-  position: relative;
+	position: relative;
 }
 
 .desc textarea {
-  line-height: 1.4em;
-  height: 200px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	line-height: 1.4em;
+	height: 200px;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .block .text-counter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  color: #ff002f;
-  font-size: 20px;
-  font-weight: 100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	color: #ff002f;
+	font-size: 20px;
+	font-weight: 100;
 }
 
 .step-data .tasks-container {
-  margin: 0;
-  max-height: 350px;
+	margin: 0;
+	max-height: 350px;
 }
 
 .step-data .tasks-container .task {
-  margin-block: 0 20px;
+	margin-block: 0 20px;
 }
 
 .temp-form .task-form {
-  margin: 0;
+	margin: 0;
 }
 
 .temp-form .task-form .form-container {
-  padding: 20px 20px 0;
+	padding: 20px 20px 0;
 }
 
 .temp-form .task-form .form-inner-container {
-  padding: 0;
+	padding: 0;
 }
 
 .temp-form .task-form .block {
-  padding: 0;
-  margin-block: 0 20px;
+	padding: 0;
+	margin-block: 0 20px;
 }
 /* end form middle */
 
 /* start form footer */
 .form-footer {
-  border-radius: inherit;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 0;
+	border-radius: inherit;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20px 0;
 }
 
 .form-footer button.save:hover {
-  box-shadow: 0 0 5px rgb(0 0 0 / 20%);
+	box-shadow: 0 0 5px rgb(0 0 0 / 20%);
 }
 /* end form footer */
 
 @media (max-width: 768px) {
-  .temp-form {
-    margin: 20px;
-    max-width: 100%;
-    min-width: calc(100% - 40px);
-  }
+	.temp-form {
+		margin: 20px;
+		max-width: 100%;
+		min-width: calc(100% - 40px);
+	}
 
-  .temp-form .form-header {
-    padding: 15px;
-  }
+	.temp-form .steps,
+	.temp-form .form-middle {
+		padding-inline: 15px;
+	}
 
-  .temp-form .form-header h2 {
-    font-size: 28px;
-  }
+	.form-middle .block,
+	.form-middle .step-data {
+		margin-top: 15px;
+	}
 
-  .form-header .close-tasks {
-    font-size: 20px;
-    padding: 7px;
-  }
+	.temp-form .task-form .form-container {
+		padding: 15px 15px 0;
+	}
 
-  .temp-form .steps,
-  .temp-form .form-middle {
-    padding-inline: 15px;
-  }
+	.temp-form .task-form .block {
+		margin-block: 0 15px;
+	}
 
-  .form-middle .block,
-  .form-middle .step-data {
-    margin-top: 15px;
-  }
-
-  .temp-form .task-form .form-container {
-    padding: 15px 15px 0;
-  }
-
-  .temp-form .task-form .block {
-    margin-block: 0 15px;
-  }
-
-  .form-footer {
-    padding: 15px 0;
-  }
+	.form-footer {
+		padding: 15px 0;
+	}
 }
 
 @media (max-width: 600px) {
-  .form-header .close-temp-form {
-    font-size: 24px;
-    padding: 8px;
-  }
-
-  .steps .step .icon {
-    font-size: 22px;
-  }
+	.steps .step .icon {
+		font-size: 22px;
+	}
 }
 
 @media (max-width: 500px) {
-  .temp-form .form-header {
-    padding: 10px;
-  }
+	.steps .step {
+		width: fit-content;
+	}
 
-  .steps .step {
-    width: fit-content;
-  }
+	.steps .step .line {
+		display: none;
+	}
 
-  .steps .step .line {
-    display: none;
-  }
+	.steps .step .icon {
+		font-size: 20px;
+	}
 
-  .steps .step .icon {
-    font-size: 20px;
-  }
+	.steps .step .text {
+		font-size: 16px;
+		margin-inline: 6px;
+	}
 
-  .steps .step .text {
-    font-size: 16px;
-    margin-inline: 6px;
-  }
+	.form-middle .text-counter p {
+		font-size: 12px;
+		margin-bottom: 10px;
+	}
 
-  .form-middle .text-counter p {
-    font-size: 12px;
-    margin-bottom: 10px;
-  }
-
-  .form-middle input.name {
-    font-size: 20px;
-    padding: 8px;
-  }
+	.form-middle input.name {
+		font-size: 20px;
+		padding: 8px;
+	}
 }
 
 @media (max-width: 425px) {
-  .temp-form .steps {
-    flex-flow: wrap;
-    justify-content: space-around;
-  }
+	.temp-form .steps {
+		flex-flow: wrap;
+		justify-content: space-around;
+	}
 
-  .steps .step {
-    margin-bottom: 15px;
-  }
-}
-
-@media (max-width: 400px) {
-  .form-header .close-temp-form {
-    font-size: 20px;
-    padding: 5px;
-  }
+	.steps .step {
+		margin-bottom: 15px;
+	}
 }
