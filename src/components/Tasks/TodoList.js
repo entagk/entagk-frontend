@@ -12,6 +12,7 @@ const Footer = lazy(() => import("./TaskFooter/TaskFooter"));
 const Menu = lazy(() => import("./TasksMenu/TasksMenu"));
 const Tasks = lazy(() => import("./Tasks"));
 const Template = lazy(() => import("./TodoTemplate"));
+const Header = lazy(() => import('./../../utils/GlassEffectHeader/header'));
 
 const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) => {
   const [activeTemplate, setActiveTemplate] = useState(null);
@@ -20,57 +21,49 @@ const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo })
   return (
     <>
       <div className="tasks glass-effect zoom-in">
-        <div className="header">
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexWrap: 'nowrap',
-            flexDirection: 'row',
-          }}>
-            <div className="header-buttons">
-              {!activeTemplate ? (
-                <Suspense fallback={
-                  <Loading
-                    size="small"
-                    color="white"
-                    backgroud="transparant"
-                  />
-                }>
-                  <Menu setMessage={setMessage} />
-                </Suspense>
-              ) : (
-                <div className="menu">
-                  <Button
-                    aria-label="toggle the task list menu"
-                    className="toggle-menu"
-                    onClick={() => setActiveTemplate(null)}
-                    disabled={tasks?.length === 0}
-                    startIcon={
-                      <MdKeyboardArrowLeft />
-                    }
-                    variant="single-icon"
-                  />
-                </div>
-              )}
-            </div>
-            <h2 style={{
-              marginLeft: "10px",
-            }}>
-              {activeTemplate?._id ? activeTemplate?.name : "Tasks"}
-            </h2>
-          </div>
-          <Button
-            aria-label='close tasks'
-            className="close-tasks"
-            type='button'
-            onClick={() => setOpenTodo(false)}
-            variant='none'
-            startIcon={
-              <CgClose />
-            }
-          />
-        </div>
+        <Header
+          title={activeTemplate?._id ? activeTemplate?.name : "Tasks"}
+          showLeft={true}
+          LeftButton={
+            !activeTemplate ? (
+              <Suspense fallback={
+                <Loading
+                  size="small"
+                  color="white"
+                  backgroud="transparant"
+                />
+              }>
+                <Menu setMessage={setMessage} />
+              </Suspense>
+            ) : (
+              <div className="menu">
+                <Button
+                  aria-label="toggle the task list menu"
+                  className="toggle-menu"
+                  onClick={() => setActiveTemplate(null)}
+                  disabled={tasks?.length === 0}
+                  startIcon={
+                    <MdKeyboardArrowLeft />
+                  }
+                  variant="single-icon"
+                />
+              </div>
+            )
+          }
+
+          RightButton={
+            <Button
+              aria-label='close tasks'
+              className="close"
+              type='button'
+              onClick={() => setOpenTodo(false)}
+              variant='none'
+              startIcon={
+                <CgClose />
+              }
+            />
+          }
+        />
         <div className="tasks-container" style={{ marginBlock: 0 }}>
           <Suspense fallback={
             <Loading
