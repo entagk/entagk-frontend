@@ -10,6 +10,7 @@ import './style.css'
 import ToggleButton from '../../utils/ToggleButton/ToggleButton';
 import Loading from '../../utils/Loading/Loading';
 import Input from '../../utils/Input/Input';
+import Header from '../../utils/GlassEffectHeader/header';
 
 const ChangeAvatar = lazy(() => import('./ChangeAvatar/ChangeAvatar'));
 
@@ -102,19 +103,21 @@ function EditAccount({ setClose, setMessage }) {
   return (
     <div className='glass-container'>
       <form className='glass-effect edit-account' onSubmit={handleSubmit}>
-        <div className='edit-account-header'>
-          <h2>Edit Account</h2>
-          <Button
-            aria-label='close edit account'
-            className="close-edit-account"
-            type='button'
-            onClick={() => setClose(false)}
-            variant='none'
-            startIcon={
-              <CgClose />
-            }
-          />
-        </div>
+        <Header
+          title='Edit account'
+          RightButton={
+            <Button
+              aria-label='close edit account'
+              className="close"
+              type='button'
+              onClick={() => setClose(false)}
+              variant='none'
+              startIcon={
+                <CgClose />
+              }
+            />
+          }
+        />
         <div className='inputs'>
           <ChangeAvatar />
           <Input
