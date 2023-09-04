@@ -9,16 +9,16 @@ import { useSearchParams } from 'react-router-dom';
 
 import { getTemplatesForUser, CHANGE_CURRENT_PAGE } from '../../actions/templates';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { CgClose } from 'react-icons/cg';
 
 import Loading from '../../utils/Loading/Loading';
 import Message from '../../utils/Message';
 import NetworkError from '../NetworkError/NetworkError';
 import NoLogin from '../NoLogin/NoLogin';
+import Button from '../../utils/Button/Button';
+import Header from '../../utils/GlassEffectHeader/header';
 
 import './style.css';
-
-import TemplateTasksHeader from './TemplateTasks/TemplateTasksHeader';
-import Button from '../../utils/Button/Button';
 
 const NavBar = lazy(() => import('../NavBar/NavBar'));
 const Template = lazy(() => import('./Template/Template.js'));
@@ -125,9 +125,20 @@ function Templates() {
         <>
           <div className='glass-container'>
             <div className='glass-effect template-tasks'>
-              <TemplateTasksHeader
-                template={templates[currentPage - 1].filter(t => t._id === showTodo)[0]}
-                setOpenTodo={setShowTodo}
+              <Header
+                title={templates[currentPage - 1].filter(t => t._id === showTodo)[0]?.name + " Tasks"}
+                RightButton={
+                  <Button
+                    aria-label='close tasks'
+                    className="close"
+                    type='button'
+                    onClick={() => setShowTodo("")}
+                    variant='none'
+                    startIcon={
+                      <CgClose />
+                    }
+                  />
+                }
               />
               <Suspense fallback={
                 <>
