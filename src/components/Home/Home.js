@@ -9,6 +9,7 @@ import NetworkError from '../NetworkError/NetworkError';
 import Congratulation from '../../utils/Congratulation/Congratulation';
 
 import "./style.css";
+import StickyNotes from '../StickyNotes/StickyNotes';
 
 const ActiveTask = lazy(() => import('../../components/ActiveTask/ActiveTask'));
 const Timer = lazy(() => import('../../components/Clock/Timer'));
@@ -161,30 +162,34 @@ function Home() {
       >
         {openTodo && (
           <div className="glass-container">
-            <TodoList message={message} setMessage={setMessage} isLoading={isLoadingTask} setIsLoading={setIsLoadingTask} setOpenTodo={setOpenTodo} />
+            <TodoList
+              message={message}
+              setMessage={setMessage}
+              isLoading={isLoadingTask}
+              setIsLoading={setIsLoadingTask}
+              setOpenTodo={setOpenTodo}
+            />
           </div>
         )}
       </React.Suspense>
-      <React.Suspense
-        fallback={
-          <>
-            <div className='glass-container'>
-              <Loading
-                color="white"
-                backgroud="transparent"
-                className="glass-effect todo-loader"
-                size="big"
-              />
-            </div>
-          </>
-        }
-      >
-        {openSticky && (
-          <div className="glass-container">
-            <div className='glass-effect'><h1>sticky</h1></div>
-          </div>
-        )}
-      </React.Suspense>
+      {openSticky && (
+        <React.Suspense
+          fallback={
+            <>
+              <div className='glass-container'>
+                <Loading
+                  color="white"
+                  backgroud="transparent"
+                  className="glass-effect todo-loader"
+                  size="big"
+                />
+              </div>
+            </>
+          }
+        >
+          <StickyNotes setOpenSticky={setOpenSticky} openSticky={openSticky} />
+        </React.Suspense>
+      )}
     </>
   );
 }
