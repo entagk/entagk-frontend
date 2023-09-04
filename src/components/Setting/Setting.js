@@ -10,7 +10,7 @@ import "./style.css";
 
 const Button = lazy(() => import('../../utils/Button/Button'));
 
-const Header = lazy(() => import('./SettingHeader/header'));
+const SettingHeader = lazy(() => import('./SettingHeader/header'));
 const SettingMenu = lazy(() => import('./SettingMenu'));
 const TimerSetting = lazy(() => import('./TimerSetting/TimerSetting'));
 const SoundSetting = lazy(() => import('./SoundSetting/SoundSetting'));
@@ -225,7 +225,7 @@ function Setting({ setOpenSetting }) {
           />
         )
         }
-        <Header
+        <SettingHeader
           linkClick={handleSubmit}
           status={status}
           setStatus={setStatus}
