@@ -1,0 +1,52 @@
+.color-options {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+  align-items: center;
+  gap: 5px;
+}
+
+.clicked {
+  border: 1px solid lightgray;
+  border-bottom: none;
+}
+
+.option,
+.hexPreview {
+  width: 16px;
+  height: 16px;
+  background-color: #000000;
+  border: 1px solid;
+}
+
+.popup button.trnas-bg {
+  width: 100%;
+  margin: 10px 0;
+  background: none;
+  color: #000;
+  font-size: 1.2rem;
+}
+
+.color-picker form {
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+  width: 100%;
+}
+
+.color-picker input {
+  width: 65%;
+  height: 1.3em;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding-left: 5px;
+}
+
+.color-picker button:not(:first-of-type) {
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.color-picker input:focus {
+  outline: none;
+}

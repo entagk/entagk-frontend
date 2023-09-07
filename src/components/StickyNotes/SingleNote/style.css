@@ -1,0 +1,58 @@
+.sticky-note {
+	position: absolute;
+	top: 6px;
+	right: 0;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	flex-direction: column;
+	z-index: 9000;
+
+	font-family: sans-serif;
+	font-size: 1rem;
+
+	margin: 10px;
+	background: yellow;
+	overflow: auto;
+	width: 300px;
+	min-width: 300px;
+	max-width: 500px;
+
+	height: 300px;
+	min-height: 300px;
+	max-height: 500px;
+
+	border-radius: 10px;
+	box-shadow: 0 0 5px #0000002e;
+}
+
+.sticky-note-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	background: var(--main-light-black);
+	padding: 5px;
+}
+
+.sticky-note-header button.toggle-menu {
+	margin: 0;
+}
+
+.sticky-note-header button.toggle-menu,
+.sticky-note-header button.close-note {
+	font-size: 1rem;
+	width: 30px;
+	height: 30px;
+	color: #000;
+}
+
+.sticky-note .text-editor .toolbar {
+	margin: 10px;
+	border-radius: 10px;
+}
+
+.sticky-note .text-editor .content {
+	margin-block: 0 10px;
+	outline: none;
+}
