@@ -3,43 +3,17 @@ import { useSlate } from "slate-react";
 import LinkButton from "./LinkButton";
 import ColorPicker from "./ColorPicker/ColorPicker";
 
-import { Menu, Button } from "../utils/components";
+import { Menu, Button, BlockButton } from "../utils/components";
+import BlockTypeButton from "./BlockTypeButton";
 import iconList from "../utils/icons";
 
 import {
   TEXT_ALIGN_TYPES,
-  isBlockActive,
-  toggleBlock,
   isMarkActive,
   toggleMark
 } from "../utils";
 
 const Toolbar = ({ editor, setOpenPopup }) => {
-  const BlockButton = ({ format, icon }) => {
-    const editor = useSlate();
-    const active = isBlockActive(
-      editor,
-      format,
-      TEXT_ALIGN_TYPES.includes(format) ? "align" : "type"
-    );
-    return (
-      <Button
-        active={active}
-        onMouseDown={(event) => {
-          event.preventDefault();
-          toggleBlock(editor, format);
-        }}
-      >
-        <span
-          style={{ color: active ? "#000" : "inherit" }}
-          className="toolbar-icon"
-        >
-          {iconList[icon]}
-        </span>
-      </Button>
-    );
-  };
-
   const MarkButton = ({ format, icon }) => {
     const editor = useSlate();
     const active = isMarkActive(editor, format);
@@ -72,19 +46,15 @@ const Toolbar = ({ editor, setOpenPopup }) => {
     { type: "link" },
     { format: "superscript", type: "mark" },
     { format: "subscript", type: "mark" },
-    { format: "heading-one", type: "block" },
-    { format: "heading-two", type: "block" },
-    { format: "block-quote", type: "block" },
     { format: "left", type: "block" },
     { format: "center", type: "block" },
     { format: "right", type: "block" },
     { format: "justify", type: "block" },
-    { format: "numbered-list", type: "block" },
-    { format: "bulleted-list", type: "block" }
   ];
 
   return (
     <Menu>
+      <BlockTypeButton editor={editor} />
       {buttons.map((b, index) => {
         switch (b.type) {
           case "mark":

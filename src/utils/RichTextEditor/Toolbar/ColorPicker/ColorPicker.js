@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { MdFormatColorText, MdFormatColorFill, MdCheck } from "react-icons/md";
 
 import { addMarkData } from "../../utils";
