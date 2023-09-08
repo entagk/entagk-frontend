@@ -1,7 +1,7 @@
 .sticky-note {
 	position: absolute;
 	top: 6px;
-	right: 0;
+	left: 0;
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
@@ -24,6 +24,87 @@
 
 	border-radius: 10px;
 	box-shadow: 0 0 5px #0000002e;
+}
+
+.sticky-note .sides {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 1;
+}
+
+.sticky-note .sides .top,
+.sticky-note .sides .bottom {
+	width: 100%;
+	position: absolute;
+	cursor: ns-resize;
+	border: 1px solid transparent;
+}
+
+.sticky-note .sides .top {
+	top: 0;
+}
+
+.sticky-note .sides .bottom {
+	bottom: 0;
+}
+
+.sticky-note .sides .left,
+.sticky-note .sides .right {
+	height: 100%;
+	position: absolute;
+	cursor: ew-resize;
+	border: 1px solid transparent;
+}
+
+.sticky-note .sides .left {
+	left: 0;
+}
+
+.sticky-note .sides .right {
+	right: 0;
+}
+
+.sticky-note .sides .top-right,
+.sticky-note .sides .top-left,
+.sticky-note .sides .bottom-right,
+.sticky-note .sides .bottom-left {
+	position: absolute;
+	width: 10px;
+	height: 10px;
+}
+
+.sticky-note .sides .top-right,
+.sticky-note .sides .top-left {
+	top: 0;
+	border-radius: 10px;
+}
+
+.sticky-note .sides .top-right {
+	right: 0;
+}
+
+.sticky-note .sides .top-left {
+	left: 0;
+}
+
+.sticky-note .sides .bottom-right,
+.sticky-note .sides .bottom-left {
+	bottom: 0;
+	border-radius: 10px;
+}
+
+.sticky-note .sides .bottom-right {
+	right: 0;
+}
+
+.sticky-note .sides .bottom-left {
+	left: 0;
+}
+
+.sticky-note .note-content {
+	z-index: 2;
+	width: 100%;
 }
 
 .sticky-note-header {
@@ -50,9 +131,11 @@
 .sticky-note .text-editor .toolbar {
 	margin: 10px;
 	border-radius: 10px;
+	width: calc(100% - 20px);
 }
 
 .sticky-note .text-editor .content {
 	margin-block: 0 10px;
+	width: calc(100% - 20px);
 	outline: none;
 }

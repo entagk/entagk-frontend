@@ -24,47 +24,47 @@ const Element = (props) => {
     case "block-quote":
       return (
         <blockquote style={style} {...attributes}>
-          {children}
+          {children || ""}
         </blockquote>
       );
     case "bulleted-list":
       return (
         <ul style={style} {...attributes}>
-          {children}
+          {children || ""}
         </ul>
       );
     case "heading-one":
       return (
         <h1 style={style} {...attributes}>
-          {children}
+          {children || ""}
         </h1>
       );
     case "heading-two":
       return (
         <h2 style={style} {...attributes}>
-          {children}
+          {children || ""}
         </h2>
       );
     case "list-item":
       return (
         <li style={style} {...attributes}>
-          {children}
+          {children || ""}
         </li>
       );
     case "numbered-list":
       return (
         <ol style={style} {...attributes}>
-          {children}
+          {children || ""}
         </ol>
       );
     case "link":
       return (
-        <Link attributes={attributes} element={element} children={children} />
+        <Link attributes={attributes} element={element} children={children || ""} />
       );
     default:
       return (
         <p style={style} {...attributes}>
-          {children}
+          {children || ""}
         </p>
       );
   }
