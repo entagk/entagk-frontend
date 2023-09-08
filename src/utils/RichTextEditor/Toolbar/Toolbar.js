@@ -3,15 +3,15 @@ import { useSlate } from "slate-react";
 import LinkButton from "./LinkButton";
 import ColorPicker from "./ColorPicker/ColorPicker";
 
-import { Menu, Button, BlockButton } from "../utils/components";
+import { Menu, Button } from "../utils/components";
 import BlockTypeButton from "./BlockTypeButton";
 import iconList from "../utils/icons";
 
 import {
-  TEXT_ALIGN_TYPES,
   isMarkActive,
   toggleMark
 } from "../utils";
+import AlignButton from "./AlignButton";
 
 const Toolbar = ({ editor, setOpenPopup }) => {
   const MarkButton = ({ format, icon }) => {
@@ -46,10 +46,6 @@ const Toolbar = ({ editor, setOpenPopup }) => {
     { type: "link" },
     { format: "superscript", type: "mark" },
     { format: "subscript", type: "mark" },
-    { format: "left", type: "block" },
-    { format: "center", type: "block" },
-    { format: "right", type: "block" },
-    { format: "justify", type: "block" },
   ];
 
   return (
@@ -63,24 +59,13 @@ const Toolbar = ({ editor, setOpenPopup }) => {
             return (
               <ColorPicker key={index} format={b.format} editor={editor} setOpenPopup={setOpenPopup} />
             );
-          case "block":
-            return (
-              <BlockButton
-                key={index}
-                format={b.format}
-                icon={
-                  TEXT_ALIGN_TYPES.includes(b.format)
-                    ? `align-${b.format}`
-                    : b.format
-                }
-              />
-            );
           case "link":
             return <LinkButton key={index} editor={editor} setOpenPopup={setOpenPopup} />;
           default:
             return <></>;
         }
       })}
+      <AlignButton editor={editor} />
     </Menu>
   );
 };

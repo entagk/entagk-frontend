@@ -1,23 +1,21 @@
-import React, { useRef, useState } from 'react'
-import { BlockButton, Button } from '../utils/components'
+import React, { useRef, useState } from 'react';
+import { BlockButton, Button } from '../utils/components';
 import usePopup from '../utils/usePopup';
 import { isBlockActive } from '../utils';
 
 import iconList from '../utils/icons';
 
-const BlockTypeButton = ({ editor, setOpenPopup }) => {
+const AlignButton = ({ editor }) => {
   const buttonsRef = useRef(null);
   const [showButtons, setShowButtons] = usePopup(buttonsRef);
   const types = [
-    'paragraph',
-    "heading-one",
-    "heading-two",
-    "block-quote",
-    "numbered-list",
-    "bulleted-list",
+    "left",
+    "center",
+    "right",
+    "justify",
   ];
 
-  const [activeType, setActiveType] = useState(types.filter(t => isBlockActive(editor, t))[0] || types[0]);
+  const [activeType, setActiveType] = useState(types.filter(t => isBlockActive(editor, t, 'align'))[0] || types[0]);
 
   return (
     <div ref={buttonsRef} className='popup-wrapper'>
@@ -36,11 +34,7 @@ const BlockTypeButton = ({ editor, setOpenPopup }) => {
           }}
           className="toolbar-icon"
         >
-          {activeType === types[0] ? 'P' : (
-            <>
-              {iconList[activeType]}
-            </>
-          )}
+          {iconList["align-" + activeType]}
         </span>
       </Button>
       {showButtons && (
@@ -56,7 +50,7 @@ const BlockTypeButton = ({ editor, setOpenPopup }) => {
             {types.map((type, i) => (
               <BlockButton
                 format={type}
-                icon={i === 0 ? 'P' : type}
+                icon={"align-" + type}
                 style={{
                   width: '30px',
                   height: '30px',
@@ -75,4 +69,4 @@ const BlockTypeButton = ({ editor, setOpenPopup }) => {
   )
 }
 
-export default BlockTypeButton
+export default AlignButton;
