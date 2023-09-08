@@ -13,14 +13,17 @@ const SingleNote = () => {
 
   const [value, setValue] = useState([]);
 
+  // for resizeing the note.
   useEffect(() => {
     noteRef.current.addEventListener('mousedown', initResize, false);
 
     function initResize(e) {
       window.document.documentElement.style.userSelect = 'none';
       noteRef.current.style.userSelect = 'none';
-      window.addEventListener('mousemove', Resize, false);
-      window.addEventListener('mouseup', stopResize, false);
+      if (e.target.className !== 'sticky-note-header') {
+        window.addEventListener('mousemove', Resize, false);
+        window.addEventListener('mouseup', stopResize, false);
+      }
     }
 
     function Resize(e) {
@@ -37,12 +40,32 @@ const SingleNote = () => {
       window.removeEventListener('mousemove', Resize, false);
       window.removeEventListener('mouseup', stopResize, false);
     }
-    
+
     return () => {
       window.removeEventListener('mousemove', Resize, false);
       window.removeEventListener('mouseup', stopResize, false);
     };
-  })
+  });
+
+  const moveNote = function (e) {
+    const left = parseInt(window.getComputedStyle(noteRef.current).getPropertyValue("left"));
+    const top = parseInt(window.getComputedStyle(noteRef.current).getPropertyValue("top"));
+
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+
+    window.onmousemove = function (e) {
+      const dx = mouseX - e.clientX;
+      const dy = mouseY - e.clientY;
+
+      noteRef.current.style.left = left - dx + "px";
+      noteRef.current.style.top = top - dy + "px";
+    };
+  }
+
+  const stopMove = function () {
+    window.onmousemove = null;
+  };
 
   return (
     <div
@@ -66,6 +89,10 @@ const SingleNote = () => {
         <div className='bottom-left'></div>
       </div>
       <div className='note-content'>
+        <Header
+          onMouseDown={moveNote}
+          onMouseUp={stopMove}
+        />
         <Suspense
           fallback={
             <Loading
@@ -75,7 +102,6 @@ const SingleNote = () => {
             />
           }
         >
-          <Header />
           <TextEditor value={value} setValue={setValue} />
         </Suspense>
       </div>

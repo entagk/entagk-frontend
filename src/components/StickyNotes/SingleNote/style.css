@@ -38,7 +38,7 @@
 	width: 100%;
 	position: absolute;
 	cursor: ns-resize;
-	border: 1px solid transparent;
+	height: 5px;
 }
 
 .sticky-note .sides .top {
@@ -54,7 +54,7 @@
 	height: 100%;
 	position: absolute;
 	cursor: ew-resize;
-	border: 1px solid transparent;
+	width: 5px;
 }
 
 .sticky-note .sides .left {

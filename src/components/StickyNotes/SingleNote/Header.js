@@ -1,16 +1,16 @@
 import React, { lazy, useState, Suspense } from 'react';
-import CircularMenu from "../../../icons/circularMenu/CircularMenu";
 import Loading from '../../../utils/Loading/Loading';
+import CircularMenu from "../../../icons/circularMenu/CircularMenu";
 import { CgClose } from 'react-icons/cg';
 
 const Button = lazy(() => import('../../../utils/Button/Button'));
 const Menu = lazy(() => import('../../../utils/Menu/Menu'));
 
-const Header = () => {
+const Header = (props) => {
   const [openMenu, setOpenMenu] = useState(false);
 
   return (
-    <div className='sticky-note-header'>
+    <div className='sticky-note-header' {...props}>
       <Suspense
         fallback={
           <Loading
