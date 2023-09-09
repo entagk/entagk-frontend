@@ -16,14 +16,11 @@ const SingleNote = () => {
   // for resizeing the note.
   useEffect(() => {
     noteRef.current.addEventListener('mousedown', initResize, false);
-    let startTrarget;
 
     function initResize(e) {
       window.document.documentElement.style.userSelect = 'none';
       noteRef.current.style.userSelect = 'none';
-
-      startTrarget = e.target.className;
-      if (startTrarget !== 'sticky-note-header') {
+      if (e.target.className !== 'sticky-note-header') {
         window.addEventListener('mousemove', Resize, false);
         window.addEventListener('mouseup', stopResize, false);
       }
@@ -31,14 +28,20 @@ const SingleNote = () => {
 
     function Resize(e) {
       const noteWidth = (e.clientX - noteRef.current.offsetLeft);
-      const noteHeight = (e.clientY - noteRef.current.offsetTop);
+      noteRef.current.style.width = noteWidth + 'px';
+      setWidth(noteWidth);
 
-      if (startTrarget.includes('rl')) {    
-        noteRef.current.style.width = noteWidth + 'px';
-        setWidth(noteWidth);
-      } else if (startTrarget.includes('tb')) {
+      const noteHeight = (e.clientY - noteRef.current.offsetTop);
+      noteRef.current.style.height = noteHeight + 'px';
+      setHeigth(noteHeight);
+      if (e.target.className.includes('rl')) {
+        console.log('rl')
         noteRef.current.style.height = noteHeight + 'px';
         setHeigth(noteHeight);
+      } else if (e.target.className.includes('tb')) {
+        console.log('tb')
+        noteRef.current.style.width = noteWidth + 'px';
+        setWidth(noteWidth);
       } else {
         noteRef.current.style.width = noteWidth + 'px';
         setWidth(noteWidth);
