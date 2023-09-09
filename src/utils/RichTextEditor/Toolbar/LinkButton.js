@@ -8,7 +8,7 @@ import iconList from "../utils/icons";
 import { insertLink } from "../utils/link";
 
 const LinkButton = (props) => {
-  const { editor, setOpenPopup } = props;
+  const { editor, setOpenPopup, popupRef } = props;
   const linkInputRef = useRef(null);
   const [showInput, setShowInput] = usePopup(linkInputRef);
   const [url, setUrl] = useState("");
@@ -24,7 +24,7 @@ const LinkButton = (props) => {
   };
 
   const toggleLink = () => {
-    setOpenPopup((o) => !o)
+    setOpenPopup(oP => !oP ? 'link' : "");
     setSelection(editor.selection);
     setShowInput((prev) => !prev);
   };
@@ -48,7 +48,7 @@ const LinkButton = (props) => {
         <span className="toolbar-icon">{iconList["link"]}</span>
       </Button>
       {showInput && (
-        <div className="popup">
+        <div className="popup" ref={popupRef}>
           <div style={{ display: "flex", gap: "4px", margin: "5px 2px" }}>
             <input
               type="text"

@@ -5,7 +5,7 @@ import { isBlockActive } from '../utils';
 
 import iconList from '../utils/icons';
 
-const BlockTypeButton = ({ editor, setOpenPopup }) => {
+const BlockTypeButton = ({ editor, setOpenPopup, popupRef }) => {
   const buttonsRef = useRef(null);
   const [showButtons, setShowButtons] = usePopup(buttonsRef);
   const types = [
@@ -24,6 +24,7 @@ const BlockTypeButton = ({ editor, setOpenPopup }) => {
       <Button
         onClick={() => {
           setShowButtons(sB => !sB);
+          setOpenPopup(oP => oP !== activeType ? activeType : "")
         }}
         style={{
           width: '30px',
@@ -44,7 +45,7 @@ const BlockTypeButton = ({ editor, setOpenPopup }) => {
         </span>
       </Button>
       {showButtons && (
-        <div className='popup'>
+        <div className='popup' ref={popupRef}>
           <div
             className='buttons'
             style={{
@@ -55,6 +56,7 @@ const BlockTypeButton = ({ editor, setOpenPopup }) => {
           >
             {types.map((type, i) => (
               <BlockButton
+                key={i}
                 format={type}
                 icon={i === 0 ? 'P' : type}
                 style={{
@@ -63,6 +65,7 @@ const BlockTypeButton = ({ editor, setOpenPopup }) => {
                   marginBottom: 0,
                 }}
                 onClick={() => {
+                  setOpenPopup("")
                   setShowButtons(sB => !sB);
                   setActiveType(type);
                 }}

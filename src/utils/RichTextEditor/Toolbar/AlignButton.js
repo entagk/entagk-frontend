@@ -5,7 +5,7 @@ import { isBlockActive } from '../utils';
 
 import iconList from '../utils/icons';
 
-const AlignButton = ({ editor }) => {
+const AlignButton = ({ editor, setOpenPopup, popupRef }) => {
   const buttonsRef = useRef(null);
   const [showButtons, setShowButtons] = usePopup(buttonsRef);
   const types = [
@@ -15,13 +15,17 @@ const AlignButton = ({ editor }) => {
     "justify",
   ];
 
-  const [activeType, setActiveType] = useState(types.filter(t => isBlockActive(editor, t, 'align'))[0] || types[0]);
+  const [
+    activeType,
+    setActiveType
+  ] = useState(types.filter(t => isBlockActive(editor, t, 'align'))[0] || types[0]);
 
   return (
     <div ref={buttonsRef} className='popup-wrapper'>
       <Button
         onClick={() => {
           setShowButtons(sB => !sB);
+          setOpenPopup(oP => oP !== activeType ? activeType : "")
         }}
         style={{
           width: '30px',
@@ -38,7 +42,7 @@ const AlignButton = ({ editor }) => {
         </span>
       </Button>
       {showButtons && (
-        <div className='popup'>
+        <div className='popup' ref={popupRef}>
           <div
             className='buttons'
             style={{
@@ -49,6 +53,7 @@ const AlignButton = ({ editor }) => {
           >
             {types.map((type, i) => (
               <BlockButton
+                key={i}
                 format={type}
                 icon={"align-" + type}
                 style={{
@@ -59,6 +64,7 @@ const AlignButton = ({ editor }) => {
                 onClick={() => {
                   setShowButtons(sB => !sB);
                   setActiveType(type);
+                  setOpenPopup("")
                 }}
               />
             ))}

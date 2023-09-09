@@ -14,7 +14,7 @@ const logo = {
   bgColor: <MdFormatColorFill />
 };
 
-const ColorPicker = ({ format, editor, setOpenPopup }) => {
+const ColorPicker = ({ format, editor, setOpenPopup, popupRef }) => {
   const [selection, setSelection] = useState();
   const [hexValue, setHexValue] = useState("");
   const [validHex, setValidHex] = useState();
@@ -31,10 +31,11 @@ const ColorPicker = ({ format, editor, setOpenPopup }) => {
 
     addMarkData(editor, { format, value: clickedColor });
     setShowOptions(false);
+    setOpenPopup("");
   };
 
   const toggleOption = () => {
-    setOpenPopup((o) => !o)
+    setOpenPopup(oP => oP === format ? "" : format);
     setSelection(editor.selection);
     selection && ReactEditor.focus(editor);
 
@@ -72,7 +73,7 @@ const ColorPicker = ({ format, editor, setOpenPopup }) => {
         <span className="icon">{logo[format]}</span>
       </button>
       {showOptions && (
-        <div className="popup">
+        <div className="popup" ref={popupRef}>
           <div className="color-options">
             {colors.map((color, index) => {
               return (

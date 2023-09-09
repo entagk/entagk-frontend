@@ -120,7 +120,6 @@ const withLinks = (editor) => {
 };
 
 const TextEditor = ({ value = [], setValue }) => {
-  const [openPopup, setOpenPopup] = useState(false);
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
 
@@ -130,26 +129,10 @@ const TextEditor = ({ value = [], setValue }) => {
     setValue(value);
   };
 
-  useEffect(() => {
-    if (openPopup) {
-      const container = window.document.querySelector(".sticky-note");
-      const popup = window.document.querySelector(".popup");
-
-      if (container?.scrollWidth !== container?.clientWidth) {
-        popup.style.transform = `translate(-${container?.scrollWidth + 20 - container?.clientWidth
-          }px, 0)`;
-      }
-
-    }
-    console.log(openPopup);
-
-    // return 
-  }, [openPopup]);
-
   return (
     <div className="text-editor">
       <Slate editor={editor} initialValue={value} value={value} onChange={onChange}>
-        <Toolbar editor={editor} setOpenPopup={setOpenPopup} />
+        <Toolbar editor={editor} />
         <Editable
           renderElement={renderElement}
           renderLeaf={renderLeaf}

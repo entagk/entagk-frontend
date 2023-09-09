@@ -11,7 +11,14 @@ const SingleNote = () => {
   const [width, setWidth] = useState(300);
   const [height, setHeigth] = useState(300);
 
-  const [value, setValue] = useState([]);
+  const [value, setValue] = useState([
+    {
+      type: "paragraph",
+      children: [
+        { text: "" }
+      ]
+    }
+  ]);
 
   // for resizeing the note.
   useEffect(() => {
@@ -33,7 +40,7 @@ const SingleNote = () => {
       const noteWidth = (e.clientX - noteRef.current.offsetLeft);
       const noteHeight = (e.clientY - noteRef.current.offsetTop);
 
-      if (startTrarget.includes('rl')) {    
+      if (startTrarget.includes('rl')) {
         noteRef.current.style.width = noteWidth + 'px';
         setWidth(noteWidth);
       } else if (startTrarget.includes('tb')) {
