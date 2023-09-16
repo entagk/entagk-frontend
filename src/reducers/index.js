@@ -6,6 +6,7 @@ import auth from './auth';
 import templates from "./templates";
 import leaderboard from './leaderboard';
 import activities from './activities';
+import notes from "./notes";
 
 export default combineReducers({
   timer,
@@ -13,5 +14,6 @@ export default combineReducers({
   auth,
   templates,
   leaderboard,
-  activities
+  activities,
+  notes
 });

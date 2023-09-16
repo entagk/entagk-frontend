@@ -57,9 +57,9 @@ function Home() {
           setOpenTodo(e => !e);
         }
 
-        if (event.code.toLowerCase() === 'keyn') {
-          setOpenSticky(e => !e);
-        }
+        // if (event.code.toLowerCase() === 'keyn') {
+        //   setOpenSticky(e => !e);
+        // }
       }
     };
 
@@ -172,7 +172,6 @@ function Home() {
           </div>
         )}
       </React.Suspense>
-      {openSticky && (
         <React.Suspense
           fallback={
             <>
@@ -189,7 +188,6 @@ function Home() {
         >
           <StickyNotes setOpenSticky={setOpenSticky} openSticky={openSticky} />
         </React.Suspense>
-      )}
     </>
   );
 }

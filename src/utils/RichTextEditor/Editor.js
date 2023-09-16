@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import isHotkey from "is-hotkey";
 import { Editable, withReact, Slate } from "slate-react";
 import { createEditor } from "slate";
@@ -125,13 +125,15 @@ const TextEditor = ({ value = [], setValue }) => {
 
   const editor = useMemo(() => withLinks(withReact(createEditor())), []);
 
-  const onChange = (value) => {
-    setValue(value);
-  };
-
   return (
     <div className="text-editor">
-      <Slate editor={editor} initialValue={value} value={value} onChange={onChange}>
+      <Slate
+        editor={editor}
+        initialValue={value}
+        value={value}
+        onChange={setValue}
+        maxLength={500}
+        minLength={1}>
         <Toolbar editor={editor} />
         <Editable
           renderElement={renderElement}

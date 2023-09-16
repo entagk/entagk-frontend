@@ -60,18 +60,11 @@ const Toolbar = ({ editor }) => {
       const popup = popupRef.current;
       const popupParantRect = popup.parentElement.getBoundingClientRect();
       const popupRect = popup.getBoundingClientRect();
-      console.log(toolbarRect);
-      console.log(popupParantRect);
-      console.log(popupRect);
-
-      console.log(popupParantRect.left + popupRect.width);
-      console.log(toolbarRect.right);
 
       if (popupParantRect.left + popupRect.right > toolbarRect.right) {
         popup.style.transform = `translate(-${popupParantRect.left + popupRect.width - toolbarRect.right}px, 0)`;
       }
     }
-    console.log(openPopup);
 
     // eslint-disable-next-line 
   }, [openPopup]);

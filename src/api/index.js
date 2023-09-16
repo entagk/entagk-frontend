@@ -132,3 +132,9 @@ export const getDays = (start, end) => API.get(`/active/?start=${start}&end=${en
 export const getYear = (year) => API.get(`/active/year?year=${year}`);
 
 /* end acivity api */
+
+/* start sticky notes api */
+
+export const getStickyNote = (id) => API.get(`/stickynote/${id}`);
+
+/* end sticky notes api */
