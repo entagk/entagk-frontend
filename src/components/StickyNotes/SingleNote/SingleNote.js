@@ -19,38 +19,48 @@ const generateWebsocket = () => {
   );
 }
 
-const SingleNote = ({ id, setMessage }) => {
+const initialNote = {
+  content: [
+    {
+      type: "paragraph",
+      children: [
+        { text: "" }
+      ]
+    }
+  ],
+  coordinates: { width: 300, height: 300 },
+  position: { top: 6, left: 0 },
+  open: true,
+  color: 'yellow'
+}
+
+const SingleNote = ({ id, setMessage, setOpenedList }) => {
   const noteRef = useRef(null);
   const dispatch = useDispatch();
-  const webSocket = generateWebsocket(id);
-  const [hasChanged, setHasChanged] = useState(false);
+  const webSocket = useRef(null);
 
-  const noteData = useSelector(state => state.notes.notes[id]) || {};
+  const note = useSelector(state => state.notes.notes[id]);
+
+  const [noteData, setNoteData] = useState(note?._id ? note : initialNote);
+  const [hasChanged, setHasChanged] = useState(false);
   // const [openDelete, setOpenDelete] = useState(false);
 
-  const [coordinates, setCoordinates] = useState(
-    noteData?.coordinates ?
-      noteData?.coordinates :
-      { width: 300, height: 300 }
-  ); // you will store the coordinates with note data. 
-  const [position, setPoistion] = useState(
-    noteData?.position ?
-      noteData?.position :
-      { top: 6, left: 0 }
-  ); // you will store the position with note data.
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [content, setContent] = useState(
-    noteData?.content ?
-      noteData.content :
-      [
-        {
-          type: "paragraph",
-          children: [
-            { text: "" }
-          ]
-        }
-      ]
-  );
+  // get the note data
+  useEffect(() => {
+    if (
+      !id.includes('new')
+      && noteData?._id
+      && (
+        !noteData?.content
+        || noteData?.contentLength.arrayLength !== noteData?.content?.length
+      )
+    ) {
+      dispatch(getNote(id, setNoteData, setIsLoading, setMessage));
+    }
+    // eslint-disable-next-line
+  }, [id]);
 
   // for resizeing the note.
   useEffect(() => {
@@ -75,7 +85,10 @@ const SingleNote = ({ id, setMessage }) => {
       if (width < 300) width = 300;
       if (height < 300) height = 300;
 
-      setCoordinates({ width: width, height: height });
+      setNoteData((nD) => ({ ...nD, coordinates: { width: width, height: height } }));
+      if (!id.includes('new')) {
+        setHasChanged(true);
+      }
     }
 
     function Resize(e) {
@@ -83,9 +96,9 @@ const SingleNote = ({ id, setMessage }) => {
       const noteHeight = (e.clientY - noteRef.current.offsetTop);
 
       if (startTrarget?.includes('rl')) {
-        changeCoordinates(noteWidth, coordinates.height);
+        changeCoordinates(noteWidth, noteData?.coordinates.height);
       } else if (startTrarget.includes('tb')) {
-        changeCoordinates(coordinates.width, noteHeight);
+        changeCoordinates(noteData?.coordinates.width, noteHeight);
       } else {
         changeCoordinates(noteWidth, noteHeight);
       }
@@ -117,7 +130,10 @@ const SingleNote = ({ id, setMessage }) => {
       const newTop = top - dy;
       noteRef.current.style.left = newLeft + "px";
       noteRef.current.style.top = newTop + "px";
-      setPoistion({ left: newLeft, top: newTop });
+      setNoteData((nD) => ({ ...nD, position: { left: newLeft, top: newTop } }));
+      if (!id.includes('new')) {
+        setHasChanged(true);
+      }
     };
   }
 
@@ -125,73 +141,75 @@ const SingleNote = ({ id, setMessage }) => {
     window.onmousemove = null;
   };
 
-  webSocket.onmessage = (ev) => {
-    const data = JSON.parse(ev.data);
-    console.log(data);
-    if (!data?.message) {
-      if (id.includes('new')) {
-        dispatch({ type: ADD_NOTE, data: { ...data, oldId: id } });
-      } else {
-        dispatch({ type: EDIT_NOTE, data });
-      }
-    } else {
-      setMessage({ message: data?.message, type: 'error' })
-    }
-  };
-
-  // get the note data
   useEffect(() => {
-    if (
-      !id.includes('new') &&
-      !noteData?._id &&
-      noteData?.contentLength !== noteData?.content?.length
-    ) {
-      dispatch(getNote(id));
-    }
+    webSocket.current = generateWebsocket(id);
+    webSocket.current.onmessage = (ev) => {
+      const data = JSON.parse(ev.data);
+      if (!data?.message) {
+        if (id.includes('new')) {
+          dispatch({ type: ADD_NOTE, data: { ...data, oldId: id } });
+          setOpenedList(oL => oL.filter(o => o !== id).concat([data._id]));
+        } else {
+          dispatch({ type: EDIT_NOTE, data });
+        }
+      } else {
+        setMessage({ message: data?.message, type: 'error' })
+      }
+    };
+
     // eslint-disable-next-line
-  }, [id]);
+  }, []);
 
   // send ws message after any change at note data.
-  const onChangeNote = () => {
+  const onChangeNote = (data) => {
     let timer = null;
-    if (webSocket.readyState !== webSocket.CLOSED) {
-      webSocket.send(
+    if (webSocket.current.readyState !== webSocket.current.CLOSED && webSocket.current !== null) {
+      webSocket?.current?.send(
         JSON.stringify({
           id: id.includes('new') ? 'new' : id,
-          content,
-          position,
-          coordinates
+          ...data
         })
       );
-      console.log('timer for sending')
       clearTimeout(timer);
     } else {
-      setTimeout(onChangeNote, 5);
+      setTimeout(() => onChangeNote(data), 5);
     }
   }
 
   const changeContent = (value) => {
-    setContent(value);
-    setHasChanged(true);
+    setNoteData((nD) => ({ ...nD, content: value }));
+    // if the content value equal note content
+    if (JSON.stringify(value) !== JSON.stringify(noteData?.content)) {
+      setHasChanged(true);
+    }
   }
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (hasChanged)
-        onChangeNote();
+      if (hasChanged) {
+        onChangeNote(noteData);
+      }
 
     }, 1000);
     return () => clearTimeout(timeoutId);
     // eslint-disable-next-line
-  }, [content, position, coordinates]);
+  }, [noteData]);
+
+  const closeNote = () => {
+    setOpenedList(oL => oL.filter(o => o !== id));
+    // setNoteData((oldData) => ({ ...oldData, open: false }));
+    if (!id.includes('new'))
+      onChangeNote({ id, open: false });
+    //  setHasChanged(true);
+  }
 
   return (
     <div
       ref={noteRef}
       className='sticky-note'
       style={{
-        ...coordinates,
-        ...position,
+        ...noteData?.coordinates,
+        ...noteData?.position,
         maxWidth: window.document.documentElement.clientWidth - 20,
         maxHeight: window.document.documentElement.clientHeight - 30
       }}
@@ -210,6 +228,8 @@ const SingleNote = ({ id, setMessage }) => {
         <Header
           onMouseDown={moveNote}
           onMouseUp={stopMove}
+          closeNote={closeNote}
+          setHasChanged={setHasChanged}
         />
         <Suspense
           fallback={
@@ -220,7 +240,15 @@ const SingleNote = ({ id, setMessage }) => {
             />
           }
         >
-          <TextEditor value={content} setValue={changeContent} />
+          {(noteData?._id && !noteData?.content) ? (
+            <Loading
+              color="white"
+              backgroud="transparent"
+              size="big"
+            />
+          ) : (
+            <TextEditor value={noteData.content} setValue={changeContent} />
+          )}
           <Footer />
         </Suspense>
       </div>

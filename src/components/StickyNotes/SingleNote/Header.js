@@ -1,13 +1,15 @@
 import React, { lazy, useState, Suspense } from 'react';
+
 import Loading from '../../../utils/Loading/Loading';
 import CircularMenu from "../../../icons/circularMenu/CircularMenu";
+
 import { CgClose } from 'react-icons/cg';
 import { MdDelete } from 'react-icons/md';
 
 const Button = lazy(() => import('../../../utils/Button/Button'));
 const Menu = lazy(() => import('../../../utils/Menu/Menu'));
 
-const Header = ({ setOpen, setOpenDelete, ...props }) => {
+const Header = ({ setHasChanged, closeNote, setOpenDelete, ...props }) => {
   const [openMenu, setOpenMenu] = useState(false);
 
   const toggleDelete = () => {
@@ -58,6 +60,7 @@ const Header = ({ setOpen, setOpenDelete, ...props }) => {
             color: "#000"
           }}
           variant='single-icon'
+          onClick={closeNote}
           startIcon={<CgClose />}
         />
       </Suspense>

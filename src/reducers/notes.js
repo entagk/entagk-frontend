@@ -6,7 +6,7 @@ import {
   ADD_NOTE,
   EDIT_NOTE,
   DELETE_NOTE,
-  INIT_NOTE
+  // INIT_NOTE
 } from "../actions/notes";
 
 const convertArrayToObject = (array, propName) => {
@@ -42,7 +42,7 @@ export default (
       return {
         ...state,
         ...action.data,
-        notes: convertArrayToObject(action.data.notes)
+        notes: convertArrayToObject(action.data.notes, '_id')
       };
 
     case GET_NOTE:
@@ -50,14 +50,14 @@ export default (
 
       return {
         ...state,
-        ...action.data,
       }
 
-    case INIT_NOTE:
-      return {
-        notes: Object.assign(state.notes, { [action.data.id]: {} }),
-        openedNotes: Object.assign(state.openedNotes, { [action.data.id]: {} }),
-      }
+    // case INIT_NOTE:
+    //   return {
+    //     ...state,
+    //     notes: Object.assign(state.notes, { [action.data.id]: {} }),
+    //     openedNotes: Object.assign(state.openedNotes, { [action.data.id]: {} }),
+    //   }
 
     case ADD_NOTE:
       delete state.notes[action.data.oldId];
@@ -65,6 +65,7 @@ export default (
       delete action.data.oldId;
 
       return {
+        ...state,
         notes: Object.assign(state.notes, { [action.data._id]: action.data }),
         openedNotes: Object.assign(state.openedNotes, { [action.data._id]: { ...action.data, content: [] } }),
         total: state.total + 1,
@@ -72,9 +73,16 @@ export default (
       };
 
     case EDIT_NOTE:
+      if (action.data.open) {
+        state.openedNotes[action.data._id] = action.data;
+      } else {
+        delete state.openedNotes[action.data._id];
+        state.totalOpenedNotes = state?.totalOpenedNotes - 1;
+      }
+
       return {
+        ...state,
         notes: Object.assign(state.notes, { [action.data._id]: action.data }),
-        openedNotes: Object.assign(state.openedNotes, { [action.data._id]: { ...action.data, content: [] } }),
       }
 
     case DELETE_NOTE:
@@ -85,7 +93,7 @@ export default (
         ...state,
         total: state.total - 1,
         totalOpenedNotes: state.totalOpenedNotes - 1
-      }
+      };
 
     default:
       return state;

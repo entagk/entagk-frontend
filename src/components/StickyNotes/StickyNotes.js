@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 
-import { INIT_NOTE, getOpenedNotes } from '../../actions/notes';
+import { getNotes } from '../../actions/notes';
 
 import { CgClose } from 'react-icons/cg';
 import { AiOutlinePlus } from 'react-icons/ai';
@@ -22,22 +22,24 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
   };
   const notesData = Object.values(notes);
 
-  const openedList = Object.keys(openedNotes);
-  const [message, setMessage] = useState({ tyep: "", message: "" })
+  const [openedList, setOpenedList] = useState(Object.keys(openedNotes));
+  const [message, setMessage] = useState({ tyep: "", message: "" });
 
   // get the notes
   useEffect(() => {
     if (totalOpenedNotes < total) {
-      // dispatch(getNotes)
+      dispatch(getNotes(setMessage));
     }
-  })
+
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <>
       {openedList.length > 0 && (
         <>
           {openedList.map((note) => (
-            <SingleNote id={note} key={note} setMessage={setMessage} />
+            <SingleNote id={note} key={note} setMessage={setMessage} setOpenedList={setOpenedList} />
           ))}
         </>
       )}
@@ -77,7 +79,8 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
                       aria-label="new sticky"
                       className="new-sticky-btn"
                       type="button"
-                      onClick={() => dispatch({ type: INIT_NOTE, data: { id: `new-${openedList.length + 1}` } })}
+                      // onClick={() => dispatch({ type: INIT_NOTE, data: { id: `new-${openedList.length + 1}` } })}
+                      onClick={() => setOpenedList(openedList.concat([`new-${openedList.length + 1}`]))}
                       variant='single-icon'
                       startIcon={
                         <AiOutlinePlus />
@@ -101,7 +104,7 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
                   {notesData.length > 0 ? (
                     notesData.map((note) => (
                       <div className='note'>
-                        {note.content}
+                        {/* {note.content} */}
                       </div>
                     ))
                   ) : (
@@ -115,7 +118,8 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
                       style={{
                         textTransform: "capitalize"
                       }}
-                      onClick={() => dispatch({ type: INIT_NOTE, data: { id: `new-${openedList.length + 1}` } })}
+                      // onClick={() => dispatch({ type: INIT_NOTE, data: { id: `new-${openedList.length + 1}` } })}
+                      onClick={() => setOpenedList(openedList.concat([`new-${openedList.length + 1}`]))}
                     >
                       add your first Note
                     </Button>

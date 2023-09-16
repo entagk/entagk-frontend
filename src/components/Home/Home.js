@@ -39,7 +39,7 @@ function Home() {
 
   // get the openedList
   useEffect(() => {
-    if (!totalOpenedNotes) {
+    if (totalOpenedNotes === undefined) {
       dispatch(getOpenedNotes(setMessage));
       console.log('get total opened notes');
     }

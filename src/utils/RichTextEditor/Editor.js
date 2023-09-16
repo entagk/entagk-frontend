@@ -119,7 +119,7 @@ const withLinks = (editor) => {
   return editor;
 };
 
-const TextEditor = ({ value = [], setValue }) => {
+const TextEditor = ({ value, setValue }) => {
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
 
