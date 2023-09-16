@@ -5,6 +5,7 @@ import Message from '../../utils/Message';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getSetting } from '../../actions/timer';
+import { getOpenedNotes } from '../../actions/notes';
 import NetworkError from '../NetworkError/NetworkError';
 import Congratulation from '../../utils/Congratulation/Congratulation';
 
@@ -21,6 +22,7 @@ const Sidebar = lazy(() => import("./../Sidebar/Sidebar"));
 function Home() {
   const { setting, started } = useSelector(state => state.timer);
   const { congrats } = useSelector(state => state.tasks);
+  const { totalOpenedNotes } = useSelector(state => state.notes);
   const [message, setMessage] = useState({ type: '', message: "" });
   const dispatch = useDispatch();
   const [isLoadingTask, setIsLoadingTask] = useState(null);
@@ -34,6 +36,16 @@ function Home() {
     }
     // eslint-disable-next-line
   }, [setting]);
+
+  // get the openedList
+  useEffect(() => {
+    if (!totalOpenedNotes) {
+      dispatch(getOpenedNotes(setMessage));
+      console.log('get total opened notes');
+    }
+
+    // eslint-disable-next-line
+  }, [])
 
   useEffect(() => {
     if (openSetting || openTodo || openSticky) {
@@ -66,7 +78,10 @@ function Home() {
     window.onkeydown = handleKeys;
   })
 
-  if (setting === undefined) {
+  if (
+    setting === undefined
+    || totalOpenedNotes === undefined
+  ) {
     return (
       <>
         {(!message.message) ?
@@ -125,6 +140,7 @@ function Home() {
             <ActiveTask />
           </div>
         </div>
+        <StickyNotes setOpenSticky={setOpenSticky} openSticky={openSticky} />
       </React.Suspense>
       <React.Suspense
         fallback={
@@ -172,22 +188,8 @@ function Home() {
           </div>
         )}
       </React.Suspense>
-        <React.Suspense
-          fallback={
-            <>
-              <div className='glass-container'>
-                <Loading
-                  color="white"
-                  backgroud="transparent"
-                  className="glass-effect todo-loader"
-                  size="big"
-                />
-              </div>
-            </>
-          }
-        >
-          <StickyNotes setOpenSticky={setOpenSticky} openSticky={openSticky} />
-        </React.Suspense>
+
+      {/* </React.Suspense> */}
     </>
   );
 }

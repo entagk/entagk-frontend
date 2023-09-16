@@ -1,3 +1,4 @@
+import { START_LOADING, END_LOADING } from "../actions/auth";
 import {
   GET_NOTES,
   GET_OPEND_NOTES,
@@ -15,6 +16,7 @@ const convertArrayToObject = (array, propName) => {
 const initialState = {
   notes: {},
   openedNotes: {},
+  isLoading: false
 }
 // eslint-disable-next-line
 export default (
@@ -22,11 +24,18 @@ export default (
   action
 ) => {
   switch (action.type) {
+    case START_LOADING:
+      return { ...state, isLoading: action.data === 'stickynotes' ? true : state.isLoading };
+
+    case END_LOADING:
+      return { ...state, isLoading: action.data === 'stickynotes' ? false : state.isLoading };
+
     case GET_OPEND_NOTES:
       return {
         ...state,
         ...action.data,
-        openedNotes: convertArrayToObject(action.data.openedNotes)
+        openedNotes: convertArrayToObject(action.data.notes, '_id'),
+        notes: convertArrayToObject(action.data.notes, '_id'),
       };
 
     case GET_NOTES:

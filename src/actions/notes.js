@@ -1,5 +1,5 @@
 import * as api from '../api/index';
-import { LOGOUT } from './auth';
+import { END_LOADING, LOGOUT, START_LOADING } from './auth';
 
 export const GET_OPEND_NOTES = 'GET_OPEND_NOTES';
 export const GET_NOTES = 'GET_NOTES';
@@ -24,6 +24,23 @@ export const getNote = (id, setIsLoading, setMessage) => async dispatch => {
     }
   } finally {
     setIsLoading(false);
+  }
+}
+
+export const getOpenedNotes = (setMessage) => async dispatch => {
+  try {
+    dispatch({ type: START_LOADING, data: 'stickynote' });
+
+    const { data } = await api.getOpenedNotes();
+
+    dispatch({ type: GET_OPEND_NOTES, data });
+  } catch (error) {
+    setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    if (error.response?.status === 401 || error.response?.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
+  } finally {
+    dispatch({ type: END_LOADING, data: 'stickynote' })
   }
 }
 

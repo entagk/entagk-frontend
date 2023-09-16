@@ -135,6 +135,12 @@ export const getYear = (year) => API.get(`/active/year?year=${year}`);
 
 /* start sticky notes api */
 
+export const getOpenedNotes = () => API.get(`/stickynote/open/`);
+
+export const getNotes = () => API.get('/stickynote/');
+
 export const getStickyNote = (id) => API.get(`/stickynote/${id}`);
+
+export const deleteNote = (id) => API.delete(`/stickynote/${id}`);
 
 /* end sticky notes api */
