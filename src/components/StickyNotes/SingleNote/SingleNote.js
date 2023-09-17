@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Loading from '../../../utils/Loading/Loading';
 
-import { baseURL } from '../../../api/index';
-import { ADD_NOTE, EDIT_NOTE, getNote } from '../../../actions/notes';
+import { getNote } from '../../../actions/notes';
 
 import './style.css';
 
@@ -12,55 +11,17 @@ const TextEditor = lazy(() => import('../../../utils/RichTextEditor/Editor'));
 const Header = lazy(() => import('./Header'));
 const Footer = lazy(() => import('./Footer'));
 
-const generateWebsocket = () => {
-  return new WebSocket(
-    `${baseURL.replace('http', 'ws')
-    }/stickynote/?authorization=Bearer ${localStorage.getItem('token')}`
-  );
-}
-
-const initialNote = {
-  content: [
-    {
-      type: "paragraph",
-      children: [
-        { text: "" }
-      ]
-    }
-  ],
-  coordinates: { width: 300, height: 300 },
-  position: { top: 6, left: 0 },
-  open: true,
-  color: 'yellow'
-}
-
-const SingleNote = ({ id, setMessage, setOpenedList }) => {
+const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   const noteRef = useRef(null);
   const dispatch = useDispatch();
-  const webSocket = useRef(null);
 
   const note = useSelector(state => state.notes.notes[id]);
 
-  const [noteData, setNoteData] = useState(note?._id ? note : initialNote);
+  const [noteData, setNoteData] = useState(note);
   const [hasChanged, setHasChanged] = useState(false);
-  // const [openDelete, setOpenDelete] = useState(false);
 
+  const [openDelete, setOpenDelete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  // get the note data
-  useEffect(() => {
-    if (
-      !id.includes('new')
-      && noteData?._id
-      && (
-        !noteData?.content
-        || noteData?.contentLength.arrayLength !== noteData?.content?.length
-      )
-    ) {
-      dispatch(getNote(id, setNoteData, setIsLoading, setMessage));
-    }
-    // eslint-disable-next-line
-  }, [id]);
 
   // for resizeing the note.
   useEffect(() => {
@@ -86,9 +47,9 @@ const SingleNote = ({ id, setMessage, setOpenedList }) => {
       if (height < 300) height = 300;
 
       setNoteData((nD) => ({ ...nD, coordinates: { width: width, height: height } }));
-      if (!id.includes('new')) {
-        setHasChanged(true);
-      }
+      // if (!id.includes('new')) {
+      setHasChanged(true);
+      // }
     }
 
     function Resize(e) {
@@ -115,6 +76,7 @@ const SingleNote = ({ id, setMessage, setOpenedList }) => {
     };
   });
 
+  // function to add a mousemove event from window
   const moveNote = function (e) {
     const left = parseInt(window.getComputedStyle(noteRef.current).getPropertyValue("left"));
     const top = parseInt(window.getComputedStyle(noteRef.current).getPropertyValue("top"));
@@ -131,56 +93,38 @@ const SingleNote = ({ id, setMessage, setOpenedList }) => {
       noteRef.current.style.left = newLeft + "px";
       noteRef.current.style.top = newTop + "px";
       setNoteData((nD) => ({ ...nD, position: { left: newLeft, top: newTop } }));
-      if (!id.includes('new')) {
-        setHasChanged(true);
-      }
+      // if (!id.includes('new')) {
+      setHasChanged(true);
+      // }
     };
   }
 
+  // function to remove mousemove event from window
   const stopMove = function () {
     window.onmousemove = null;
   };
 
+  // get the note data
   useEffect(() => {
-    webSocket.current = generateWebsocket(id);
-    webSocket.current.onmessage = (ev) => {
-      const data = JSON.parse(ev.data);
-      if (!data?.message) {
-        if (id.includes('new')) {
-          dispatch({ type: ADD_NOTE, data: { ...data, oldId: id } });
-          setOpenedList(oL => oL.filter(o => o !== id).concat([data._id]));
-        } else {
-          dispatch({ type: EDIT_NOTE, data });
-        }
-      } else {
-        setMessage({ message: data?.message, type: 'error' })
-      }
-    };
-
-    // eslint-disable-next-line
-  }, []);
-
-  // send ws message after any change at note data.
-  const onChangeNote = (data) => {
-    let timer = null;
-    if (webSocket.current.readyState !== webSocket.current.CLOSED && webSocket.current !== null) {
-      webSocket?.current?.send(
-        JSON.stringify({
-          id: id.includes('new') ? 'new' : id,
-          ...data
-        })
-      );
-      clearTimeout(timer);
-    } else {
-      setTimeout(() => onChangeNote(data), 5);
+    if (
+      !id.includes('new')
+      && noteData?._id
+      && (
+        !noteData?.content
+        || noteData?.contentLength.arrayLength !== noteData?.content?.length
+      )
+    ) {
+      dispatch(getNote(id, setNoteData, setIsLoading, setMessage));
     }
-  }
+    // eslint-disable-next-line
+  }, [id]);
 
   const changeContent = (value) => {
     setNoteData((nD) => ({ ...nD, content: value }));
     // if the content value equal note content
     if (JSON.stringify(value) !== JSON.stringify(noteData?.content)) {
       setHasChanged(true);
+      console.log('changed content');
     }
   }
 
@@ -197,10 +141,7 @@ const SingleNote = ({ id, setMessage, setOpenedList }) => {
 
   const closeNote = () => {
     setOpenedList(oL => oL.filter(o => o !== id));
-    // setNoteData((oldData) => ({ ...oldData, open: false }));
-    if (!id.includes('new'))
-      onChangeNote({ id, open: false });
-    //  setHasChanged(true);
+    onChangeNote({ id, open: false });
   }
 
   return (
@@ -230,6 +171,7 @@ const SingleNote = ({ id, setMessage, setOpenedList }) => {
           onMouseUp={stopMove}
           closeNote={closeNote}
           setHasChanged={setHasChanged}
+          setOpenDelete={setOpenDelete}
         />
         <Suspense
           fallback={

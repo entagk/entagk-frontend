@@ -1,7 +1,10 @@
-import React, { Suspense, lazy, useEffect, useState } from 'react'
+import React, { Suspense, lazy, useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getNotes } from '../../actions/notes';
+import { ADD_NOTE, EDIT_NOTE, getNotes } from '../../actions/notes';
+
+import { baseURL } from '../../api/index';
+// import { ADD_NOTE, EDIT_NOTE, getNote } from '../../../actions/notes';
 
 import { CgClose } from 'react-icons/cg';
 import { AiOutlinePlus } from 'react-icons/ai';
@@ -14,6 +17,28 @@ import './style.css';
 const Header = lazy(() => import('../../utils/GlassEffectHeader/header'));
 const Button = lazy(() => import('./../../utils/Button/Button'));
 
+const generateWebsocket = () => {
+  return new WebSocket(
+    `${baseURL.replace('http', 'ws')
+    }/stickynote/?authorization=Bearer ${localStorage.getItem('token')}`
+  );
+}
+
+const initialNote = {
+  content: [
+    {
+      type: "paragraph",
+      children: [
+        { text: "" }
+      ]
+    }
+  ],
+  coordinates: { width: 300, height: 300 },
+  position: { top: 6, left: 0 },
+  open: true,
+  color: 'yellow'
+}
+
 const StickyNotes = ({ openSticky, setOpenSticky }) => {
   const dispatch = useDispatch();
   const { notes, openedNotes, totalOpenedNotes, total } = useSelector(state => state.notes) || {
@@ -25,6 +50,8 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
   const [openedList, setOpenedList] = useState(Object.keys(openedNotes));
   const [message, setMessage] = useState({ tyep: "", message: "" });
 
+  const webSocket = useRef(null);
+
   // get the notes
   useEffect(() => {
     if (totalOpenedNotes < total) {
@@ -34,12 +61,59 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
     // eslint-disable-next-line
   }, []);
 
+  const initializeWebsocket = () => {
+    webSocket.current = generateWebsocket();
+    webSocket.current.onmessage = (ev) => {
+      const data = JSON.parse(ev.data);
+      if (!data?.message) {
+        if (!openedList.includes(data?._id) && !openedNotes[data?._id]) {
+          dispatch({ type: ADD_NOTE, data });
+          setOpenedList((oL) => oL.concat([data?._id]));
+        } else {
+          dispatch({ type: EDIT_NOTE, data });
+        }
+      } else {
+        setMessage({ message: data?.message, type: 'error' })
+      }
+    };
+  }
+
+  // initialize the websocket and connect to it.
+  useEffect(() => {
+    initializeWebsocket();
+
+    // eslint-disable-next-line
+  }, []);
+  console.log(webSocket.current);
+
+  console.log(openedList);
+
+  // send ws message after any change at note data.
+  const onChangeNote = (data) => {
+    let timer = null;
+    if (webSocket.current?.readyState !== webSocket.current.CLOSED && webSocket.current !== null) {
+      webSocket?.current?.send(
+        JSON.stringify(data)
+      );
+      clearTimeout(timer);
+    } else {
+      setTimeout(() => onChangeNote(data), 5);
+    }
+  }
+
+  const newNote = () => {
+    console.log('add new')
+    if (webSocket.current === null)
+      initializeWebsocket();
+    onChangeNote({ ...initialNote, id: 'new' })
+  }
+
   return (
     <>
       {openedList.length > 0 && (
         <>
           {openedList.map((note) => (
-            <SingleNote id={note} key={note} setMessage={setMessage} setOpenedList={setOpenedList} />
+            <SingleNote id={note} key={note} onChangeNote={onChangeNote} setMessage={setMessage} setOpenedList={setOpenedList} />
           ))}
         </>
       )}
@@ -79,8 +153,7 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
                       aria-label="new sticky"
                       className="new-sticky-btn"
                       type="button"
-                      // onClick={() => dispatch({ type: INIT_NOTE, data: { id: `new-${openedList.length + 1}` } })}
-                      onClick={() => setOpenedList(openedList.concat([`new-${openedList.length + 1}`]))}
+                      onClick={newNote}
                       variant='single-icon'
                       startIcon={
                         <AiOutlinePlus />
@@ -118,8 +191,7 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
                       style={{
                         textTransform: "capitalize"
                       }}
-                      // onClick={() => dispatch({ type: INIT_NOTE, data: { id: `new-${openedList.length + 1}` } })}
-                      onClick={() => setOpenedList(openedList.concat([`new-${openedList.length + 1}`]))}
+                      onClick={newNote}
                     >
                       add your first Note
                     </Button>
