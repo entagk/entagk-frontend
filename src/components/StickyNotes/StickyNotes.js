@@ -13,6 +13,8 @@ import Loading from '../../utils/Loading/Loading';
 import SingleNote from './SingleNote/SingleNote';
 
 import './style.css';
+import TextEditor from '../../utils/RichTextEditor/Editor';
+import NoteAtList from './NoteAtList';
 
 const Header = lazy(() => import('../../utils/GlassEffectHeader/header'));
 const Button = lazy(() => import('./../../utils/Button/Button'));
@@ -41,7 +43,7 @@ const initialNote = {
 
 const StickyNotes = ({ openSticky, setOpenSticky }) => {
   const dispatch = useDispatch();
-  const { notes, openedNotes, totalOpenedNotes, total } = useSelector(state => state.notes) || {
+  const { notes, openedNotes, totalOpenedNotes, total, isLoading } = useSelector(state => state.notes) || {
     notes: {},
     openedNotes: {}
   };
@@ -54,14 +56,14 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
 
   // get the notes
   useEffect(() => {
-    if (totalOpenedNotes < total) {
+    if (totalOpenedNotes < total && total > 0 && openSticky) {
       dispatch(getNotes(setMessage));
     }
 
     // eslint-disable-next-line
-  }, []);
+  }, [openSticky]);
 
-  const initializeWebsocket = () => {
+  const initWebSocket = () => {
     webSocket.current = generateWebsocket();
     webSocket.current.onmessage = (ev) => {
       const data = JSON.parse(ev.data);
@@ -81,29 +83,32 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
   }
 
   // initialize the websocket and connect to it.
-  useEffect(() => {
-    initializeWebsocket();
-
-    // eslint-disable-next-line
-  }, []);
+  useEffect(
+    initWebSocket,
+    // eslint-disable-next-line 
+    []
+  );
 
   // send ws message after any change at note data.
   const onChangeNote = (data) => {
     let timer = null;
-    if (webSocket.current?.readyState < 3 && webSocket.current?.readyState > 0 && webSocket.current !== null) {
+    console.log(webSocket);
+    if (
+      webSocket.current?.readyState === webSocket.current?.OPEN
+      && webSocket.current !== null
+    ) {
       webSocket?.current?.send(
         JSON.stringify(data)
       );
       clearTimeout(timer);
-    } else {
+    } else if (webSocket.current?.readyState > 1) {
+      initWebSocket();
       setTimeout(() => onChangeNote(data), 5);
     }
   }
 
   const newNote = () => {
-    if (webSocket.current === null)
-      initializeWebsocket();
-    onChangeNote({ ...initialNote, id: 'new', method: 'add' })
+    onChangeNote({ ...initialNote, id: 'new' })
   }
 
   return (
@@ -178,13 +183,7 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
                   }
                 />
                 <div className='notes'>
-                  {notesData.length > 0 ? (
-                    notesData.map((note) => (
-                      <div className='note'>
-                        {/* {note.content} */}
-                      </div>
-                    ))
-                  ) : (
+                  {total === 0 ? (
                     <Button
                       type="button"
                       className="add-new-note"
@@ -199,6 +198,22 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
                     >
                       add your first Note
                     </Button>
+                  ) : (
+                    <>
+                      {isLoading && notesData.length === 0 ?
+                        (
+                          <Loading
+                            size="medium"
+                            color={"#fff"}
+                            backgroud="transparent"
+                            style={{ marginTop: 0 }}
+                          />
+                        ) :
+                        notesData.map((note) => (
+                          <NoteAtList note={note} key={note?._id} />
+                        ))
+                      }
+                    </>
                   )}
                 </div>
               </Suspense>

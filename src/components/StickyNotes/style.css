@@ -1,13 +1,82 @@
 .sticky-notes {
 	border-radius: 20px;
+	max-height: calc(100% - 40px);
+	margin: 20px;
 }
 
 .sticky-notes .notes {
-	
-	width: 100%;
-	padding: 0 20px 20px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	flex-direction: column;
+	margin: 0 20px 20px;
+	max-height: 470px;
+	overflow-y: scroll;
+	justify-content: flex-start;
+	padding-right: 10px;
+}
 
+.sticky-notes .notes::-webkit-scrollbar-thumb {
+	background-color: #ddd; /* #09c6f9 */
+	border-radius: 5px;
+}
+
+.sticky-notes .notes .note {
+	color: #000;
+	width: 100%;
+	margin-bottom: 10px;
+	border-radius: 10px;
+}
+
+.sticky-notes .notes .note .note-container {
+	width: 100%;
+	padding: 10px 20px 20px;
+}
+
+.sticky-notes .notes .note .note-container:hover {
+	background-color: var(--main-light-black);
+	border-radius: inherit;
+}
+
+.sticky-notes .note .upper {
+	width: 100%;
+}
+
+.sticky-notes .note .upper p {
+	font-size: 12px;
+	color: #777676;
+	text-align: right;
+	width: 100%;
+	margin-block: 10px;
+}
+
+.sticky-notes .note:hover .upper p {
+	display: none;
+}
+
+.sticky-notes .note .upper .menu {
+	display: flex;
+	align-items: center;
+	justify-content: end;
+	display: none;
+	margin-bottom: 6px;
+}
+
+.sticky-notes .note:hover .upper .menu {
+	display: flex;
+}
+
+.sticky-notes .note .upper button.toggle-menu {
+	color: #000;
+	font-size: 16px;
+	padding: 5px;
+}
+
+.sticky-notes .note .text-editor {
+	width: 100%;
+}
+
+.sticky-notes .note .content {
+	padding-inline: 0px;
+	width: 100%;
 }

@@ -31,7 +31,7 @@ export const getNote = (id, setNoteData, setIsLoading, setMessage) => async disp
 
 export const getOpenedNotes = (setMessage) => async dispatch => {
   try {
-    dispatch({ type: START_LOADING, data: 'stickynote' });
+    dispatch({ type: START_LOADING, data: 'stickynotes' });
 
     const { data } = await api.getOpenedNotes();
 
@@ -42,13 +42,13 @@ export const getOpenedNotes = (setMessage) => async dispatch => {
       dispatch({ type: LOGOUT });
     }
   } finally {
-    dispatch({ type: END_LOADING, data: 'stickynote' })
+    dispatch({ type: END_LOADING, data: 'stickynotes' })
   }
 }
 
 export const getNotes = (setMessage) => async dispatch => {
   try {
-    dispatch({ type: START_LOADING, data: 'stickynote' });
+    dispatch({ type: START_LOADING, data: 'stickynotes' });
 
     const { data } = await api.getNotes();
 
@@ -59,7 +59,7 @@ export const getNotes = (setMessage) => async dispatch => {
       dispatch({ type: LOGOUT });
     }
   } finally {
-    dispatch({ type: END_LOADING, data: 'stickynote' });
+    dispatch({ type: END_LOADING, data: 'stickynotes' });
   }
 }
 

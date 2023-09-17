@@ -184,7 +184,7 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
     if (contentLength === 0) {
       dispatch(deleteNote(id, setIsLoading, setMessage));
     } else {
-      onChangeNote({ id, open: false, method: 'edit' });
+      onChangeNote({ id, open: false });
     }
     setIsLoading(false);
   }

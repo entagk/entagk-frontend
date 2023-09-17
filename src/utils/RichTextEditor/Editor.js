@@ -119,7 +119,7 @@ const withLinks = (editor) => {
   return editor;
 };
 
-const TextEditor = ({ value, setValue }) => {
+const TextEditor = ({ value, setValue, readonly }) => {
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
 
@@ -134,13 +134,16 @@ const TextEditor = ({ value, setValue }) => {
         onChange={setValue}
         maxLength={500}
         minLength={1}>
-        <Toolbar editor={editor} />
+        {!readonly && (
+          <Toolbar editor={editor} />
+        )}
         <Editable
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           placeholder="Enter the note text..."
           className="content"
           spellCheck
+          readOnly={readonly}
           autoFocus
           onKeyDown={(event) => {
             for (const hotkey in HOTKEYS) {
