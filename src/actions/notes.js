@@ -49,9 +49,9 @@ export const getOpenedNotes = (setMessage) => async dispatch => {
 export const getNotes = (setMessage) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'stickynote' });
-  
+
     const { data } = await api.getNotes();
-  
+
     dispatch({ type: GET_NOTES, data });
   } catch (error) {
     setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
@@ -60,5 +60,23 @@ export const getNotes = (setMessage) => async dispatch => {
     }
   } finally {
     dispatch({ type: END_LOADING, data: 'stickynote' });
+  }
+}
+
+export const deleteNote = (id, setIsLoading, setMessage) => async dispatch => {
+  try {
+    setIsLoading(true);
+
+    const { data } = await api.deleteNote(id);
+
+    dispatch({ type: DELETE_NOTE, data })
+
+  } catch (error) {
+    setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    if (error.response?.status === 401 || error.response?.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
+  } finally {
+    setIsLoading(false);
   }
 }

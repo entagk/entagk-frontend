@@ -52,13 +52,6 @@ export default (
         ...state,
       }
 
-    // case INIT_NOTE:
-    //   return {
-    //     ...state,
-    //     notes: Object.assign(state.notes, { [action.data.id]: {} }),
-    //     openedNotes: Object.assign(state.openedNotes, { [action.data.id]: {} }),
-    //   }
-
     case ADD_NOTE:
       delete state.notes[action.data.oldId];
       delete state.openedNotes[action.data.oldId];

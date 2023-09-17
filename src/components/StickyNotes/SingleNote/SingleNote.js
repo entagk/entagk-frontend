@@ -3,13 +3,42 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Loading from '../../../utils/Loading/Loading';
 
-import { getNote } from '../../../actions/notes';
+import { deleteNote, getNote } from '../../../actions/notes';
 
 import './style.css';
 
 const TextEditor = lazy(() => import('../../../utils/RichTextEditor/Editor'));
 const Header = lazy(() => import('./Header'));
 const Footer = lazy(() => import('./Footer'));
+
+const defaultContent = [
+  {
+    type: "paragraph",
+    children: [
+      { text: "" }
+    ]
+  }
+];
+
+const contentTextLength = (content = defaultContent) => {
+  let textLength = 0;
+  for (const row of content) {
+    if (row.children.length === 0) {
+      return { validContent: false, textLength, invalidChildren: true };
+    }
+
+    if (row.type === "numbered-list" || row.type === "bulleted-list") {
+      const listTextLength = contentTextLength(row.children);
+      textLength += listTextLength.textLength;
+    } else {
+      for (const text of row.children) {
+        textLength += text.text.trim().length;
+      };
+    }
+  }
+
+  return textLength;
+}
 
 const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   const noteRef = useRef(null);
@@ -107,14 +136,16 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   // get the note data
   useEffect(() => {
     if (
-      !id.includes('new')
-      && noteData?._id
+      noteData?._id
       && (
         !noteData?.content
         || noteData?.contentLength.arrayLength !== noteData?.content?.length
       )
+      && noteData?.contentLength.textLength > 0
     ) {
       dispatch(getNote(id, setNoteData, setIsLoading, setMessage));
+    } else {
+      setNoteData(data => ({ ...data, content: defaultContent }))
     }
     // eslint-disable-next-line
   }, [id]);
@@ -124,14 +155,21 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
     // if the content value equal note content
     if (JSON.stringify(value) !== JSON.stringify(noteData?.content)) {
       setHasChanged(true);
-      console.log('changed content');
     }
   }
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (hasChanged) {
-        onChangeNote(noteData);
+        onChangeNote({
+          content: noteData.content,
+          coordinates: noteData.coordinates,
+          position: noteData.position,
+          color: noteData.color,
+          open: noteData.open,
+          _id: noteData._id,
+          method: 'edit'
+        });
       }
 
     }, 1000);
@@ -140,8 +178,15 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   }, [noteData]);
 
   const closeNote = () => {
+    setIsLoading(true);
     setOpenedList(oL => oL.filter(o => o !== id));
-    onChangeNote({ id, open: false });
+    const contentLength = contentTextLength(noteData.content);
+    if (contentLength === 0) {
+      dispatch(deleteNote(id, setIsLoading, setMessage));
+    } else {
+      onChangeNote({ id, open: false, method: 'edit' });
+    }
+    setIsLoading(false);
   }
 
   return (

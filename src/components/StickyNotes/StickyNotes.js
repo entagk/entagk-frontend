@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 
-import { ADD_NOTE, EDIT_NOTE, getNotes } from '../../actions/notes';
+import { ADD_NOTE, EDIT_NOTE, GET_NOTE, getNotes } from '../../actions/notes';
 
 import { baseURL } from '../../api/index';
 // import { ADD_NOTE, EDIT_NOTE, getNote } from '../../../actions/notes';
@@ -69,6 +69,8 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
         if (!openedList.includes(data?._id) && !openedNotes[data?._id]) {
           dispatch({ type: ADD_NOTE, data });
           setOpenedList((oL) => oL.concat([data?._id]));
+        } else if (Object.keys(data)[0] === 'content') {
+          dispatch({ type: GET_NOTE, data })
         } else {
           dispatch({ type: EDIT_NOTE, data });
         }
@@ -84,14 +86,11 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
 
     // eslint-disable-next-line
   }, []);
-  console.log(webSocket.current);
-
-  console.log(openedList);
 
   // send ws message after any change at note data.
   const onChangeNote = (data) => {
     let timer = null;
-    if (webSocket.current?.readyState !== webSocket.current.CLOSED && webSocket.current !== null) {
+    if (webSocket.current?.readyState < 3 && webSocket.current?.readyState > 0 && webSocket.current !== null) {
       webSocket?.current?.send(
         JSON.stringify(data)
       );
@@ -102,10 +101,9 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
   }
 
   const newNote = () => {
-    console.log('add new')
     if (webSocket.current === null)
       initializeWebsocket();
-    onChangeNote({ ...initialNote, id: 'new' })
+    onChangeNote({ ...initialNote, id: 'new', method: 'add' })
   }
 
   return (
@@ -113,7 +111,13 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
       {openedList.length > 0 && (
         <>
           {openedList.map((note) => (
-            <SingleNote id={note} key={note} onChangeNote={onChangeNote} setMessage={setMessage} setOpenedList={setOpenedList} />
+            <SingleNote
+              id={note}
+              key={note}
+              onChangeNote={onChangeNote}
+              setMessage={setMessage}
+              setOpenedList={setOpenedList}
+            />
           ))}
         </>
       )}
