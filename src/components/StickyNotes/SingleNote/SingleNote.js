@@ -136,11 +136,7 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   // get the note data
   useEffect(() => {
     if (
-      noteData?._id
-      && (
-        !noteData?.content
-        || noteData?.contentLength.arrayLength !== noteData?.content?.length
-      )
+      noteData?.contentLength.arrayLength > noteData?.content?.length
       && noteData?.contentLength.textLength > 0
     ) {
       dispatch(getNote(id, setNoteData, setIsLoading, setMessage));
@@ -148,7 +144,7 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
       setNoteData(data => ({ ...data, content: defaultContent }))
     }
     // eslint-disable-next-line
-  }, [id]);
+  }, []);
 
   const changeContent = (value) => {
     setNoteData((nD) => ({ ...nD, content: value }));
@@ -229,7 +225,7 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
             />
           }
         >
-          {(noteData?._id && !noteData?.content) ? (
+          {(noteData?._id && (!noteData?.content || noteData?.content.length < noteData?.contentLength.arrayLength)) ? (
             <Loading
               color="white"
               backgroud="transparent"
