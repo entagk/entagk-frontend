@@ -6,7 +6,7 @@ import {
   ADD_NOTE,
   EDIT_NOTE,
   DELETE_NOTE,
-  // INIT_NOTE
+  INIT_NOTE
 } from "../actions/notes";
 
 const convertArrayToObject = (array, propName) => {
@@ -57,11 +57,37 @@ export default (
         ...state,
       }
 
-    case ADD_NOTE:
+    case INIT_NOTE:
+      state.notes.objects[action.data?.id] = action.data;
+      state.notes.ids.push(action.data?.id);
+
+      state.openedNotes.objects[action.data?.id] = action.data;
+      state.openedNotes.ids.push(action.data?.id);
+
       return {
         ...state,
-        notes: { objects: Object.assign(state.notes.objects, { [action.data._id]: action.data }), ids: state.notes.ids },
-        openedNotes: { objects: Object.assign(state.openedNotes.objects, { [action.data._id]: action.data }), ids: state.openedNotes.ids },
+        notes: {
+          objects: state.notes.objects,
+          ids: state.notes.ids
+        }
+      }
+
+    case ADD_NOTE:
+      const newNote = action.data;
+
+      delete state.notes.objects[newNote?.oldId];
+      delete state.openedNotes.objects[newNote?.oldId];
+
+      const notesAfterAdd = Object.assign({ [newNote._id]: newNote }, state.notes.objects);
+      const openedNotesAfterAdd = Object.assign({ [newNote._id]: newNote }, state.openedNotes.objects);
+
+      console.log(notesAfterAdd);
+      console.log(openedNotesAfterAdd);
+
+      return {
+        ...state,
+        notes: { objects: notesAfterAdd, ids: Object.keys(notesAfterAdd) },
+        openedNotes: { objects: openedNotesAfterAdd, ids: Object.keys(openedNotesAfterAdd) },
         total: state.total + 1,
         totalOpenedNotes: state.totalOpenedNotes + 1
       };

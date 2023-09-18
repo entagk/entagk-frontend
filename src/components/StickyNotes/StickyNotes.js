@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 
-import { ADD_NOTE, EDIT_NOTE, GET_NOTE, getNotes } from '../../actions/notes';
+import { ADD_NOTE, EDIT_NOTE, GET_NOTE, INIT_NOTE, getNotes } from '../../actions/notes';
 
 import { baseURL } from '../../api/index';
 // import { ADD_NOTE, EDIT_NOTE, getNote } from '../../../actions/notes';
@@ -35,10 +35,12 @@ const initialNote = {
       ]
     }
   ],
+  contentLength: { textLength: 0, arrayLength: 1 },
   coordinates: { width: 300, height: 300 },
   position: { top: 6, left: 0 },
   open: true,
-  color: 'yellow'
+  color: 'yellow',
+  updatedAt: new Date().toJSON()
 }
 
 const StickyNotes = ({ openSticky, setOpenSticky }) => {
@@ -80,7 +82,10 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
       if (!data?.message) {
         if (!checkNoteId(data?._id)) {
           dispatch({ type: ADD_NOTE, data });
-          setOpenedList((oL) => oL.concat([data?._id]));
+          setOpenedList((oL) => {
+            const newOL = oL.filter(n => n !== data?.oldId);
+            return newOL.concat([data?._id]);
+          });
         } else {
           dispatch({ type: EDIT_NOTE, data });
         }
@@ -115,7 +120,10 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
   }
 
   const newNote = () => {
-    onChangeNote({ ...initialNote, id: 'new' })
+    const newId = `new-${openedList.length + 1}`;
+    setOpenedList(oL => oL.concat([newId]));
+    dispatch({ type: INIT_NOTE, data: { id: newId, ...initialNote } });
+    // onChangeNote({ ...initialNote, id: 'new' })
   }
 
   return (

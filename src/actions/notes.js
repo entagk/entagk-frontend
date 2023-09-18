@@ -4,7 +4,7 @@ import { END_LOADING, LOGOUT, START_LOADING } from './auth';
 export const GET_OPEND_NOTES = 'GET_OPEND_NOTES';
 export const GET_NOTES = 'GET_NOTES';
 
-// export const INIT_NOTE = 'INIT_NOTE';
+export const INIT_NOTE = 'INIT_NOTE';
 export const GET_NOTE = 'GET_NOTE';
 export const ADD_NOTE = 'ADD_NOTE';
 export const EDIT_NOTE = 'EDIT_NOTE';

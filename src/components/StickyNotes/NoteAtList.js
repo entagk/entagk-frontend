@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TextEditor from '../../utils/RichTextEditor/Editor';
 import Menu from '../../utils/Menu/Menu';
 import Button from '../../utils/Button/Button';
@@ -29,11 +29,7 @@ const NoteAtList = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const note = useSelector(state => state.notes.notes.objects[id]);
   const { openedNotes } = useSelector(state => state.notes);
-  const [updated, setUpdated] = useState(updatedAt(note.updatedAt));
-
-  setInterval(() => {
-    setUpdated(updatedAt(note?.updatedAt));
-  }, 10000);
+  const editorContent = [note.content[0]];
 
   const openNote = (e) => {
     console.log(openedNotes);
@@ -48,7 +44,7 @@ const NoteAtList = ({ id, onChangeNote, setMessage, setOpenedList }) => {
       <div className='note-container'>
         <div className='upper'>
           <p>
-            {updated}
+            {updatedAt(note.updatedAt)}
           </p>
           <Menu
             open={openMenu}
@@ -80,7 +76,7 @@ const NoteAtList = ({ id, onChangeNote, setMessage, setOpenedList }) => {
         <div>
           {
             note?.contentLength?.textLength > 0 ? (
-              <TextEditor value={[note.content[0]]} setValue={() => { }} readonly />
+              <TextEditor value={editorContent} setValue={() => { }} readonly />
             ) : (<></>)
           }
         </div>

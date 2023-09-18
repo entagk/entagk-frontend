@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Loading from '../../../utils/Loading/Loading';
 
-import { deleteNote, getNote } from '../../../actions/notes';
+import { DELETE_NOTE, deleteNote, getNote } from '../../../actions/notes';
 
 import './style.css';
 
@@ -20,16 +20,16 @@ const defaultContent = [
   }
 ];
 
-const contentTextLength = (content = defaultContent) => {
+const contentTextLength = (content) => {
   let textLength = 0;
   for (const row of content) {
     if (row.children.length === 0) {
-      return { validContent: false, textLength, invalidChildren: true };
+      return textLength;
     }
 
     if (row.type === "numbered-list" || row.type === "bulleted-list") {
       const listTextLength = contentTextLength(row.children);
-      textLength += listTextLength.textLength;
+      textLength += listTextLength;
     } else {
       for (const text of row.children) {
         textLength += text.text.trim().length;
@@ -50,7 +50,7 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   const [hasChanged, setHasChanged] = useState(false);
 
   const [openDelete, setOpenDelete] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(noteData?.content.length < noteData?.contentLength?.arrayLength);
 
   // for resizeing the note.
   useEffect(() => {
@@ -149,7 +149,7 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
     ) {
       dispatch(getNote(id, setNoteData, setIsLoading, setMessage));
     } else {
-      setNoteData(data => ({ ...data, content: defaultContent }))
+      setNoteData(data => ({ ...data, content: defaultContent }));
     }
     // eslint-disable-next-line
   }, []);
@@ -165,15 +165,16 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (hasChanged) {
-        onChangeNote({
-          content: noteData.content,
-          coordinates: noteData.coordinates,
-          position: noteData.position,
-          color: noteData.color,
-          open: noteData.open,
-          _id: noteData._id,
-          method: 'edit'
-        });
+        const contentLength = contentTextLength(noteData.content);
+        if ((id.includes('new') && contentLength > 0) || !id.includes('new'))
+          onChangeNote({
+            content: noteData.content,
+            coordinates: noteData.coordinates,
+            position: noteData.position,
+            color: noteData.color,
+            open: noteData.open,
+            id: id,
+          });
       }
 
     }, 1000);
@@ -182,19 +183,21 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   }, [noteData]);
 
   const closeNote = () => {
-    setIsLoading(true);
     setOpenedList(oL => oL.filter(o => o !== id));
     const contentLength = contentTextLength(noteData.content);
-    console.log(note);
-    console.log(noteData);
-    console.log(noteData.content);
-    console.log(contentLength);
-    if (contentLength === 0) {
-      dispatch(deleteNote(id, setIsLoading, setMessage));
+    if (contentLength === 0 && JSON.stringify(note?.content) === JSON.stringify(noteData?.content)) {
+      if (!id.includes('new')) {
+        dispatch(deleteNote(id, setIsLoading, setMessage));
+      } else {
+        dispatch({ type: DELETE_NOTE, data: id });
+      }
     } else {
-      onChangeNote({ id, open: false });
+      if (id.includes('new')) {
+        onChangeNote({ ...noteData, id: 'new', open: false });
+      } else {
+        onChangeNote({ id, open: false });
+      }
     }
-    setIsLoading(false);
   }
 
   return (
@@ -235,7 +238,7 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
             />
           }
         >
-          {(noteData?.content.length < noteData?.contentLength.arrayLength) ? (
+          {(isLoading) ? (
             <Loading
               color="white"
               backgroud="transparent"
