@@ -51,6 +51,7 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
 
   const [openDelete, setOpenDelete] = useState(false);
   const [isLoading, setIsLoading] = useState(noteData?.content.length < noteData?.contentLength?.arrayLength);
+  const [maxContentHeight, setMaxContentHeight] = useState(noteData.coordinates.height);
 
   // for resizeing the note.
   useEffect(() => {
@@ -76,9 +77,8 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
       if (height < 300) height = 300;
 
       setNoteData((nD) => ({ ...nD, coordinates: { width: width, height: height } }));
-      // if (!id.includes('new')) {
       setHasChanged(true);
-      // }
+      // const toolbarHeight = noteRef.current.query
     }
 
     function Resize(e) {
@@ -104,6 +104,16 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
       window.removeEventListener('mouseup', stopResize, false);
     };
   });
+
+
+  useEffect(() => {
+    if (noteRef.current) {
+      const editorConetent = noteRef.current.querySelector('.text-editor .content');
+      setMaxContentHeight(noteData.coordinates.height - editorConetent?.offsetTop -20);
+    }
+
+    // eslint-disable-next-line
+  }, [noteRef, noteData, ]);
 
   // function to add a mousemove event from window
   const moveNote = function (e) {
@@ -246,7 +256,11 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
               size="big"
             />
           ) : (
-            <TextEditor value={noteData.content} setValue={changeContent} />
+            <TextEditor
+              value={noteData.content}
+              setValue={changeContent}
+              maxContentHeight={maxContentHeight}
+            />
           )}
           <Footer />
         </Suspense>

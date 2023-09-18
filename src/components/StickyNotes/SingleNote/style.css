@@ -24,6 +24,7 @@
 
 	border-radius: 10px;
 	box-shadow: 0 0 5px #0000002e;
+	overflow: hidden;
 }
 
 .sticky-note .sides {
@@ -138,4 +139,9 @@
 	margin-block: 0 10px;
 	width: calc(100% - 20px);
 	outline: none;
+	overflow-y: scroll;
+}
+
+.sticky-note .text-editor .content::-webkit-scrollbar {
+	width: 7px;
 }

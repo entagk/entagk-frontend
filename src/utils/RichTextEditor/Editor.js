@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import isHotkey from "is-hotkey";
 import { Editable, withReact, Slate } from "slate-react";
 import { createEditor } from "slate";
@@ -119,11 +119,12 @@ const withLinks = (editor) => {
   return editor;
 };
 
-const TextEditor = ({ value, setValue, readonly }) => {
+const TextEditor = ({ value, setValue, readonly, maxContentHeight }) => {
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
 
   const editor = useMemo(() => withLinks(withReact(createEditor())), []);
+  const editorRef = useRef(null);
 
   return (
     <div className="text-editor">
@@ -142,6 +143,9 @@ const TextEditor = ({ value, setValue, readonly }) => {
           renderLeaf={renderLeaf}
           placeholder="Enter the note text..."
           className="content"
+          style={{
+            maxHeight: maxContentHeight ? maxContentHeight : '100%'
+          }}
           spellCheck
           readOnly={readonly}
           autoFocus
