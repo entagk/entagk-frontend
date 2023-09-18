@@ -69,7 +69,7 @@ export const deleteNote = (id, setIsLoading, setMessage) => async dispatch => {
 
     const { data } = await api.deleteNote(id);
 
-    dispatch({ type: DELETE_NOTE, data })
+    dispatch({ type: DELETE_NOTE, data: data.deletedId })
 
   } catch (error) {
     setMessage({ type: 'error', message: error?.response?.data?.message || error.message });

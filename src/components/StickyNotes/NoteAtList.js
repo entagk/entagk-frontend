@@ -4,6 +4,7 @@ import Menu from '../../utils/Menu/Menu';
 import Button from '../../utils/Button/Button';
 
 import CircularMenu from '../../icons/circularMenu/CircularMenu';
+import { useSelector } from 'react-redux';
 
 export const updatedAt = (t) => {
   const now = new Date(Date.now());
@@ -24,16 +25,25 @@ export const updatedAt = (t) => {
   }
 }
 
-const NoteAtList = ({ note }) => {
+const NoteAtList = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   const [openMenu, setOpenMenu] = useState(false);
+  const note = useSelector(state => state.notes.notes.objects[id]);
+  const { openedNotes } = useSelector(state => state.notes.openedNotes.objects);
   const [updated, setUpdated] = useState(updatedAt(note.updatedAt));
 
   setInterval(() => {
     setUpdated(updatedAt(note?.updatedAt));
   }, 10000);
 
+  const openNote = (e) => {
+    if (!openedNotes?.objects[id]) {
+      setOpenedList(oL => oL.concat([id]));
+      onChangeNote({ id, open: true });
+    }
+  }
+
   return (
-    <div className='note' style={{ background: note.color }}>
+    <div className='note' onDoubleClick={openNote} style={{ background: note.color }}>
       <div className='note-container'>
         <div className='upper'>
           <p>

@@ -57,7 +57,7 @@
 .sticky-notes .note .upper .menu {
 	display: flex;
 	align-items: center;
-	justify-content: end;
+	justify-content: flex-end;
 	display: none;
 	margin-bottom: 6px;
 }

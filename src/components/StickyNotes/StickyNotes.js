@@ -12,9 +12,9 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import Loading from '../../utils/Loading/Loading';
 import SingleNote from './SingleNote/SingleNote';
 
-import './style.css';
-import TextEditor from '../../utils/RichTextEditor/Editor';
 import NoteAtList from './NoteAtList';
+
+import './style.css';
 
 const Header = lazy(() => import('../../utils/GlassEffectHeader/header'));
 const Button = lazy(() => import('./../../utils/Button/Button'));
@@ -44,12 +44,16 @@ const initialNote = {
 const StickyNotes = ({ openSticky, setOpenSticky }) => {
   const dispatch = useDispatch();
   const { notes, openedNotes, totalOpenedNotes, total, isLoading } = useSelector(state => state.notes) || {
-    notes: {},
-    openedNotes: {}
+    notes: {
+      ids: []
+    },
+    openedNotes: {
+      ids: []
+    }
   };
-  const notesData = Object.values(notes);
+  // const notesData = notes?.ids || [];
 
-  const [openedList, setOpenedList] = useState(Object.keys(openedNotes));
+  const [openedList, setOpenedList] = useState(openedNotes?.ids);
   const [message, setMessage] = useState({ tyep: "", message: "" });
 
   const webSocket = useRef(null);
@@ -63,16 +67,19 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
     // eslint-disable-next-line
   }, [openSticky]);
 
+  const checkNoteId = (id) => {
+    console.log(notes);
+    return notes.ids.includes(id) && notes?.objects[id]
+  }
+
   const initWebSocket = () => {
     webSocket.current = generateWebsocket();
     webSocket.current.onmessage = (ev) => {
       const data = JSON.parse(ev.data);
       if (!data?.message) {
-        if (!openedList.includes(data?._id) && !openedNotes[data?._id]) {
+        if (checkNoteId(data?._id)) {
           dispatch({ type: ADD_NOTE, data });
           setOpenedList((oL) => oL.concat([data?._id]));
-        } else if (Object.keys(data)[0] === 'content') {
-          dispatch({ type: GET_NOTE, data })
         } else {
           dispatch({ type: EDIT_NOTE, data });
         }
@@ -117,8 +124,8 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
         <>
           {openedList.map((note) => (
             <SingleNote
-              id={note}
               key={note}
+              id={note}
               onChangeNote={onChangeNote}
               setMessage={setMessage}
               setOpenedList={setOpenedList}
@@ -200,7 +207,7 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
                     </Button>
                   ) : (
                     <>
-                      {isLoading && notesData.length === 0 ?
+                      {isLoading && notes.ids.length === 0 ?
                         (
                           <Loading
                             size="medium"
@@ -209,8 +216,15 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
                             style={{ marginTop: 0 }}
                           />
                         ) :
-                        notesData.map((note) => (
-                          <NoteAtList note={note} key={note?._id} />
+                        notes?.ids?.map((note) => (
+                          <NoteAtList
+                            id={note}
+                            key={note}
+                            onChangeNote={onChangeNote}
+                            setMessage={setMessage}
+                            openedList={openedList}
+                            setOpenedList={setOpenedList}
+                          />
                         ))
                       }
                     </>

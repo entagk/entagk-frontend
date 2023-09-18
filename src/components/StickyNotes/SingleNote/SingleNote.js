@@ -44,7 +44,7 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   const noteRef = useRef(null);
   const dispatch = useDispatch();
 
-  const note = useSelector(state => state.notes.notes[id]);
+  const note = useSelector(state => state.notes.notes.objects[id]);
 
   const [noteData, setNoteData] = useState(note);
   const [hasChanged, setHasChanged] = useState(false);
@@ -181,6 +181,8 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
     setIsLoading(true);
     setOpenedList(oL => oL.filter(o => o !== id));
     const contentLength = contentTextLength(noteData.content);
+    console.log(noteData.content);
+    console.log(contentLength);
     if (contentLength === 0) {
       dispatch(deleteNote(id, setIsLoading, setMessage));
     } else {

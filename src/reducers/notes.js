@@ -10,7 +10,12 @@ import {
 } from "../actions/notes";
 
 const convertArrayToObject = (array, propName) => {
-  return array.reduce((prv, cur) => Object.assign(prv, { [cur[propName]]: cur }), {});
+  const ids = [];
+  const obj = array.reduce((prv, cur) => {
+    ids.push(cur[propName]);
+    return Object.assign(prv, { [cur[propName]]: cur })
+  }, {});
+  return { ids, objects: obj }
 }
 
 const initialState = {
@@ -46,41 +51,41 @@ export default (
       };
 
     case GET_NOTE:
-      state.notes[action.data._id] = action.data;
+      state.notes.objects[action.data._id] = action.data;
 
       return {
         ...state,
       }
 
     case ADD_NOTE:
-      delete state.notes[action.data.oldId];
-      delete state.openedNotes[action.data.oldId];
-      delete action.data.oldId;
-
       return {
         ...state,
-        notes: Object.assign(state.notes, { [action.data._id]: action.data }),
-        openedNotes: Object.assign(state.openedNotes, { [action.data._id]: { ...action.data, content: [] } }),
+        notes: { objects: Object.assign(state.notes.objects, { [action.data._id]: action.data }), ids: state.notes.ids },
+        openedNotes: { objects: Object.assign(state.openedNotes.objects, { [action.data._id]: action.data }), ids: state.openedNotes.ids },
         total: state.total + 1,
         totalOpenedNotes: state.totalOpenedNotes + 1
       };
 
     case EDIT_NOTE:
       if (action.data.open) {
-        state.openedNotes[action.data._id] = action.data;
+        state.openedNotes.objects[action.data._id] = action.data;
       } else {
-        delete state.openedNotes[action.data._id];
+        delete state.openedNotes.objects[action.data._id];
         state.totalOpenedNotes = state?.totalOpenedNotes - 1;
       }
 
+      let openedNotesObjs = Object.assign(state.notes.objects, { [action.data._id]: action.data });
+
       return {
         ...state,
-        notes: Object.assign(state.notes, { [action.data._id]: action.data }),
+        notes: { objects: openedNotesObjs, ids: Object.keys(openedNotesObjs) },
       }
 
     case DELETE_NOTE:
-      delete state.openedNotes[action.data._id];
-      delete state.notes[action.data._id];
+      delete state.openedNotes.objects[action.data];
+      state.openedNotes.ids = state.openedNotes?.ids?.filter(n => n !== action.data);
+      delete state.notes.objects[action.data];
+      state.notes.ids = state.notes?.ids?.filter(n => n !== action.data);
 
       return {
         ...state,
