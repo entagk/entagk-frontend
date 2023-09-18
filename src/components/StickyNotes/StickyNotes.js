@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useState, useRef } from 'react'
+import React, { Suspense, lazy, useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ADD_NOTE, EDIT_NOTE, GET_NOTE, getNotes } from '../../actions/notes';
@@ -67,17 +67,18 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
     // eslint-disable-next-line
   }, [openSticky]);
 
-  const checkNoteId = (id) => {
+  const checkNoteId = useCallback((id) => {
     console.log(notes);
     return notes.ids.includes(id) && notes?.objects[id]
-  }
+  }, [notes]);
 
   const initWebSocket = () => {
-    webSocket.current = generateWebsocket();
+    if (webSocket.current === null)
+      webSocket.current = generateWebsocket();
     webSocket.current.onmessage = (ev) => {
       const data = JSON.parse(ev.data);
       if (!data?.message) {
-        if (checkNoteId(data?._id)) {
+        if (!checkNoteId(data?._id)) {
           dispatch({ type: ADD_NOTE, data });
           setOpenedList((oL) => oL.concat([data?._id]));
         } else {
@@ -93,13 +94,12 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
   useEffect(
     initWebSocket,
     // eslint-disable-next-line 
-    []
+    [notes]
   );
 
   // send ws message after any change at note data.
   const onChangeNote = (data) => {
     let timer = null;
-    console.log(webSocket);
     if (
       webSocket.current?.readyState === webSocket.current?.OPEN
       && webSocket.current !== null

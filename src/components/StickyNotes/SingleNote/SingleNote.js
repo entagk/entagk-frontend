@@ -133,6 +133,14 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
     window.onmousemove = null;
   };
 
+
+  useEffect(() => {
+    if (JSON.stringify(note) !== JSON.stringify(noteData) && note?.content.length > noteData?.content.length) {
+      setNoteData(note);
+    }
+    // eslint-disable-next-line
+  }, [note]);
+
   // get the note data
   useEffect(() => {
     if (
@@ -177,6 +185,8 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
     setIsLoading(true);
     setOpenedList(oL => oL.filter(o => o !== id));
     const contentLength = contentTextLength(noteData.content);
+    console.log(note);
+    console.log(noteData);
     console.log(noteData.content);
     console.log(contentLength);
     if (contentLength === 0) {
@@ -225,7 +235,7 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
             />
           }
         >
-          {(noteData?._id && (!noteData?.content || noteData?.content.length < noteData?.contentLength.arrayLength)) ? (
+          {(noteData?.content.length < noteData?.contentLength.arrayLength) ? (
             <Loading
               color="white"
               backgroud="transparent"

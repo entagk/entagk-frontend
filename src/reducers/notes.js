@@ -79,6 +79,7 @@ export default (
       return {
         ...state,
         notes: { objects: openedNotesObjs, ids: Object.keys(openedNotesObjs) },
+        openedNotes: { objects: state.openedNotes?.objects, ids: Object.keys(state?.openedNotes?.objects) }
       }
 
     case DELETE_NOTE:
