@@ -166,15 +166,16 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
     const timeoutId = setTimeout(() => {
       if (hasChanged) {
         const contentLength = contentTextLength(noteData.content);
-        if ((id.includes('new') && contentLength > 0) || !id.includes('new'))
-          onChangeNote({
-            content: noteData.content,
-            coordinates: noteData.coordinates,
-            position: noteData.position,
-            color: noteData.color,
-            open: noteData.open,
-            id: id,
-          });
+        if (JSON.stringify(note) !== JSON.stringify(noteData))
+          if ((id.includes('new') && contentLength > 0) || !id.includes('new'))
+            onChangeNote({
+              content: noteData.content,
+              coordinates: noteData.coordinates,
+              position: noteData.position,
+              color: noteData.color,
+              open: noteData.open,
+              id: id,
+            });
       }
 
     }, 1000);

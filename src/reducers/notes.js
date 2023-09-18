@@ -81,9 +81,6 @@ export default (
       const notesAfterAdd = Object.assign({ [newNote._id]: newNote }, state.notes.objects);
       const openedNotesAfterAdd = Object.assign({ [newNote._id]: newNote }, state.openedNotes.objects);
 
-      console.log(notesAfterAdd);
-      console.log(openedNotesAfterAdd);
-
       return {
         ...state,
         notes: { objects: notesAfterAdd, ids: Object.keys(notesAfterAdd) },
@@ -93,18 +90,18 @@ export default (
       };
 
     case EDIT_NOTE:
+      delete state.openedNotes.objects[action.data._id];
+      delete state.notes.objects[action.data._id];
+
       if (action.data.open) {
-        state.openedNotes.objects[action.data._id] = action.data;
-      } else {
-        delete state.openedNotes.objects[action.data._id];
-        state.totalOpenedNotes = state?.totalOpenedNotes - 1;
+        state.openedNotes.objects = Object.assign({ [action.data._id]: action.data }, state.openedNotes.objects);
       }
 
-      let openedNotesObjs = Object.assign(state.notes.objects, { [action.data._id]: action.data });
+      state.notes.objects = Object.assign({ [action.data._id]: action.data }, state.notes.objects);
 
       return {
         ...state,
-        notes: { objects: openedNotesObjs, ids: Object.keys(openedNotesObjs) },
+        notes: { objects: state.notes.objects, ids: Object.keys(state.notes.objects) },
         openedNotes: { objects: state.openedNotes?.objects, ids: Object.keys(state?.openedNotes?.objects) }
       }
 
