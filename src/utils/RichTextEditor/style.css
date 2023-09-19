@@ -66,6 +66,17 @@ blockquote {
 	width: calc(100% - 20px);
 }
 
+.content .link a {
+	font-size: inherit;
+	text-align: inherit;
+	display: inline;
+	text-decoration: underline;
+}
+
+.content .link a span {
+	display: inline;
+}
+
 .content code {
 	font-family: monospace;
 	background-color: #eee;

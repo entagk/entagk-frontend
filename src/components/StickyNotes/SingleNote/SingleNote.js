@@ -33,7 +33,7 @@ const contentTextLength = (content) => {
       textLength += listTextLength;
     } else {
       for (const text of row.children) {
-        textLength += text.text.trim().length;
+        textLength += text.text?.trim()?.length;
       };
     }
   }
