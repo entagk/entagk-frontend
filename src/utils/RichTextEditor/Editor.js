@@ -124,7 +124,6 @@ const TextEditor = ({ value, setValue, readonly, maxContentHeight }) => {
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
 
   const editor = useMemo(() => withLinks(withReact(createEditor())), []);
-  const editorRef = useRef(null);
 
   return (
     <div className="text-editor">

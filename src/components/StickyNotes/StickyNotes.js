@@ -134,6 +134,7 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
             <SingleNote
               key={note}
               id={note}
+              newNote={newNote}
               onChangeNote={onChangeNote}
               setMessage={setMessage}
               setOpenedList={setOpenedList}

@@ -40,7 +40,7 @@ const contentTextLength = (content) => {
   return textLength;
 }
 
-const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
+const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) => {
   const noteRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -109,11 +109,11 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   useEffect(() => {
     if (noteRef.current) {
       const editorConetent = noteRef.current.querySelector('.text-editor .content');
-      setMaxContentHeight(noteData.coordinates.height - editorConetent?.offsetTop -20);
+      setMaxContentHeight(noteData.coordinates.height - editorConetent?.offsetTop - 20);
     }
 
     // eslint-disable-next-line
-  }, [noteRef, noteData, ]);
+  }, [noteRef, noteData,]);
 
   // function to add a mousemove event from window
   const moveNote = function (e) {
@@ -218,6 +218,7 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
       style={{
         ...noteData?.coordinates,
         ...noteData?.position,
+        background: noteData.color !== 'rose' ? noteData.color : 'mistyrose',
         maxWidth: window.document.documentElement.clientWidth - 20,
         maxHeight: window.document.documentElement.clientHeight - 30
       }}
@@ -234,10 +235,12 @@ const SingleNote = ({ id, onChangeNote, setMessage, setOpenedList }) => {
       </div>
       <div className='note-content'>
         <Header
+          newNote={newNote}
           onMouseDown={moveNote}
           onMouseUp={stopMove}
           closeNote={closeNote}
-          setHasChanged={setHasChanged}
+          noteData={noteData}
+          setNoteData={setNoteData}
           setOpenDelete={setOpenDelete}
         />
         <Suspense

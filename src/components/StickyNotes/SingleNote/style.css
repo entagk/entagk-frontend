@@ -121,6 +121,30 @@
 	margin: 0;
 }
 
+.sticky-note-header .menu-content {
+	right: auto;
+	padding-block: 0;
+	/* overflow: hidden; */
+	padding: 5px;
+}
+
+.sticky-note-header .menu-content .row button {
+	font-size: 16px;
+	padding: 6px 10px;
+	border-radius: 10px;
+}
+
+.sticky-note-header .menu-content .row button .color-icon {
+	width: 16px;
+	height: 16px;
+	border-radius: 4px;
+}
+
+.sticky-note-header .menu-content .row .menu .menu-content.color-menu {
+	right: -120px;
+	top: -10px;
+}
+
 .sticky-note-header button.toggle-menu,
 .sticky-note-header button.close-note {
 	font-size: 1rem;
