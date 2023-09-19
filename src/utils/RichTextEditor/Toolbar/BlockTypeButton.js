@@ -32,10 +32,7 @@ const BlockTypeButton = ({ editor, setOpenPopup, popupRef }) => {
         }}
       >
         <span
-          style={{
-            color: "#000"
-          }}
-          className="toolbar-icon"
+          className={"active toolbar-icon"}
         >
           {activeType === types[0] ? 'P' : (
             <>

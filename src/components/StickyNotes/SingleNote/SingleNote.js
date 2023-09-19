@@ -231,7 +231,7 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
   return (
     <div
       ref={noteRef}
-      className='sticky-note'
+      className={`sticky-note ${noteData.color}`}
       style={{
         ...noteData?.coordinates,
         ...noteData?.position,

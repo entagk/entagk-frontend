@@ -40,7 +40,7 @@ const NoteAtList = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   }
 
   return (
-    <div className='note' onDoubleClick={openNote} style={{ background: note.color }}>
+    <div className={`note ${note.color}`} onDoubleClick={openNote} style={{ background: note.color }}>
       <div className='note-container'>
         <div className='upper'>
           <p>

@@ -13,6 +13,7 @@
 
 	margin: 10px;
 	background: yellow;
+	color: #000;
 	overflow: auto;
 	width: 300px;
 	min-width: 300px;
@@ -25,6 +26,12 @@
 	border-radius: 10px;
 	box-shadow: 0 0 5px #0000002e;
 	overflow: hidden;
+}
+
+.sticky-note.green,
+.sticky-note.orange,
+.sticky-note.blue {
+	color: #fff;
 }
 
 .sticky-note .sides {
@@ -124,7 +131,6 @@
 .sticky-note-header .menu-content {
 	right: auto;
 	padding-block: 0;
-	/* overflow: hidden; */
 	padding: 5px;
 }
 
@@ -150,7 +156,7 @@
 	font-size: 1rem;
 	width: 30px;
 	height: 30px;
-	color: #000;
+	color: inherit;
 }
 
 .sticky-note .text-editor .toolbar {
@@ -158,6 +164,31 @@
 	border-radius: 10px;
 	width: calc(100% - 20px);
 }
+
+.sticky-note.green .text-editor .toolbar,
+.sticky-note.orange .text-editor .toolbar,
+.sticky-note.pink .text-editor .toolbar,
+.sticky-note.blue .text-editor .toolbar {
+	background-color: #ffffff30;
+}
+
+.sticky-note .text-editor .toolbar .toolbar-icon.active {
+	color: #000;
+}
+
+.sticky-note.green .text-editor .toolbar .toolbar-icon.active,
+.sticky-note.orange .text-editor .toolbar .toolbar-icon.active,
+.sticky-note.blue .text-editor .toolbar .toolbar-icon.active {
+	color: #fff;
+}
+
+
+.sticky-note.green .text-editor .content code,
+.sticky-note.orange .text-editor .content code,
+.sticky-note.blue .text-editor .content code {
+	background-color: #ccc;
+}
+
 
 .sticky-note .text-editor .content {
 	margin-block: 0 10px;

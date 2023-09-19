@@ -28,6 +28,12 @@
 	border-radius: 10px;
 }
 
+.sticky-notes .notes .note.orange,
+.sticky-notes .notes .note.green,
+.sticky-notes .notes .note.blue {
+	color: #fff;
+}
+
 .sticky-notes .notes .note .note-container {
 	width: 100%;
 	padding: 10px 20px 20px;
@@ -40,6 +46,12 @@
 
 .sticky-notes .note .upper {
 	width: 100%;
+}
+
+.sticky-notes .note.orange .upper p,
+.sticky-notes .note.green .upper p,
+.sticky-notes .note.blue .upper p {
+	color: #ddd;
 }
 
 .sticky-notes .note .upper p {
@@ -67,7 +79,7 @@
 }
 
 .sticky-notes .note .upper button.toggle-menu {
-	color: #000;
+	color: inherit;
 	font-size: 16px;
 	padding: 5px;
 }

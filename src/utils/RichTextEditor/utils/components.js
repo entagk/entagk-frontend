@@ -30,8 +30,7 @@ export const BlockButton = ({ format, icon, ...props }) => {
       {...props}
     >
       <span
-        style={{ color: active ? "#000" : "inherit" }}
-        className="toolbar-icon"
+        className={`${active ? 'active' : ''} toolbar-icon`}
       >
         {icon !== 'P' ? iconList[icon] : icon}
       </span>

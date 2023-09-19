@@ -65,12 +65,11 @@ const ColorPicker = ({ format, editor, setOpenPopup, popupRef }) => {
     <div className="color-picker popup-wrapper" ref={colorPickerRef}>
       <button
         style={{
-          color: "black",
           opacity: "1"
         }}
         onClick={toggleOption}
       >
-        <span className="icon">{logo[format]}</span>
+        <span className="toolbar-icon active">{logo[format]}</span>
       </button>
       {showOptions && (
         <div className="popup" ref={popupRef}>

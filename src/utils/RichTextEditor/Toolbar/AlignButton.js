@@ -33,10 +33,7 @@ const AlignButton = ({ editor, setOpenPopup, popupRef }) => {
         }}
       >
         <span
-          style={{
-            color: "#000"
-          }}
-          className="toolbar-icon"
+          className={"active toolbar-icon"}
         >
           {iconList["align-" + activeType]}
         </span>

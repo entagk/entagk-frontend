@@ -40,12 +40,12 @@ const LinkButton = (props) => {
   return (
     <div ref={linkInputRef} className="popup-wrapper">
       <Button
-        className={showInput ? "clicked" : ""}
+        className={`${showInput ? "clicked" : ""}`}
         active={isBlockActive(editor, "link")}
         format={"link"}
         onClick={toggleLink}
       >
-        <span className="toolbar-icon">{iconList["link"]}</span>
+        <span className={`${isBlockActive(editor, 'link') ? 'active' : ''} toolbar-icon`}>{iconList["link"]}</span>
       </Button>
       {showInput && (
         <div className="popup" ref={popupRef}>

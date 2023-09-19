@@ -114,9 +114,6 @@ const Header = ({ newNote, noteData, setNoteData, closeNote, setOpenDelete, ...p
         </Menu>
         <Button
           className="close-note"
-          style={{
-            color: "#000"
-          }}
           variant='single-icon'
           onClick={closeNote}
           startIcon={<CgClose />}

@@ -28,10 +28,10 @@ const Toolbar = ({ editor }) => {
           event.preventDefault();
           toggleMark(editor, format);
         }}
+        className={active ? 'active' : ''}
       >
         <span
-          className="toolbar-icon"
-          style={{ color: active ? "#000" : "inherit" }}
+          className={`${active ? 'active' : ''} toolbar-icon`}
         >
           {iconList[icon]}
         </span>
