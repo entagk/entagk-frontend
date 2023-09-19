@@ -33,7 +33,10 @@ const contentTextLength = (content) => {
       textLength += listTextLength;
     } else {
       for (const text of row.children) {
-        textLength += text.text?.trim()?.length;
+        if (text.type === 'link') {
+          textLength += text.children[0].text?.trim()?.length;
+        } else
+          textLength += text.text?.trim()?.length;
       };
     }
   }
@@ -214,7 +217,7 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
 
   const deleteSingleNote = () => {
     setIsLoading(true);
-    
+
     setOpenDelete(false);
 
     setOpenedList(oL => oL.filter(o => o !== id));

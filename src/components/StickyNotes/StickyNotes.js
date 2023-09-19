@@ -1,7 +1,7 @@
-import React, { Suspense, lazy, useEffect, useState, useRef, useCallback, useMemo } from 'react'
+import React, { Suspense, lazy, useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 
-import { ADD_NOTE, EDIT_NOTE, GET_NOTE, INIT_NOTE, getNotes } from '../../actions/notes';
+import { ADD_NOTE, EDIT_NOTE, INIT_NOTE, getNotes } from '../../actions/notes';
 
 import { baseURL } from '../../api/index';
 // import { ADD_NOTE, EDIT_NOTE, getNote } from '../../../actions/notes';
@@ -70,7 +70,6 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
   }, [openSticky]);
 
   const checkNoteId = useCallback((id) => {
-    console.log(notes);
     return notes.ids.includes(id) && notes?.objects[id]
   }, [notes]);
 
@@ -90,6 +89,7 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
           dispatch({ type: EDIT_NOTE, data });
         }
       } else {
+        webSocket.current = generateWebsocket();
         setMessage({ message: data?.message, type: 'error' })
       }
     };
@@ -104,6 +104,7 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
 
   // send ws message after any change at note data.
   const onChangeNote = (data) => {
+
     let timer = null;
     if (
       webSocket.current?.readyState === webSocket.current?.OPEN
@@ -115,7 +116,7 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
       clearTimeout(timer);
     } else if (webSocket.current?.readyState > 1) {
       initWebSocket();
-      setTimeout(() => onChangeNote(data), 5);
+      timer = setTimeout(() => onChangeNote(data), 5);
     }
   }
 
