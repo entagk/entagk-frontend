@@ -10,6 +10,7 @@ import './style.css';
 const TextEditor = lazy(() => import('../../../utils/RichTextEditor/Editor'));
 const Header = lazy(() => import('./Header'));
 const Footer = lazy(() => import('./Footer'));
+const DeletePopupSmaller = lazy(() => import('../../../utils/DeletePopup/DeletePopupSmaller'));
 
 const defaultContent = [
   {
@@ -211,6 +212,22 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
     }
   }
 
+  const deleteSingleNote = () => {
+    setIsLoading(true);
+    
+    setOpenDelete(false);
+
+    setOpenedList(oL => oL.filter(o => o !== id));
+
+    if (!id.includes('new')) {
+      dispatch(deleteNote(id, setIsLoading, setMessage));
+    } else {
+      dispatch({ type: DELETE_NOTE, data: id });
+    }
+
+    setIsLoading(false);
+  }
+
   return (
     <div
       ref={noteRef}
@@ -223,6 +240,15 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
         maxHeight: window.document.documentElement.clientHeight - 30
       }}
     >
+      {openDelete && (
+        <div className='delete-popup-container'>
+          <DeletePopupSmaller
+            type={'this note'}
+            onOk={deleteSingleNote}
+            onCancel={() => setOpenDelete(false)}
+          />
+        </div>
+      )}
       <div className='sides'>
         <div className='top tb'></div>
         <div className='bottom tb'></div>

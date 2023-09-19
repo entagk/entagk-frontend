@@ -13,7 +13,7 @@ const Menu = lazy(() => import('../../../utils/Menu/Menu'));
 const Header = ({ newNote, noteData, setNoteData, closeNote, setOpenDelete, ...props }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [openColor, setOpenColor] = useState(false);
-  const colors = ["pink", "yellow", "orange", "green", "blue", "rose"];
+  const colors = ["pink", "yellow", "orange", "green", "blue"];
 
   const changeColor = (color) => {
     setNoteData(d => ({ ...d, color: color }))
@@ -84,6 +84,7 @@ const Header = ({ newNote, noteData, setNoteData, closeNote, setOpenDelete, ...p
           >
             {colors.map((color) => (
               <Button
+                key={color}
                 variant="none"
                 aria-label={`${color} color`}
                 startIcon={
