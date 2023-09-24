@@ -47,7 +47,7 @@ const initialNote = {
 const StickyNotes = ({ openSticky, setOpenSticky }) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const { notes, openedNotes, totalOpenedNotes, total, isLoading, currentPage, numberOfPages } = useSelector(state => state.notes) || {
+  const { notes, openedNotes, totalOpenedNotes, total, isLoading, currentPage } = useSelector(state => state.notes) || {
     notes: {
       ids: []
     },
@@ -55,7 +55,6 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
       ids: []
     }
   };
-  // const notesData = notes?.ids || [];
 
   const [openedList, setOpenedList] = useState(openedNotes?.ids);
   const [message, setMessage] = useState({ tyep: "", message: "" });
@@ -75,8 +74,9 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
     return notes.ids.includes(id) && notes?.objects[id]
   }, [notes]);
 
-  const initWebSocket = () => {
-    if (webSocket.current === null)
+  // initialize the websocket and connect to it.
+  useEffect(() => {
+    if (!webSocket.current || !webSocket.current?.readyState === 1)
       webSocket.current = generateWebsocket();
     webSocket.current.onmessage = (ev) => {
       const data = JSON.parse(ev.data);
@@ -91,15 +91,27 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
           dispatch({ type: EDIT_NOTE, data });
         }
       } else {
-        webSocket.current = generateWebsocket();
         setMessage({ message: data?.message, type: 'error' })
       }
-    };
-  }
+    }
 
-  // initialize the websocket and connect to it.
-  useEffect(
-    initWebSocket,
+    webSocket.current.onclose = (ev) => {
+      reconnect();
+    }
+
+    const reconnect = () => {
+      setTimeout(() => {
+        webSocket.current = generateWebsocket();
+      }, 3000);
+    }
+
+    return () => {
+      // Cleanup function to close the WebSocket connection when the component unmounts
+      if (webSocket.current) {
+        webSocket.current.close();
+      }
+    };
+  },
     // eslint-disable-next-line 
     [notes]
   );
@@ -110,7 +122,6 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
   }, [notes, total]);
 
   useEffect(() => {
-    console.log("page getting: ", page);
     if (page > currentPage) {
       dispatch(getNotes(setMessage, page));
     }
@@ -118,11 +129,8 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
     // eslint-disable-next-line
   }, [page]);
 
-  console.log("page: ", page);
-
   // send ws message after any change at note data.
   const onChangeNote = (data) => {
-    let timer = null;
     if (
       webSocket.current?.readyState === webSocket.current?.OPEN
       && webSocket.current !== null
@@ -130,10 +138,6 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
       webSocket?.current?.send(
         JSON.stringify(data)
       );
-      clearTimeout(timer);
-    } else if (webSocket.current?.readyState > 1) {
-      initWebSocket();
-      timer = setTimeout(() => onChangeNote(data), 5);
     }
   }
 

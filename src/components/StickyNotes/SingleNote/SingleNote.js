@@ -167,6 +167,8 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
     // eslint-disable-next-line
   }, []);
 
+  // console.log(noteData);
+
   const changeContent = (value) => {
     setNoteData((nD) => ({ ...nD, content: value }));
     // if the content value equal note content
@@ -182,6 +184,10 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
         if (JSON.stringify(note) !== JSON.stringify(noteData))
           if ((id.includes('new') && contentLength > 0) || !id.includes('new'))
             onChangeNote({
+              // content: noteData.content,
+              // coordinates: noteData.coordinates,
+              // position: noteData.position,
+              // color: noteData.color,
               ...noteData,
               id: id,
             });
@@ -193,9 +199,11 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
   }, [noteData]);
 
   const closeNote = () => {
+    console.log('close');
     setOpenedList(oL => oL.filter(o => o !== id));
     const contentLength = contentTextLength(noteData.content);
     if (contentLength === 0 && JSON.stringify(note?.content) === JSON.stringify(noteData?.content)) {
+      console.log('close 1')
       if (!id.includes('new')) {
         dispatch(deleteNote(id, setIsLoading, setMessage));
       } else {
@@ -205,6 +213,7 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
       if (id.includes('new')) {
         onChangeNote({ ...noteData, id: 'new', open: false });
       } else {
+        console.log('close 2')
         onChangeNote({ ...noteData, id, open: false });
       }
     }
@@ -284,7 +293,7 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
             />
           ) : (
             <TextEditor
-              value={note.content}
+              value={noteData.content}
               setValue={changeContent}
               maxContentHeight={maxContentHeight}
             />
