@@ -44,10 +44,19 @@ export default (
       };
 
     case GET_NOTES:
+      localStorage.setItem('sticky-total', Number(action.data.total));
+      localStorage.setItem('sticky-currentPage', Number(action.data.currentPage));
+      localStorage.setItem('stickyLen', action.data.notes.length + state.notes.ids.length);
+
+      const newNotes = convertArrayToObject(action.data.notes, '_id')
       return {
         ...state,
         ...action.data,
-        notes: convertArrayToObject(action.data.notes, '_id')
+        currentPage: Number(action.data.currentPage),
+        notes: {
+          objects: { ...state.notes.objects, ...newNotes.objects },
+          ids: state.notes.ids.concat(newNotes.ids)
+        }
       };
 
     case GET_NOTE:

@@ -137,7 +137,7 @@ export const getYear = (year) => API.get(`/active/year?year=${year}`);
 
 export const getOpenedNotes = () => API.get(`/stickynote/open/`);
 
-export const getNotes = () => API.get('/stickynote/');
+export const getNotes = (page = 1) => API.get(`/stickynote/?page=${page}`);
 
 export const getStickyNote = (id) => API.get(`/stickynote/${id}`);
 

@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ADD_NOTE, EDIT_NOTE, INIT_NOTE, getNotes } from '../../actions/notes';
 
 import { baseURL } from '../../api/index';
-// import { ADD_NOTE, EDIT_NOTE, getNote } from '../../../actions/notes';
+
+import { onScroll } from '../../utils/helper';
 
 import { CgClose } from 'react-icons/cg';
 import { AiOutlinePlus } from 'react-icons/ai';
@@ -45,7 +46,8 @@ const initialNote = {
 
 const StickyNotes = ({ openSticky, setOpenSticky }) => {
   const dispatch = useDispatch();
-  const { notes, openedNotes, totalOpenedNotes, total, isLoading } = useSelector(state => state.notes) || {
+  const [page, setPage] = useState(1);
+  const { notes, openedNotes, totalOpenedNotes, total, isLoading, currentPage } = useSelector(state => state.notes) || {
     notes: {
       ids: []
     },
@@ -63,7 +65,7 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
   // get the notes
   useEffect(() => {
     if (totalOpenedNotes < total && total > 0 && openSticky) {
-      dispatch(getNotes(setMessage));
+      dispatch(getNotes(setMessage, 1));
     }
 
     // eslint-disable-next-line
@@ -102,6 +104,22 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
     [notes]
   );
 
+  useEffect(() => {
+    onScroll(setPage, 'sticky-total', 'stickyLen', 'sticky-currentPage', "notes", 'notes-list');
+    // eslint-disable-next-line
+  }, [notes, total]);
+
+  useEffect(() => {
+    console.log("page getting: ", page);
+    if (page > currentPage) {
+      dispatch(getNotes(setMessage, page));
+    }
+
+    // eslint-disable-next-line
+  }, [page]);
+
+  console.log("page: ", page);
+
   // send ws message after any change at note data.
   const onChangeNote = (data) => {
     let timer = null;
@@ -123,7 +141,6 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
     const newId = `new-${openedList.length + 1}`;
     setOpenedList(oL => oL.concat([newId]));
     dispatch({ type: INIT_NOTE, data: { id: newId, ...initialNote } });
-    // onChangeNote({ ...initialNote, id: 'new' })
   }
 
   return (
@@ -226,26 +243,28 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
                           />
                         ) : (
                           <>
-                            {
-                              notes?.ids?.map((note) => (
-                                <NoteAtList
-                                  id={note}
-                                  key={note}
-                                  onChangeNote={onChangeNote}
-                                  setMessage={setMessage}
-                                  openedList={openedList}
-                                  setOpenedList={setOpenedList}
-                                />
-                              ))
-                            }
-                            {/* {isLoading && (
+                            <div className='notes-list'>
+                              {
+                                notes?.ids?.map((note) => (
+                                  <NoteAtList
+                                    id={note}
+                                    key={note}
+                                    onChangeNote={onChangeNote}
+                                    setMessage={setMessage}
+                                    openedList={openedList}
+                                    setOpenedList={setOpenedList}
+                                  />
+                                ))
+                              }
+                            </div>
+                            {isLoading && (
                               <Loading
                                 size="medium"
                                 color={"#fff"}
                                 backgroud="transparent"
                                 style={{ marginTop: 0 }}
                               />
-                            )} */}
+                            )}
                           </>
                         )
                       }
@@ -254,9 +273,9 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
                 </div>
               </Suspense>
             </div>
-          </div >
+          </div>
         )}
-      </React.Suspense >
+      </React.Suspense>
     </>
   )
 }

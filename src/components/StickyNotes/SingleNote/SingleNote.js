@@ -205,7 +205,7 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
       if (id.includes('new')) {
         onChangeNote({ ...noteData, id: 'new', open: false });
       } else {
-        onChangeNote({ id, open: false, ...noteData });
+        onChangeNote({ ...noteData, id, open: false });
       }
     }
   }

@@ -97,29 +97,26 @@ export const getPages = (current, numberOfPages) => {
   return pages;
 };
 
-export const onScroll = (setPage, totalKey, tasksLenKey, tasksCurrentPageKey) => {
+export const onScroll = (setPage, totalKey, tasksLenKey, tasksCurrentPageKey, tasksContainer = 'tasks-container', tasksList = 'tasks-list') => {
   const handleScrolling = () => {
-    let scrollTop = document.querySelector('.tasks-container')?.scrollTop;
-    let scrollHeight = document.querySelector('.tasks-list')?.scrollHeight;
-    let clientHeight = document.querySelector('.tasks-container')?.clientHeight;
+    let scrollTop = document.querySelector(`.${tasksContainer}`)?.scrollTop;
+    let scrollHeight = document.querySelector(`.${tasksList}`)?.scrollHeight;
+    let clientHeight = document.querySelector(`.${tasksContainer}`)?.clientHeight;
+    const total = Number(localStorage.getItem(totalKey));
+    const tasksLen = Number(localStorage.getItem(tasksLenKey));
+    const currentPage = Number(localStorage.getItem(tasksCurrentPageKey));
 
     if (
-      scrollTop + clientHeight >= scrollHeight &&
-      Number(localStorage.getItem(totalKey)) > Number(localStorage.getItem(tasksLenKey))
+      Math.ceil(scrollTop + clientHeight) >= scrollHeight &&
+      total > tasksLen
     ) {
-      setPage(Number(localStorage.getItem(tasksCurrentPageKey)) + 1);
-    }
-
-    if (
-      scrollTop + clientHeight >= scrollHeight &&
-      Number(localStorage.getItem(totalKey)) > Number(localStorage.getItem(tasksLenKey))
-    ) {
-      setPage(Number(localStorage.getItem(tasksCurrentPageKey)) + 1);
+      // console.log(currentPage + 1);
+      setPage(currentPage + 1);
     }
   }
 
-  document.querySelector('.tasks-container')?.addEventListener('scroll', handleScrolling);
-  return () => document.querySelector('.tasks-container')?.removeEventListener('scroll', handleScrolling);
+  document.querySelector(`.${tasksContainer}`)?.addEventListener('scroll', handleScrolling);
+  return () => document.querySelector(`.${tasksContainer}`)?.removeEventListener('scroll', handleScrolling);
 }
 
 export const stringToColor = (string) => {
@@ -187,7 +184,7 @@ export function getWeekStartAndEnd(date) {
 
 export function getMonthRange(year, month) {
   const start = `${year}-${month + 1 < 10 ? "0" + (month + 1) : month + 1}-01`;
-  const end = `${year}-${month + 1 < 10 ? "0" + (month + 1) : month + 1}-${new Date(year, month+1, 0).getDate()}`;
+  const end = `${year}-${month + 1 < 10 ? "0" + (month + 1) : month + 1}-${new Date(year, month + 1, 0).getDate()}`;
 
   return [start, end];
 }

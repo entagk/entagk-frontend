@@ -46,11 +46,11 @@ export const getOpenedNotes = (setMessage) => async dispatch => {
   }
 }
 
-export const getNotes = (setMessage) => async dispatch => {
+export const getNotes = (setMessage, page) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'stickynotes' });
 
-    const { data } = await api.getNotes();
+    const { data } = await api.getNotes(page);
 
     dispatch({ type: GET_NOTES, data });
   } catch (error) {
