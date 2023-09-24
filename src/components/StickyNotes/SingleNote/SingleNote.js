@@ -147,7 +147,6 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
     window.onmousemove = null;
   };
 
-
   useEffect(() => {
     if (JSON.stringify(note) !== JSON.stringify(noteData) && note?.content.length > noteData?.content.length) {
       setNoteData(note);
@@ -162,7 +161,7 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
       && noteData?.contentLength.textLength > 0
     ) {
       dispatch(getNote(id, setNoteData, setIsLoading, setMessage));
-    } else {
+    } else if (id.includes('new')) {
       setNoteData(data => ({ ...data, content: defaultContent }));
     }
     // eslint-disable-next-line
@@ -183,11 +182,7 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
         if (JSON.stringify(note) !== JSON.stringify(noteData))
           if ((id.includes('new') && contentLength > 0) || !id.includes('new'))
             onChangeNote({
-              content: noteData.content,
-              coordinates: noteData.coordinates,
-              position: noteData.position,
-              color: noteData.color,
-              open: noteData.open,
+              ...noteData,
               id: id,
             });
       }
@@ -210,7 +205,7 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
       if (id.includes('new')) {
         onChangeNote({ ...noteData, id: 'new', open: false });
       } else {
-        onChangeNote({ id, open: false });
+        onChangeNote({ id, open: false, ...noteData });
       }
     }
   }
@@ -289,7 +284,7 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
             />
           ) : (
             <TextEditor
-              value={noteData.content}
+              value={note.content}
               setValue={changeContent}
               maxContentHeight={maxContentHeight}
             />

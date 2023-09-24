@@ -104,7 +104,6 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
 
   // send ws message after any change at note data.
   const onChangeNote = (data) => {
-
     let timer = null;
     if (
       webSocket.current?.readyState === webSocket.current?.OPEN
@@ -220,31 +219,44 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
                       {isLoading && notes.ids.length === 0 ?
                         (
                           <Loading
-                            size="medium"
+                            size="big"
                             color={"#fff"}
                             backgroud="transparent"
                             style={{ marginTop: 0 }}
                           />
-                        ) :
-                        notes?.ids?.map((note) => (
-                          <NoteAtList
-                            id={note}
-                            key={note}
-                            onChangeNote={onChangeNote}
-                            setMessage={setMessage}
-                            openedList={openedList}
-                            setOpenedList={setOpenedList}
-                          />
-                        ))
+                        ) : (
+                          <>
+                            {
+                              notes?.ids?.map((note) => (
+                                <NoteAtList
+                                  id={note}
+                                  key={note}
+                                  onChangeNote={onChangeNote}
+                                  setMessage={setMessage}
+                                  openedList={openedList}
+                                  setOpenedList={setOpenedList}
+                                />
+                              ))
+                            }
+                            {/* {isLoading && (
+                              <Loading
+                                size="medium"
+                                color={"#fff"}
+                                backgroud="transparent"
+                                style={{ marginTop: 0 }}
+                              />
+                            )} */}
+                          </>
+                        )
                       }
                     </>
                   )}
                 </div>
               </Suspense>
             </div>
-          </div>
+          </div >
         )}
-      </React.Suspense>
+      </React.Suspense >
     </>
   )
 }
