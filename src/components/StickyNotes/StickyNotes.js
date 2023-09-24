@@ -47,7 +47,7 @@ const initialNote = {
 const StickyNotes = ({ openSticky, setOpenSticky }) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const { notes, openedNotes, totalOpenedNotes, total, isLoading, currentPage } = useSelector(state => state.notes) || {
+  const { notes, openedNotes, totalOpenedNotes, total, isLoading, currentPage, numberOfPages } = useSelector(state => state.notes) || {
     notes: {
       ids: []
     },
@@ -265,6 +265,17 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
                                 style={{ marginTop: 0 }}
                               />
                             )}
+                            {
+                              (notes.ids.length !== total && currentPage >= 1 && !isLoading) && (
+                                <div>
+                                  <Button
+                                    onClick={() => setPage(p => p + 1)}
+                                  >
+                                    Load more
+                                  </Button>
+                                </div>
+                              )
+                            }
                           </>
                         )
                       }
