@@ -34,12 +34,29 @@
 	width: 100%;
 	margin-bottom: 10px;
 	border-radius: 10px;
+	position: relative;
 }
 
 .sticky-notes .notes .note.orange,
 .sticky-notes .notes .note.green,
 .sticky-notes .notes .note.blue {
 	color: #fff;
+}
+
+.sticky-notes .notes .note .loader-container {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: #00000010;
+	border-radius: inherit;
+	z-index: 100;
+}
+
+.sticky-notes .notes .note .loading-container {
+	width: 100%;
+	height: 100%;
+	margin: 0;
 }
 
 .sticky-notes .notes .note .note-container {
@@ -54,15 +71,17 @@
 
 .sticky-notes .note .upper {
 	width: 100%;
+	position: relative;
 }
 
-.sticky-notes .note.orange .upper p,
-.sticky-notes .note.green .upper p,
-.sticky-notes .note.blue .upper p {
+
+.sticky-notes .note.orange .upper p.date,
+.sticky-notes .note.green .upper p.date,
+.sticky-notes .note.blue .upper p.date {
 	color: #ddd;
 }
 
-.sticky-notes .note .upper p {
+.sticky-notes .note .upper p.date {
 	font-size: 12px;
 	color: #777676;
 	text-align: right;
@@ -70,7 +89,7 @@
 	margin-block: 10px;
 }
 
-.sticky-notes .note:hover .upper p {
+.sticky-notes .note:hover .upper p.date {
 	display: none;
 }
 
@@ -84,6 +103,29 @@
 
 .sticky-notes .note:hover .upper .menu {
 	display: flex;
+}
+
+.sticky-notes .note .upper .menu-content {
+	right: auto;
+	padding-block: 0;
+	padding: 5px;
+	top: 22px;
+}
+
+.sticky-notes .note .upper .menu-content .row button {
+	font-size: 16px;
+	padding: 6px 10px;
+	border-radius: 10px;
+}
+
+.sticky-notes .note .upper .menu-content .row button .color-icon {
+	width: 16px;
+	height: 16px;
+	border-radius: 4px;
+}
+
+.sticky-notes .note .upper .smaller-popup.delete-popup {
+	top: 32px;
 }
 
 .sticky-notes .note .upper button.toggle-menu {

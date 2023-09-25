@@ -184,10 +184,6 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
         if (JSON.stringify(note) !== JSON.stringify(noteData))
           if ((id.includes('new') && contentLength > 0) || !id.includes('new'))
             onChangeNote({
-              // content: noteData.content,
-              // coordinates: noteData.coordinates,
-              // position: noteData.position,
-              // color: noteData.color,
               ...noteData,
               id: id,
             });
@@ -220,8 +216,6 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
   }
 
   const deleteSingleNote = () => {
-    setIsLoading(true);
-
     setOpenDelete(false);
 
     setOpenedList(oL => oL.filter(o => o !== id));
@@ -231,8 +225,6 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
     } else {
       dispatch({ type: DELETE_NOTE, data: id });
     }
-
-    setIsLoading(false);
   }
 
   return (

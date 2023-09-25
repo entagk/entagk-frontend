@@ -1,10 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { deleteNote, DELETE_NOTE } from '../../actions/notes';
+
 import TextEditor from '../../utils/RichTextEditor/Editor';
 import Menu from '../../utils/Menu/Menu';
 import Button from '../../utils/Button/Button';
 
 import CircularMenu from '../../icons/circularMenu/CircularMenu';
-import { useSelector } from 'react-redux';
+
+import { RiExternalLinkLine } from 'react-icons/ri';
+import { MdDelete } from 'react-icons/md';
+import DeletePopupSmaller from '../../utils/DeletePopup/DeletePopupSmaller';
+import Loading from '../../utils/Loading/Loading'
 
 export const updatedAt = (t) => {
   const now = new Date(Date.now());
@@ -30,58 +38,98 @@ const NoteAtList = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   const note = useSelector(state => state.notes.notes.objects[id]);
   const { openedNotes } = useSelector(state => state.notes);
   const editorContent = [note.content[0]];
+  const [openDelete, setOpenDelete] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const openNote = (e) => {
-    console.log(openedNotes);
     if (!openedNotes?.objects[id]) {
       setOpenedList(oL => oL.concat([id]));
       onChangeNote({ id, open: true });
     }
   }
 
+  const deleteSingleNote = () => {
+    setOpenDelete(false);
+
+    if (!id.includes('new')) {
+      dispatch(deleteNote(id, setIsLoading, setMessage));
+    } else {
+      dispatch({ type: DELETE_NOTE, data: id });
+    }
+  }
+
   return (
-    <div className={`note ${note.color}`} onDoubleClick={openNote} style={{ background: note.color }}>
-      <div className='note-container'>
-        <div className='upper'>
-          <p>
-            {updatedAt(note.updatedAt)}
-          </p>
-          <Menu
-            open={openMenu}
-            setOpen={setOpenMenu}
-            MainButton={
+    <>
+      <div className={`note ${note.color}`} onDoubleClick={openNote} style={{ background: note.color }}>
+        {isLoading && (
+          <div className='loader-container'>
+            <Loading
+              color="white"
+              backgroud="transparent"
+              size="small"
+            />
+          </div>
+        )}
+        <div className='note-container'>
+          <div className='upper'>
+            <p className='date'>
+              {updatedAt(note.updatedAt)}
+            </p>
+            <Menu
+              open={openMenu}
+              setOpen={setOpenMenu}
+              MainButton={
+                <Button
+                  aria-label="toggle the note list menu"
+                  className="toggle-menu"
+                  startIcon={
+                    <CircularMenu />
+                  }
+                  variant="single-icon"
+                />
+              }>
               <Button
-                aria-label="toggle the note list menu"
-                className="toggle-menu"
+                variant="none"
+                aria-label="open note button"
+                onClick={openNote}
                 startIcon={
-                  <CircularMenu />
+                  <RiExternalLinkLine />
                 }
-                variant="single-icon"
+              >
+                Open
+              </Button>
+              <Button
+                variant="none"
+                aria-label="delete button"
+                onClick={() => setOpenDelete(true)}
+                style={{ color: 'red' }}
+                className="delete"
+                startIcon={
+                  <MdDelete />
+                }
+              >
+                Delete
+              </Button>
+            </Menu>
+            {openDelete && (
+              <DeletePopupSmaller
+                type={'this note'}
+                onOk={deleteSingleNote}
+                onCancel={() => setOpenDelete(false)}
               />
-            }>
-            {/* <Button
-              variant="none"
-              aria-label="delet button"
-              onClick={toggleDelete}
-              style={{ color: 'red' }}
-              className="delete"
-              startIcon={
-                <MdDelete />
-              }
-            >
-              <>Delete</>
-            </Button> */}
-          </Menu>
-        </div>
-        <div>
-          {
-            note?.contentLength?.textLength > 0 ? (
-              <TextEditor value={editorContent} setValue={() => { }} readonly />
-            ) : (<></>)
-          }
+            )}
+          </div>
+          <div>
+            {
+              note?.contentLength?.textLength > 0 ? (
+                <TextEditor value={editorContent} setValue={() => { }} readonly />
+              ) : (<></>)
+            }
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
