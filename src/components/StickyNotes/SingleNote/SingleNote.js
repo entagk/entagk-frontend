@@ -9,7 +9,6 @@ import './style.css';
 
 const TextEditor = lazy(() => import('../../../utils/RichTextEditor/Editor'));
 const Header = lazy(() => import('./Header'));
-const Footer = lazy(() => import('./Footer'));
 const DeletePopupSmaller = lazy(() => import('../../../utils/DeletePopup/DeletePopupSmaller'));
 
 const defaultContent = [
@@ -74,27 +73,24 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
     }
 
     function changeCoordinates(width, height) {
-      noteRef.current.style.width = width + 'px';
-      noteRef.current.style.height = height + 'px';
-
       if (width < 300) width = 300;
       if (height < 300) height = 300;
 
+      noteRef.current.style.width = width + 'px';
+      noteRef.current.style.height = height + 'px';
+
       setNoteData((nD) => ({ ...nD, coordinates: { width: width, height: height } }));
       setHasChanged(true);
-      // const toolbarHeight = noteRef.current.query
     }
 
     function Resize(e) {
       const noteWidth = (e.clientX - noteRef.current.offsetLeft);
       const noteHeight = (e.clientY - noteRef.current.offsetTop);
 
-      if (startTrarget?.includes('rl')) {
+      if (startTrarget?.includes('right')) {
         changeCoordinates(noteWidth, noteData?.coordinates.height);
-      } else if (startTrarget.includes('tb')) {
+      } else if (startTrarget.includes('bottom')) {
         changeCoordinates(noteData?.coordinates.width, noteHeight);
-      } else {
-        changeCoordinates(noteWidth, noteHeight);
       }
     }
 
@@ -108,7 +104,6 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
       window.removeEventListener('mouseup', stopResize, false);
     };
   });
-
 
   useEffect(() => {
     if (noteRef.current) {
@@ -136,9 +131,7 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
       noteRef.current.style.left = newLeft + "px";
       noteRef.current.style.top = newTop + "px";
       setNoteData((nD) => ({ ...nD, position: { left: newLeft, top: newTop } }));
-      // if (!id.includes('new')) {
       setHasChanged(true);
-      // }
     };
   }
 
@@ -167,8 +160,6 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
     // eslint-disable-next-line
   }, []);
 
-  // console.log(noteData);
-
   const changeContent = (value) => {
     setNoteData((nD) => ({ ...nD, content: value }));
     // if the content value equal note content
@@ -195,11 +186,9 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
   }, [noteData]);
 
   const closeNote = () => {
-    console.log('close');
     setOpenedList(oL => oL.filter(o => o !== id));
     const contentLength = contentTextLength(noteData.content);
     if (contentLength === 0 && JSON.stringify(note?.content) === JSON.stringify(noteData?.content)) {
-      console.log('close 1')
       if (!id.includes('new')) {
         dispatch(deleteNote(id, setIsLoading, setMessage));
       } else {
@@ -209,7 +198,6 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
       if (id.includes('new')) {
         onChangeNote({ ...noteData, id: 'new', open: false });
       } else {
-        console.log('close 2')
         onChangeNote({ ...noteData, id, open: false });
       }
     }
@@ -229,70 +217,67 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
 
   return (
     <div
+      className='note-container'
       ref={noteRef}
-      className={`sticky-note ${noteData.color}`}
       style={{
-        ...noteData?.coordinates,
         ...noteData?.position,
-        background: noteData.color !== 'rose' ? noteData.color : 'mistyrose',
-        maxWidth: window.document.documentElement.clientWidth - 20,
-        maxHeight: window.document.documentElement.clientHeight - 30
       }}
     >
-      {openDelete && (
-        <div className='delete-popup-container'>
-          <DeletePopupSmaller
-            type={'this note'}
-            onOk={deleteSingleNote}
-            onCancel={() => setOpenDelete(false)}
+      <div
+        className={`sticky-note ${noteData.color} center`}
+        style={{
+          ...noteData?.coordinates,
+          maxWidth: window.document.documentElement.clientWidth - 20,
+          maxHeight: window.document.documentElement.clientHeight - 30,
+          background: noteData.color !== 'rose' ? noteData.color : 'mistyrose',
+        }}
+      >
+        {openDelete && (
+          <div className='delete-popup-container'>
+            <DeletePopupSmaller
+              type={'this note'}
+              onOk={deleteSingleNote}
+              onCancel={() => setOpenDelete(false)}
+            />
+          </div>
+        )}
+        <div className='note-content'>
+          <Header
+            newNote={newNote}
+            onMouseDown={moveNote}
+            onMouseUp={stopMove}
+            closeNote={closeNote}
+            noteData={noteData}
+            setNoteData={setNoteData}
+            setOpenDelete={setOpenDelete}
           />
+          <Suspense
+            fallback={
+              <Loading
+                color="white"
+                backgroud="transparent"
+                size="big"
+              />
+            }
+          >
+            {(isLoading) ? (
+              <Loading
+                color="white"
+                backgroud="transparent"
+                size="big"
+              />
+            ) : (
+              <TextEditor
+                value={noteData.content}
+                setValue={changeContent}
+                maxContentHeight={maxContentHeight}
+              />
+            )}
+          </Suspense>
         </div>
-      )}
-      <div className='sides'>
-        <div className='top tb'></div>
-        <div className='bottom tb'></div>
-        <div className='right rl'></div>
-        <div className='left rl'></div>
-        <div className='top-right'></div>
-        <div className='bottom-right'></div>
-        <div className='top-left'></div>
-        <div className='bottom-left'></div>
       </div>
-      <div className='note-content'>
-        <Header
-          newNote={newNote}
-          onMouseDown={moveNote}
-          onMouseUp={stopMove}
-          closeNote={closeNote}
-          noteData={noteData}
-          setNoteData={setNoteData}
-          setOpenDelete={setOpenDelete}
-        />
-        <Suspense
-          fallback={
-            <Loading
-              color="white"
-              backgroud="transparent"
-              size="big"
-            />
-          }
-        >
-          {(isLoading) ? (
-            <Loading
-              color="white"
-              backgroud="transparent"
-              size="big"
-            />
-          ) : (
-            <TextEditor
-              value={noteData.content}
-              setValue={changeContent}
-              maxContentHeight={maxContentHeight}
-            />
-          )}
-          <Footer />
-        </Suspense>
-      </div>
+      <div class="right rl"></div>
+      <div class="bottom tb"></div>
     </div>
   )
 }

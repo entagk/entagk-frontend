@@ -71,7 +71,7 @@ const NoteAtList = ({ id, onChangeNote, setMessage, setOpenedList }) => {
             />
           </div>
         )}
-        <div className='note-container'>
+        <div className='note-content'>
           <div className='upper'>
             <p className='date'>
               {updatedAt(note.updatedAt)}

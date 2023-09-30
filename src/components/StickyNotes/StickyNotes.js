@@ -44,7 +44,7 @@ const initialNote = {
   updatedAt: new Date().toJSON()
 }
 
-const StickyNotes = ({ openSticky, setOpenSticky }) => {
+const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const { notes, openedNotes, totalOpenedNotes, total, isLoading, currentPage } = useSelector(state => state.notes) || {
@@ -57,7 +57,6 @@ const StickyNotes = ({ openSticky, setOpenSticky }) => {
   };
 
   const [openedList, setOpenedList] = useState(openedNotes?.ids);
-  const [message, setMessage] = useState({ tyep: "", message: "" });
 
   const webSocket = useRef(null);
 

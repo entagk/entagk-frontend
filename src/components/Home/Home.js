@@ -140,7 +140,7 @@ function Home() {
             <ActiveTask />
           </div>
         </div>
-        <StickyNotes setOpenSticky={setOpenSticky} openSticky={openSticky} />
+        <StickyNotes setOpenSticky={setOpenSticky} openSticky={openSticky} setMessage={setMessage} />
       </React.Suspense>
       <React.Suspense
         fallback={
