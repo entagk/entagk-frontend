@@ -17,8 +17,12 @@ const FullscreenBtn = () => {
 
   useEffect(() => {
     window.onkeydown = (event) => {
-      if (event.code.toLowerCase() === 'keyf') {
-        handleFull();
+      const inputsItems = ['input', 'textarea'];
+      const activeElement = document.activeElement.tagName.toLowerCase();
+      if (inputsItems.findIndex(item => item === activeElement || item === event.target.role) === -1) {
+        if (event.code.toLowerCase() === 'keyf') {
+          handleFull();
+        }
       }
     }
   })

@@ -220,9 +220,9 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
 
     useEffect(() => {
         const handleKeys = (event) => {
-            const inputsItems = ['input', 'textarea']
+            const inputsItems = ['input', 'textarea'];
             const activeElement = document.activeElement.tagName.toLowerCase();
-            if (!inputsItems.includes(activeElement)) {
+            if (inputsItems.findIndex(item => item === activeElement || item === event.target.role) === -1) {
                 if (event.code.toLowerCase() === 'space') {
                     toggleStart();
                 }

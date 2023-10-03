@@ -60,7 +60,7 @@ function Home() {
     const handleKeys = (event) => {
       const inputsItems = ['input', 'textarea'];
       const activeElement = document.activeElement.tagName.toLowerCase();
-      if (!inputsItems.includes(activeElement)) {
+      if (inputsItems.findIndex(item => item === activeElement || item === event.target.role) === -1) {
         if (event.code.toLowerCase() === 'keys' && !started) {
           setOpenSetting((e) => !e);
         }
@@ -69,9 +69,9 @@ function Home() {
           setOpenTodo(e => !e);
         }
 
-        // if (event.code.toLowerCase() === 'keyn') {
-        //   setOpenSticky(e => !e);
-        // }
+        if (event.code.toLowerCase() === 'keyn') {
+          setOpenSticky(e => !e);
+        }
       }
     };
 
