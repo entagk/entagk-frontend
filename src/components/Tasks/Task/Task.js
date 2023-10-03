@@ -57,7 +57,7 @@ const Task = ({
   const handleDelete = () => {
     setOpenDelete(false);
     if (props?._id) {
-      dispatch(deleteTask(props._id, props?.template || null, setIsLoading, setMessage));
+      dispatch(deleteTask(props._id, props?.template || null, setIsLoading, setMessage, setActiveTemplate, template?.tasks || []));
     } else {
       setTemplateData(t => ({ ...t, tasks: t.tasks.filter(task => task.id !== props.id) }))
     };

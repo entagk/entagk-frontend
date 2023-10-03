@@ -50,7 +50,6 @@ const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo })
               </div>
             )
           }
-
           RightButton={
             <Button
               aria-label='close tasks'
@@ -79,6 +78,7 @@ const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo })
                 setIsLoading={setIsLoading}
                 message={message}
                 setMessage={setMessage}
+                setActiveTemplate={setActiveTemplate}
               />
             ) : (
               <Tasks

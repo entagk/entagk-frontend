@@ -146,22 +146,25 @@ export const checkTask = (id, setIsLoading, setMessage) => async dispatch => {
   }
 };
 
-export const deleteTask = (id, template, setIsLoading, setMessage) => async dispatch => {
+export const deleteTask = (id, template, setIsLoading, setMessage, setActiveTemplate, tempTasks) => async dispatch => {
   try {
     setIsLoading(id);
     if (!id) {
       setMessage({ message: "invalid task", type: "error" })
     }
-    
+
     if (!localStorage.getItem('token')) {
-      dispatch({ type: DELETE_TASK, data: id });
+      dispatch({ type: DELETE_TASK, data: { id } });
     } else {
       const { data } = await api.deleteTask(id);
-      setMessage({ message: data.message, type: 'success' })
+      setMessage({ message: data.message, type: 'success' });
+
       if (template && !template?.todo) {
         dispatch({ type: DELETE_TEMPLATE_TASK, data: { id: data.deleted_id, template } });
       } else {
         dispatch({ type: DELETE_TASK, data: { id: data.deleted_id, template } });
+        if (tempTasks.length === 1)
+          setActiveTemplate(null);
       }
     }
     setIsLoading(null);
@@ -181,7 +184,7 @@ export const modifyTask = (formData, id, setIsLoading, setMessage, setFormErrors
     if (!formData.name || !formData.est) {
       setMessage({ message: "Please enter the task name and est", type: "error" })
     }
-    
+
     if (!localStorage.getItem('token')) {
       dispatch({ type: MODIFY_TASK, data: { ...formData, _id: id } });
     } else {

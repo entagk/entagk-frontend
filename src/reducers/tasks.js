@@ -217,7 +217,7 @@ export default (
 
             newActive =
               !task?.check
-                ?  { _id: task._id, name: state.tasks[tempIndex].name + " > " + action.data.name }
+                ? { _id: task._id, name: state.tasks[tempIndex].name + " > " + action.data.name }
                 :
                 state.autoStartNextTask &&
                   taskIndex + 1 < state.tempTasks[task.template._id].tasks.length ?
@@ -347,10 +347,20 @@ export default (
 
     case DELETE_TASK:
       all = state.tasks;
-      const tIndex = action.data?.template ? all.findIndex((t) => t._id === action.data?.template?._id) : all.findIndex((t) => t._id === action.data.id);
+      const tIndex = action.data?.template ?
+        state.tempTasks[action.data?.template?._id].tasks.findIndex((t) => t._id === action.data.id) :
+        all.findIndex((t) => t._id === action.data.id);
+
       console.log(tIndex);
-      const task = all[tIndex];
-      let newAll = task.tasks.length > 1 ? all.filter((task) => task._id !== action.data || task._id !== action.data?.id) : all.filter(t => t._id !== task._id);
+
+      const task =
+        !action.data?.template?._id ?
+          all[tIndex] :
+          state.tempTasks[action.data?.template?._id].tasks[tIndex];
+      console.log(task);
+
+      let newAll = task?.template?._id ? all : all.filter((t) => t._id !== action.data?.id);
+      console.log(newAll);
 
       if (!localStorage.getItem("token")) {
         const newEst = state.est - task.est;
@@ -378,18 +388,20 @@ export default (
           activeName: state.activeName !== task.name ? state.activeName : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0].name : null,
         };
       } else {
-        const realTask = action.data.template ? state.tempTasks[task._id].tasks.filter(t => t._id === action.data.id)[0] : null;
-        newEst = action.data?.template ? state.est - realTask.est : state.est - task.est;
-        newAct = action.data?.template ? state.act - realTask.act : state.act - task.act;
+        newEst = state.est - task.est;
+        newAct = state.act - task.act;
         const unfinishedTasks = all.filter(t => !t.check);
 
-        if (action.data?.template && task.tasks.length > 1) {
-          console.log(task);
-          console.log(state.tempTasks[task._id]);
-          state.tempTasks[task._id].tasks = state.tempTasks[task._id].tasks.filter(t => t._id !== action.data.id);
+        if (action.data.template) {
+          const tempIndex = action.data?.template?._id ? newAll.findIndex(t => t._id === action.data?.template._id) : -1;
+          newAll[tempIndex].tasks = newAll[tempIndex].tasks.filter(t => t !== action.data.id);
+          newAll[tempIndex].act = newAll[tempIndex].act - task.act;
+          newAll[tempIndex].est = newAll[tempIndex].est - task.est;
 
-          newAll[tIndex] = { ...task, tasks: task.tasks.filter(t => t !== action.data.id), act: task.act - realTask.act, est: task.est - realTask.est };
-          console.log(newAll);
+          if (newAll[tempIndex].tasks.length === 0) {
+            newAll.splice(tempIndex, 1);
+          }
+          state.tempTasks[action.data?.template?._id].tasks = state.tempTasks[action.data?.template?._id].tasks.filter(t => t._id !== action.data.id);
         }
 
         return {
@@ -397,9 +409,19 @@ export default (
           est: newEst,
           act: newAct,
           tasks: newAll,
-          total: state.total - 1,
-          activeId: state.activeId !== task._id ? state.activeId : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0]._id : null,
-          activeName: state.activeName !== task.name ? state.activeName : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0].name : null
+          total: action.data.template?._id ? state.total : state.total - 1,
+          activeId: state.activeId !== task._id ?
+            state.activeId :
+            state.autoStartNextTask ?
+              null :
+              unfinishedTasks.length > 0 ? unfinishedTasks[0]._id
+                : null,
+          activeName: state.activeName !== task.name ?
+            state.activeName :
+            state.autoStartNextTask ?
+              null :
+              unfinishedTasks.length > 0 ? unfinishedTasks[0].name
+                : null
         };
       };
 
