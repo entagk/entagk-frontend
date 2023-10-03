@@ -166,7 +166,7 @@ export default (
     case INCREASE_ACT:
       let newActive =
         Boolean(state.activeId)
-          ? state.tasks.find((t) => t._id === state.activeId)
+          ? { _id: state.activeId, name: state?.activeName }
           : { _id: null, name: null };
       let realAct = state.act;
       let congrats = '';
@@ -206,24 +206,34 @@ export default (
         if (Boolean(state.activeId) && action.data.active === PERIOD) {
           const task = action.data.task;
 
-          const taskIndex = state.tasks.findIndex(
-            (t) => t._id === task?.template?._id || t._id === task._id
-          );
-
-          state.tasks[taskIndex] = task.template?._id ? { ...state.tasks[taskIndex], act: state.tasks[taskIndex].act + 1 } : task;
+          const taskIndex = !task?.template?._id ? state.tasks.findIndex(
+            (t) => t._id === task._id
+          ) : state.tempTasks[task.template._id].tasks.findIndex((t) => t._id === task._id);
 
           if (task.template?._id) {
-            const realTaskIndex = state.tempTasks[task.template._id].tasks.findIndex(t => t._id === task._id);
-            state.tempTasks[task.template._id].tasks[realTaskIndex] = task;
+            state.tempTasks[task.template._id].tasks[taskIndex] = task;
+            const tempIndex = state.tasks.findIndex(t => t._id === task.template._id);
+            state.tasks[tempIndex].act += 1;
+
+            newActive =
+              !task?.check
+                ?  { _id: task._id, name: state.tasks[tempIndex].name + " > " + action.data.name }
+                :
+                state.autoStartNextTask &&
+                  taskIndex + 1 < state.tempTasks[task.template._id].tasks.length ?
+                  { _id: task._id, name: state.tasks[tempIndex].name + " > " + state.tempTasks[taskIndex + 1].name } :
+                  { _id: null, name: null };
+          } else {
+            state.tasks[taskIndex] = task;
+
+            newActive =
+              !task?.check
+                ? task
+                : state.autoStartNextTask && taskIndex + 1 < state.tasks.length ? state.tasks[taskIndex + 1] : { _id: null, name: null };
           }
           congrats = task.check ? task.name : "";
 
           realAct = realAct + 1;
-
-          newActive =
-            !task?.check
-              ? state.tasks[taskIndex]
-              : state.autoStartNextTask ? state.tasks[taskIndex + 1] : { _id: null, name: null };
         }
 
         return {

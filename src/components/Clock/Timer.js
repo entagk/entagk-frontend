@@ -89,11 +89,11 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                 })
             }
         }
-        
+
         alarmSound.current.chengeVolume(setting?.alarmVolume);
         alarmSound.current.changeFile(setting?.alarmType.src);
         alarmSound.current.changeLoop(setting?.alarmRepet);
-        
+
         if (setting.clickType.name !== 'none') {
             if (clickSound.current) {
                 clickSound.current.chengeVolume(setting.clickVolume);
