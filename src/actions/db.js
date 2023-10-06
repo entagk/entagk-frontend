@@ -12,12 +12,17 @@ function withDB(storeName, callback) {
     callback(db); // Invoke the callback with the database
   };
 
-  request.onupgradeneeded = () => { initdb(request.result, storeName); };
+  request.onupgradeneeded = () => {
+    initdb(request.result, storeName);
+  };
 }
 
-function initdb(db, storeName) {
-  if (!db.objectStoreNames.contains(storeName))
-    db.createObjectStore(storeName, { keyPath: "_id" });
+function initdb(db) {
+  if (!db.objectStoreNames.contains("notes"))
+    db.createObjectStore("notes", { keyPath: "_id" });
+
+  if (!db.objectStoreNames.contains("tasks"))
+    db.createObjectStore("tasks", { keyPath: "_id" });
 }
 
 export const getAll = (storeName) => {
@@ -103,7 +108,7 @@ export const deleteOne = (id, storeName) => {
       };
 
       request.onsuccess = () => { // Or call this function on success
-        resolve({ data: { id } });
+        resolve({ id });
       };
     });
   })
@@ -119,13 +124,30 @@ export const updateOne = (data, storeName) => {
 
       const request = objectstore.put(data);
 
-      console.log('req', request);
       request.onerror = () => {
         reject("unexpected error while saveing the data");
       };
 
       request.onsuccess = () => { // Or call this function on success
         resolve(data);
+      };
+    });
+  })
+}
+
+export const clearStore = (storeName) => {
+  return new Promise((resolve, reject) => {
+    withDB(storeName, (db) => {
+      const objectstore = db.transaction([storeName], 'readwrite').objectStore(storeName);
+
+      const request = objectstore.clear();
+
+      request.onerror = () => {
+        reject("unexpected error while saveing the data");
+      };
+
+      request.onsuccess = () => { // Or call this function on success
+        resolve({ message: "Deleteded successfully" });
       };
     });
   })

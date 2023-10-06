@@ -107,7 +107,7 @@ export const deleteNote = (id, setIsLoading, setMessage) => async dispatch => {
 
       dispatch({ type: DELETE_NOTE, data: data.deletedId })
     } else {
-      const data = deleteOne(id, 'notes');
+      const data = await deleteOne(id, 'notes');
 
       dispatch({ type: DELETE_NOTE, data: data.id })
     }

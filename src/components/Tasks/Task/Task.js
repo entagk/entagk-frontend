@@ -50,7 +50,7 @@ const Task = ({
   }, [props])
 
   const handleCheck = () => {
-    dispatch(checkTask(props._id, setIsLoading, setMessage));
+    dispatch(checkTask(props, setIsLoading, setMessage));
     setOpenMenu(false);
   }
 
@@ -64,7 +64,8 @@ const Task = ({
   }
 
   const handleActive = () => {
-    if (props.tasks?.length === 0) {
+    console.log('activate', props);
+    if (props.tasks?.length === 0 || !props?.tasks) {
       if ((!props.check && setting.autoStartNextTask) || (!setting.autoStartNextTask && props.act !== props.est)) {
         if (activeId === props._id) {
           dispatch({ type: CHANGE_ACTIVE_TASK, data: {} });
@@ -239,7 +240,11 @@ const Task = ({
                     variant="single-icon"
                   />
                 }>
-                {((props?.template?.todo && props?.template) || (!props?.template && props?.tasks?.length === 0)) ? (
+                {(
+                  (props?.template?.todo && props?.template) ||
+                  (!props?.template && props?.tasks?.length === 0) ||
+                  (!props?.tasks)
+                ) ? (
                   <>
                     {(!setting?.autoStartNextTask) ? (
                       <Button

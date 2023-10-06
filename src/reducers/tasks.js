@@ -20,8 +20,6 @@ import {
   GET_SETTING
 } from "../actions/timer";
 
-import { nanoid } from "nanoid";
-
 import {
   LOGOUT,
   START_LOADING,
@@ -30,15 +28,7 @@ import {
 } from "../actions/auth";
 
 import { ADD_TO_TODO_LIST } from "../actions/templates";
-
-const initialData = {
-  name: "",
-  est: 1,
-  act: 0,
-  notes: "",
-  project: "",
-  check: false,
-};
+import { deleteOne, updateOne } from "../actions/db";
 
 const initialState = {
   activeId: null,
@@ -184,9 +174,6 @@ export default (
           }
 
           realAct = realAct + 1;
-          localStorage.setItem("act", realAct);
-          localStorage.setItem("tasks", JSON.stringify(state.tasks));
-          console.log(realAct, state.tasks);
 
           newActive =
             !state.tasks[taskIndex].check
@@ -254,14 +241,9 @@ export default (
       finishedTasks = all.filter(t => t.check);
       unfinishedTasks = all.filter(t => !t.check);
       if (!localStorage.getItem("token")) {
-        const newTask = Object.assign(
-          { _id: nanoid(), ...initialData },
-          action.data
-        );
-        localStorage.setItem("tasks", JSON.stringify([...unfinishedTasks, newTask, ...finishedTasks]));
         localStorage.setItem("est", state?.est + action.data.est);
 
-        unfinishedTasks.push(newTask);
+        unfinishedTasks.push(action.data);
 
         return {
           ...state,
@@ -301,11 +283,7 @@ export default (
         task.check = !task.check;
         task.act = task.check ? task.est : 0;
 
-        localStorage.setItem("tasks", JSON.stringify(all));
-
         newAct = task.check ? state.act + task.est : state.act - task.est;
-
-        localStorage.setItem('act', newAct);
 
         return {
           ...state,
@@ -351,41 +329,35 @@ export default (
         state.tempTasks[action.data?.template?._id].tasks.findIndex((t) => t._id === action.data.id) :
         all.findIndex((t) => t._id === action.data.id);
 
-      console.log(tIndex);
-
       const task =
         !action.data?.template?._id ?
           all[tIndex] :
           state.tempTasks[action.data?.template?._id].tasks[tIndex];
-      console.log(task);
 
       let newAll = task?.template?._id ? all : all.filter((t) => t._id !== action.data?.id);
-      console.log(newAll);
 
       if (!localStorage.getItem("token")) {
         const newEst = state.est - task.est;
         newAct = task.check ? state.act - task.act : state.act;
         const unfinishedTasks = all.filter(t => !t.check)
-        // save the tasks in localStorage
-        localStorage.setItem("tasks", JSON.stringify(newAll));
-
-        if (state.tasks.length === 0) {
-          localStorage.removeItem("est");
-          localStorage.removeItem("act");
-        } else {
-          localStorage.setItem("est", newEst);
-          localStorage.setItem("act", newAct);
-        }
-        console.log(state.activeId !== task._id);
-        console.log(state.activeName !== task.name);
 
         return {
           ...state,
           est: newEst,
           act: newAct,
           tasks: newAll,
-          activeId: state.activeId !== task._id ? state.activeId : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0]._id : null,
-          activeName: state.activeName !== task.name ? state.activeName : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0].name : null,
+          activeId: state.activeId !== task._id ?
+            state.activeId :
+            state.autoStartNextTask ?
+              null :
+              unfinishedTasks.length > 0 ?
+                unfinishedTasks[0]._id : null,
+          activeName: state.activeName !== task.name ?
+            state.activeName :
+            state.autoStartNextTask ?
+              null :
+              unfinishedTasks.length > 0 ?
+                unfinishedTasks[0].name : null,
         };
       } else {
         newEst = state.est - task.est;
@@ -460,15 +432,6 @@ export default (
           state.tasks[taskIndex] = newTask;
         }
 
-        localStorage.setItem(
-          "tasks",
-          JSON.stringify(
-            newTask.check && state.autoStartNextTask ? all : state.tasks
-          )
-        );
-        localStorage.setItem("est", newEst);
-        localStorage.setItem("act", newAct);
-
         return {
           ...state,
           tasks: newTask.check && state.autoStartNextTask ? all : state.tasks,
@@ -523,7 +486,6 @@ export default (
      * filter the tasks from tasks that is checked
      * and then reduce the total act
      */
-
     case CLEAR_FINISHED_TASKS:
       all = state.tasks;
       finishedTasks = all.filter((task) => task.check);
@@ -533,9 +495,9 @@ export default (
       newEst = state.est - finishedTasks.reduce((total, cur) => total + cur.est, 0);
 
       if (!localStorage.getItem("token")) {
-        localStorage.setItem("tasks", JSON.stringify(unfinishedTasks));
-        localStorage.setItem("act", newAct);
-        localStorage.setItem('est', newEst)
+        finishedTasks.forEach(async (ele) => {
+          await deleteOne(ele._id, "tasks");
+        })
       } else {
         if (Object.values(state.tempTasks).length > 0) {
           const tempTasks = Object.entries(state.tempTasks).filter(tt => unfinishedTasks.find(t => t._id === tt[0]) !== undefined);
@@ -562,10 +524,9 @@ export default (
           return { ...t, act: 0, check: false };
         })
       if (!localStorage.getItem("token")) {
-
-        localStorage.setItem("tasks", JSON.stringify(all));
-
-        localStorage.setItem("act", 0);
+        all.forEach(async (ele) => {
+          await updateOne({ ...ele, check: false, act: 0 }, "tasks");
+        })
       } else {
         if (Object.values(state.tempTasks).length > 0) {
           const tempTasks = Object.entries(state.tempTasks).filter(tt => tt[1]?.tasks?.filter(t => t.act > 0).length > 0);
@@ -594,9 +555,6 @@ export default (
 
     case CLEAR_ALL_TASKS:
       if (!localStorage.getItem("token")) {
-        localStorage.setItem("tasks", JSON.stringify([]));
-        localStorage.setItem("act", 0);
-        localStorage.setItem("est", 0);
       } else {
         if (Object.values(state.tempTasks).length > 0) {
           state.tempTasks = {};
