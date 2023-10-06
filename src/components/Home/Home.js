@@ -79,8 +79,10 @@ function Home() {
   })
 
   if (
-    setting === undefined
-    || totalOpenedNotes === undefined
+    (
+      setting === undefined ||
+      totalOpenedNotes === undefined
+    )
   ) {
     return (
       <>

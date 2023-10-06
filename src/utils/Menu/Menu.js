@@ -37,7 +37,8 @@ function Menu({ children, setOpen, open, MainButton, ...props }) {
                       {
                         React.cloneElement(child, {
                           onClick: (e) => {
-                            child?.props?.onClick(e);
+                            if ("onClick" in child.props)
+                              child?.props?.onClick(e);
                             setOpen(false);
                           }
                         })

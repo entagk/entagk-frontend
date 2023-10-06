@@ -1,5 +1,6 @@
 import * as api from '../api/index';
 import { END_LOADING, LOGOUT, START_LOADING } from './auth';
+import { getAll, getOne, deleteOne } from './db';
 
 export const GET_OPEND_NOTES = 'GET_OPEND_NOTES';
 export const GET_NOTES = 'GET_NOTES';
@@ -14,11 +15,19 @@ export const getNote = (id, setNoteData, setIsLoading, setMessage) => async disp
   try {
     setIsLoading(true);
 
-    const { data } = await api.getStickyNote(id);
+    if (localStorage.getItem('token')) {
+      const { data } = await api.getStickyNote(id);
 
-    setNoteData(data);
+      setNoteData(data);
 
-    dispatch({ type: GET_NOTE, data });
+      dispatch({ type: GET_NOTE, data });
+    } else {
+      const data = getOne(id, 'notes');
+      setNoteData(data);
+
+      dispatch({ type: GET_NOTE, data });
+    }
+
   } catch (error) {
     setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
     if (error.response?.status === 401 || error.response?.status === 500) {
@@ -31,11 +40,24 @@ export const getNote = (id, setNoteData, setIsLoading, setMessage) => async disp
 
 export const getOpenedNotes = (setMessage) => async dispatch => {
   try {
-    dispatch({ type: START_LOADING, data: 'stickynotes' });
+    if (!localStorage.getItem('token')) {
+      const data = await getAll('notes');
 
-    const { data } = await api.getOpenedNotes();
+      const opeendNotes = data.filter(d => d.open);
+      dispatch({
+        type: GET_OPEND_NOTES, data: {
+          total: data.length,
+          notes: opeendNotes,
+          totalOpenedNotes: opeendNotes.length
+        }
+      });
+    } else {
+      dispatch({ type: START_LOADING, data: 'stickynotes' });
 
-    dispatch({ type: GET_OPEND_NOTES, data });
+      const { data } = await api.getOpenedNotes();
+
+      dispatch({ type: GET_OPEND_NOTES, data });
+    }
   } catch (error) {
     setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
     if (error.response?.status === 401 || error.response?.status === 500) {
@@ -50,9 +72,22 @@ export const getNotes = (setMessage, page) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'stickynotes' });
 
-    const { data } = await api.getNotes(page);
+    if (localStorage.getItem('token')) {
+      const { data } = await api.getNotes(page);
 
-    dispatch({ type: GET_NOTES, data });
+      dispatch({ type: GET_NOTES, data });
+    } else {
+      const data = await getAll('notes');
+
+      dispatch({
+        type: GET_NOTES, data: {
+          total: data.length,
+          notes: data.filter(d => !d.open),
+          currentPage: Math.ceil(data.length / 25),
+          numberOfPages: Math.ceil(data.length / 25)
+        }
+      });
+    }
   } catch (error) {
     setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
     if (error.response?.status === 401 || error.response?.status === 500) {
@@ -67,9 +102,15 @@ export const deleteNote = (id, setIsLoading, setMessage) => async dispatch => {
   try {
     setIsLoading(true);
 
-    const { data } = await api.deleteNote(id);
+    if (localStorage.getItem('token')) {
+      const { data } = await api.deleteNote(id);
 
-    dispatch({ type: DELETE_NOTE, data: data.deletedId })
+      dispatch({ type: DELETE_NOTE, data: data.deletedId })
+    } else {
+      const data = deleteOne(id, 'notes');
+
+      dispatch({ type: DELETE_NOTE, data: data.id })
+    }
 
   } catch (error) {
     setMessage({ type: 'error', message: error?.response?.data?.message || error.message });

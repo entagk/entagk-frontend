@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useEffect, useState, useRef, useCallback } from 
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ADD_NOTE, EDIT_NOTE, INIT_NOTE, getNotes } from '../../actions/notes';
+import { addNew, updateOne } from '../../actions/db';
 
 import { baseURL } from '../../api/index';
 
@@ -47,7 +48,15 @@ const initialNote = {
 const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const { notes, openedNotes, totalOpenedNotes, total, isLoading, currentPage } = useSelector(state => state.notes) || {
+  const {
+    notes,
+    openedNotes,
+    totalOpenedNotes,
+    total,
+    isLoading,
+    currentPage, 
+    numberOfPages
+  } = useSelector(state => state.notes) || {
     notes: {
       ids: []
     },
@@ -56,13 +65,13 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
     }
   };
 
-  const [openedList, setOpenedList] = useState(openedNotes?.ids);
+  const [openedList, setOpenedList] = useState(openedNotes?.ids || []);
 
   const webSocket = useRef(null);
 
   // get the notes
   useEffect(() => {
-    if (totalOpenedNotes < total && total > 0 && openSticky) {
+    if (totalOpenedNotes < total && total > 0 && openSticky && !currentPage) {
       dispatch(getNotes(setMessage, 1));
     }
 
@@ -75,41 +84,43 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
 
   // initialize the websocket and connect to it.
   useEffect(() => {
-    if (!webSocket.current || !webSocket.current?.readyState === 1)
-      webSocket.current = generateWebsocket();
-    webSocket.current.onmessage = (ev) => {
-      const data = JSON.parse(ev.data);
-      if (!data?.message) {
-        if (!checkNoteId(data?._id)) {
-          dispatch({ type: ADD_NOTE, data });
-          setOpenedList((oL) => {
-            const newOL = oL.filter(n => n !== data?.oldId);
-            return newOL.concat([data?._id]);
-          });
-        } else {
-          dispatch({ type: EDIT_NOTE, data });
-        }
-      } else {
-        setMessage({ message: data?.message, type: 'error' })
-      }
-    }
-
-    webSocket.current.onclose = (ev) => {
-      reconnect();
-    }
-
-    const reconnect = () => {
-      setTimeout(() => {
+    if (localStorage.getItem('token')) {
+      if (!webSocket.current || !webSocket.current?.readyState === 1)
         webSocket.current = generateWebsocket();
-      }, 3000);
-    }
-
-    return () => {
-      // Cleanup function to close the WebSocket connection when the component unmounts
-      if (webSocket.current) {
-        webSocket.current.close();
+      webSocket.current.onmessage = (ev) => {
+        const data = JSON.parse(ev.data);
+        if (!data?.message) {
+          if (!checkNoteId(data?._id)) {
+            dispatch({ type: ADD_NOTE, data });
+            setOpenedList((oL) => {
+              const newOL = oL.filter(n => n !== data?.oldId);
+              return newOL.concat([data?._id]);
+            });
+          } else {
+            dispatch({ type: EDIT_NOTE, data });
+          }
+        } else {
+          setMessage({ message: data?.message, type: 'error' })
+        }
       }
-    };
+
+      webSocket.current.onclose = (ev) => {
+        reconnect();
+      }
+
+      const reconnect = () => {
+        setTimeout(() => {
+          webSocket.current = generateWebsocket();
+        }, 3000);
+      }
+
+      return () => {
+        // Cleanup function to close the WebSocket connection when the component unmounts
+        if (webSocket.current) {
+          webSocket.current.close();
+        }
+      };
+    }
   },
     // eslint-disable-next-line 
     [notes]
@@ -129,14 +140,35 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
   }, [page]);
 
   // send ws message after any change at note data.
-  const onChangeNote = (data) => {
-    if (
-      webSocket.current?.readyState === webSocket.current?.OPEN
-      && webSocket.current !== null
-    ) {
-      webSocket?.current?.send(
-        JSON.stringify(data)
-      );
+  const onChangeNote = async (data) => {
+    if (localStorage.getItem('token')) {
+      if (
+        webSocket.current?.readyState === webSocket.current?.OPEN
+        && webSocket.current !== null
+      ) {
+
+        webSocket?.current?.send(
+          JSON.stringify(data)
+        );
+      }
+    } else {
+      data.updatedAt = new Date().toJSON();
+      if (!checkNoteId(data?._id) && data?.id?.includes('new')) {
+        data.oldId = data.id;
+        delete data.id;
+
+        const addedNote = await addNew('notes', data);
+
+        dispatch({ type: ADD_NOTE, data: addedNote });
+        setOpenedList((oL) => {
+          const newOL = oL.filter(n => n !== data.oldId);
+          return newOL.concat([addedNote?._id]);
+        });
+      } else {
+        const updatedNote = await updateOne(data, 'notes');
+
+        dispatch({ type: EDIT_NOTE, data: updatedNote });
+      }
     }
   }
 
@@ -236,7 +268,7 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
                     </Button>
                   ) : (
                     <>
-                      {isLoading && notes.ids.length === 0 ?
+                      {isLoading && notes?.ids?.length === 0 ?
                         (
                           <Loading
                             size="big"
@@ -269,7 +301,7 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
                               />
                             )}
                             {
-                              (notes.ids.length !== total && currentPage >= 1 && !isLoading) && (
+                              (Number(currentPage) < numberOfPages && Number(currentPage) >= 1 && !isLoading) && (
                                 <div>
                                   <Button
                                     onClick={() => setPage(p => p + 1)}

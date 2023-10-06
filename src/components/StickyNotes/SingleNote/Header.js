@@ -16,7 +16,8 @@ const Header = ({ newNote, noteData, setNoteData, closeNote, setOpenDelete, ...p
   const colors = ["pink", "yellow", "orange", "green", "blue"];
 
   const changeColor = (color) => {
-    setNoteData(d => ({ ...d, color: color }))
+    setNoteData(d => ({ ...d, color: color }));
+    console.log(noteData);
   }
 
   const toggleDelete = () => {
@@ -93,7 +94,7 @@ const Header = ({ newNote, noteData, setNoteData, closeNote, setOpenDelete, ...p
                 style={{
                   background: color === noteData.color ? "var(--main-light-black)" : ""
                 }}
-                onClick={() => changeColor(color)}
+                onClick={(e) => changeColor(color)}
               >
                 {color}
               </Button>

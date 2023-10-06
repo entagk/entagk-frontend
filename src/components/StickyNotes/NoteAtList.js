@@ -45,7 +45,10 @@ const NoteAtList = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   const openNote = (e) => {
     if (!openedNotes?.objects[id]) {
       setOpenedList(oL => oL.concat([id]));
-      onChangeNote({ id, open: true });
+      if (localStorage.getItem('token'))
+        onChangeNote({ id, open: true });
+      else
+        onChangeNote({ ...note, open: true });
     }
   }
 

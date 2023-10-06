@@ -39,8 +39,8 @@ export default (
       return {
         ...state,
         ...action.data,
-        openedNotes: convertArrayToObject(action.data.notes, '_id'),
-        notes: convertArrayToObject(action.data.notes, '_id'),
+        openedNotes: action.data?.notes ? convertArrayToObject(action.data?.notes, '_id') : [],
+        notes: action.data?.notes ? convertArrayToObject(action.data?.notes, '_id') : [],
       };
 
     case GET_NOTES:

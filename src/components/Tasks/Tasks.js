@@ -20,7 +20,6 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate
   const tasks = useSelector(state => state.tasks);
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
-  console.log(tasks);
 
   useEffect(() => {
     if (tasks.tasks === undefined && tasks?.total === undefined) {

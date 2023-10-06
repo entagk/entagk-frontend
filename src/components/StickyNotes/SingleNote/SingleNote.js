@@ -53,8 +53,8 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
   const [hasChanged, setHasChanged] = useState(false);
 
   const [openDelete, setOpenDelete] = useState(false);
-  const [isLoading, setIsLoading] = useState(noteData?.content.length < noteData?.contentLength?.arrayLength);
-  const [maxContentHeight, setMaxContentHeight] = useState(noteData.coordinates.height);
+  const [isLoading, setIsLoading] = useState(noteData?.content?.length < noteData?.contentLength?.arrayLength);
+  const [maxContentHeight, setMaxContentHeight] = useState(noteData?.coordinates?.height);
 
   // for resizeing the note.
   useEffect(() => {
@@ -176,7 +176,11 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
           if ((id.includes('new') && contentLength > 0) || !id.includes('new'))
             onChangeNote({
               ...noteData,
-              id: id,
+              contentLength: {
+                textLength: contentLength,
+                arrayLength: noteData.content.length
+              },
+              id,
             });
       }
 
@@ -276,8 +280,8 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
           </Suspense>
         </div>
       </div>
-      <div class="right rl"></div>
-      <div class="bottom tb"></div>
+      <div className="right rl"></div>
+      <div className="bottom tb"></div>
     </div>
   )
 }
