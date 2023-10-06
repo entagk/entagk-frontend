@@ -17,13 +17,8 @@ export default (state = {
 }, action) => {
   switch (action.type) {
     case START_LOADING:
-      if (action.data === 'auth')
-        document.body.style.overflow = 'hidden'
       return { ...state, isLoading: action.data === "auth" ? true : state.isLoading }
     case END_LOADING:
-      if (action.data === 'auth')
-        document.body.style.overflow = 'auto';
-      document.body.style.overflowX = 'hidden';
       return { ...state, isLoading: action.data === "auth" ? false : state.isLoading }
     case AUTH:
       localStorage.setItem('token', action.data.access_token);

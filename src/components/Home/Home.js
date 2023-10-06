@@ -48,15 +48,6 @@ function Home() {
   }, [])
 
   useEffect(() => {
-    if (openSetting || openTodo || openSticky) {
-      document.body.style.overflowY = 'hidden';
-    } else {
-      document.body.style.overflowY = 'auto';
-    }
-  }, [openSetting, openTodo, openSticky]);
-
-
-  useEffect(() => {
     const handleKeys = (event) => {
       const inputsItems = ['input', 'textarea'];
       const activeElement = document.activeElement.tagName.toLowerCase();
