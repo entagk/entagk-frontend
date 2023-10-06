@@ -101,6 +101,9 @@ const TasksMenu = ({ setMessage }) => {
               variant="single-icon"
             />
           }
+          style={{
+            left: "0"
+          }}
         >
           <Button
             type='button'
