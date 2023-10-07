@@ -28,6 +28,13 @@
 	color: #000;
 }
 
+.tasks .header .delete-popup button {
+	margin: 0;
+	padding: 8px 24px;
+	border-radius: 30px;
+	font-size: 1.125rem;
+}
+
 /* end tasks */
 
 /* start the responsive design */
