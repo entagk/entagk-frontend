@@ -33,6 +33,12 @@ function Achivments() {
   } = useSelector(state => state.leaderboard);
 
   useEffect(() => {
+    document.body.classList.remove('home');
+
+    // eslint-disable-next-line
+  }, [])
+
+  useEffect(() => {
     if (!total) {
       dispatch(getLeaderboard(1));
     }

@@ -48,6 +48,12 @@ function Reset() {
   };
 
   useEffect(() => {
+    document.body.classList.remove('home');
+
+    // eslint-disable-next-line
+  }, [])
+
+  useEffect(() => {
     localStorage.setItem('reset-token', tokenId);
     verifyResetToken(setMessage, setValidate, setIsLoading)
   }, [tokenId]);

@@ -31,6 +31,12 @@ function Home() {
   const [openSticky, setOpenSticky] = useState(false);
 
   useEffect(() => {
+    document.body.classList.add('home');
+
+    // eslint-disable-next-line
+  }, [])
+
+  useEffect(() => {
     if (setting === undefined) {
       dispatch(getSetting(setMessage));
     }

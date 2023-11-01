@@ -47,6 +47,12 @@ function Templates() {
   } = useSelector(state => state?.templates) || { userTemplates: {} };
 
   useEffect(() => {
+    document.body.classList.remove('home');
+
+    // eslint-disable-next-line
+  }, [])
+
+  useEffect(() => {
     if (localStorage.getItem('token')) {
       if (total === undefined && templates === undefined) {
         const sort = searchParams.get('sort') || 'updatedAt'

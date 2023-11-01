@@ -57,6 +57,12 @@ const Auth = () => {
   const signUpRequired = ['name', 'confirmPassword'];
 
   useEffect(() => {
+    document.body.classList.remove('home');
+
+    // eslint-disable-next-line
+  }, [])
+
+  useEffect(() => {
     if (isSignUp) {
       setRequiredFields(pF => [...pF, ...signUpRequired])
       setValidations(pV => ({

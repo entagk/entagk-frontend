@@ -1,7 +1,8 @@
 import React, {
   lazy,
   Suspense,
-  useState
+  useState,
+  useEffect
 } from 'react';
 
 import Loading from '../../utils/Loading/Loading';
@@ -19,6 +20,12 @@ const Analytics = lazy(() => import('./Analytics/Analytics'));
 const Achievements = () => {
   const [message, setMessage] = useState({ message: "", type: "" });
   const { user } = useSelector(state => state.auth);
+
+  useEffect(() => {
+    document.body.classList.remove('home');
+
+    // eslint-disable-next-line
+  }, [])
 
   if (!localStorage.getItem('token') || (!user?._id && !localStorage.getItem('token'))) {
     return (
