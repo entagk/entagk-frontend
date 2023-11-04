@@ -115,6 +115,7 @@ export const addMultipleTasks = (tasksData, setMessage, setFormErrors) => async 
 
     const { data } = await api.addMultipleTasks(tasksData);
 
+    // todo: clear the store of tasks indexedDB
     dispatch({ type: ADD_LOCAL_TASKS, data });
 
   } catch (error) {

@@ -1,6 +1,6 @@
 import * as api from '../api/index';
 import { END_LOADING, LOGOUT, START_LOADING } from './auth';
-import { getAll, getOne, deleteOne } from './db';
+import { getAll, getOne, deleteOne, clearStore } from './db';
 
 export const GET_OPEND_NOTES = 'GET_OPEND_NOTES';
 export const GET_NOTES = 'GET_NOTES';
@@ -10,6 +10,7 @@ export const GET_NOTE = 'GET_NOTE';
 export const ADD_NOTE = 'ADD_NOTE';
 export const EDIT_NOTE = 'EDIT_NOTE';
 export const DELETE_NOTE = 'DELETE_NOTE';
+export const ADD_LOCAL_NOTES = 'ADD_LOCAL_NOTES';
 
 export const getNote = (id, setNoteData, setIsLoading, setMessage) => async dispatch => {
   try {
@@ -68,7 +69,7 @@ export const getOpenedNotes = (setMessage) => async dispatch => {
   }
 }
 
-export const getNotes = (setMessage, page) => async dispatch => {
+export const getNotes = (setMessage, page = 1) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'stickynotes' });
 
@@ -90,6 +91,7 @@ export const getNotes = (setMessage, page) => async dispatch => {
     }
   } catch (error) {
     setMessage({ type: 'error', message: error?.response?.data?.message || error.message });
+    console.error(error);
     if (error.response?.status === 401 || error.response?.status === 500) {
       dispatch({ type: LOGOUT });
     }
@@ -119,5 +121,28 @@ export const deleteNote = (id, setIsLoading, setMessage) => async dispatch => {
     }
   } finally {
     setIsLoading(false);
+  }
+}
+
+export const addMultipleNotes = (setMessage) => async dispatch => {
+  try {
+    dispatch({ type: START_LOADING, data: 'stickynotes' });
+
+    const notesData = await getAll('notes');
+
+    await api.addMultipleNotes(notesData);
+
+    dispatch({ type: ADD_LOCAL_NOTES })
+
+    await clearStore('notes');
+
+  } catch (error) {
+    setMessage({ message: error?.response?.data?.message || error.message, type: "error" })
+    console.error(error);
+    if (error.response?.status === 401 || error.response?.status === 500) {
+      dispatch({ type: LOGOUT });
+    }
+  } finally {
+    dispatch({ type: END_LOADING, data: 'stickynotes' });
   }
 }

@@ -6,7 +6,8 @@ import {
   ADD_NOTE,
   EDIT_NOTE,
   DELETE_NOTE,
-  INIT_NOTE
+  INIT_NOTE,
+  ADD_LOCAL_NOTES
 } from "../actions/notes";
 
 const convertArrayToObject = (array, propName) => {
@@ -46,7 +47,7 @@ export default (
     case GET_NOTES:
       localStorage.setItem('sticky-total', Number(action.data.total));
       localStorage.setItem('sticky-currentPage', Number(action.data.currentPage));
-      localStorage.setItem('stickyLen', action.data.notes.length + state.notes.ids.length);
+      localStorage.setItem('stickyLen', action.data.notes.length + (state.notes?.ids?.length || 0));
 
       const newNotes = convertArrayToObject(action.data.notes, '_id')
       return {
@@ -55,7 +56,7 @@ export default (
         currentPage: Number(action.data.currentPage),
         notes: {
           objects: { ...state.notes.objects, ...newNotes.objects },
-          ids: state.notes.ids.concat(newNotes.ids)
+          ids: (state.notes.ids || []).concat(newNotes.ids)
         }
       };
 
@@ -125,6 +126,9 @@ export default (
         total: state.total - 1,
         totalOpenedNotes: state.totalOpenedNotes - 1
       };
+
+    case ADD_LOCAL_NOTES:
+      return initialState;
 
     default:
       return state;

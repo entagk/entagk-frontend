@@ -67,11 +67,9 @@ export default (
       };
 
     case ADD_LOCAL_TASKS:
-      const tasks = action.data;
-      localStorage.removeItem('tasks');
       localStorage.removeItem('act');
       localStorage.removeItem('est');
-      return { ...state, tasks: tasks };
+      return initialState;
 
     case GET_TASKS:
       const page = action.data?.currentPage;

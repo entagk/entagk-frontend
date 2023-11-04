@@ -1,8 +1,8 @@
 import axios from "axios";
 import jwt_decode from 'jwt-decode';
 
-export const baseURL = "https://pomodoro-backend-6j65.onrender.com/api";
-// export const baseURL = 'http://localhost:5500/api';
+// export const baseURL = "https://pomodoro-backend-6j65.onrender.com/api";
+export const baseURL = 'http://localhost:5500/api';
 
 const API = axios.create({ baseURL: baseURL }); // http://localhost:5500/api
 
@@ -142,5 +142,7 @@ export const getNotes = (page = 1) => API.get(`/stickynote/?page=${page}`);
 export const getStickyNote = (id) => API.get(`/stickynote/${id}`);
 
 export const deleteNote = (id) => API.delete(`/stickynote/${id}`);
+
+export const addMultipleNotes = (notesData) => API.post('/stickynote/add_multiple_notes', notesData)
 
 /* end sticky notes api */

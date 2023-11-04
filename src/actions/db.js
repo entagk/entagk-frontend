@@ -102,7 +102,6 @@ export const deleteOne = (id, storeName) => {
 
       const request = objectstore.delete(id);
 
-      console.log('req', request);
       request.onerror = () => {
         reject("unexpected error while saveing the data");
       };
@@ -138,6 +137,7 @@ export const updateOne = (data, storeName) => {
 export const clearStore = (storeName) => {
   return new Promise((resolve, reject) => {
     withDB(storeName, (db) => {
+      console.log('clear store: ', storeName);
       const objectstore = db.transaction([storeName], 'readwrite').objectStore(storeName);
 
       const request = objectstore.clear();

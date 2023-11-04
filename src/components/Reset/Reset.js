@@ -7,7 +7,7 @@ import Loading from '../../utils/Loading/Loading';
 import Message from '../../utils/Message';
 import LogoutPage from '../Auth/LogoutPage/LogoutPage';
 
-import './../Auth/Auth.css';
+import '../Auth/AuthForm/style.css';
 import NotValidToken from './NotValidToken/NotValidToken';
 import NetworkError from '../NetworkError/NetworkError';
 import Button from '../../utils/Button/Button';

@@ -5,12 +5,12 @@ import { authForm } from '../../actions/auth';
 
 import Loading from '../../utils/Loading/Loading';
 
-function GoogleLoginButton({ setMessage, navigate }) {
+function GoogleLoginButton({ setMessage, localData, setSuccess, navigate }) {
   const dispatch = useDispatch();
   const { isLoading } = useSelector(state => state.auth);
 
-  const loginUsingGoogle = (res) => {
-    dispatch(authForm({ token: res.credential }, "google login", setMessage, navigate));
+  const loginUsingGoogle = (res) => { // todo
+    dispatch(authForm({ token: res.credential }, "google login", localData, setSuccess, setMessage, navigate));
   }
 
   return (
