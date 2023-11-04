@@ -65,7 +65,7 @@ const SaveLocal = ({ setMessage }) => {
     }
 
     if (tasks.length > 0 && saveData.tasks) {
-      dispatch(addMultipleTasks(tasks, setIsLoading, setMessage));
+      dispatch(addMultipleTasks(setIsLoading, setMessage));
     }
 
     setIsLoading(false);

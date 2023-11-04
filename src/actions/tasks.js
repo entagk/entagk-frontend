@@ -109,14 +109,15 @@ export const addNewTask = (taskData, setIsLoading, setMessage, setFormErrors) =>
   }
 }
 
-export const addMultipleTasks = (tasksData, setMessage, setFormErrors) => async dispatch => {
+export const addMultipleTasks = (setMessage, setFormErrors) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'tasks' });
 
+    const tasksData = await getAll('tasks');
     const { data } = await api.addMultipleTasks(tasksData);
 
-    // todo: clear the store of tasks indexedDB
-    dispatch({ type: ADD_LOCAL_TASKS, data });
+    await clearStore('tasks');
+    dispatch({ type: ADD_LOCAL_TASKS });
 
   } catch (error) {
     if (error?.response?.data?.errors) {
