@@ -103,7 +103,6 @@ const AuthForm = ({ setMessage, setSuccess, localData }) => {
 
   const handleSubmit = async (e) => {
     await e.preventDefault();
-    console.log(formData);
 
     const dataEntries = Object.entries(formData);
     const errors = Object.entries(formErrors).filter(([k, v]) => v.length > 0);
@@ -230,6 +229,8 @@ const AuthForm = ({ setMessage, setSuccess, localData }) => {
           </div>
           <div className="block">
             <GoogleLogin
+              localData={localData}
+              setSuccess={setSuccess}
               setMessage={setMessage}
               navigate={navigate}
             />

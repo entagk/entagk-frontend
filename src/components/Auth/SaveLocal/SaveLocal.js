@@ -22,24 +22,12 @@ const SaveLocal = ({ setMessage }) => {
   const { notes } = useSelector(state => state.notes);
 
   useEffect(() => {
-    console.log(saveData);
-    console.log(tasks);
-    console.log(notes);
-    console.log(setting);
     if (tasks.length > 0)
       setSaveData((p) => ({ ...p, tasks: false }));
 
-    console.log(saveData);
-    console.log(tasks);
-    console.log(notes);
-    console.log(setting);
     if (notes.ids.length > 0)
       setSaveData((p) => ({ ...p, notes: false }));
 
-    console.log(saveData);
-    console.log(tasks);
-    console.log(notes);
-    console.log(setting);
     if (JSON.stringify(setting) !== JSON.stringify(initialSetting))
       setSaveData((p) => ({ ...p, timerSettings: false }));
 
@@ -108,7 +96,7 @@ const SaveLocal = ({ setMessage }) => {
           <h2>Save local data</h2>
           <div className='sava-options'>
             {Object.keys(saveData).map((label) => (
-              <div className='block'>
+              <div className='block' key={label}>
                 <span>{lables[label]}</span>
                 <ToggleButton data={saveData} type={label} setData={setSaveData} />
               </div>

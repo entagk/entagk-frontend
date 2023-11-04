@@ -35,11 +35,8 @@ const initialData = {
 export const getTasks = (setMessage, page) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'tasks' });
-    console.log(page);
     if (!localStorage.getItem('token')) {
       const all = await getAll('tasks');
-
-      console.log(all);
 
       dispatch({
         type: GET_TASKS,
