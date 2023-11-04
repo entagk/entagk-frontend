@@ -128,9 +128,11 @@ export default (
       };
 
     case INITIAL_NOTES_STATE:
-    case LOGOUT:
       return initialState;
 
+    case LOGOUT:
+      return { ...state, notes: { ids: [], objects: {} }, openedNotes: { ids: [], objects: {} }, totalOpenedNotes: 0, total: 0 };
+      
     default:
       return state;
   }

@@ -94,14 +94,18 @@ const Auth = () => {
       />
     }>
       <div>
-        {success && (JSON.stringify(setting) !== JSON.stringify(initialSetting) || tasks.length > 0 || notes.ids > 0) && (
-          <SaveLocalPopup
-            timerSettings={setting}
-            tasks={tasks}
-            notes={notes}
-            setMessage={setMessage}
-          />
-        )}
+        {success && (
+          JSON.stringify(setting) !== JSON.stringify(initialSetting) ||
+          tasks.length > 0 ||
+          notes.ids > 0
+        ) && (
+            <SaveLocalPopup
+              timerSettings={setting}
+              tasks={tasks}
+              notes={notes}
+              setMessage={setMessage}
+            />
+          )}
         <div className="container">
           <NavBar setMessage={setMessage} />
           {message.message && (

@@ -84,12 +84,17 @@ const SaveLocal = ({ setMessage }) => {
 
   return (
     <Suspense fallback={
-      <Loading
-        size="verybig"
-        backgroud="transperent"
-        color="#ffffff"
-        className="center-fullpage"
-      />
+      <div className='glass-container'>
+        <div className='glass-effect save-local-popup'>
+          <h2>Loading...</h2>
+          <Loading
+            size="big"
+            backgroud="transperent"
+            color="#ffffff"
+            className="center-fullpage"
+          />
+        </div>
+      </div>
     }>
       <div className='glass-container'>
         <div className='glass-effect save-local-popup'>
