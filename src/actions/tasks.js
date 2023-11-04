@@ -9,7 +9,7 @@ import * as api from './../api';
 
 export const GET_TASKS = "GET_TASKS";
 export const NEW_TASK = "NEW_TASK";
-export const ADD_LOCAL_TASKS = "ADD_LOCAL_TASKS";
+export const INITIAL_TASKS_STATE = "INITIAL_TASKS_STATE";
 export const CHECK_TASK = "CHECK_TASK";
 export const MODIFY_TASK = "MODIFY_TASK";
 export const DELETE_TASK = "DELETE_TASK";
@@ -114,10 +114,10 @@ export const addMultipleTasks = (setMessage, setFormErrors) => async dispatch =>
     dispatch({ type: START_LOADING, data: 'tasks' });
 
     const tasksData = await getAll('tasks');
-    const { data } = await api.addMultipleTasks(tasksData);
+    await api.addMultipleTasks(tasksData);
 
     await clearStore('tasks');
-    dispatch({ type: ADD_LOCAL_TASKS });
+    dispatch({ type: INITIAL_TASKS_STATE });
 
   } catch (error) {
     if (error?.response?.data?.errors) {

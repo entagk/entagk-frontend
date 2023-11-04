@@ -5,8 +5,9 @@ import Loading from '../../../utils/Loading/Loading';
 
 import './style.css';
 import { initialSetting, modifySetting } from '../../../actions/timer';
-import { addMultipleNotes } from '../../../actions/notes';
-import { addMultipleTasks } from '../../../actions/tasks';
+import { INITIAL_NOTES_STATE, addMultipleNotes } from '../../../actions/notes';
+import { INITIAL_TASKS_STATE, addMultipleTasks } from '../../../actions/tasks';
+import { clearStore } from '../../../actions/db';
 
 const Button = lazy(() => import('../../../utils/Button/Button'));
 const ToggleButton = lazy(() => import('../../../utils/ToggleButton/ToggleButton'));
@@ -51,24 +52,45 @@ const SaveLocal = ({ setMessage }) => {
     timerSettings: "Timer settings"
   }
 
-  const handleSaveLocalData = () => {
+  const handleSaveLocalData = async () => {
     setIsLoading(true);
-    console.log('SavaLocalData');
-    console.log(saveData);
     if (JSON.stringify(setting) !== JSON.stringify(initialSetting) && saveData.timerSettings) {
       dispatch(modifySetting(setting, setMessage));
+    } else {
+      localStorage.removeItem('setting');
     }
 
-    console.log(notes.ids);
     if (notes.ids.length > 0 && saveData.notes) {
       dispatch(addMultipleNotes(setMessage));
+    } else {
+      await clearStore('notes');
+      dispatch({ type: INITIAL_TASKS_STATE });
     }
 
     if (tasks.length > 0 && saveData.tasks) {
       dispatch(addMultipleTasks(setIsLoading, setMessage));
+    } else {
+      localStorage.removeItem('est');
+      localStorage.removeItem('act');
+      await clearStore('tasks');
+      dispatch({ type: INITIAL_TASKS_STATE });
     }
 
     setIsLoading(false);
+    navigate('/');
+  }
+
+  const handleUnsaveingLocalData = async () => {
+    localStorage.removeItem('est');
+    localStorage.removeItem('act');
+    localStorage.removeItem('setting');
+
+    await clearStore('tasks');
+    await clearStore('notes');
+
+    dispatch({ type: INITIAL_TASKS_STATE });
+    dispatch({ type: INITIAL_NOTES_STATE });
+
     navigate('/');
   }
 
@@ -117,7 +139,7 @@ const SaveLocal = ({ setMessage }) => {
             <Button
               type='button'
               aria-label='cancel form'
-              onClick={() => navigate('/')}
+              onClick={handleUnsaveingLocalData}
               variant='outlined'
               className="cancel"
             >

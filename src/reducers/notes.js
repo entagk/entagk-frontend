@@ -7,7 +7,7 @@ import {
   EDIT_NOTE,
   DELETE_NOTE,
   INIT_NOTE,
-  ADD_LOCAL_NOTES
+  INITIAL_NOTES_STATE
 } from "../actions/notes";
 
 const convertArrayToObject = (array, propName) => {
@@ -127,7 +127,7 @@ export default (
         totalOpenedNotes: state.totalOpenedNotes - 1
       };
 
-    case ADD_LOCAL_NOTES:
+    case INITIAL_NOTES_STATE:
       return initialState;
 
     default:

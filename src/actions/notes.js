@@ -10,7 +10,7 @@ export const GET_NOTE = 'GET_NOTE';
 export const ADD_NOTE = 'ADD_NOTE';
 export const EDIT_NOTE = 'EDIT_NOTE';
 export const DELETE_NOTE = 'DELETE_NOTE';
-export const ADD_LOCAL_NOTES = 'ADD_LOCAL_NOTES';
+export const INITIAL_NOTES_STATE = 'INITIAL_NOTES_STATE';
 
 export const getNote = (id, setNoteData, setIsLoading, setMessage) => async dispatch => {
   try {
@@ -132,7 +132,7 @@ export const addMultipleNotes = (setMessage) => async dispatch => {
 
     await api.addMultipleNotes(notesData);
 
-    dispatch({ type: ADD_LOCAL_NOTES })
+    dispatch({ type: INITIAL_NOTES_STATE })
 
     await clearStore('notes');
 

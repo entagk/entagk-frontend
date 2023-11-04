@@ -8,7 +8,7 @@ import {
   CLEAR_FINISHED_TASKS,
   CLEAR_ACT_FROM_TASKS,
   CLEAR_ALL_TASKS,
-  ADD_LOCAL_TASKS,
+  INITIAL_TASKS_STATE,
   CLEAR_CONGRATS,
   GET_TEMPLATE_TASKS
 } from "../actions/tasks";
@@ -66,7 +66,7 @@ export default (
         autoStartNextTask: action.data.autoStartNextTask
       };
 
-    case ADD_LOCAL_TASKS:
+    case INITIAL_TASKS_STATE:
       localStorage.removeItem('act');
       localStorage.removeItem('est');
       return initialState;
