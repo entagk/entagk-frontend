@@ -8,7 +8,7 @@ import { MdRestartAlt } from "react-icons/md";
 import { PERIOD } from "../../../actions/timer";
 
 import { formatTime } from "../../../utils/helper";
-import Button from "../../../utils/Button/Button";
+import Button from "../../../utils/Components/Button/Button";
 
 const DigitalTimer = ({ time, toggleStart, handleReset, handleSkip }) => {
   const {

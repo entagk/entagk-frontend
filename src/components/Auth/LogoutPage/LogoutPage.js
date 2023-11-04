@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { LOGOUT } from '../../../actions/auth';
-import Button from '../../../utils/Button/Button';
+import Button from '../../../utils/Components/Button/Button';
 
 import './style.css';
 

@@ -2,15 +2,15 @@ import React, { lazy, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { authForm } from "../../../actions/auth";
-import Loading from "../../../utils/Loading/Loading";
+import Loading from "../../../utils/Components/Loading/Loading";
 
 import GoogleLogin from '../GoogleLogin';
 
 import "./style.css";
 
-import Button from "../../../utils/Button/Button";
+import Button from "../../../utils/Components/Button/Button";
 
-const Input = lazy(() => import("../../../utils/Input/Input"));
+const Input = lazy(() => import("../../../utils/Components/Input/Input"));
 const initialFormData = {
   name: "",
   email: "",

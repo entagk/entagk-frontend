@@ -1,15 +1,15 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Loading from '../../../utils/Loading/Loading';
+import Loading from '../../../utils/Components/Loading/Loading';
 
 import { DELETE_NOTE, deleteNote, getNote } from '../../../actions/notes';
 
 import './style.css';
 
-const TextEditor = lazy(() => import('../../../utils/RichTextEditor/Editor'));
+const TextEditor = lazy(() => import('../../../utils/Components/RichTextEditor/Editor'));
 const Header = lazy(() => import('./Header'));
-const DeletePopupSmaller = lazy(() => import('../../../utils/DeletePopup/DeletePopupSmaller'));
+const DeletePopupSmaller = lazy(() => import('../../../utils/Components/DeletePopup/DeletePopupSmaller'));
 
 const defaultContent = [
   {

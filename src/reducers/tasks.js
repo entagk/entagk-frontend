@@ -28,7 +28,7 @@ import {
 } from "../actions/auth";
 
 import { ADD_TO_TODO_LIST } from "../actions/templates";
-import { deleteOne, updateOne } from "../actions/db";
+import { deleteOne, updateOne } from "../utils/indexedDB/db";
 
 const initialState = {
   activeId: null,

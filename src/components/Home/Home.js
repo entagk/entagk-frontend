@@ -1,16 +1,16 @@
 import React, { lazy, useEffect, useState } from 'react';
 
-import Loading from '../../utils/Loading/Loading';
-import Message from '../../utils/Message';
+import Loading from '../../utils/Components/Loading/Loading';
+import Message from '../../utils/Components/Message/Message';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getSetting } from '../../actions/timer';
 import { getOpenedNotes } from '../../actions/notes';
 import NetworkError from '../NetworkError/NetworkError';
-import Congratulation from '../../utils/Congratulation/Congratulation';
+import Congratulation from '../../utils/Components/Congratulation/Congratulation';
+import StickyNotes from '../StickyNotes/StickyNotes';
 
 import "./style.css";
-import StickyNotes from '../StickyNotes/StickyNotes';
 
 const ActiveTask = lazy(() => import('../../components/ActiveTask/ActiveTask'));
 const Timer = lazy(() => import('../../components/Clock/Timer'));

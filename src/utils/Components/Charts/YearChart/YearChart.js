@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import { formatTime } from '../../helper';
+import { formatTime } from '../../../helper';
 
 const dayNames = [
   'Sun', 'Mon',

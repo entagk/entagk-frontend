@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import * as d3 from 'd3';
-import { formatTime } from '../../helper';
+import { formatTime } from '../../../helper';
 
 import './style.css';
 

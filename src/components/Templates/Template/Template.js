@@ -6,17 +6,17 @@ import { FiEdit3 } from 'react-icons/fi';
 import { MdDelete, MdAddTask } from 'react-icons/md';
 import CircularMenu from "../../../icons/circularMenu/CircularMenu";
 
-import Loading from '../../../utils/Loading/Loading';
+import Loading from '../../../utils/Components/Loading/Loading';
 
 import './style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToTodo, deleteTemplate } from '../../../actions/templates';
-import Button from '../../../utils/Button/Button';
+import Button from '../../../utils/Components/Button/Button';
 
-const Menu = lazy(() => import('../../../utils/Menu/Menu'));
+const Menu = lazy(() => import('../../../utils/Components/Menu/Menu'));
 
 const TodoList = lazy(() => import('../../../icons/list/TodoList'));
-const DeletePopup = lazy(() => import("../../../utils/DeletePopup/DeletePopup"));
+const DeletePopup = lazy(() => import("../../../utils/Components/DeletePopup/DeletePopup"));
 const TemplateForm = lazy(() => import('../TemplateForm/TemplateForm'));
 
 function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }) {

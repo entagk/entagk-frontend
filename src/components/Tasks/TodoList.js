@@ -3,16 +3,16 @@ import React, { lazy, Suspense, useState } from "react";
 import { CgClose } from "react-icons/cg";
 import { MdKeyboardArrowLeft } from 'react-icons/md';
 import { useSelector } from "react-redux";
-import Loading from "../../utils/Loading/Loading";
+import Loading from "../../utils/Components/Loading/Loading";
 
 import "./style.css";
-import Button from "../../utils/Button/Button";
+import Button from "../../utils/Components/Button/Button";
 
 const Footer = lazy(() => import("./TaskFooter/TaskFooter"));
 const Menu = lazy(() => import("./TasksMenu/TasksMenu"));
 const Tasks = lazy(() => import("./Tasks"));
 const Template = lazy(() => import("./TodoTemplate"));
-const Header = lazy(() => import('./../../utils/GlassEffectHeader/header'));
+const Header = lazy(() => import('./../../utils/Components/GlassEffectHeader/header'));
 
 const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) => {
   const [activeTemplate, setActiveTemplate] = useState(null);

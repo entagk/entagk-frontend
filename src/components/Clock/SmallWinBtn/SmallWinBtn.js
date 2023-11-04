@@ -6,7 +6,7 @@ import React, {
 
 import { RiExternalLinkLine } from "react-icons/ri";
 import { CgInternal } from "react-icons/cg";
-import Button from '../../../utils/Button/Button';
+import Button from '../../../utils/Components/Button/Button';
 
 function SmallWinBtn() {
   const [minWin, setMinWin] = useState(localStorage.getItem('opened') === 'popup');

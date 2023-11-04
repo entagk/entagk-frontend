@@ -1,6 +1,6 @@
 import * as api from '../api/index';
 import { END_LOADING, LOGOUT, START_LOADING } from './auth';
-import { getAll, getOne, deleteOne, clearStore } from './db';
+import { getAll, getOne, deleteOne, clearStore } from '../utils/indexedDB/db';
 
 export const GET_OPEND_NOTES = 'GET_OPEND_NOTES';
 export const GET_NOTES = 'GET_NOTES';

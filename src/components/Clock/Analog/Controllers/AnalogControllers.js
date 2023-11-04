@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 /* some attachments for redux action */
 import { PERIOD } from "../../../../actions/timer";
-import Loading from "../../../../utils/Loading/Loading";
+import Loading from "../../../../utils/Components/Loading/Loading";
 
 const StartButton = lazy(() => import("./Roll/StartButton"));
 const ClearButton = lazy(() => import("./Roll/ClearButton"));

@@ -13,10 +13,10 @@ import {
   refreshToken
 } from "../../actions/auth";
 
-import Loading from "../../utils/Loading/Loading";
-import Button from "../../utils/Button/Button";
+import Loading from "../../utils/Components/Loading/Loading";
+import Button from "../../utils/Components/Button/Button";
 
-const DeletePopup = lazy(() => import("../../utils/DeletePopup/DeletePopup"));
+const DeletePopup = lazy(() => import("../../utils/Components/DeletePopup/DeletePopup"));
 const UserMenu = lazy(() => import('./UserMenu.js'));
 const EditAccount = lazy(() => import('../EditAccount/EditAccount'));
 

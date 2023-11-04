@@ -7,7 +7,7 @@ import { stringToColor } from '../../../utils/helper';
 
 import { UPDATE_USER } from '../../../actions/auth';
 
-import Loading from '../../../utils/Loading/Loading';
+import Loading from '../../../utils/Components/Loading/Loading';
 import './style.css';
 
 import { baseURL } from '../../../api';

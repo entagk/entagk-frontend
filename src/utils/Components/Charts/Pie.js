@@ -1,6 +1,6 @@
 import { useLayoutEffect, useMemo, useRef } from "react";
 import * as d3 from "d3";
-import { stringToColor, formatTime } from "../helper";
+import { stringToColor, formatTime } from "../../helper";
 
 import './style.css';
 import ChartReport from "./ChartReport";

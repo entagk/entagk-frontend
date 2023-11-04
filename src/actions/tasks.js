@@ -1,5 +1,5 @@
 import { START_LOADING, END_LOADING, LOGOUT } from "./auth";
-import { addNew, clearStore, deleteOne, getAll, updateOne } from './db';
+import { addNew, clearStore, deleteOne, getAll, updateOne } from '../utils/indexedDB/db';
 import {
   NEW_TEMPLATE_TASK,
   MODIFY_TEMPLATE_TASK,

@@ -2,9 +2,9 @@ import React, { lazy, useEffect, useState, Suspense } from 'react';
 
 import { getTodoTasks } from '../../actions/tasks';
 
-import Loading from '../../utils/Loading/Loading';
+import Loading from '../../utils/Components/Loading/Loading';
 
-import Message from "../../utils/Message";
+import Message from "../../utils/Components/Message/Message";
 import NetworkError from "../NetworkError/NetworkError";
 
 import { useDispatch, useSelector } from 'react-redux';

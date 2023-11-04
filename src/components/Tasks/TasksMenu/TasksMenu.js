@@ -7,12 +7,12 @@ import { MdDelete } from 'react-icons/md';
 import { BsCheckLg } from 'react-icons/bs';
 import { clearFinishedTasks, clearAct, clearAllTasks } from "../../../actions/tasks";
 
-import Loading from "../../../utils/Loading/Loading";
+import Loading from "../../../utils/Components/Loading/Loading";
 
-const Menu = lazy(() => import("../../../utils/Menu/Menu"));
-const Button = lazy(() => import('../../../utils/Button/Button'))
+const Menu = lazy(() => import("../../../utils/Components/Menu/Menu"));
+const Button = lazy(() => import('../../../utils/Components/Button/Button'))
 
-const DeletePopup = lazy(() => import("./../../../utils/DeletePopup/DeletePopup"));
+const DeletePopup = lazy(() => import("./../../../utils/Components/DeletePopup/DeletePopup"));
 
 const TasksMenu = ({ setMessage }) => {
   const { tasks } = useSelector(state => state.tasks);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BiShow, BiHide } from 'react-icons/bi';
-import Button from '../../../utils/Button/Button';
+import Button from '../../../utils/Components/Button/Button';
 
 import './style.css';
 

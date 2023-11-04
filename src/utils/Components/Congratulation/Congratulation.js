@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ImCheckboxChecked } from 'react-icons/im';
-import { CLEAR_CONGRATS } from '../../actions/tasks';
+import { CLEAR_CONGRATS } from '../../../actions/tasks';
 
 import './style.css';
-import audioPlayer from '../audioPlayer';
+import audioPlayer from '../../audioPlayer';
 
 const Congratulation = ({ text }) => {
   const { setting } = useSelector(state => state.timer);

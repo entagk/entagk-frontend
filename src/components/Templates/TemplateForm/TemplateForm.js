@@ -5,14 +5,14 @@ import { AiOutlineInfo, AiFillSound } from 'react-icons/ai';
 
 import './style.css'
 
-import Message from '../../../utils/Message';
+import Message from '../../../utils/Components/Message/Message';
 import NetworkError from '../../NetworkError/NetworkError';
 import FormFooter from './FormFooter/FormFooter';
 import { useDispatch } from 'react-redux';
 import { addTemplate, modifyTemplate } from '../../../actions/templates';
-import Loading from '../../../utils/Loading/Loading';
-import Button from '../../../utils/Button/Button';
-import Header from '../../../utils/GlassEffectHeader/header';
+import Loading from '../../../utils/Components/Loading/Loading';
+import Button from '../../../utils/Components/Button/Button';
+import Header from '../../../utils/Components/GlassEffectHeader/header';
 
 const TodoList = lazy(() => import('../../../icons/list/TodoList'));
 const InfoStep = lazy(() => import('./InfoStep/InfoStep'));

@@ -1,16 +1,16 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import Loading from '../../../utils/Loading/Loading';
+import Loading from '../../../utils/Components/Loading/Loading';
 
 import './style.css';
 import { initialSetting, modifySetting } from '../../../actions/timer';
 import { INITIAL_NOTES_STATE, addMultipleNotes } from '../../../actions/notes';
 import { INITIAL_TASKS_STATE, addMultipleTasks } from '../../../actions/tasks';
-import { clearStore } from '../../../actions/db';
+import { clearStore } from '../../../utils/indexedDB/db';
 
-const Button = lazy(() => import('../../../utils/Button/Button'));
-const ToggleButton = lazy(() => import('../../../utils/ToggleButton/ToggleButton'));
+const Button = lazy(() => import('../../../utils/Components/Button/Button'));
+const ToggleButton = lazy(() => import('../../../utils/Components/ToggleButton/ToggleButton'));
 
 const SaveLocal = ({ setMessage }) => {
   const dispatch = useDispatch();

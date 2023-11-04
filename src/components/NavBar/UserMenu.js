@@ -12,12 +12,12 @@ import {
 import { LOGOUT } from '../../actions/auth';
 
 import { Link } from 'react-router-dom';
-import Button from '../../utils/Button/Button';
+import Button from '../../utils/Components/Button/Button';
 
 import { stringToColor } from '../../utils/helper';
 
 const TodoList = lazy(() => import('../../icons/list/TodoList'));
-const Menu = lazy(() => import("../../utils/Menu/Menu"));
+const Menu = lazy(() => import("../../utils/Components/Menu/Menu"));
 
 function UserMenu({ setOpenDelete, setOpenEditAccount }) {
   const dispatch = useDispatch();

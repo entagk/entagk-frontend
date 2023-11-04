@@ -2,7 +2,9 @@ import React, { useEffect } from "react";
 
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { BiError } from "react-icons/bi";
-import Button from "./Button/Button";
+import Button from "../Button/Button";
+
+import './style.css'
 
 const Message = ({ message, type, setMessage }) => {
   useEffect(() => {

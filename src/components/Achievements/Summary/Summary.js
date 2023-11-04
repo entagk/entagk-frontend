@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import Loading from '../../../utils/Loading/Loading';
+import Loading from '../../../utils/Components/Loading/Loading';
 
 import { CgTimelapse } from 'react-icons/cg';
 import { MdFlashOn } from 'react-icons/md';

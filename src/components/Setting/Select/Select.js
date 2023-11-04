@@ -4,10 +4,10 @@ import { RiArrowDownSLine } from 'react-icons/ri';
 
 import './style.css';
 
-import Loading from '../../../utils/Loading/Loading';
-import Button from '../../../utils/Button/Button';
+import Loading from '../../../utils/Components/Loading/Loading';
+import Button from '../../../utils/Components/Button/Button';
 
-const Menu = lazy(() => import('../../../utils/Menu/Menu'));
+const Menu = lazy(() => import('../../../utils/Components/Menu/Menu'));
 
 function Select({ options, setChange, type, data, setData, width }) {
   const realOptions = typeof options[0] === "object" ? options.map((op) => op.name) : options;

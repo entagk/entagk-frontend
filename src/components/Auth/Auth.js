@@ -5,10 +5,10 @@ import { getSetting, initialSetting } from '../../actions/timer';
 import { getNotes, getOpenedNotes } from '../../actions/notes';
 import { getTasks } from '../../actions/tasks';
 
-import Message from '../../utils/Message';
+import Message from '../../utils/Components/Message/Message';
 import LogoutPage from "./LogoutPage/LogoutPage";
 import NetworkError from "../NetworkError/NetworkError";
-import Loading from '../../utils/Loading/Loading';
+import Loading from '../../utils/Components/Loading/Loading';
 
 const NavBar = lazy(() => import("../NavBar/NavBar"));
 const SaveLocalPopup = lazy(() => import('./SaveLocal/SaveLocal'));

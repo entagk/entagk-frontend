@@ -1,6 +1,6 @@
 import React from 'react';
 import { AiOutlineSetting } from "react-icons/ai";
-import Button from '../../../utils/Button/Button';
+import Button from '../../../utils/Components/Button/Button';
 
 function SettingOpen({ setOpenSetting }) {
   return (

@@ -8,10 +8,10 @@ import './style.css';
 import { useDispatch } from 'react-redux';
 import { getTemplatesForUser } from '../../../actions/templates';
 
-import Loading from '../../../utils/Loading/Loading';
-import Button from '../../../utils/Button/Button';
+import Loading from '../../../utils/Components/Loading/Loading';
+import Button from '../../../utils/Components/Button/Button';
 
-const Menu = lazy(() => import('../../../utils/Menu/Menu'));
+const Menu = lazy(() => import('../../../utils/Components/Menu/Menu'));
 
 function SearchBar({ setOpenFormForNew, searchParams, setSearchParams, setMessage }) {
   const dispatch = useDispatch();

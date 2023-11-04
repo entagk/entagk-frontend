@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
 import './style.css';
-import { getPages } from '../helper';
+import { getPages } from '../../helper';
 import Button from '../Button/Button';
 
 function PaginationBar({ numberOfPages, currentPage, changePage }) {

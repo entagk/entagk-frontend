@@ -11,12 +11,12 @@ import { getTemplatesForUser, CHANGE_CURRENT_PAGE } from '../../actions/template
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgClose } from 'react-icons/cg';
 
-import Loading from '../../utils/Loading/Loading';
-import Message from '../../utils/Message';
+import Loading from '../../utils/Components/Loading/Loading';
+import Message from '../../utils/Components/Message/Message';
 import NetworkError from '../NetworkError/NetworkError';
 import NoLogin from '../NoLogin/NoLogin';
-import Button from '../../utils/Button/Button';
-import Header from '../../utils/GlassEffectHeader/header';
+import Button from '../../utils/Components/Button/Button';
+import Header from '../../utils/Components/GlassEffectHeader/header';
 
 import './style.css';
 
@@ -25,7 +25,7 @@ const Template = lazy(() => import('./Template/Template.js'));
 const TemplateTasks = lazy(() => import('./TemplateTasks/TemplateTasks'))
 const TemplateForm = lazy(() => import('./TemplateForm/TemplateForm.js'))
 const SearchBar = lazy(() => import('./SearchBar/SearchBar'));
-const PaginationBar = lazy(() => import('../../utils/PaginationBar/PaginationBar'));
+const PaginationBar = lazy(() => import('../../utils/Components/PaginationBar/PaginationBar'));
 
 function Templates() {
   const dispatch = useDispatch();

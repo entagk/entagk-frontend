@@ -1,14 +1,14 @@
 import React, { lazy, useState, Suspense } from 'react';
 
-import Button from '../../../utils/Button/Button';
-import Loading from '../../../utils/Loading/Loading';
+import Button from '../../../utils/Components/Button/Button';
+import Loading from '../../../utils/Components/Loading/Loading';
 import CircularMenu from "../../../icons/circularMenu/CircularMenu";
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgClose } from 'react-icons/cg';
 import { MdDelete, MdKeyboardArrowRight } from 'react-icons/md';
 
-const Menu = lazy(() => import('../../../utils/Menu/Menu'));
+const Menu = lazy(() => import('../../../utils/Components/Menu/Menu'));
 
 const Header = ({ newNote, noteData, setNoteData, closeNote, setOpenDelete, ...props }) => {
   const [openMenu, setOpenMenu] = useState(false);

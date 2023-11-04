@@ -2,11 +2,11 @@ import React, { Suspense, lazy } from 'react';
 
 import { LONG, PERIOD, SHORT } from "../../../actions/timer";
 
-import Loading from '../../../utils/Loading/Loading';
+import Loading from '../../../utils/Components/Loading/Loading';
 
 const Select = lazy(() => import('../Select/Select'));
 const TimeInputs = lazy(() => import('../TimeInputs/timeInputs'));
-const ToggleButton = lazy(() => import('../../../utils/ToggleButton/ToggleButton'));
+const ToggleButton = lazy(() => import('../../../utils/Components/ToggleButton/ToggleButton'));
 
 const AutomaticOption = ({ data, index, automations, auto, setData }) => (
   <div style={{

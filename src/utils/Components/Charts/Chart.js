@@ -1,6 +1,6 @@
 import { useRef, useEffect, useLayoutEffect } from "react";
 import * as d3 from "d3";
-import { wrapText, stringToColor } from "../helper";
+import { wrapText, stringToColor } from "../../helper";
 
 import './style.css';
 import ChartReport from "./ChartReport";

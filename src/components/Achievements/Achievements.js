@@ -5,8 +5,8 @@ import React, {
   useEffect
 } from 'react';
 
-import Loading from '../../utils/Loading/Loading';
-import Message from '../../utils/Message';
+import Loading from '../../utils/Components/Loading/Loading';
+import Message from '../../utils/Components/Message/Message';
 import NetworkError from '../NetworkError/NetworkError';
 import NoLogin from '../NoLogin/NoLogin';
 

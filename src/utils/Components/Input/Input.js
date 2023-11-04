@@ -1,5 +1,5 @@
 import React from 'react';
-import Password from '../../components/Auth/Password/Password';
+import Password from '../../../components/Auth/Password/Password';
 
 import './style.css'
 

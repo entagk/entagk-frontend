@@ -2,7 +2,7 @@ import React, { lazy } from 'react';
 import { BsStickies } from 'react-icons/bs';
 
 import './style.css';
-import Button from '../../utils/Button/Button';
+import Button from '../../utils/Components/Button/Button';
 const TodoList = lazy(() => import('../../icons/list/TodoList'));
 
 const Sidebar = ({ setOpenSticky, setOpenTodo }) => {

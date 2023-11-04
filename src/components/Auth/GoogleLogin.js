@@ -3,7 +3,7 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { useDispatch, useSelector } from 'react-redux';
 import { authForm } from '../../actions/auth';
 
-import Loading from '../../utils/Loading/Loading';
+import Loading from '../../utils/Components/Loading/Loading';
 
 function GoogleLoginButton({ setMessage, localData, setSuccess, navigate }) {
   const dispatch = useDispatch();

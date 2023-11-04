@@ -6,7 +6,7 @@ import { CgTimelapse } from 'react-icons/cg';
 import { MdNotifications } from 'react-icons/md';
 import { TbFocus } from 'react-icons/tb';
 
-const Button = lazy(() => import('../../utils/Button/Button'));
+const Button = lazy(() => import('../../utils/Components/Button/Button'));
 
 function SettingMenu({setStatus, }) {
   return (

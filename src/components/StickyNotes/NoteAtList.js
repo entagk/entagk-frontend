@@ -3,16 +3,16 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { deleteNote, DELETE_NOTE } from '../../actions/notes';
 
-import TextEditor from '../../utils/RichTextEditor/Editor';
-import Menu from '../../utils/Menu/Menu';
-import Button from '../../utils/Button/Button';
+import TextEditor from '../../utils/Components/RichTextEditor/Editor';
+import Menu from '../../utils/Components/Menu/Menu';
+import Button from '../../utils/Components/Button/Button';
 
 import CircularMenu from '../../icons/circularMenu/CircularMenu';
 
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { MdDelete } from 'react-icons/md';
-import DeletePopupSmaller from '../../utils/DeletePopup/DeletePopupSmaller';
-import Loading from '../../utils/Loading/Loading'
+import DeletePopupSmaller from '../../utils/Components/DeletePopup/DeletePopupSmaller';
+import Loading from '../../utils/Components/Loading/Loading'
 
 export const updatedAt = (t) => {
   const now = new Date(Date.now());

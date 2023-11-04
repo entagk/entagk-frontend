@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { RiFullscreenFill, RiFullscreenExitFill } from 'react-icons/ri';
-import Button from '../../../utils/Button/Button';
+import Button from '../../../utils/Components/Button/Button';
 
 const FullscreenBtn = () => {
   const [full, setFull] = useState(false);

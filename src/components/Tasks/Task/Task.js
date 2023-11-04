@@ -11,14 +11,14 @@ import { RiCheckboxCircleFill, RiCheckboxBlankCircleLine } from 'react-icons/ri'
 import { checkTask, deleteTask, CHANGE_ACTIVE_TASK } from "../../../actions/tasks";
 import { CHANGE_TO_TEMPLATE_SETTING } from '../../../actions/timer';
 
-import Loading from "../../../utils/Loading/Loading";
-import Button from "../../../utils/Button/Button";
+import Loading from "../../../utils/Components/Loading/Loading";
+import Button from "../../../utils/Components/Button/Button";
 
 import "./style.css";
 
-const Menu = lazy(() => import("../../../utils/Menu/Menu"));
+const Menu = lazy(() => import("../../../utils/Components/Menu/Menu"));
 
-const DeletePopupSmaller = lazy(() => import("./../../../utils/DeletePopup/DeletePopupSmaller"));
+const DeletePopupSmaller = lazy(() => import("./../../../utils/Components/DeletePopup/DeletePopupSmaller"));
 const TaskForm = lazy(() => import("../TaskForm/TaskForm"));
 
 const Task = ({

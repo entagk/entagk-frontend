@@ -1,6 +1,6 @@
 import { useRef, useEffect, lazy } from "react";
 import * as d3 from "d3";
-import { stringToColor, filterDuplicatedData } from "../helper";
+import { stringToColor, filterDuplicatedData } from "../../helper";
 
 import './style.css';
 

@@ -1,6 +1,6 @@
 import { END_LOADING, LOGOUT, START_LOADING } from "./auth";
 import * as api from './../api';
-import { updateOne, getOne } from "./db";
+import { updateOne, getOne } from "../utils/indexedDB/db";
 
 export const CHANGE_ACTIVE = "CHANGE_ACTIVE";
 export const INCREASE_ACT = "INCREASE_ACT";

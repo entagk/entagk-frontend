@@ -4,13 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { CgClose } from 'react-icons/cg';
 
-import Button from '../../utils/Button/Button';
+import Button from '../../utils/Components/Button/Button';
 
 import './style.css'
-import ToggleButton from '../../utils/ToggleButton/ToggleButton';
-import Loading from '../../utils/Loading/Loading';
-import Input from '../../utils/Input/Input';
-import Header from '../../utils/GlassEffectHeader/header';
+import ToggleButton from '../../utils/Components/ToggleButton/ToggleButton';
+import Loading from '../../utils/Components/Loading/Loading';
+import Input from '../../utils/Components/Input/Input';
+import Header from '../../utils/Components/GlassEffectHeader/header';
 
 const ChangeAvatar = lazy(() => import('./ChangeAvatar/ChangeAvatar'));
 

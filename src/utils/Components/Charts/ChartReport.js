@@ -1,5 +1,5 @@
 import React from 'react'
-import { formatTime, stringToColor } from '../helper'
+import { formatTime, stringToColor } from '../../helper'
 
 const ChartReport = ({ rows, totalTime = 0 }) => {
   return (

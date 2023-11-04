@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getTasks } from "../../actions/tasks";
 
-import Loading from "../../utils/Loading/Loading";
-import Message from "../../utils/Message";
+import Loading from "../../utils/Components/Loading/Loading";
+import Message from "../../utils/Components/Message/Message";
 import NetworkError from "../NetworkError/NetworkError";
 
 import "./style.css";

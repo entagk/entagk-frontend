@@ -2,7 +2,7 @@ import React, { Suspense, lazy, useEffect, useState, useRef, useCallback } from 
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ADD_NOTE, EDIT_NOTE, INIT_NOTE, getNotes } from '../../actions/notes';
-import { addNew, updateOne } from '../../actions/db';
+import { addNew, updateOne } from '../../utils/indexedDB/db';
 
 import { baseURL } from '../../api/index';
 
@@ -11,15 +11,15 @@ import { onScroll } from '../../utils/helper';
 import { CgClose } from 'react-icons/cg';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import Loading from '../../utils/Loading/Loading';
+import Loading from '../../utils/Components/Loading/Loading';
 import SingleNote from './SingleNote/SingleNote';
 
 import NoteAtList from './NoteAtList';
 
 import './style.css';
 
-const Header = lazy(() => import('../../utils/GlassEffectHeader/header'));
-const Button = lazy(() => import('./../../utils/Button/Button'));
+const Header = lazy(() => import('../../utils/Components/GlassEffectHeader/header'));
+const Button = lazy(() => import('./../../utils/Components/Button/Button'));
 
 const generateWebsocket = () => {
   return new WebSocket(

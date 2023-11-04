@@ -1,8 +1,8 @@
 import React from 'react';
 import { CgClose } from 'react-icons/cg';
 import { BsArrowLeft } from 'react-icons/bs';
-import Button from '../../../utils/Button/Button';
-import Header from '../../../utils/GlassEffectHeader/header';
+import Button from '../../../utils/Components/Button/Button';
+import Header from '../../../utils/Components/GlassEffectHeader/header';
 
 function SettingHeader({
   linkClick,
