@@ -1,4 +1,4 @@
-import { START_LOADING, END_LOADING } from "../actions/auth";
+import { START_LOADING, END_LOADING, LOGOUT } from "../actions/auth";
 import {
   GET_NOTES,
   GET_OPEND_NOTES,
@@ -128,6 +128,7 @@ export default (
       };
 
     case INITIAL_NOTES_STATE:
+    case LOGOUT:
       return initialState;
 
     default:
