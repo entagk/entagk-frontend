@@ -31,17 +31,26 @@ export default (
 ) => {
   switch (action.type) {
     case START_LOADING:
-      return { ...state, isLoading: action.data === 'stickynotes' ? true : state.isLoading };
+      return {
+        ...state,
+        isLoading: action.data === 'stickynotes' ? true : state.isLoading
+      };
 
     case END_LOADING:
-      return { ...state, isLoading: action.data === 'stickynotes' ? false : state.isLoading };
+      return {
+        ...state,
+        isLoading: action.data === 'stickynotes' ? false : state.isLoading
+      };
 
     case GET_OPEND_NOTES:
+      const openedNotes = convertArrayToObject(action.data?.notes, '_id');
+
       return {
         ...state,
         ...action.data,
-        openedNotes: action.data?.notes ? convertArrayToObject(action.data?.notes, '_id') : [],
-        notes: action.data?.notes ? convertArrayToObject(action.data?.notes, '_id') : [],
+        openedNotes: action.data?.notes ? { ids: openedNotes.ids } : { ids: [] },
+        notes: action.data?.notes ? openedNotes : { ids: [], objects: {} },
+        totalOpenedNotes: openedNotes.ids.length,
       };
 
     case GET_NOTES:
@@ -49,7 +58,8 @@ export default (
       localStorage.setItem('sticky-currentPage', Number(action.data.currentPage));
       localStorage.setItem('stickyLen', action.data.notes.length + (state.notes?.ids?.length || 0));
 
-      const newNotes = convertArrayToObject(action.data.notes, '_id')
+      const newNotes = convertArrayToObject(action.data.notes, '_id');
+
       return {
         ...state,
         ...action.data,
@@ -65,13 +75,12 @@ export default (
 
       return {
         ...state,
-      }
+      };
 
     case INIT_NOTE:
       state.notes.objects[action.data?.id] = action.data;
       state.notes.ids.push(action.data?.id);
 
-      state.openedNotes.objects[action.data?.id] = action.data;
       state.openedNotes.ids.push(action.data?.id);
 
       return {
@@ -80,43 +89,50 @@ export default (
           objects: state.notes.objects,
           ids: state.notes.ids
         }
-      }
+      };
 
     case ADD_NOTE:
       const newNote = action.data;
 
       delete state.notes.objects[newNote?.oldId];
-      delete state.openedNotes.objects[newNote?.oldId];
 
-      const notesAfterAdd = Object.assign({ [newNote._id]: newNote }, state.notes.objects);
-      const openedNotesAfterAdd = Object.assign({ [newNote._id]: newNote }, state.openedNotes.objects);
+      state.notes.objects[newNote?._id] = newNote;
 
       return {
         ...state,
-        notes: { objects: notesAfterAdd, ids: Object.keys(notesAfterAdd) },
-        openedNotes: { objects: openedNotesAfterAdd, ids: Object.keys(openedNotesAfterAdd) },
+        notes: {
+          objects: state.notes.objects,
+          ids: Object.keys(state.notes.objects).filter(id => id !== newNote._id).concat([newNote?._id])
+        },
+        openedNotes: {
+          ids: state.openedNotes.ids.filter(id => id !== newNote?.oldId).concat([newNote?._id])
+        },
         total: state.total + 1,
         totalOpenedNotes: state.totalOpenedNotes + 1
       };
 
     case EDIT_NOTE:
-      delete state.openedNotes.objects[action.data._id];
-      delete state.notes.objects[action.data._id];
-
-      if (action.data.open) {
-        state.openedNotes.objects = Object.assign({ [action.data._id]: action.data }, state.openedNotes.objects);
-      }
-
       state.notes.objects = Object.assign({ [action.data._id]: action.data }, state.notes.objects);
+
+      state.totalOpenedNotes = state.openedNotes.ids.include(action.data._id) &&
+        !action.data.open ?
+        state.totalOpenedNotes - 1 :
+        state.totalOpenedNotes + 1;
 
       return {
         ...state,
-        notes: { objects: state.notes.objects, ids: Object.keys(state.notes.objects) },
-        openedNotes: { objects: state.openedNotes?.objects, ids: Object.keys(state?.openedNotes?.objects) }
-      }
+        notes: {
+          objects: state.notes.objects,
+          ids: Object.keys(state.notes.objects)
+        },
+        openedNotes: {
+          ids: action.data.open ?
+            state.openedNotes.ids.filter(id => id !== action.data._id).concat([action.data._id]) :
+            state.openedNotes.ids.filter(id => id !== action.data._id)
+        },
+      };
 
     case DELETE_NOTE:
-      delete state.openedNotes.objects[action.data];
       state.openedNotes.ids = state.openedNotes?.ids?.filter(n => n !== action.data);
       delete state.notes.objects[action.data];
       state.notes.ids = state.notes?.ids?.filter(n => n !== action.data);
@@ -131,8 +147,20 @@ export default (
       return initialState;
 
     case LOGOUT:
-      return { ...state, notes: { ids: [], objects: {} }, openedNotes: { ids: [], objects: {} }, totalOpenedNotes: 0, total: 0 };
-      
+      return {
+        ...state,
+        notes: {
+          ids: [],
+          objects: {}
+        },
+        openedNotes: {
+          ids: [],
+          objects: {}
+        },
+        totalOpenedNotes: 0,
+        total: 0
+      };
+
     default:
       return state;
   }

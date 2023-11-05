@@ -190,7 +190,7 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
   }, [noteData]);
 
   const closeNote = () => {
-    setOpenedList(oL => oL.filter(o => o !== id));
+    // setOpenedList(oL => oL.filter(o => o !== id));
     const contentLength = contentTextLength(noteData.content);
     if (contentLength === 0 && JSON.stringify(note?.content) === JSON.stringify(noteData?.content)) {
       if (!id.includes('new')) {
@@ -210,7 +210,7 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, setOpenedList }) =>
   const deleteSingleNote = () => {
     setOpenDelete(false);
 
-    setOpenedList(oL => oL.filter(o => o !== id));
+    // setOpenedList(oL => oL.filter(o => o !== id));
 
     if (!id.includes('new')) {
       dispatch(deleteNote(id, setIsLoading, setMessage));

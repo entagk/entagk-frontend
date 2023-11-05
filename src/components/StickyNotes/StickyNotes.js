@@ -54,7 +54,7 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
     totalOpenedNotes,
     total,
     isLoading,
-    currentPage, 
+    currentPage,
     numberOfPages
   } = useSelector(state => state.notes) || {
     notes: {
@@ -65,7 +65,7 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
     }
   };
 
-  const [openedList, setOpenedList] = useState(openedNotes?.ids || []);
+  // const [openedList, setOpenedList] = useState(openedNotes?.ids || []);
 
   const webSocket = useRef(null);
 
@@ -87,15 +87,18 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
     if (localStorage.getItem('token')) {
       if (!webSocket.current || !webSocket.current?.readyState === 1)
         webSocket.current = generateWebsocket();
-      webSocket.current.onmessage = (ev) => {
+      function onmessage(ev) {
+        console.log('message');
+        console.log(ev);
         const data = JSON.parse(ev.data);
         if (!data?.message) {
           if (!checkNoteId(data?._id)) {
             dispatch({ type: ADD_NOTE, data });
-            setOpenedList((oL) => {
-              const newOL = oL.filter(n => n !== data?.oldId);
-              return newOL.concat([data?._id]);
-            });
+            // adding to opened list
+            // setOpenedList((oL) => {
+            //   const newOL = oL.filter(n => n !== data?.oldId);
+            //   return newOL.concat([data?._id]);
+            // });
           } else {
             dispatch({ type: EDIT_NOTE, data });
           }
@@ -103,6 +106,7 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
           setMessage({ message: data?.message, type: 'error' })
         }
       }
+      webSocket.current.onmessage = onmessage;
 
       webSocket.current.onclose = (ev) => {
         reconnect();
@@ -111,6 +115,7 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
       const reconnect = () => {
         setTimeout(() => {
           webSocket.current = generateWebsocket();
+          webSocket.current.onmessage = onmessage;
         }, 3000);
       }
 
@@ -155,15 +160,15 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
       data.updatedAt = new Date().toJSON();
       if (!checkNoteId(data?._id) && data?.id?.includes('new')) {
         data.oldId = data.id;
-        delete data.id;
 
         const addedNote = await addNew('notes', data);
 
         dispatch({ type: ADD_NOTE, data: addedNote });
-        setOpenedList((oL) => {
-          const newOL = oL.filter(n => n !== data.oldId);
-          return newOL.concat([addedNote?._id]);
-        });
+        // adding to opened list
+        // setOpenedList((oL) => {
+        //   const newOL = oL.filter(n => n !== data.oldId);
+        //   return newOL.concat([addedNote?._id]);
+        // });
       } else {
         const updatedNote = await updateOne(data, 'notes');
 
@@ -173,14 +178,16 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
   }
 
   const newNote = () => {
-    const newId = `new-${openedList.length + 1}`;
-    setOpenedList(oL => oL.concat([newId]));
+    // const newId = `new-${openedList.length + 1}`;
+    const newId = `new-${openedNotes?.ids?.length + 1}`;
+    // adding to opened list
+    // setOpenedList(oL => oL.concat([newId]));
     dispatch({ type: INIT_NOTE, data: { id: newId, ...initialNote } });
   }
 
   return (
     <>
-      {openedList.length > 0 && (
+      {/* {openedList.length > 0 && (
         <>
           {openedList.map((note) => (
             <SingleNote
@@ -190,6 +197,20 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
               onChangeNote={onChangeNote}
               setMessage={setMessage}
               setOpenedList={setOpenedList}
+            />
+          ))}
+        </>
+      )} */}
+      {openedNotes?.ids?.length > 0 && (
+        <>
+          {openedNotes?.ids?.map((note) => (
+            <SingleNote
+              key={note}
+              id={note}
+              newNote={newNote}
+              onChangeNote={onChangeNote}
+              setMessage={setMessage}
+            // setOpenedList={setOpenedList}
             />
           ))}
         </>
@@ -286,8 +307,8 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
                                     key={note}
                                     onChangeNote={onChangeNote}
                                     setMessage={setMessage}
-                                    openedList={openedList}
-                                    setOpenedList={setOpenedList}
+                                  // openedList={openedList}
+                                  // setOpenedList={setOpenedList}
                                   />
                                 ))
                               }
