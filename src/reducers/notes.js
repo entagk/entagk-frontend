@@ -79,15 +79,15 @@ export default (
 
     case INIT_NOTE:
       state.notes.objects[action.data?.id] = action.data;
-      state.notes.ids.push(action.data?.id);
-
-      state.openedNotes.ids.push(action.data?.id);
 
       return {
         ...state,
         notes: {
           objects: state.notes.objects,
-          ids: state.notes.ids
+          ids: state.notes.ids.concat([action.data?.id])
+        },
+        openedNotes: {
+          ids: state.openedNotes.ids.concat([action.data.id])
         }
       };
 
@@ -114,7 +114,7 @@ export default (
     case EDIT_NOTE:
       state.notes.objects = Object.assign({ [action.data._id]: action.data }, state.notes.objects);
 
-      state.totalOpenedNotes = state.openedNotes.ids.include(action.data._id) &&
+      state.totalOpenedNotes = state.openedNotes.ids.includes(action.data._id) &&
         !action.data.open ?
         state.totalOpenedNotes - 1 :
         state.totalOpenedNotes + 1;

@@ -152,7 +152,7 @@ const AuthForm = ({ setMessage, setSuccess, localData }) => {
         );
       }
     } else {
-      if (errors.length === 0) {// todo
+      if (errors.length === 0) {
         dispatch(
           authForm(
             { password: formData.password, email: formData.email },

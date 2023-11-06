@@ -43,7 +43,11 @@ const Auth = () => {
     }
 
     // eslint-disable-next-line
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    console.log("suc:", success);
+  }, [success]);
 
   if (message.message === 'Network Error') {
     return (
@@ -97,7 +101,7 @@ const Auth = () => {
         {success && (
           JSON.stringify(setting) !== JSON.stringify(initialSetting) ||
           tasks.length > 0 ||
-          notes.ids > 0
+          notes.ids.length > 0
         ) && (
             <SaveLocalPopup
               timerSettings={setting}
@@ -120,7 +124,7 @@ const Auth = () => {
           <AuthForm
             setMessage={setMessage}
             setSuccess={setSuccess}
-            localData={JSON.stringify(setting) !== JSON.stringify(initialSetting) || tasks.length > 0 || notes.ids > 0}
+            localData={JSON.stringify(setting) !== JSON.stringify(initialSetting) || tasks.length > 0 || notes.ids.length > 0}
           />
         </div>
       </div>

@@ -39,6 +39,7 @@ function Home() {
   useEffect(() => {
     if (setting === undefined) {
       dispatch(getSetting(setMessage));
+      console.log("loading setting");
     }
     // eslint-disable-next-line
   }, [setting]);
@@ -51,7 +52,7 @@ function Home() {
     }
 
     // eslint-disable-next-line
-  }, [])
+  }, [totalOpenedNotes])
 
   useEffect(() => {
     const handleKeys = (event) => {
