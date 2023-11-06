@@ -2,15 +2,15 @@ import React, { useState, useEffect, lazy } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSetting, modifySetting } from '../../actions/timer';
 
-import Loading from '../../utils/Loading/Loading';
-import Message from '../../utils/Message';
+import Loading from '../../utils/Components/Loading/Loading';
+import Message from '../../utils/Components/Message/Message';
 import NetworkError from '../NetworkError/NetworkError';
 
 import "./style.css";
 
-const Button = lazy(() => import('../../utils/Button/Button'));
+const Button = lazy(() => import('../../utils/Components/Button/Button'));
 
-const Header = lazy(() => import('./SettingHeader/header'));
+const SettingHeader = lazy(() => import('./SettingHeader/header'));
 const SettingMenu = lazy(() => import('./SettingMenu'));
 const TimerSetting = lazy(() => import('./TimerSetting/TimerSetting'));
 const SoundSetting = lazy(() => import('./SoundSetting/SoundSetting'));
@@ -225,7 +225,7 @@ function Setting({ setOpenSetting }) {
           />
         )
         }
-        <Header
+        <SettingHeader
           linkClick={handleSubmit}
           status={status}
           setStatus={setStatus}

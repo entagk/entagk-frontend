@@ -8,7 +8,7 @@ import {
   CLEAR_FINISHED_TASKS,
   CLEAR_ACT_FROM_TASKS,
   CLEAR_ALL_TASKS,
-  ADD_LOCAL_TASKS,
+  INITIAL_TASKS_STATE,
   CLEAR_CONGRATS,
   GET_TEMPLATE_TASKS
 } from "../actions/tasks";
@@ -20,8 +20,6 @@ import {
   GET_SETTING
 } from "../actions/timer";
 
-import { nanoid } from "nanoid";
-
 import {
   LOGOUT,
   START_LOADING,
@@ -30,15 +28,7 @@ import {
 } from "../actions/auth";
 
 import { ADD_TO_TODO_LIST } from "../actions/templates";
-
-const initialData = {
-  name: "",
-  est: 1,
-  act: 0,
-  notes: "",
-  project: "",
-  check: false,
-};
+import { deleteOne, updateOne } from "../utils/indexedDB/db";
 
 const initialState = {
   activeId: null,
@@ -76,12 +66,10 @@ export default (
         autoStartNextTask: action.data.autoStartNextTask
       };
 
-    case ADD_LOCAL_TASKS:
-      const tasks = action.data;
-      localStorage.removeItem('tasks');
+    case INITIAL_TASKS_STATE:
       localStorage.removeItem('act');
       localStorage.removeItem('est');
-      return { ...state, tasks: tasks };
+      return initialState;
 
     case GET_TASKS:
       const page = action.data?.currentPage;
@@ -166,7 +154,7 @@ export default (
     case INCREASE_ACT:
       let newActive =
         Boolean(state.activeId)
-          ? state.tasks.find((t) => t._id === state.activeId)
+          ? { _id: state.activeId, name: state?.activeName }
           : { _id: null, name: null };
       let realAct = state.act;
       let congrats = '';
@@ -184,9 +172,6 @@ export default (
           }
 
           realAct = realAct + 1;
-          localStorage.setItem("act", realAct);
-          localStorage.setItem("tasks", JSON.stringify(state.tasks));
-          console.log(realAct, state.tasks);
 
           newActive =
             !state.tasks[taskIndex].check
@@ -206,24 +191,34 @@ export default (
         if (Boolean(state.activeId) && action.data.active === PERIOD) {
           const task = action.data.task;
 
-          const taskIndex = state.tasks.findIndex(
-            (t) => t._id === task?.template?._id || t._id === task._id
-          );
-
-          state.tasks[taskIndex] = task.template?._id ? { ...state.tasks[taskIndex], act: state.tasks[taskIndex].act + 1 } : task;
+          const taskIndex = !task?.template?._id ? state.tasks.findIndex(
+            (t) => t._id === task._id
+          ) : state.tempTasks[task.template._id].tasks.findIndex((t) => t._id === task._id);
 
           if (task.template?._id) {
-            const realTaskIndex = state.tempTasks[task.template._id].tasks.findIndex(t => t._id === task._id);
-            state.tempTasks[task.template._id].tasks[realTaskIndex] = task;
+            state.tempTasks[task.template._id].tasks[taskIndex] = task;
+            const tempIndex = state.tasks.findIndex(t => t._id === task.template._id);
+            state.tasks[tempIndex].act += 1;
+
+            newActive =
+              !task?.check
+                ? { _id: task._id, name: state.tasks[tempIndex].name + " > " + action.data.name }
+                :
+                state.autoStartNextTask &&
+                  taskIndex + 1 < state.tempTasks[task.template._id].tasks.length ?
+                  { _id: task._id, name: state.tasks[tempIndex].name + " > " + state.tempTasks[taskIndex + 1].name } :
+                  { _id: null, name: null };
+          } else {
+            state.tasks[taskIndex] = task;
+
+            newActive =
+              !task?.check
+                ? task
+                : state.autoStartNextTask && taskIndex + 1 < state.tasks.length ? state.tasks[taskIndex + 1] : { _id: null, name: null };
           }
           congrats = task.check ? task.name : "";
 
           realAct = realAct + 1;
-
-          newActive =
-            !task?.check
-              ? state.tasks[taskIndex]
-              : state.autoStartNextTask ? state.tasks[taskIndex + 1] : { _id: null, name: null };
         }
 
         return {
@@ -244,14 +239,9 @@ export default (
       finishedTasks = all.filter(t => t.check);
       unfinishedTasks = all.filter(t => !t.check);
       if (!localStorage.getItem("token")) {
-        const newTask = Object.assign(
-          { _id: nanoid(), ...initialData },
-          action.data
-        );
-        localStorage.setItem("tasks", JSON.stringify([...unfinishedTasks, newTask, ...finishedTasks]));
         localStorage.setItem("est", state?.est + action.data.est);
 
-        unfinishedTasks.push(newTask);
+        unfinishedTasks.push(action.data);
 
         return {
           ...state,
@@ -291,11 +281,7 @@ export default (
         task.check = !task.check;
         task.act = task.check ? task.est : 0;
 
-        localStorage.setItem("tasks", JSON.stringify(all));
-
         newAct = task.check ? state.act + task.est : state.act - task.est;
-
-        localStorage.setItem('act', newAct);
 
         return {
           ...state,
@@ -337,49 +323,55 @@ export default (
 
     case DELETE_TASK:
       all = state.tasks;
-      const tIndex = action.data?.template ? all.findIndex((t) => t._id === action.data?.template?._id) : all.findIndex((t) => t._id === action.data.id);
-      console.log(tIndex);
-      const task = all[tIndex];
-      let newAll = task.tasks.length > 1 ? all.filter((task) => task._id !== action.data || task._id !== action.data?.id) : all.filter(t => t._id !== task._id);
+      const tIndex = action.data?.template ?
+        state.tempTasks[action.data?.template?._id].tasks.findIndex((t) => t._id === action.data.id) :
+        all.findIndex((t) => t._id === action.data.id);
+
+      const task =
+        !action.data?.template?._id ?
+          all[tIndex] :
+          state.tempTasks[action.data?.template?._id].tasks[tIndex];
+
+      let newAll = task?.template?._id ? all : all.filter((t) => t._id !== action.data?.id);
 
       if (!localStorage.getItem("token")) {
         const newEst = state.est - task.est;
         newAct = task.check ? state.act - task.act : state.act;
         const unfinishedTasks = all.filter(t => !t.check)
-        // save the tasks in localStorage
-        localStorage.setItem("tasks", JSON.stringify(newAll));
-
-        if (state.tasks.length === 0) {
-          localStorage.removeItem("est");
-          localStorage.removeItem("act");
-        } else {
-          localStorage.setItem("est", newEst);
-          localStorage.setItem("act", newAct);
-        }
-        console.log(state.activeId !== task._id);
-        console.log(state.activeName !== task.name);
 
         return {
           ...state,
           est: newEst,
           act: newAct,
           tasks: newAll,
-          activeId: state.activeId !== task._id ? state.activeId : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0]._id : null,
-          activeName: state.activeName !== task.name ? state.activeName : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0].name : null,
+          activeId: state.activeId !== task._id ?
+            state.activeId :
+            state.autoStartNextTask ?
+              null :
+              unfinishedTasks.length > 0 ?
+                unfinishedTasks[0]._id : null,
+          activeName: state.activeName !== task.name ?
+            state.activeName :
+            state.autoStartNextTask ?
+              null :
+              unfinishedTasks.length > 0 ?
+                unfinishedTasks[0].name : null,
         };
       } else {
-        const realTask = action.data.template ? state.tempTasks[task._id].tasks.filter(t => t._id === action.data.id)[0] : null;
-        newEst = action.data?.template ? state.est - realTask.est : state.est - task.est;
-        newAct = action.data?.template ? state.act - realTask.act : state.act - task.act;
+        newEst = state.est - task.est;
+        newAct = state.act - task.act;
         const unfinishedTasks = all.filter(t => !t.check);
 
-        if (action.data?.template && task.tasks.length > 1) {
-          console.log(task);
-          console.log(state.tempTasks[task._id]);
-          state.tempTasks[task._id].tasks = state.tempTasks[task._id].tasks.filter(t => t._id !== action.data.id);
+        if (action.data.template) {
+          const tempIndex = action.data?.template?._id ? newAll.findIndex(t => t._id === action.data?.template._id) : -1;
+          newAll[tempIndex].tasks = newAll[tempIndex].tasks.filter(t => t !== action.data.id);
+          newAll[tempIndex].act = newAll[tempIndex].act - task.act;
+          newAll[tempIndex].est = newAll[tempIndex].est - task.est;
 
-          newAll[tIndex] = { ...task, tasks: task.tasks.filter(t => t !== action.data.id), act: task.act - realTask.act, est: task.est - realTask.est };
-          console.log(newAll);
+          if (newAll[tempIndex].tasks.length === 0) {
+            newAll.splice(tempIndex, 1);
+          }
+          state.tempTasks[action.data?.template?._id].tasks = state.tempTasks[action.data?.template?._id].tasks.filter(t => t._id !== action.data.id);
         }
 
         return {
@@ -387,9 +379,19 @@ export default (
           est: newEst,
           act: newAct,
           tasks: newAll,
-          total: state.total - 1,
-          activeId: state.activeId !== task._id ? state.activeId : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0]._id : null,
-          activeName: state.activeName !== task.name ? state.activeName : state.autoStartNextTask ? null : unfinishedTasks.length > 0 ? unfinishedTasks[0].name : null
+          total: action.data.template?._id ? state.total : state.total - 1,
+          activeId: state.activeId !== task._id ?
+            state.activeId :
+            state.autoStartNextTask ?
+              null :
+              unfinishedTasks.length > 0 ? unfinishedTasks[0]._id
+                : null,
+          activeName: state.activeName !== task.name ?
+            state.activeName :
+            state.autoStartNextTask ?
+              null :
+              unfinishedTasks.length > 0 ? unfinishedTasks[0].name
+                : null
         };
       };
 
@@ -427,15 +429,6 @@ export default (
         } else {
           state.tasks[taskIndex] = newTask;
         }
-
-        localStorage.setItem(
-          "tasks",
-          JSON.stringify(
-            newTask.check && state.autoStartNextTask ? all : state.tasks
-          )
-        );
-        localStorage.setItem("est", newEst);
-        localStorage.setItem("act", newAct);
 
         return {
           ...state,
@@ -491,7 +484,6 @@ export default (
      * filter the tasks from tasks that is checked
      * and then reduce the total act
      */
-
     case CLEAR_FINISHED_TASKS:
       all = state.tasks;
       finishedTasks = all.filter((task) => task.check);
@@ -501,9 +493,9 @@ export default (
       newEst = state.est - finishedTasks.reduce((total, cur) => total + cur.est, 0);
 
       if (!localStorage.getItem("token")) {
-        localStorage.setItem("tasks", JSON.stringify(unfinishedTasks));
-        localStorage.setItem("act", newAct);
-        localStorage.setItem('est', newEst)
+        finishedTasks.forEach(async (ele) => {
+          await deleteOne(ele._id, "tasks");
+        })
       } else {
         if (Object.values(state.tempTasks).length > 0) {
           const tempTasks = Object.entries(state.tempTasks).filter(tt => unfinishedTasks.find(t => t._id === tt[0]) !== undefined);
@@ -530,10 +522,9 @@ export default (
           return { ...t, act: 0, check: false };
         })
       if (!localStorage.getItem("token")) {
-
-        localStorage.setItem("tasks", JSON.stringify(all));
-
-        localStorage.setItem("act", 0);
+        all.forEach(async (ele) => {
+          await updateOne({ ...ele, check: false, act: 0 }, "tasks");
+        })
       } else {
         if (Object.values(state.tempTasks).length > 0) {
           const tempTasks = Object.entries(state.tempTasks).filter(tt => tt[1]?.tasks?.filter(t => t.act > 0).length > 0);
@@ -562,9 +553,6 @@ export default (
 
     case CLEAR_ALL_TASKS:
       if (!localStorage.getItem("token")) {
-        localStorage.setItem("tasks", JSON.stringify([]));
-        localStorage.setItem("act", 0);
-        localStorage.setItem("est", 0);
       } else {
         if (Object.values(state.tempTasks).length > 0) {
           state.tempTasks = {};

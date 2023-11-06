@@ -11,14 +11,14 @@ import { RiCheckboxCircleFill, RiCheckboxBlankCircleLine } from 'react-icons/ri'
 import { checkTask, deleteTask, CHANGE_ACTIVE_TASK } from "../../../actions/tasks";
 import { CHANGE_TO_TEMPLATE_SETTING } from '../../../actions/timer';
 
-import Loading from "../../../utils/Loading/Loading";
-import Button from "../../../utils/Button/Button";
+import Loading from "../../../utils/Components/Loading/Loading";
+import Button from "../../../utils/Components/Button/Button";
 
 import "./style.css";
 
-const Menu = lazy(() => import("../../../utils/Menu/Menu"));
+const Menu = lazy(() => import("../../../utils/Components/Menu/Menu"));
 
-const DeletePopupSmaller = lazy(() => import("./../../../utils/DeletePopup/DeletePopupSmaller"));
+const DeletePopupSmaller = lazy(() => import("./../../../utils/Components/DeletePopup/DeletePopupSmaller"));
 const TaskForm = lazy(() => import("../TaskForm/TaskForm"));
 
 const Task = ({
@@ -50,21 +50,22 @@ const Task = ({
   }, [props])
 
   const handleCheck = () => {
-    dispatch(checkTask(props._id, setIsLoading, setMessage));
+    dispatch(checkTask(props, setIsLoading, setMessage));
     setOpenMenu(false);
   }
 
   const handleDelete = () => {
     setOpenDelete(false);
     if (props?._id) {
-      dispatch(deleteTask(props._id, props?.template || null, setIsLoading, setMessage));
+      dispatch(deleteTask(props._id, props?.template || null, setIsLoading, setMessage, setActiveTemplate, template?.tasks || []));
     } else {
       setTemplateData(t => ({ ...t, tasks: t.tasks.filter(task => task.id !== props.id) }))
     };
   }
 
   const handleActive = () => {
-    if (props.tasks?.length === 0) {
+    console.log('activate', props);
+    if (props.tasks?.length === 0 || !props?.tasks) {
       if ((!props.check && setting.autoStartNextTask) || (!setting.autoStartNextTask && props.act !== props.est)) {
         if (activeId === props._id) {
           dispatch({ type: CHANGE_ACTIVE_TASK, data: {} });
@@ -239,7 +240,11 @@ const Task = ({
                     variant="single-icon"
                   />
                 }>
-                {((props?.template?.todo && props?.template) || (!props?.template && props?.tasks?.length === 0)) ? (
+                {(
+                  (props?.template?.todo && props?.template) ||
+                  (!props?.template && props?.tasks?.length === 0) ||
+                  (!props?.tasks)
+                ) ? (
                   <>
                     {(!setting?.autoStartNextTask) ? (
                       <Button

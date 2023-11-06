@@ -1,6 +1,6 @@
 import React from 'react';
 import { TbPlayerSkipForward } from "react-icons/tb";
-import Button from '../../../../../utils/Button/Button';
+import Button from '../../../../../utils/Components/Button/Button';
 
 function SkipButton({ handleClick, time }) {
   return (

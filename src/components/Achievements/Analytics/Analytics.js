@@ -7,7 +7,7 @@ import AnalyticsChart from './AnalyticsChart';
 
 import { getMonthRange, getWeekStartAndEnd } from '../../../utils/helper';
 
-const Button = lazy(() => import('../../../utils/Button/Button'));
+const Button = lazy(() => import('../../../utils/Components/Button/Button'));
 
 const Analytics = ({ setMessage }) => {
   const [chart, setChart] = useState('bar');

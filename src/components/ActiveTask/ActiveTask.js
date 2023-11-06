@@ -5,7 +5,7 @@ import { CHANGE_ACTIVE_TASK } from "../../actions/tasks";
 import { FiEdit3 } from "react-icons/fi";
 
 import "./style.css";
-import Button from "../../utils/Button/Button";
+import Button from "../../utils/Components/Button/Button";
 
 const ActiveTask = () => {
   const { periodNum } = useSelector(state => state.timer);

@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../../../../utils/Button/Button';
+import Button from '../../../../utils/Components/Button/Button';
 
 function FormFooter({
   activeStep,

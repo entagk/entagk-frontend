@@ -1,4 +1,4 @@
-import { START_LOADING, END_LOADING } from "../actions/auth";
+import { START_LOADING, END_LOADING, LOGOUT } from "../actions/auth";
 import {
   GET_USER_TEMPLATES,
   DELETE_TEMPLATE,
@@ -156,7 +156,7 @@ export default (state = initialState, action) => {
         } else if (state.userTemplates.templates[state.userTemplates.numberOfPages - 1]) {
           state.userTemplates.templates[state.userTemplates.numberOfPages - 1].push(action.data);
         }
-        
+
         return {
           ...state,
           userTemplates: {
@@ -252,6 +252,9 @@ export default (state = initialState, action) => {
           templates: state.userTemplates?.templates[0]?.sort(sortCallback)
         }
       }
+
+    case LOGOUT:
+      return initialState;
 
     default:
       return state;

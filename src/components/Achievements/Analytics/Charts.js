@@ -1,16 +1,16 @@
 import React, { lazy, useEffect, useState } from 'react';
 
-import Loading from '../../../utils/Loading/Loading';
+import Loading from '../../../utils/Components/Loading/Loading';
 
 import { filterDuplicatedData } from '../../../utils/helper';
 
 import './style.css';
-import YearChart from '../../../utils/Charts/YearChart/YearChart';
+import YearChart from '../../../utils/Components/Charts/YearChart/YearChart';
 
-const Chart = lazy(() => import('../../../utils/Charts/Chart'));
-const Pie = lazy(() => import('../../../utils/Charts/Pie'));
-const StackedBarChart = lazy(() => import('../../../utils/Charts/StackedBarChart'));
-const MonthChart = lazy(() => import('../../../utils/Charts/MonthChart/MonthChart'));
+const Chart = lazy(() => import('../../../utils/Components/Charts/Chart'));
+const Pie = lazy(() => import('../../../utils/Components/Charts/Pie'));
+const StackedBarChart = lazy(() => import('../../../utils/Components/Charts/StackedBarChart'));
+const MonthChart = lazy(() => import('../../../utils/Components/Charts/MonthChart/MonthChart'));
 
 const Charts = ({
   isLoading,

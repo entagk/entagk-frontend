@@ -1,5 +1,6 @@
 import { END_LOADING, LOGOUT, START_LOADING } from "./auth";
 import * as api from './../api';
+import { updateOne, getOne } from "../utils/indexedDB/db";
 
 export const CHANGE_ACTIVE = "CHANGE_ACTIVE";
 export const INCREASE_ACT = "INCREASE_ACT";
@@ -193,10 +194,16 @@ export const getSetting = (setMessage, setError) => async dispatch => {
 
 export const changeActive = (active, activeId, setIsLoading, setMessage) => async dispatch => {
   try {
-    // setTime()
     setIsLoading(activeId);
+    console.log(active, activeId);
     if (!localStorage.getItem('token')) {
       dispatch({ type: CHANGE_ACTIVE });
+      if (activeId && active === PERIOD) {
+        const task = await getOne(activeId, 'tasks');
+
+        await updateOne({ ...task, act: task.act + 1 }, 'tasks');
+      }
+
       dispatch({ type: INCREASE_ACT, data: active });
     } else {
       if (active === PERIOD && activeId) {
@@ -207,13 +214,14 @@ export const changeActive = (active, activeId, setIsLoading, setMessage) => asyn
         dispatch({ type: CHANGE_ACTIVE })
       }
     }
-    setIsLoading(null);
   } catch (error) {
     console.error(error);
     setMessage({ message: error.response.data.message || error.message, type: 'error' });
     if (error.response?.status === 401 || error.response?.status === 500) {
       dispatch({ type: LOGOUT });
     }
+  } finally {
+    setIsLoading(null);
   }
 }
 
@@ -226,13 +234,13 @@ export const modifySetting = (formData, setMessage, setFormErrors) => async disp
       const { data } = await api.updateSetting(formData);
       dispatch({ type: MODITY_SETTING, data });
     }
-    dispatch({ type: END_LOADING, data: 'setting' });
   } catch (error) {
-    dispatch({ type: END_LOADING, data: 'setting' });
     console.error(error);
     setMessage({ message: error.response.data.message || error.message, type: 'error' });
     if (error.response?.status === 401 || error.response?.status === 500) {
       dispatch({ type: LOGOUT });
     }
+  } finally {
+    dispatch({ type: END_LOADING, data: 'setting' });
   }
 }

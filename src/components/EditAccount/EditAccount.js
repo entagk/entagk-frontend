@@ -4,12 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { CgClose } from 'react-icons/cg';
 
-import Button from '../../utils/Button/Button';
+import Button from '../../utils/Components/Button/Button';
 
 import './style.css'
-import ToggleButton from '../../utils/ToggleButton/ToggleButton';
-import Loading from '../../utils/Loading/Loading';
-import Input from '../../utils/Input/Input';
+import ToggleButton from '../../utils/Components/ToggleButton/ToggleButton';
+import Loading from '../../utils/Components/Loading/Loading';
+import Input from '../../utils/Components/Input/Input';
+import Header from '../../utils/Components/GlassEffectHeader/header';
 
 const ChangeAvatar = lazy(() => import('./ChangeAvatar/ChangeAvatar'));
 
@@ -102,19 +103,21 @@ function EditAccount({ setClose, setMessage }) {
   return (
     <div className='glass-container'>
       <form className='glass-effect edit-account' onSubmit={handleSubmit}>
-        <div className='edit-account-header'>
-          <h2>Edit Account</h2>
-          <Button
-            aria-label='close edit account'
-            className="close-edit-account"
-            type='button'
-            onClick={() => setClose(false)}
-            variant='none'
-            startIcon={
-              <CgClose />
-            }
-          />
-        </div>
+        <Header
+          title='Edit account'
+          RightButton={
+            <Button
+              aria-label='close edit account'
+              className="close"
+              type='button'
+              onClick={() => setClose(false)}
+              variant='none'
+              startIcon={
+                <CgClose />
+              }
+            />
+          }
+        />
         <div className='inputs'>
           <ChangeAvatar />
           <Input

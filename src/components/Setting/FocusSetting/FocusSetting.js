@@ -1,8 +1,8 @@
 import React, { Suspense, lazy } from 'react';
 
-import Loading from '../../../utils/Loading/Loading';
+import Loading from '../../../utils/Components/Loading/Loading';
 
-const ToggleButton = lazy(() => import('../../../utils/ToggleButton/ToggleButton'));
+const ToggleButton = lazy(() => import('../../../utils/Components/ToggleButton/ToggleButton'));
 
 const FocusSetting = ({ data, setData }) => {
   return (

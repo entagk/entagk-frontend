@@ -5,13 +5,14 @@ import { AiOutlineInfo, AiFillSound } from 'react-icons/ai';
 
 import './style.css'
 
-import Message from '../../../utils/Message';
+import Message from '../../../utils/Components/Message/Message';
 import NetworkError from '../../NetworkError/NetworkError';
 import FormFooter from './FormFooter/FormFooter';
 import { useDispatch } from 'react-redux';
 import { addTemplate, modifyTemplate } from '../../../actions/templates';
-import Loading from '../../../utils/Loading/Loading';
-import Button from '../../../utils/Button/Button';
+import Loading from '../../../utils/Components/Loading/Loading';
+import Button from '../../../utils/Components/Button/Button';
+import Header from '../../../utils/Components/GlassEffectHeader/header';
 
 const TodoList = lazy(() => import('../../../icons/list/TodoList'));
 const InfoStep = lazy(() => import('./InfoStep/InfoStep'));
@@ -290,18 +291,20 @@ function TemplateForm({
       )}
       <div className="glass-container">
         <div className="glass-effect temp-form">
-          <div className='form-header'>
-            <h2>{oldData ? 'edit template' : 'new template'}</h2>
-            <Button
-              aria-label='close template form'
-              className="close-temp-form"
-              type='button'
-              onClick={() => setOpen(false)}
-              startIcon={
-                <CgClose />
-              }
-            />
-          </div>
+          <Header
+            title={oldData ? 'edit template' : 'new template'}
+            RightButton={
+              <Button
+                aria-label='close template form'
+                className="close"
+                type='button'
+                onClick={() => setOpen(false)}
+                startIcon={
+                  <CgClose />
+                }
+              />
+            }
+          />
           <div className='steps'>
             {steps.map((step, index) => (
               <div key={index} className={`step ${index === activeStep ? 'active' : index < activeStep && 'completed'}`}>

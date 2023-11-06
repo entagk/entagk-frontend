@@ -1,6 +1,6 @@
 import React from "react";
 import { TbPlayerPlay } from "react-icons/tb";
-import Button from "../../../../../utils/Button/Button";
+import Button from "../../../../../utils/Components/Button/Button";
 
 const StartButton = ({ handleClick, ariaLabel, className, time, id }) => {
   return (

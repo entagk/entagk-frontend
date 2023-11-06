@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouteError, Link } from 'react-router-dom';
 
 import './style.css'
-import Button from '../../utils/Button/Button';
+import Button from '../../utils/Components/Button/Button';
 
 function ErrorPage() {
   const error = useRouteError();

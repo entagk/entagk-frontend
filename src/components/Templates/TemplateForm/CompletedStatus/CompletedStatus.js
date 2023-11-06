@@ -4,8 +4,8 @@ import React from 'react';
 
 import { FaCheck } from 'react-icons/fa'
 import './style.css';
-import Loading from '../../../../utils/Loading/Loading';
-import Button from '../../../../utils/Button/Button';
+import Loading from '../../../../utils/Components/Loading/Loading';
+import Button from '../../../../utils/Components/Button/Button';
 
 function CompletedStatus({ data, isLoading, setOpen }) {
   if (isLoading) {

@@ -13,10 +13,11 @@ import {
   refreshToken
 } from "../../actions/auth";
 
-import Loading from "../../utils/Loading/Loading";
-import Button from "../../utils/Button/Button";
+import Loading from "../../utils/Components/Loading/Loading";
+import Button from "../../utils/Components/Button/Button";
+import Logo from "../../icons/entagkLogo/logo";
 
-const DeletePopup = lazy(() => import("../../utils/DeletePopup/DeletePopup"));
+const DeletePopup = lazy(() => import("../../utils/Components/DeletePopup/DeletePopup"));
 const UserMenu = lazy(() => import('./UserMenu.js'));
 const EditAccount = lazy(() => import('../EditAccount/EditAccount'));
 
@@ -88,7 +89,7 @@ const NavBar = ({ setMessage }) => {
       )}
       <nav className="nav-bar">
         <Link to="/">
-          <h1>Entagk</h1>
+          <h1><Logo/> Entagk</h1>
         </Link>
         <div style={{ position: 'relative' }}>
           {!localStorage.getItem('token') ? (

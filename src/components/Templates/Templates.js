@@ -9,23 +9,23 @@ import { useSearchParams } from 'react-router-dom';
 
 import { getTemplatesForUser, CHANGE_CURRENT_PAGE } from '../../actions/templates';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { CgClose } from 'react-icons/cg';
 
-import Loading from '../../utils/Loading/Loading';
-import Message from '../../utils/Message';
+import Loading from '../../utils/Components/Loading/Loading';
+import Message from '../../utils/Components/Message/Message';
 import NetworkError from '../NetworkError/NetworkError';
 import NoLogin from '../NoLogin/NoLogin';
+import Button from '../../utils/Components/Button/Button';
+import Header from '../../utils/Components/GlassEffectHeader/header';
 
 import './style.css';
-
-import TemplateTasksHeader from './TemplateTasks/TemplateTasksHeader';
-import Button from '../../utils/Button/Button';
 
 const NavBar = lazy(() => import('../NavBar/NavBar'));
 const Template = lazy(() => import('./Template/Template.js'));
 const TemplateTasks = lazy(() => import('./TemplateTasks/TemplateTasks'))
 const TemplateForm = lazy(() => import('./TemplateForm/TemplateForm.js'))
 const SearchBar = lazy(() => import('./SearchBar/SearchBar'));
-const PaginationBar = lazy(() => import('../../utils/PaginationBar/PaginationBar'));
+const PaginationBar = lazy(() => import('../../utils/Components/PaginationBar/PaginationBar'));
 
 function Templates() {
   const dispatch = useDispatch();
@@ -45,6 +45,12 @@ function Templates() {
     },
     isLoading
   } = useSelector(state => state?.templates) || { userTemplates: {} };
+
+  useEffect(() => {
+    document.body.classList.remove('home');
+
+    // eslint-disable-next-line
+  }, [])
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -125,9 +131,20 @@ function Templates() {
         <>
           <div className='glass-container'>
             <div className='glass-effect template-tasks'>
-              <TemplateTasksHeader
-                template={templates[currentPage - 1].filter(t => t._id === showTodo)[0]}
-                setOpenTodo={setShowTodo}
+              <Header
+                title={templates[currentPage - 1].filter(t => t._id === showTodo)[0]?.name + " Tasks"}
+                RightButton={
+                  <Button
+                    aria-label='close tasks'
+                    className="close"
+                    type='button'
+                    onClick={() => setShowTodo("")}
+                    variant='none'
+                    startIcon={
+                      <CgClose />
+                    }
+                  />
+                }
               />
               <Suspense fallback={
                 <>

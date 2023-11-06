@@ -1,9 +1,10 @@
 import React from 'react';
 import { CgClose } from 'react-icons/cg';
 import { BsArrowLeft } from 'react-icons/bs';
-import Button from '../../../utils/Button/Button';
+import Button from '../../../utils/Components/Button/Button';
+import Header from '../../../utils/Components/GlassEffectHeader/header';
 
-function Header({
+function SettingHeader({
   linkClick,
   status,
   setStatus,
@@ -20,8 +21,11 @@ function Header({
   }
 
   return (
-    <div className='setting-header'>
-      {status !== '' && (
+    <Header
+      title={status === '' ? 'Setting' : `${status} setting`}
+      className='setting-header'
+      showLeft={status !== ''}
+      LeftButton={
         <Button
           aria-label='back'
           type='button'
@@ -34,20 +38,21 @@ function Header({
           }
           disabled={Object.values(formErrors).filter(fE => fE.length > 0).length > 0}
         />
-      )}
-      <h2>{status === '' ? 'Setting' : `${status} setting`}</h2>
-      <Button
-        aria-label='close setting'
-        className="close-setting"
-        type='button'
-        onClick={linkClick}
-        variant='none'
-        startIcon={
-          <CgClose />
-        }
-      />
-    </div>
+      }
+      RightButton={
+        <Button
+          aria-label='close setting'
+          className="close"
+          type='button'
+          onClick={linkClick}
+          variant='none'
+          startIcon={
+            <CgClose />
+          }
+        />
+      }
+    />
   );
 }
 
-export default Header;
+export default SettingHeader;

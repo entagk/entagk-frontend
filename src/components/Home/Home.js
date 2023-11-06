@@ -1,12 +1,14 @@
 import React, { lazy, useEffect, useState } from 'react';
 
-import Loading from '../../utils/Loading/Loading';
-import Message from '../../utils/Message';
+import Loading from '../../utils/Components/Loading/Loading';
+import Message from '../../utils/Components/Message/Message';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getSetting } from '../../actions/timer';
+import { getOpenedNotes } from '../../actions/notes';
 import NetworkError from '../NetworkError/NetworkError';
-import Congratulation from '../../utils/Congratulation/Congratulation';
+import Congratulation from '../../utils/Components/Congratulation/Congratulation';
+import StickyNotes from '../StickyNotes/StickyNotes';
 
 import "./style.css";
 
@@ -20,6 +22,7 @@ const Sidebar = lazy(() => import("./../Sidebar/Sidebar"));
 function Home() {
   const { setting, started } = useSelector(state => state.timer);
   const { congrats } = useSelector(state => state.tasks);
+  const { totalOpenedNotes } = useSelector(state => state.notes);
   const [message, setMessage] = useState({ type: '', message: "" });
   const dispatch = useDispatch();
   const [isLoadingTask, setIsLoadingTask] = useState(null);
@@ -28,26 +31,34 @@ function Home() {
   const [openSticky, setOpenSticky] = useState(false);
 
   useEffect(() => {
+    document.body.classList.add('home');
+
+    // eslint-disable-next-line
+  }, [])
+
+  useEffect(() => {
     if (setting === undefined) {
       dispatch(getSetting(setMessage));
+      console.log("loading setting");
     }
     // eslint-disable-next-line
   }, [setting]);
 
+  // get the openedList
   useEffect(() => {
-    if (openSetting || openTodo || openSticky) {
-      document.body.style.overflowY = 'hidden';
-    } else {
-      document.body.style.overflowY = 'auto';
+    if (totalOpenedNotes === undefined) {
+      dispatch(getOpenedNotes(setMessage));
+      console.log('get total opened notes');
     }
-  }, [openSetting, openTodo, openSticky]);
 
+    // eslint-disable-next-line
+  }, [totalOpenedNotes])
 
   useEffect(() => {
     const handleKeys = (event) => {
       const inputsItems = ['input', 'textarea'];
       const activeElement = document.activeElement.tagName.toLowerCase();
-      if (!inputsItems.includes(activeElement)) {
+      if (inputsItems.findIndex(item => item === activeElement || item === event.target.role) === -1) {
         if (event.code.toLowerCase() === 'keys' && !started) {
           setOpenSetting((e) => !e);
         }
@@ -65,7 +76,12 @@ function Home() {
     window.onkeydown = handleKeys;
   })
 
-  if (setting === undefined) {
+  if (
+    (
+      setting === undefined ||
+      totalOpenedNotes === undefined
+    )
+  ) {
     return (
       <>
         {(!message.message) ?
@@ -124,6 +140,7 @@ function Home() {
             <ActiveTask />
           </div>
         </div>
+        <StickyNotes setOpenSticky={setOpenSticky} openSticky={openSticky} setMessage={setMessage} />
       </React.Suspense>
       <React.Suspense
         fallback={
@@ -161,30 +178,18 @@ function Home() {
       >
         {openTodo && (
           <div className="glass-container">
-            <TodoList message={message} setMessage={setMessage} isLoading={isLoadingTask} setIsLoading={setIsLoadingTask} setOpenTodo={setOpenTodo} />
+            <TodoList
+              message={message}
+              setMessage={setMessage}
+              isLoading={isLoadingTask}
+              setIsLoading={setIsLoadingTask}
+              setOpenTodo={setOpenTodo}
+            />
           </div>
         )}
       </React.Suspense>
-      <React.Suspense
-        fallback={
-          <>
-            <div className='glass-container'>
-              <Loading
-                color="white"
-                backgroud="transparent"
-                className="glass-effect todo-loader"
-                size="big"
-              />
-            </div>
-          </>
-        }
-      >
-        {openSticky && (
-          <div className="glass-container">
-            <div className='glass-effect'><h1>sticky</h1></div>
-          </div>
-        )}
-      </React.Suspense>
+
+      {/* </React.Suspense> */}
     </>
   );
 }

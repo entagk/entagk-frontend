@@ -3,10 +3,10 @@ import React, { Suspense, lazy, useState } from 'react';
 import { RiArrowDownSLine } from 'react-icons/ri';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import { getMonthRange, getWeekStartAndEnd } from '../../../utils/helper';
-import Loading from '../../../utils/Loading/Loading';
+import Loading from '../../../utils/Components/Loading/Loading';
 
-const Menu = lazy(() => import('../../../utils/Menu/Menu'));
-const Button = lazy(() => import('../../../utils/Button/Button'));
+const Menu = lazy(() => import('../../../utils/Components/Menu/Menu'));
+const Button = lazy(() => import('../../../utils/Components/Button/Button'));
 
 const DateAndData = ({ dataType, setDataType, dateType, setDateType, date, setDate }) => {
   const [openMenu, setOpenMenu] = useState(false);

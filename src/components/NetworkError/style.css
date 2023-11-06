@@ -16,8 +16,7 @@
   background: #5d5d5da3;
   right: 0;
   top: 0;
-  padding-bottom: 20px;
-  padding-inline: 20px;
+  padding: 20px;
   backdrop-filter: blur(10px);
 }
 

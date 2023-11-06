@@ -3,17 +3,17 @@ import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { resetPassword, verifyResetToken } from '../../actions/auth';
-import Loading from '../../utils/Loading/Loading';
-import Message from '../../utils/Message';
+import Loading from '../../utils/Components/Loading/Loading';
+import Message from '../../utils/Components/Message/Message';
 import LogoutPage from '../Auth/LogoutPage/LogoutPage';
 
-import './../Auth/Auth.css';
+import '../Auth/AuthForm/style.css';
 import NotValidToken from './NotValidToken/NotValidToken';
 import NetworkError from '../NetworkError/NetworkError';
-import Button from '../../utils/Button/Button';
+import Button from '../../utils/Components/Button/Button';
 
 const NavBar = lazy(() => import('./../NavBar/NavBar'));
-const Input = lazy(() => import('../../utils/Input/Input'));
+const Input = lazy(() => import('../../utils/Components/Input/Input'));
 
 function Reset() {
   const { tokenId } = useParams();
@@ -46,6 +46,12 @@ function Reset() {
       }
     },
   };
+
+  useEffect(() => {
+    document.body.classList.remove('home');
+
+    // eslint-disable-next-line
+  }, [])
 
   useEffect(() => {
     localStorage.setItem('reset-token', tokenId);

@@ -1,0 +1,44 @@
+.save-local-popup {
+	margin: 20px;
+	padding: 20px;
+	border-radius: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.save-local-popup h2 {
+	width: 100%;
+	font-size: 40px;
+}
+
+.save-local-popup .sava-options {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	width: 100%;
+	margin-top: 20px;
+}
+
+.save-local-popup .sava-options .block {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.save-local-popup .sava-options .block span {
+	font-size: 24px;
+	margin-right: 20px;
+}
+
+.save-local-popup .buttons {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 20px;
+}

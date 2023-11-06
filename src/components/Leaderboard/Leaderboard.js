@@ -5,8 +5,8 @@ import React, {
   useState
 } from 'react';
 
-import Loading from '../../utils/Loading/Loading';
-import Message from '../../utils/Message';
+import Loading from '../../utils/Components/Loading/Loading';
+import Message from '../../utils/Components/Message/Message';
 import NetworkError from '../NetworkError/NetworkError';
 
 import './style.css';
@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getLeaderboard } from '../../actions/leaderboard';
 
 import User from './User';
-import Button from '../../utils/Button/Button';
+import Button from '../../utils/Components/Button/Button';
 import { Link } from 'react-router-dom';
 
 const NavBar = lazy(() => import('../NavBar/NavBar'));
@@ -31,6 +31,12 @@ function Achivments() {
     currentPage,
     numberOfPages,
   } = useSelector(state => state.leaderboard);
+
+  useEffect(() => {
+    document.body.classList.remove('home');
+
+    // eslint-disable-next-line
+  }, [])
 
   useEffect(() => {
     if (!total) {

@@ -1,6 +1,6 @@
 import React, { lazy, useState, useEffect, Suspense } from 'react';
 
-import Loading from "../../../../utils/Loading/Loading";
+import Loading from "../../../../utils/Components/Loading/Loading";
 import { useDispatch, useSelector } from 'react-redux';
 import { getTasksForTemplate } from '../../../../actions/templates';
 

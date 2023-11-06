@@ -1,7 +1,7 @@
 import React from "react";
 
 import { TbPlayerPause } from "react-icons/tb";
-import Button from "../../../../../utils/Button/Button";
+import Button from "../../../../../utils/Components/Button/Button";
 
 const Pause = ({ handleClick }) => {
   return (

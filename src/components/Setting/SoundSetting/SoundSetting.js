@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 
-import Loading from '../../../utils/Loading/Loading';
+import Loading from '../../../utils/Components/Loading/Loading';
 
 const Sound = lazy(() => import('./Sound/Sound'));
 

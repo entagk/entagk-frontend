@@ -2,7 +2,7 @@ import React from 'react';
 import NoIntenet from '../../icons/NoInternet/NoIntenet';
 
 import './style.css'
-import Button from '../../utils/Button/Button';
+import Button from '../../utils/Components/Button/Button';
 
 function NetworkError() {
   const reload = () => {

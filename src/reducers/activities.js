@@ -1,14 +1,12 @@
 import { ADD_ACTIVITY, GET_DAY, GET_DAYS, GET_YEAR, initToday } from "../actions/activities";
-import { END_LOADING, START_LOADING } from "../actions/auth";
+import { END_LOADING, START_LOADING, LOGOUT } from "../actions/auth";
 
 import { filterDuplicatedData, newDate } from "../utils/helper";
 
+const initialState = { days: [], isLoading: false };
+
 // eslint-disable-next-line
-export default (state = {
-  isLoading: false,
-  days: [],
-  // today: initToday
-}, action) => {
+export default (state = initialState, action) => {
   switch (action.type) {
     case START_LOADING:
       return {
@@ -66,6 +64,9 @@ export default (state = {
         days: yearData,
         total: yearData.length
       }
+
+    case LOGOUT:
+      return initialState;
 
     default:
       return state;

@@ -1,6 +1,6 @@
 import React from "react";
 import { MdRestartAlt } from "react-icons/md";
-import Button from "../../../../../utils/Button/Button";
+import Button from "../../../../../utils/Components/Button/Button";
 
 const ClearButton = ({ handleClear }) => {
   return (

@@ -6,7 +6,7 @@ import React, {
 
 import { RiExternalLinkLine } from "react-icons/ri";
 import { CgInternal } from "react-icons/cg";
-import Button from '../../../utils/Button/Button';
+import Button from '../../../utils/Components/Button/Button';
 
 function SmallWinBtn() {
   const [minWin, setMinWin] = useState(localStorage.getItem('opened') === 'popup');
@@ -63,8 +63,12 @@ function SmallWinBtn() {
 
   useEffect(() => {
     window.onkeydown = (event) => {
-      if (event.code.toLowerCase() === 'keye') {
-        handleOpenExtInt();
+      const inputsItems = ['input', 'textarea'];
+      const activeElement = document.activeElement.tagName.toLowerCase();
+      if (inputsItems.findIndex(item => item === activeElement || item === event.target.role) === -1) {
+        if (event.code.toLowerCase() === 'keye') {
+          handleOpenExtInt();
+        }
       }
     }
   })

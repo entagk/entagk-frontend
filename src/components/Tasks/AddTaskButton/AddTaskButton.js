@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Button from '../../../utils/Button/Button';
+import Button from '../../../utils/Components/Button/Button';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 import './style.css';

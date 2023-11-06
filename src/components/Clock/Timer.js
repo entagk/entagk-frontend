@@ -6,7 +6,7 @@ import { changeActive, PERIOD, START_TIMER, STOP_TIMER, CHANGE_ACTIVE } from "..
 import { pushNotification } from "../../utils/helper";
 import audioPlayer from "../../utils/audioPlayer";
 
-import Loading from "../../utils/Loading/Loading";
+import Loading from "../../utils/Components/Loading/Loading";
 
 import "./style.css";
 import SmallWinBtn from "./SmallWinBtn/SmallWinBtn";
@@ -89,11 +89,11 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
                 })
             }
         }
-        
+
         alarmSound.current.chengeVolume(setting?.alarmVolume);
         alarmSound.current.changeFile(setting?.alarmType.src);
         alarmSound.current.changeLoop(setting?.alarmRepet);
-        
+
         if (setting.clickType.name !== 'none') {
             if (clickSound.current) {
                 clickSound.current.chengeVolume(setting.clickVolume);
@@ -220,9 +220,9 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
 
     useEffect(() => {
         const handleKeys = (event) => {
-            const inputsItems = ['input', 'textarea']
+            const inputsItems = ['input', 'textarea'];
             const activeElement = document.activeElement.tagName.toLowerCase();
-            if (!inputsItems.includes(activeElement)) {
+            if (inputsItems.findIndex(item => item === activeElement || item === event.target.role) === -1) {
                 if (event.code.toLowerCase() === 'space') {
                     toggleStart();
                 }

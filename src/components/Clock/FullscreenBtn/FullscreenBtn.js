@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { RiFullscreenFill, RiFullscreenExitFill } from 'react-icons/ri';
-import Button from '../../../utils/Button/Button';
+import Button from '../../../utils/Components/Button/Button';
 
 const FullscreenBtn = () => {
   const [full, setFull] = useState(false);
@@ -17,8 +17,12 @@ const FullscreenBtn = () => {
 
   useEffect(() => {
     window.onkeydown = (event) => {
-      if (event.code.toLowerCase() === 'keyf') {
-        handleFull();
+      const inputsItems = ['input', 'textarea'];
+      const activeElement = document.activeElement.tagName.toLowerCase();
+      if (inputsItems.findIndex(item => item === activeElement || item === event.target.role) === -1) {
+        if (event.code.toLowerCase() === 'keyf') {
+          handleFull();
+        }
       }
     }
   })

@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getTasks } from "../../actions/tasks";
 
-import Loading from "../../utils/Loading/Loading";
-import Message from "../../utils/Message";
+import Loading from "../../utils/Components/Loading/Loading";
+import Message from "../../utils/Components/Message/Message";
 import NetworkError from "../NetworkError/NetworkError";
 
 import "./style.css";
@@ -20,7 +20,6 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate
   const tasks = useSelector(state => state.tasks);
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
-  console.log(tasks);
 
   useEffect(() => {
     if (tasks.tasks === undefined && tasks?.total === undefined) {

@@ -1,6 +1,4 @@
 import * as api from './../api/index';
-import { getSetting, initialSetting, modifySetting } from './timer';
-import { getTasks, addMultipleTasks } from './tasks';
 
 export const START_LOADING = 'START_LOADING';
 export const END_LOADING = 'END_LOADING';
@@ -14,30 +12,20 @@ export const REFRESH_TOKEN = 'REFRESH_TOKEN';
 export const LOGOUT = 'LOGOUT';
 export const ERROR = 'ERROR';
 
-export const authForm = (formData, type, setMessage, navigate, setFormErrors) => async dispatch => {
+export const authForm = (formData, type, localData, setSuccess, setMessage, navigate, setFormErrors) => async dispatch => {
   try {
     dispatch({ type: START_LOADING, data: 'auth' });
     if (type !== 'forget password') {
       const { data } = type === 'sign in' ? await api.signIn(formData) : type === 'sign up' ? await api.signUp(formData) : await api.googleLogin(formData);
-      setMessage({ type: 'success', message: data.message })
+      setMessage({ type: 'success', message: data.message });
+      setSuccess(true);
       dispatch({ type: AUTH, data: { ...data } });
+
       dispatch(getUserData(setMessage));
-      const setting = JSON.parse(localStorage.getItem('setting'));
-      const tasks = JSON.parse(localStorage.getItem('tasks'));
-      if (setting !== initialSetting && Boolean(setting)) {
-        dispatch(modifySetting(setting, setMessage, () => { }));
-      } else {
-        dispatch(getSetting(setMessage));
-      }
 
-      if (tasks?.length >= 0) {
-        dispatch(addMultipleTasks(tasks, setMessage, () => { }));
+      if (!localData) {
+        navigate("/");
       }
-      if (type !== 'sign up') {
-        dispatch(getTasks(setMessage, 1));
-      }
-
-      navigate("/");
     } else {
       const { data } = await api.forgetPassword(formData);
       setMessage({ type: 'success', message: data.message });

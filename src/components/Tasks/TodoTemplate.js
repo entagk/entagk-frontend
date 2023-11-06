@@ -2,9 +2,9 @@ import React, { lazy, useEffect, useState, Suspense } from 'react';
 
 import { getTodoTasks } from '../../actions/tasks';
 
-import Loading from '../../utils/Loading/Loading';
+import Loading from '../../utils/Components/Loading/Loading';
 
-import Message from "../../utils/Message";
+import Message from "../../utils/Components/Message/Message";
 import NetworkError from "../NetworkError/NetworkError";
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,7 +15,7 @@ const Task = lazy(() => import('./Task/Task'));
 const TaskForm = lazy(() => import('./TaskForm/TaskForm'));
 const AddTaskButton = lazy(() => import('./AddTaskButton/AddTaskButton'));
 
-const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage }) => {
+const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage, setActiveTemplate }) => {
   const dispatch = useDispatch();
   /**
    * I have used '|| {}' because after cleaning the task template from act i get the following error, 
@@ -94,6 +94,7 @@ const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage }
                     isLoading={isLoading}
                     setIsLoading={setIsLoading}
                     setMessage={setMessage}
+                    setActiveTemplate={setActiveTemplate}
                     {...task}
                   />
                 </Suspense>
@@ -122,6 +123,7 @@ const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage }
                     isLoading={isLoading}
                     setIsLoading={setIsLoading}
                     setMessage={setMessage}
+                    setActiveTemplate={setActiveTemplate}
                     {...task}
                   />
                 </Suspense>
@@ -162,7 +164,14 @@ const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage }
         />
       }>
         {openFormForNew && (
-          <TaskForm setOpen={setOpenFormForNew} oldData={null} template={{ "_id": todoTemplate._id }} isLoading={isLoading} setIsLoading={setIsLoading} setMessage={setMessage} />
+          <TaskForm
+            setOpen={setOpenFormForNew}
+            oldData={null}
+            template={{ "_id": todoTemplate._id }}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            setMessage={setMessage}
+          />
         )}
       </Suspense>
     </>
