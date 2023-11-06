@@ -11,6 +11,11 @@
 	grid-template-rows: 10px auto 10px;
 }
 
+.note-container:hover,
+.note-container.active {
+	z-index: 9001;
+}
+
 .bottom {
 	grid-row: 3;
 	grid-column: 1 / 4; /* Span across all columns */

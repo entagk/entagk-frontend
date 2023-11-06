@@ -33,7 +33,7 @@ export const updatedAt = (t) => {
   }
 }
 
-const NoteAtList = ({ id, onChangeNote, setMessage, setOpenedList }) => {
+const NoteAtList = ({ id, onChangeNote, setMessage, setActiveNote }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const note = useSelector(state => state.notes.notes.objects[id]);
   const { openedNotes } = useSelector(state => state.notes);
@@ -43,12 +43,13 @@ const NoteAtList = ({ id, onChangeNote, setMessage, setOpenedList }) => {
   const dispatch = useDispatch();
 
   const openNote = (e) => {
-    if (!openedNotes?.objects[id]) {
-      // setOpenedList(oL => oL.concat([id]));
+    if (!openedNotes?.ids.includes(id)) {
       if (localStorage.getItem('token'))
         onChangeNote({ id, open: true });
       else
         onChangeNote({ ...note, open: true });
+
+      setActiveNote(id);
     }
   }
 

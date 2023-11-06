@@ -47,6 +47,7 @@ const initialNote = {
 
 const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
   const dispatch = useDispatch();
+  const [activeNote, setActiveNote] = useState('');
   const [page, setPage] = useState(1);
   const {
     notes,
@@ -64,8 +65,6 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
       ids: []
     }
   };
-
-  // const [openedList, setOpenedList] = useState(openedNotes?.ids || []);
 
   const webSocket = useRef(null);
 
@@ -94,11 +93,6 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
         if (!data?.message) {
           if (!checkNoteId(data?._id)) {
             dispatch({ type: ADD_NOTE, data });
-            // adding to opened list
-            // setOpenedList((oL) => {
-            //   const newOL = oL.filter(n => n !== data?.oldId);
-            //   return newOL.concat([data?._id]);
-            // });
           } else {
             dispatch({ type: EDIT_NOTE, data });
           }
@@ -164,11 +158,6 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
         const addedNote = await addNew('notes', data);
 
         dispatch({ type: ADD_NOTE, data: addedNote });
-        // adding to opened list
-        // setOpenedList((oL) => {
-        //   const newOL = oL.filter(n => n !== data.oldId);
-        //   return newOL.concat([addedNote?._id]);
-        // });
       } else {
         const updatedNote = await updateOne(data, 'notes');
 
@@ -178,29 +167,12 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
   }
 
   const newNote = () => {
-    // const newId = `new-${openedList.length + 1}`;
     const newId = `new-${openedNotes?.ids?.length + 1}`;
-    // adding to opened list
-    // setOpenedList(oL => oL.concat([newId]));
     dispatch({ type: INIT_NOTE, data: { id: newId, ...initialNote } });
   }
 
   return (
     <>
-      {/* {openedList.length > 0 && (
-        <>
-          {openedList.map((note) => (
-            <SingleNote
-              key={note}
-              id={note}
-              newNote={newNote}
-              onChangeNote={onChangeNote}
-              setMessage={setMessage}
-              setOpenedList={setOpenedList}
-            />
-          ))}
-        </>
-      )} */}
       {openedNotes?.ids?.length > 0 && (
         <>
           {openedNotes?.ids?.map((note) => (
@@ -210,7 +182,8 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
               newNote={newNote}
               onChangeNote={onChangeNote}
               setMessage={setMessage}
-            // setOpenedList={setOpenedList}
+              active={activeNote}
+              setActive={setActiveNote}
             />
           ))}
         </>
@@ -307,8 +280,7 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
                                     key={note}
                                     onChangeNote={onChangeNote}
                                     setMessage={setMessage}
-                                  // openedList={openedList}
-                                  // setOpenedList={setOpenedList}
+                                    setActiveNote={setActiveNote}
                                   />
                                 ))
                               }
