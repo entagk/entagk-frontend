@@ -1,50 +1,75 @@
 /* start task form */
 .task-form {
-  background: transparent;
-  border: 2px solid #fff;
-  border-radius: 10px;
-  box-shadow: rgb(0 0 0 / 15%) 0px 10px 15px, rgb(0 0 0 / 12%) 0px 3px 6px;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 20px;
-  /* overflow: hidden; */
+	background: transparent;
+	border: 2px solid #fff;
+	border-radius: 10px;
+	box-shadow: rgb(0 0 0 / 15%) 0px 10px 15px, rgb(0 0 0 / 12%) 0px 3px 6px;
+	color: #fff;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	margin-bottom: 20px;
+	/* overflow: hidden; */
 }
 
 .task-form .form-container {
-  padding: 20px 20px 0;
-  padding-bottom: 0;
-  width: 100%;
-  border-radius: inherit;
+	padding: 20px 20px 0;
+	padding-bottom: 0;
+	width: 100%;
+	border-radius: inherit;
 }
 
 .task-form .form-inner-container {
-  width: 100%;
-  padding: 0;
+	width: 100%;
+	padding: 0;
 }
 
 .task-form .block {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 0;
-  margin-block: 0 20px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding: 0;
+	margin-block: 0 20px;
+}
+
+.task-form .block .task-type-name {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.task-form .block .task-type-name .select-menu button.toggle-menu {
+	font-size: 25px;
+}
+
+.task-form .block .task-type-name .select-menu button.toggle-menu .arrow {
+	margin-left: 0;
+}
+
+.task-form .block .task-type-name button.toggle-menu .start.icon {
+  width: fit-content;
+	height: fit-content;
+}
+
+.task-form .block .task-type-name .select-menu .menu-content {
+  left: 0;
+  width: max-content;
 }
 
 .task-form .block p {
-  text-transform: capitalize;
-  margin-bottom: 10px;
-  font-weight: 700;
+	text-transform: capitalize;
+	margin-bottom: 10px;
+	font-weight: 700;
 }
 
 .task-form .block.more-details-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 /* .task-form input {
@@ -56,146 +81,146 @@
 
 .task-form input:focus,
 .task-form textarea:focus,
-.task-form input.name:focus  {
-  padding: 9px;
-  border: 2px solid;
+.task-form input.name:focus {
+	padding: 9px;
+	border: 2px solid;
 }
 
 .task-form input.name {
-  outline: none;
-  font-size: 25px;
-  padding: 10px;
-  width: 100%;
+	outline: none;
+	font-size: 25px;
+	padding: 10px;
+	width: 100%;
 }
 
 .task-form input.name::placeholder {
-  font-style: italic;
-  padding-left: 3px;
-  color: #fff;
+	font-style: italic;
+	padding-left: 3px;
+	color: #fff;
 }
 
 .task-form .text-counter p {
-  text-transform: capitalize;
-  margin-bottom: 10px;
-  font-weight: bold;
-  font-size: 18px;
-  margin-right: 10px;
+	text-transform: capitalize;
+	margin-bottom: 10px;
+	font-weight: bold;
+	font-size: 18px;
+	margin-right: 10px;
 }
 
 .task-form .pomodoros {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: nowrap;
-  flex-direction: row;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	flex-wrap: nowrap;
+	flex-direction: row;
 }
 
 .task-form .pomodoros p {
-  font-weight: 200;
-  margin-bottom: 0;
-  margin-inline: 5px;
+	font-weight: 200;
+	margin-bottom: 0;
+	margin-inline: 5px;
 }
 
 .pomodoros .input-number {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
 }
 
 .pomodoros .arrows {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  right: 10px;
-  flex-direction: column-reverse;
-  background: #d7d6d6;
-  border-radius: 0 6px 6px 0;
-  height: 100%;
-  width: 16px;
-  padding: 2px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	right: 10px;
+	flex-direction: column-reverse;
+	background: #d7d6d6;
+	border-radius: 0 6px 6px 0;
+	height: 100%;
+	width: 16px;
+	padding: 2px;
 }
 
 .block input,
 .notes textarea {
-  background-color: #9f9f9f33;
-  /* margin-right: 10px; */
-  border-radius: 8px;
-  font-size: 16px;
+	background-color: #9f9f9f33;
+	/* margin-right: 10px; */
+	border-radius: 8px;
+	font-size: 16px;
 }
 
 .notes {
-  position: relative;
+	position: relative;
 }
 
 .notes textarea {
-  line-height: 1.4em;
-  height: 200px;
+	line-height: 1.4em;
+	height: 200px;
 }
 
 .block .text-counter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  color: #ff002f;
-  font-size: 20px;
-  font-weight: 100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	color: #ff002f;
+	font-size: 20px;
+	font-weight: 100;
 }
 
 .pomodoros input.est:last-of-type {
-  margin-left: 10px;
+	margin-left: 10px;
 }
 
 .block .notes,
 .block .project {
-  margin-block: 10px;
+	margin-block: 10px;
 }
 
 .add-buttons {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
 }
 
 .add-buttons button {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  font-weight: 600;
-  text-decoration: underline;
-  font-size: 1rem;
+	display: flex;
+	align-items: center;
+	text-align: center;
+	font-weight: 600;
+	text-decoration: underline;
+	font-size: 1rem;
 }
 
 .add-buttons button:last-of-type {
-  margin-left: 8px;
+	margin-left: 8px;
 }
 
 button.more-details {
-  font-size: 16px;
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: 2px solid;
-  justify-content: space-between;
+	font-size: 16px;
+	padding: 8px 14px;
+	border-radius: 8px;
+	border: 2px solid;
+	justify-content: space-between;
 }
 
 .task-footer {
-  background: #ececec38;
-  border-radius: inherit;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px;
+	background: #ececec38;
+	border-radius: inherit;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 15px;
 }
 /* end task form */
 
 @media (max-width: 500px) {
-  .task-form input.name {
-    font-size: 22px;
-    padding: 8px;
-  }
+	.task-form input.name {
+		font-size: 22px;
+		padding: 8px;
+	}
 }

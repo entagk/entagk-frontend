@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from 'react';
 
 import Loading from '../../../utils/Components/Loading/Loading';
 
-const Select = lazy(() => import('../Select/Select'));
+const Select = lazy(() => import('../../../utils/Components/Select/Select'));
 
 const NotificationSetting = ({ data, setData, handleChange, formErrors, handleBlur }) => {
   return (

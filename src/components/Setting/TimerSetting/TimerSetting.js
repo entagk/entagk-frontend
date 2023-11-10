@@ -4,7 +4,7 @@ import { LONG, PERIOD, SHORT } from "../../../actions/timer";
 
 import Loading from '../../../utils/Components/Loading/Loading';
 
-const Select = lazy(() => import('../Select/Select'));
+const Select = lazy(() => import('../../../utils/Components/Select/Select'));
 const TimeInputs = lazy(() => import('../TimeInputs/timeInputs'));
 const ToggleButton = lazy(() => import('../../../utils/Components/ToggleButton/ToggleButton'));
 

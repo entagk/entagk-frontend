@@ -6,7 +6,7 @@ import audioPlayer from '../../../../utils/audioPlayer';
 
 import "./style.css";
 
-const Select = lazy(() => import("../../Select/Select"));
+const Select = lazy(() => import("../../../../utils/Components/Select/Select"));
 
 function Sound({
   type,

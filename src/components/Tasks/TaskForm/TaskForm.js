@@ -10,12 +10,17 @@ import "./style.css";
 import Loading from "../../../utils/Components/Loading/Loading";
 import Button from "../../../utils/Components/Button/Button";
 const MoreSetting = lazy(() => import("./MoreSetting"));
+const Select = lazy(() => import("../../../utils/Components/Select/Select"));
 
 const initialData = {
   name: "",
   est: 1,
   notes: "",
-  project: ""
+  project: "",
+  type: {
+    name: "Work",
+    code: "1F4BC"
+  }
 }
 
 const TaskForm = ({
@@ -223,6 +228,21 @@ const TaskForm = ({
     validations: settingValidations,
   }
 
+  const types = [
+    { name: "Work", code: "1F4BC" },
+    { name: "Sport", code: "26BD" },
+    { name: "Entertainment", code: "1F389" },
+    { name: "Gaming", code: "1F3AE" },
+    { name: "Shopping", code: "1F6CD" },
+    { name: "Social networking", code: "1F310" },
+    { name: "Read", code: "1F4DA" },
+    { name: "Study", code: "1F4D6" },
+    { name: "Coding", code: "1F4BB" },
+    { name: "Designing", code: "1F3A8" },
+    { name: "Planning", code: "1F4C5" },
+    { name: "Nothing", code: "1F6AB" }
+  ];
+
   return (
     <>
       {isLoading === data?._id && (
@@ -241,32 +261,57 @@ const TaskForm = ({
         <div className="form-container">
           <div className="form-inner-container">
             <div className="block">
-              <div style={{ position: "relative" }}>
-                <input
-                  autoFocus
-                  className={`${formErrors.name && 'error'} name`}
-                  maxLength="50"
-                  required
-                  name="name"
-                  type="text"
-                  value={data.name}
-                  placeholder="What is task title?"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {data?.name?.length > 30 && (
-                  <div className="text-counter" style={{ color: `${50 - data?.name?.length > 10 ? "#0effe9" : "#ff002f"}` }}>
-                    <p
-                      style={{ fontSize: "16px", fontWeight: "500", marginBottom: "15px" }}
-                    >{50 - data?.name?.length}</p>
-                  </div>
-                )}
+              <div className="task-type-name">
+                <Suspense fallback={
+                  <Loading
+                    size="small"
+                    color={"#fff"}
+                    backgroud="transparent"
+                    paddingBlock='0'
+                  />
+                }>
+                  <Select
+                    options={types}
+                    data={!('type' in data) ? { ...data, type: { name: "Nothing", code: "1F6AB" } } : data}
+                    type="type"
+                    setData={setData}
+                    width="fit-content"
+                    displayType="icon"
+                    setChange={() => { }}
+                    menuTop={50}
+                  />
+                </Suspense>
+                <div style={{
+                  position: "relative",
+                  width: "100%",
+                  marginLeft: "10px"
+                }}>
+                  <input
+                    autoFocus
+                    className={`${formErrors.name && 'error'} name`}
+                    maxLength="50"
+                    required
+                    name="name"
+                    type="text"
+                    value={data.name}
+                    placeholder="What is task title?"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {data?.name?.length > 30 && (
+                    <div className="text-counter" style={{ color: `${50 - data?.name?.length > 10 ? "#0effe9" : "#ff002f"}` }}>
+                      <p
+                        style={{ fontSize: "16px", fontWeight: "500", marginBottom: "15px" }}
+                      >{50 - data?.name?.length}</p>
+                    </div>
+                  )}
+                  {formErrors.name && (
+                    <span className="error-text">
+                      {formErrors.name}
+                    </span>
+                  )}
+                </div>
               </div>
-              {formErrors.name && (
-                <span className="error-text">
-                  {formErrors.name}
-                </span>
-              )}
             </div>
             <div className="block">
               <p>
@@ -420,7 +465,7 @@ const TaskForm = ({
             variant="outlined"
           >cancel</Button>
         </div>
-      </form>
+      </form >
     </>
   )
 }

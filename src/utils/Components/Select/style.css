@@ -5,7 +5,7 @@ div.select-container {
   width: fit-content;
 }
 
-.setting .block .select-container {
+.block .select-container {
   width: fit-content;
 }
 
@@ -53,6 +53,7 @@ div.select-container {
 
 .select-menu button.toggle-menu.open {
   border: 2px solid;
+  padding: 9px;
 }
 
 .select-menu button.toggle-menu .arrow {
