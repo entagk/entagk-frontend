@@ -194,9 +194,12 @@ const Task = ({
                 </>
               )}
             </div>
+
             <p style={{
               textDecoration: props.check && "line-through"
-            }}>{props.name}</p>
+            }}>{
+                `${(props.type && props.type.name !== "Nothing") && String.fromCodePoint(parseInt((props.type?.code), 16))} ${props.name}`
+              }</p>
           </div>
           <div style={{
             display: "flex",
