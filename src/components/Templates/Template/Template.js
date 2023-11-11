@@ -121,9 +121,14 @@ function Template({ isLoading, setIsLoading, setMessage, setShowTodo, ...props }
           />
         )}
         <div className='temp-upper'>
-          <p className='temp-name'>
-            {props.name}
-          </p>
+          <div className='name-type-temp'>
+            {(props.type && props.type.name !== "Nothing") && (
+              <span className="temp-type" title="Template Type">{String.fromCodePoint(parseInt((props.type?.code), 16))}</span>
+            )}
+            <p className='temp-name' title="Template Name">
+              {props.name}
+            </p>
+          </div>
           <div style={{
             display: "flex",
             alignItems: "center",
