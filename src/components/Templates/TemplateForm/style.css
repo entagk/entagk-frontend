@@ -91,6 +91,31 @@
 	justify-content: space-between;
 }
 
+.form-middle .block .task-type-name {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.form-middle .block .task-type-name .select-menu button.toggle-menu {
+	font-size: 25px;
+}
+
+.form-middle .block .task-type-name .select-menu button.toggle-menu .arrow {
+	margin-left: 0;
+}
+
+.form-middle .block .task-type-name button.toggle-menu .start.icon {
+  width: fit-content;
+	height: fit-content;
+}
+
+.form-middle .block .task-type-name .select-menu .menu-content {
+  left: 0;
+  width: max-content;
+}
+
 .form-middle input {
 	width: 100%;
 	font-size: 15px;

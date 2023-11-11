@@ -23,6 +23,7 @@ const CompletedStatus = lazy(() => import('./CompletedStatus/CompletedStatus'));
 
 const initialData = {
   name: "",
+  type: { name: "Work", code: "1F4BC" },
   desc: "",
   tasks: [],
   time: {
