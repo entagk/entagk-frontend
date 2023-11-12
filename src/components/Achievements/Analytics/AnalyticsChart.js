@@ -3,7 +3,7 @@ import React, { lazy, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getDay, getDays, getYear } from '../../../actions/activities';
-import { calcDays, newDate } from '../../../utils/helper';
+import { calcDays, newDate, types } from '../../../utils/helper';
 
 const Charts = lazy(() => import('./Charts'));
 const DateAndData = lazy(() => import('./DateAndData'));
@@ -60,17 +60,16 @@ const AnalyticsChart = ({
         const max = day?.[dataType]?.reduce((p, c) => p + c?.totalMins, 0);
 
         if (max !== day?.totalMins) {
-          setData([
-            ...day?.[dataType],
-            {
-              name: dataType === 'tasks' ?
-                'unknown task' :
-                dataType === 'templates' ?
-                  'unknown templates' :
-                  'unknown types',
-              totalMins: day.totalMins - max
-            }
-          ])
+          if (dataType === 'tasks') {
+            const unknownTask = { name: "unknown task", type: types.at(-1) };
+            setData([...day?.[dataType], { ...unknownTask, totalMins: day.totalMins - max }]);
+          } else if (dataType === 'templates') {
+            setData([...day?.[dataType], { name: 'unknown template', totalMins: day.totalMins - max }])
+          } else {
+            const unknownType = { typeData: types.at(-1), totalMins: day.totalMins - max };
+
+            setData([...day?.[dataType], unknownType]);
+          }
         } else {
           if (day?.[dataType])
             setData(day?.[dataType]);

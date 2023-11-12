@@ -1,74 +1,83 @@
 .chart-container svg {
-  max-width: 100%;
-  height: auto;
-  width: 100%;
-  font: 10px sans-serif;
-  fill: rgb(204, 204, 204);
+	max-width: 100%;
+	height: auto;
+	width: 100%;
+	font: 10px sans-serif;
+	fill: rgb(204, 204, 204);
 }
 
 .chart-container .circle svg {
-  background-color: inherit;
+	background-color: inherit;
 }
 
-.chart-container svg .tick text,
-svg text {
+
+.chart-container svg .tick text, svg text {
   fill: #000;
 }
 .chart-container svg g.labels text {
   fill: #fff;
 }
 
+.chart-container svg text tspan {
+  font-size: 20px;
+}
+
+.chart-container svg .tick text tspan {
+  font-size: 16px;
+}
+
 .chart-container .chart-report {
-  background: #fff;
-  border-radius: 20px;
-  color: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding-top: 20px;
-  font-size: 18px;
+	background: #fff;
+	border-radius: 20px;
+	color: #000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding-top: 20px;
+	font-size: 18px;
 }
 
 .chart-container .chart-report .rows {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	width: 100%;
 }
 
 .chart-container .chart-report .row {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-block: 10px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-block: 10px;
 }
 
 .chart-container .chart-report .row > div {
-  display: flex;
+	display: flex;
 }
 
-.chart-container .chart-report .row .row-color {
-  width: 20px;
-  height: 20px;
-  display: block;
-  margin-right: 10px;
+.chart-container .chart-report .row .row-color,
+.chart-container .chart-report .row .type-icon {
+	width: 20px;
+	height: 20px;
+	display: block;
+	margin-right: 10px;
 }
 
 .rows .row.head-row {
-  padding-bottom: 15px;
-  border-bottom: 1px solid #ccc;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #ccc;
 }
 
 .chart-container .chart-report .row.head-row p {
-  font-weight: 600;
+	font-weight: 600;
 }
 
 @media (max-width: 768px) {
-  .chart-container .chart-report .row .name {
-    font-size: 16px;
-    margin-right: 10px;
-  }
+	.chart-container .chart-report .row .name {
+		font-size: 16px;
+		margin-right: 10px;
+	}
 }

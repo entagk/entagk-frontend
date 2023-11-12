@@ -2,7 +2,7 @@ import React, { lazy, useEffect, useState } from 'react';
 
 import Loading from '../../../utils/Components/Loading/Loading';
 
-import { filterDuplicatedData } from '../../../utils/helper';
+import { filterDuplicatedData, types } from '../../../utils/helper';
 
 import './style.css';
 import YearChart from '../../../utils/Components/Charts/YearChart/YearChart';
@@ -32,8 +32,14 @@ const Charts = ({
           const dayTasks = d?.[dataType] || [];
           const totalMins = dayTasks ? dayTasks?.reduce((p, c) => p + c?.totalMins, 0) : 0;
           if (d.totalMins !== totalMins && d.totalMins > 0) {
-            const unknownName = dataType === 'tasks' ? "unknown task" : dataType === 'templates' ? 'unknown template' : 'unknown type';
-            dayTasks.push({ name: unknownName, totalMins: d.totalMins - totalMins });
+            if (dataType === 'tasks') {
+              const unknownTask = { name: "unknown task", type: types.at(-1) };
+              dayTasks.push({ ...unknownTask, totalMins: d.totalMins - totalMins });
+            } else if (dataType === 'templates') {
+              dayTasks.push({name: "unknown template", totalMins: d.totalMins - totalMins });
+            } else {
+              dayTasks.push({ typeData: types.at(-1), totalMins: d.totalMins - totalMins });
+            }
           }
 
           return dayTasks;
@@ -72,9 +78,9 @@ const Charts = ({
               ) : (
                 <>
                   {chart === 'pie' ? (
-                    <Pie data={data} />
+                    <Pie data={data} dataType={dataType} />
                   ) : (
-                    <Chart data={data} />
+                    <Chart data={data} dataType={dataType} />
                   )}
                 </>
               )}

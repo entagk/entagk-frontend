@@ -5,8 +5,10 @@ import { wrapText, stringToColor } from "../../helper";
 import './style.css';
 import ChartReport from "./ChartReport";
 
-function Chart({ data }) {
+function Chart({ data, dataType }) {
   const maxMins = Math.ceil(d3.max(data, (d) => d?.totalMins) / 10) * 10;
+
+  console.log("data: ", data);
 
   const width = window.innerWidth,
     marginTop = 30,
@@ -27,7 +29,7 @@ function Chart({ data }) {
       d3.groupSort(
         data,
         ([d]) => -d?.totalMins,
-        (d) => d?.name
+        (d) => dataType !== 'types' ? d?.name : d?.typeData?.name
       )
     )
     .range([marginTop, height - marginBottom])
@@ -87,7 +89,7 @@ function Chart({ data }) {
       .data(data)
       .join("text")
       .attr("x", (d) => x(d?.totalMins))
-      .attr("y", (d) => y(d.name) + y.bandwidth() / 2)
+      .attr("y", (d) => y(dataType !== 'types' ? d?.name : d?.typeData?.name) + y.bandwidth() / 2)
       .attr("dy", "0.35em")
       .attr("dx", -4)
       .text((d) => d?.totalMins?.toFixed(2) + " m")
@@ -115,9 +117,9 @@ function Chart({ data }) {
         .data(data)
         .enter()
         .append('rect')
-        .attr('y', (d) => y(d.name))
+        .attr('y', (d) => y(dataType !== 'types' ? d?.name : d?.typeData?.name))
         .attr('x', (d) => x(0))
-        .attr("fill", (d) => stringToColor(d.name))
+        .attr("fill", (d) => stringToColor(dataType !== 'types' ? d?.name : d?.typeData?.name))
         .attr('height', y.bandwidth());
 
     const duration = 1000;
@@ -130,7 +132,7 @@ function Chart({ data }) {
 
     selectedBarsRef
       .append('title')
-      .text((d) => d.name);
+      .text((d) => dataType !== 'types' ? d?.name : d?.typeData?.name);
 
     return () => {
       bars.selectAll('*').remove();
@@ -158,7 +160,7 @@ function Chart({ data }) {
         <g ref={gx} transform={`translate(0,${marginTop})`}></g>
         <g ref={gy} transform={`translate(${marginLeft},0)`} />
       </svg>
-      <ChartReport rows={data} totalTime={data.reduce((p, t) => p + t.totalMins, 0)} />
+      <ChartReport dataType={dataType} rows={data} totalTime={data.reduce((p, t) => p + t.totalMins, 0)} />
     </>
   );
 }
