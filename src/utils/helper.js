@@ -230,3 +230,18 @@ export const filterDuplicatedData = (data, property) => {
     }
   })
 }
+
+export const types = [
+  { name: "Work", code: "1F4BC" },
+  { name: "Sport", code: "26BD" },
+  { name: "Entertainment", code: "1F389" },
+  { name: "Gaming", code: "1F3AE" },
+  { name: "Shopping", code: "1F6CD" },
+  { name: "Social networking", code: "1F310" },
+  { name: "Read", code: "1F4DA" },
+  { name: "Study", code: "1F4D6" },
+  { name: "Coding", code: "1F4BB" },
+  { name: "Designing", code: "1F3A8" },
+  { name: "Planning", code: "1F4C5" },
+  { name: "Nothing", code: "1F6AB" }
+];

@@ -1,6 +1,6 @@
 import * as api from '../api';
 import { END_LOADING, LOGOUT, START_LOADING } from "./auth";
-import { calcDays, newDate } from '../utils/helper';
+import { calcDays, newDate, types } from '../utils/helper';
 
 export const ADD_ACTIVITY = 'ADD_ACTIVITY';
 export const GET_DAY = 'GET_DAY';
@@ -37,17 +37,16 @@ const changeDayData = (dateType, dataType, today, setData, data) => {
     if (day) {
       const max = day?.[dataType]?.reduce((p, c) => p + c?.totalMins, 0);
       if (max !== data?.totalMins) {
-        setData([
-          ...data[dataType],
-          {
-            name: dataType === 'tasks' ?
-              'unknown task' :
-              dataType === 'templates' ?
-                'unknown templates' :
-                'unknown types',
-            totalMins: data.totalMins - max
-          }
-        ])
+        if (dataType === 'tasks') {
+          const unknownTask = { name: "unknown task", type: types.at(-1) };
+          setData([...day?.[dataType], { ...unknownTask, totalMins: day.totalMins - max }]);
+        } else if (dataType === 'templates') {
+          setData([...day?.[dataType], { name: 'unknown template', totalMins: day.totalMins - max }])
+        } else {
+          const unknownType = { typeData: types.at(-1), totalMins: day.totalMins - max };
+
+          setData([...day?.[dataType], unknownType]);
+        }
       } else {
         if (data?.[dataType])
           setData(data?.[dataType]);

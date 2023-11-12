@@ -194,9 +194,14 @@ const Task = ({
                 </>
               )}
             </div>
-            <p style={{
+            {(props.type && props.type.name !== "Nothing") && (
+              <span className="task-type" title="Task Type">{String.fromCodePoint(parseInt((props.type?.code), 16))}</span>
+            )}
+            <p className="task-name" title="Task Name" style={{
               textDecoration: props.check && "line-through"
-            }}>{props.name}</p>
+            }}>{
+                `${props.name}`
+              }</p>
           </div>
           <div style={{
             display: "flex",

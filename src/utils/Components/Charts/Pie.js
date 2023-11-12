@@ -54,7 +54,7 @@ const Pie = ({ data, dateType, dataType }) => {
     const path = g
       .enter()
       .append("path")
-      .attr("fill", (d) => stringToColor(d?.data.name))
+      .attr("fill", (d) => stringToColor(dataType !== 'types' ? d?.data.name : d?.data?.typeData.name))
 
     path.transition()
       .duration(1000)
@@ -76,7 +76,7 @@ const Pie = ({ data, dateType, dataType }) => {
       .append("title")
       .text(
         (d) =>
-          `${d.data.name}: ${d.data.totalMins?.toFixed(2)?.toLocaleString()} Mins`
+          `${dataType !== 'types' ? d?.data.name : d?.data?.typeData.name}: ${d.data.totalMins?.toFixed(2)?.toLocaleString()} Mins`
       );
 
     const centerText = svg
@@ -144,7 +144,7 @@ const Pie = ({ data, dateType, dataType }) => {
         width={width}
         height={height}
       ></svg>
-      <ChartReport rows={data} totalTime={maxTotalMins} />
+      <ChartReport rows={data} dataType={dataType} totalTime={maxTotalMins} />
     </>
   );
 };
