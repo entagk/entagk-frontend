@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ADD_NOTE, EDIT_NOTE, INIT_NOTE, getNotes } from '../../actions/notes';
 import { addNew, updateOne } from '../../utils/indexedDB/db';
 
-import { baseURL } from '../../api/index';
+import { BASE_URL } from '../../api/index';
 
 import { onScroll } from '../../utils/helper';
 
@@ -23,7 +23,7 @@ const Button = lazy(() => import('./../../utils/Components/Button/Button'));
 
 const generateWebsocket = () => {
   return new WebSocket(
-    `${baseURL.replace('http', 'ws')
+    `${BASE_URL.replace('http', 'ws')
     }/stickynote/?authorization=Bearer ${localStorage.getItem('token')}`
   );
 }
