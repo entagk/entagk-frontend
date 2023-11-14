@@ -10,7 +10,7 @@ import { UPDATE_USER } from '../../../actions/auth';
 import Loading from '../../../utils/Components/Loading/Loading';
 import './style.css';
 
-import { baseURL } from '../../../api';
+import { BASE_URL } from '../../../api';
 
 function ChangeAvatar() {
   const dispatch = useDispatch();
@@ -25,7 +25,7 @@ function ChangeAvatar() {
     const logoFormData = new FormData()
     logoFormData.set('avatar', e.target.files[0]);
     const uploadedData = await fetch(
-      `${baseURL}/upload/image/avatar/`,
+      `${BASE_URL}/upload/image/avatar/`,
       {
         method: 'POST',
         body: logoFormData,
