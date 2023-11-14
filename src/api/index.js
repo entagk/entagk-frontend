@@ -2,7 +2,7 @@ import axios from "axios";
 import jwt_decode from 'jwt-decode';
 
 export const BASE_URL = process.env.REACT_APP_API_URL;
-
+console.log(BASE_URL);
 const API = axios.create({ baseURL: BASE_URL });
 
 // Add a request interceptor
