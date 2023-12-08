@@ -21,9 +21,9 @@ div.select-container {
 
 .select-menu .menu-content {
   top: 35px;
-  background: #afafaf8f;
+  background: #fff;
   backdrop-filter: blur(8px);
-  color: #fff;
+  color: #000;
   width: 100%;
 
   max-height: 150px;
@@ -31,12 +31,12 @@ div.select-container {
   justify-content: flex-start;
 }
 
-/* todo: add padding 7px, 10px*/
 .select-menu .menu-content .row button {
   font-size: 16px;
   /* width: 200px; */
 
-  color: #fff;
+  color: #595959;
+  padding: 7px 10px;
 }
 
 .select-menu button.toggle-menu {
@@ -63,8 +63,9 @@ div.select-container {
   margin-left: 10px;
 }
 
-.select-menu button.active {
-  background-color: rgb(0 0 0 / 26%);
+.select-menu .menu-content .row button.active {
+  background-color: var(--main-light-black);
+  color: #000;
 }
 
 @media (max-width: 400px) {
