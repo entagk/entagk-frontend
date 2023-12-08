@@ -20,6 +20,10 @@
   margin-right: 20px;
 }
 
+.sound-type .select-menu .menu-content .row button {
+  padding: 7px 10px;
+}
+
 .sound-details input {
   margin-right: 0;
 }

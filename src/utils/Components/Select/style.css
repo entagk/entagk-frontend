@@ -17,6 +17,8 @@ div.select-container {
   position: relative;
 }
 
+/* todo: .select-menu .menu for width */
+
 .select-menu .menu-content {
   top: 35px;
   background: #afafaf8f;
@@ -29,6 +31,7 @@ div.select-container {
   justify-content: flex-start;
 }
 
+/* todo: add padding 7px, 10px*/
 .select-menu .menu-content .row button {
   font-size: 16px;
   /* width: 200px; */

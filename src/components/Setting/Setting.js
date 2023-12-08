@@ -179,13 +179,14 @@ function Setting({ setOpenSetting }) {
   }
 
   const requiredForEveryStatus = {
-    data: data,
-    setData: setData,
-    handleChange: handleChange,
-    handleBlur: handleBlur,
-    formErrors: formErrors,
-    setFormErrors: setFormErrors,
-    validations: validations,
+    data,
+    setData,
+    handleChange,
+    handleBlur,
+    formErrors,
+    setFormErrors,
+    validations,
+    setMessage,
   }
 
   return (

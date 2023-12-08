@@ -10,7 +10,8 @@ import {
   CHANGE_TO_TEMPLATE_SETTING,
   START_TIMER,
   STOP_TIMER,
-  initialSetting
+  initialSetting,
+  GET_SOUNDS
 } from "../actions/timer";
 
 // eslint-disable-next-line
@@ -45,9 +46,10 @@ export default (state = {
       document.documentElement.style.setProperty('--main-color', state.activites[active]?.color || '#ff002f');
       document.documentElement.style.setProperty('--main-light-background', (state.activites[active]?.color || '#ff002f') + "15");
       document.documentElement.style.setProperty('--secondary-color', state.activites[active]?.timerBorder || '#b40021');
-      return { ...state, isLoading: action.data === 'setting' ? true : state.isLoading }
+      return { ...state, isLoading: action.data === 'setting' ? true : state.isLoading };
+
     case END_LOADING:
-      return { ...state, isLoading: action.data === 'setting' ? false : state.isLoading }
+      return { ...state, isLoading: action.data === 'setting' ? false : state.isLoading };
 
     case GET_SETTING:
       return {
@@ -60,7 +62,7 @@ export default (state = {
       return { ...state, setting: { ...state.setting, ...action.data } };
 
     case CHANGE_ACTIVE_TASK:
-      return { ...state, setting: state.setting.applyTaskSetting && !action.data?._id ? state.originalSetting : state.setting }
+      return { ...state, setting: state.setting.applyTaskSetting && !action.data?._id ? state.originalSetting : state.setting };
 
     case START_TIMER:
       localStorage.setItem('restOfTime', action.data);
@@ -86,7 +88,6 @@ export default (state = {
 
       return { ...state, active: newActive, periodNum };
 
-
     case MODITY_SETTING:
       if (!localStorage.getItem("token")) {
         const oldSetting = state.setting;
@@ -97,7 +98,10 @@ export default (state = {
         const oldSetting = state.setting;
         const newSetting = Object.assign(oldSetting, action.data);
         return { ...state, setting: newSetting, originalSetting: newSetting }
-      }
+      };
+
+    case GET_SOUNDS:
+      return { ...state, sounds: { ...state.sounds, [action.data.type]: action.data.data } };
 
     case LOGOUT:
     case DELETE_USER:
