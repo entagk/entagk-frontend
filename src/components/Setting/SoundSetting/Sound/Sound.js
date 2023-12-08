@@ -68,7 +68,6 @@ function Sound({
             setData={setData}
             type={`${type}Type`}
             setChange={setChange}
-            width={type === "click" ? "200px" : "150px"}
           />
         )}
       </div>

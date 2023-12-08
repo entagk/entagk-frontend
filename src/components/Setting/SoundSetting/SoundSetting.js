@@ -53,10 +53,6 @@ const SoundSetting = ({
           }>
             <Sound
               type="click"
-              // handleChange={handleChange}
-              // data={data}
-              // setData={setData}
-              // setMessage={setMessage}
               {...requiredForEverySound}
             />
           </Suspense>
@@ -74,9 +70,6 @@ const SoundSetting = ({
         }>
           <Sound
             type="ticking"
-            // handleChange={handleChange}
-            // data={data}
-            // setData={setData}
             {...requiredForEverySound}
           />
         </Suspense>

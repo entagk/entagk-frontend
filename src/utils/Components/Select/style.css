@@ -17,7 +17,9 @@ div.select-container {
   position: relative;
 }
 
-/* todo: .select-menu .menu for width */
+.select-container .select-menu .menu {
+  width: 100%;
+}
 
 .select-menu .menu-content {
   top: 35px;
@@ -37,6 +39,7 @@ div.select-container {
 
   color: #595959;
   padding: 7px 10px;
+  text-transform: capitalize;
 }
 
 .select-menu button.toggle-menu {
@@ -47,6 +50,7 @@ div.select-container {
   border: 1px solid;
   border-radius: 10px;
   width: 100%;
+  text-transform: capitalize;
 }
 
 .select-menu button.toggle-menu:hover,

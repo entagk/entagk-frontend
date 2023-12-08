@@ -137,7 +137,7 @@ export const getGeneralSounds = (type, setIsLoading, setMessage) => async dispat
         type,
         data: {
           total: data.total,
-          files: data.files.map(f => ({ name: f.name.toLowerCase().replace('_', " ").replace('-', " "), src: f.src })).sort((a, b) => a.name - b.name)
+          files: data.files.map(f => ({ name: f.name.toLowerCase().replaceAll('_', " ").replaceAll('-', " "), src: f.src })).sort((a, b) => a.name - b.name)
         }
       }
     });
