@@ -14,6 +14,7 @@ import Button from '../../utils/Components/Button/Button';
 
 const NavBar = lazy(() => import('./../NavBar/NavBar'));
 const Input = lazy(() => import('../../utils/Components/Input/Input'));
+const Logo = lazy(() => import('../../icons/entagkLogo/logo'));
 
 function Reset() {
   const { tokenId } = useParams();
@@ -74,12 +75,14 @@ function Reset() {
 
   if (validate === undefined && isLoading) {
     return (
-      <Loading
-        size="verybig"
-        backgroud="transperent"
-        color="#ffffff"
-        className="center-fullpage"
-      />
+      <div className='center-fullpage' style={{ color: "#fff" }}>
+        <div className='home-loading'>
+          <Suspense fallback={<></>}>
+            <Logo style={{ fontSize: "12rem" }} />
+          </Suspense>
+          <p>loading...</p>
+        </div>
+      </div>
     )
   }
 
@@ -106,12 +109,11 @@ function Reset() {
 
   return (
     <Suspense fallback={
-      <Loading
-        size="verybig"
-        backgroud="transperent"
-        color="#ffffff"
-        className="center-fullpage"
-      />
+      <div className='center-fullpage' style={{ color: "#fff" }}>
+        <div className='home-loading'>
+          <p>loading...</p>
+        </div>
+      </div>
     }>
       <div className="container">
         <NavBar setMessage={setMessage} />

@@ -4,14 +4,13 @@ import React, {
   useState,
   useEffect
 } from 'react';
+import { useSelector } from 'react-redux';
 
-import Loading from '../../utils/Components/Loading/Loading';
 import Message from '../../utils/Components/Message/Message';
 import NetworkError from '../NetworkError/NetworkError';
 import NoLogin from '../NoLogin/NoLogin';
 
 import './style.css';
-import { useSelector } from 'react-redux';
 
 const NavBar = lazy(() => import('../NavBar/NavBar'));
 const Summary = lazy(() => import('./Summary/Summary'));
@@ -45,12 +44,11 @@ const Achievements = () => {
         </>
       )}
       <Suspense fallback={
-        <Loading
-          size="verybig"
-          backgroud="transperent"
-          color="#ffffff"
-          className='center-fullpage'
-        />
+        <div className='center-fullpage' style={{ color: "#fff" }}>
+          <div className='home-loading'>
+            <p>loading...</p>
+          </div>
+        </div>
       }>
         <div className='container'>
           <NavBar />

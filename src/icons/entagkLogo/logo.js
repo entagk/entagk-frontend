@@ -1,6 +1,6 @@
 import React from 'react'
 
-const logo = () => {
+const logo = ({style}) => {
   return (
     <svg
       version={1.0}
@@ -11,7 +11,8 @@ const logo = () => {
       viewBox="0 0 128.000000 128.000000"
       stroke="currentColor" fill="currentColor"
       style={{
-        filter: 'drop-shadow(0px 0px 2px #7a7a7a)'
+        filter: 'drop-shadow(0px 0px 2px #7a7a7a)',
+        ...style
       }}
     >
       <g

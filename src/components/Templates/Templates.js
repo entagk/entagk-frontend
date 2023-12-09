@@ -26,6 +26,7 @@ const TemplateTasks = lazy(() => import('./TemplateTasks/TemplateTasks'))
 const TemplateForm = lazy(() => import('./TemplateForm/TemplateForm.js'))
 const SearchBar = lazy(() => import('./SearchBar/SearchBar'));
 const PaginationBar = lazy(() => import('../../utils/Components/PaginationBar/PaginationBar'));
+const Logo = lazy(() => import("../../icons/entagkLogo/logo"));
 
 function Templates() {
   const dispatch = useDispatch();
@@ -68,12 +69,14 @@ function Templates() {
         {(!message.message.includes('Network Error')) ?
           (
             <>
-              <Loading
-                size="verybig"
-                backgroud="transperent"
-                color="#ffffff"
-                className='center-fullpage'
-              />
+              <div className='center-fullpage' style={{ color: "#fff" }}>
+                <div className='home-loading'>
+                  <Suspense fallback={<></>}>
+                    <Logo style={{ fontSize: "12rem" }} />
+                  </Suspense>
+                  <p>loading...</p>
+                </div>
+              </div>
             </>
           ) : (
             <>
@@ -165,12 +168,11 @@ function Templates() {
         </>
       )}
       <Suspense fallback={
-        <Loading
-          size="verybig"
-          backgroud="transperent"
-          color="#ffffff"
-          className='center-fullpage'
-        />
+        <div className='center-fullpage' style={{ color: "#fff" }}>
+          <div className='home-loading'>
+            <p>loading...</p>
+          </div>
+        </div>
       }>
         <div className='templates container'>
           <NavBar />
