@@ -43,28 +43,13 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate
   }, [tasks.tasks, tasks.total])
 
   if (tasks.tasks === undefined) {
-    console.log(message);
     return (
       <>
-        {(!message.message) ?
-          (
-            <>
-              <Loading
-                size="big"
-                color="white"
-                backgroud="transparent"
-              />
-            </>
-          ) : (
-            <>
-              {(message.message && !message.message.includes('Network Error')) ? (
-                <Message {...message} setMessage={setMessage} />
-              ) : (
-                <NetworkError />
-              )}
-            </>
-          )
-        }
+        <Loading
+          size="big"
+          color="white"
+          backgroud="transparent"
+        />
       </>
     )
   }
@@ -81,7 +66,6 @@ const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate
                     size="medium"
                     color={"#fff"}
                     backgroud="transparent"
-                    style={{}}
                   />
                 }>
                   <Task

@@ -171,12 +171,16 @@ function Home() {
         fallback={
           <>
             <div className='glass-container'>
-              <Loading
-                color="white"
-                backgroud="transparent"
-                className="glass-effect todo-loader"
-                size="big"
-              />
+              <div className='glass-effect todo-loader'>
+                <div className='header'>
+                  <h2>loading tasks...</h2>
+                </div>
+                <Loading
+                  color="white"
+                  backgroud="transparent"
+                  size="big"
+                />
+              </div>
             </div>
           </>
         }
