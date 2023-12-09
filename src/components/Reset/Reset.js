@@ -78,7 +78,7 @@ function Reset() {
       <div className='center-fullpage' style={{ color: "#fff" }}>
         <div className='home-loading'>
           <Suspense fallback={<></>}>
-            <Logo style={{ fontSize: "12rem" }} />
+            <Logo style={{ fontSize: "8em" }} />
           </Suspense>
           <p>loading...</p>
         </div>

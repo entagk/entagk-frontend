@@ -61,7 +61,7 @@ function Achivments() {
       <Suspense fallback={
         <div className='center-fullpage' style={{ color: "#fff" }}>
           <div className='home-loading'>
-            <Logo style={{ fontSize: "12rem" }} />
+            <Logo style={{ fontSize: "8em" }} />
             <p>loading...</p>
           </div>
         </div>
