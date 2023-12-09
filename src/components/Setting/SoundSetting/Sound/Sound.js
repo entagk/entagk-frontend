@@ -1,10 +1,12 @@
 import React, { lazy, useEffect, useRef, useState } from 'react';
 
-import { alarmSounds, tickingSounds, clickSounds } from "../../../../actions/timer";
+import { getGeneralSounds } from "../../../../actions/timer";
 
 import audioPlayer from '../../../../utils/audioPlayer';
 
 import "./style.css";
+import { useSelector, useDispatch } from 'react-redux';
+import Loading from '../../../../utils/Components/Loading/Loading';
 
 const Select = lazy(() => import("../../../../utils/Components/Select/Select"));
 
@@ -14,11 +16,23 @@ function Sound({
   setData,
   handleBlur,
   handleRepetChange,
-  formErrors
+  formErrors,
+  setMessage
 }) {
-  const sounds = type === 'alarm' ? alarmSounds : type === 'ticking' ? tickingSounds : clickSounds;
+  // const sounds = type === 'alarm' ? alarmSounds : type === 'ticking' ? tickingSounds : clickSounds;
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const sounds = useSelector(state => state.timer.sounds?.[type]);
   const audioChanging = useRef(audioPlayer({ src: data[`${type}Type`].src, volume: data[`${type}Volume`] }));
   const [change, setChange] = useState(null);
+
+  useEffect(() => {
+    if (!sounds || sounds?.files?.length === 0) {
+      dispatch(getGeneralSounds(type, setIsLoading, setMessage));
+    }
+
+    // eslint-disable-next-line
+  }, [sounds]);
 
   useEffect(() => {
     if (change !== null && data[`${type}Type`].name !== 'none') {
@@ -40,14 +54,22 @@ function Sound({
     <div className='sound-details'>
       <div className="sound-type">
         <h4>Sound</h4>
-        <Select
-          data={data}
-          options={sounds}
-          setData={setData}
-          type={`${type}Type`}
-          setChange={setChange}
-          width={type === "click" ? "200px" : "150px"}
-        />
+        {(isLoading || sounds?.files?.length === 0) ? (
+          <Loading
+            size="small"
+            color={"#fff"}
+            backgroud="transparent"
+            paddingBlock='0'
+          />
+        ) : (
+          <Select
+            data={data}
+            options={sounds?.files}
+            setData={setData}
+            type={`${type}Type`}
+            setChange={setChange}
+          />
+        )}
       </div>
       {data[`${type}Type`].name !== "none" && (
         <div className="sound-type">

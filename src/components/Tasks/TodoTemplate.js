@@ -4,9 +4,6 @@ import { getTodoTasks } from '../../actions/tasks';
 
 import Loading from '../../utils/Components/Loading/Loading';
 
-import Message from "../../utils/Components/Message/Message";
-import NetworkError from "../NetworkError/NetworkError";
-
 import { useDispatch, useSelector } from 'react-redux';
 
 import { onScroll } from '../../utils/helper';
@@ -15,7 +12,7 @@ const Task = lazy(() => import('./Task/Task'));
 const TaskForm = lazy(() => import('./TaskForm/TaskForm'));
 const AddTaskButton = lazy(() => import('./AddTaskButton/AddTaskButton'));
 
-const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage, setActiveTemplate }) => {
+const Template = ({ todoTemplate, isLoading, setIsLoading, setMessage, setActiveTemplate }) => {
   const dispatch = useDispatch();
   /**
    * I have used '|| {}' because after cleaning the task template from act i get the following error, 
@@ -51,25 +48,11 @@ const Template = ({ todoTemplate, isLoading, setIsLoading, message, setMessage, 
 
     return (
       <>
-        {(!message.message) ?
-          (
-            <>
-              <Loading
-                size="big"
-                color="white"
-                backgroud="transparent"
-              />
-            </>
-          ) : (
-            <>
-              {(message.message && !message.message.includes('Network Error')) ? (
-                <Message {...message} setMessage={setMessage} />
-              ) : (
-                <NetworkError />
-              )}
-            </>
-          )
-        }
+        <Loading
+          size="big"
+          color="white"
+          backgroud="transparent"
+        />
       </>
     )
   }

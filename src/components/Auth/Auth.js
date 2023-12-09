@@ -8,11 +8,12 @@ import { getTasks } from '../../actions/tasks';
 import Message from '../../utils/Components/Message/Message';
 import LogoutPage from "./LogoutPage/LogoutPage";
 import NetworkError from "../NetworkError/NetworkError";
-import Loading from '../../utils/Components/Loading/Loading';
+// import Loading from '../../utils/Components/Loading/Loading';
 
 const NavBar = lazy(() => import("../NavBar/NavBar"));
 const SaveLocalPopup = lazy(() => import('./SaveLocal/SaveLocal'));
 const AuthForm = lazy(() => import('./AuthForm/AuthForm'));
+const Logo = lazy(() => import('../../icons/entagkLogo/logo'));
 
 const Auth = () => {
   const dispatch = useDispatch();
@@ -67,12 +68,14 @@ const Auth = () => {
         {(!message.message) ?
           (
             <>
-              <Loading
-                size="verybig"
-                backgroud="transperent"
-                color="#ffffff"
-                className='center-fullpage'
-              />
+              <div className='center-fullpage' style={{ color: "#fff" }}>
+                <div className='home-loading'>
+                  <Suspense fallback={<></>}>
+                    <Logo style={{ fontSize: "12rem" }} />
+                  </Suspense>
+                  <p>loading...</p>
+                </div>
+              </div>
             </>
           ) : (
             <>
@@ -90,12 +93,11 @@ const Auth = () => {
 
   return (
     <Suspense fallback={
-      <Loading
-        size="verybig"
-        backgroud="transperent"
-        color="#ffffff"
-        className="center-fullpage"
-      />
+      <div className='center-fullpage'>
+        <div className='home-loading'>
+          <p>loading...</p>
+        </div>
+      </div>
     }>
       <div>
         {success && (

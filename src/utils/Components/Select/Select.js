@@ -19,7 +19,7 @@ function Select({
   displayType,
   menuTop
 }) {
-  const realOptions = typeof options[0] === "object" ? options.map((op) => (op?.name || op?.text)) : options;
+  const realOptions = typeof options?.[0] === "object" ? options.map((op) => (op?.name || op?.text)) : options;
   const [openMenu, setOpenMenu] = useState(false);
 
   const handleChange = (optionIndex) => {

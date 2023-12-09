@@ -94,6 +94,8 @@ export const increaseAct = (id) => API.post(`/task/increase_act/${id}`);
 export const getAllSetting = () => API.get("/setting/");
 
 export const updateSetting = (settingData) => API.post("/setting/update/", settingData);
+
+export const getGeneralSounds = (type) => API.get(`/setting/sounds/${type}`);
 /* end the setting api */
 
 /* start the template api */

@@ -15,138 +15,9 @@ export const LONG = "LONG";
 export const GET_SETTING = "GET_SETTING";
 export const MODITY_SETTING = "MODITY_SETTING";
 
+export const GET_SOUNDS = "GET_SOUNDS";
+
 export const CHANGE_TO_TEMPLATE_SETTING = 'CHANGE_TO_TEMPLATE_SETTING';
-
-export const alarmSounds = [
-  {
-    name: "alarm 1",
-    src: 'sounds/alarm/1.mp3'
-  },
-  {
-    name: "alarm 2",
-    src: 'sounds/alarm/2.mp3'
-  },
-  {
-    name: "alarm 3",
-    src: 'sounds/alarm/3.mp3'
-  },
-  {
-    name: "alarm 4",
-    src: 'sounds/alarm/4.mp3'
-  },
-  {
-    name: "alarm 5",
-    src: 'sounds/alarm/5.mp3'
-  },
-  {
-    name: "alarm 6",
-    src: 'sounds/alarm/6.mp3'
-  },
-  {
-    name: "alarm 7",
-    src: 'sounds/alarm/7.mp3'
-  },
-  {
-    name: "alarm 8",
-    src: 'sounds/alarm/8.mp3'
-  },
-  {
-    name: "Analog",
-    src: 'sounds/alarm/Analog.mp3'
-  },
-  {
-    name: "bell ringing",
-    src: 'sounds/alarm/bell-ringing.mp3'
-  },
-];
-
-export const tickingSounds = [
-  { name: "none" },
-  {
-    name: "tricking 1",
-    src: "sounds/tricking/1.mp3"
-  },
-  {
-    name: "tricking 2",
-    src: "sounds/tricking/2.mp3"
-  },
-  {
-    name: "tricking 3",
-    src: "sounds/tricking/3.mp3"
-  },
-  {
-    name: "tricking 4",
-    src: "sounds/tricking/4.mp3"
-  },
-  {
-    name: "tricking 5",
-    src: "sounds/tricking/5.mp3"
-  },
-  {
-    name: "tricking 6",
-    src: "sounds/tricking/6.mp3"
-  },
-  {
-    name: "tricking 7",
-    src: "sounds/tricking/7.mp3"
-  },
-  {
-    name: "tricking 8",
-    src: "sounds/tricking/8.mp3"
-  },
-  {
-    name: "tricking 9",
-    src: "sounds/tricking/9.mp3"
-  },
-  {
-    name: "tricking 10",
-    src: "sounds/tricking/10.mp3"
-  }
-];
-
-export const clickSounds = [
-  { name: "none" },
-  {
-    name: "can opening pop",
-    src: "sounds/click/can-opening-pop-101856.mp3"
-  },
-  {
-    name: "click 1",
-    src: "sounds/click/click-1.mp3"
-  },
-  {
-    name: "click 2",
-    src: "sounds/click/click-2.mp3"
-  },
-  {
-    name: "click 3",
-    src: "sounds/click/click-3.mp3"
-  },
-  {
-    name: "clickswitch",
-    src: "sounds/click/clickswitch-03-104090.mp3"
-  },
-  {
-    name: "clip in",
-    src: "sounds/click/clip-in.mp3"
-  },
-  {
-    name: "flashlight clicking on",
-    src: "sounds/click/flashlight-clicking-on-105809.mp3"
-  },
-  {
-    name: "lego piece pressed",
-    src: "sounds/click/lego-piece-pressed-105360.mp3"
-  },
-  {
-    name: "light switch",
-    src: "sounds/click/light-switch-81967.mp3"
-  },
-  {
-    name: "logitech",
-    src: "sounds/click/logitech-computer-mouse-click-95725.mp3"
-  },
-];
 
 export const initialSetting = {
   format: 'analog',
@@ -159,12 +30,21 @@ export const initialSetting = {
   autoPomodors: false,
   autoStartNextTask: false,
   longInterval: 4,
-  alarmType: alarmSounds[0],
+  alarmType: {
+    "name": "alarm 1",
+    "src": "https://res.cloudinary.com/da47rmq7c/video/upload/v1699991843/audio/alarm/general/alarm_1.mp3"
+  },
   alarmVolume: 50,
   alarmRepet: 0,
-  tickingType: tickingSounds[1],
+  tickingType: {
+    "name": "click 1",
+    "src": "https://res.cloudinary.com/da47rmq7c/video/upload/v1699993234/audio/click/general/click_1.mp3"
+  },
   tickingVolume: 50,
-  clickType: clickSounds[1],
+  clickType: {
+    "name": "ticking low",
+    "src": "https://res.cloudinary.com/da47rmq7c/video/upload/v1699994018/audio/ticking/general/ticking_low.mp3"
+  },
   clickVolume: 50,
   focusMode: false,
   notificationType: "last",
@@ -242,5 +122,29 @@ export const modifySetting = (formData, setMessage, setFormErrors) => async disp
     }
   } finally {
     dispatch({ type: END_LOADING, data: 'setting' });
+  }
+}
+
+export const getGeneralSounds = (type, setIsLoading, setMessage) => async dispatch => {
+  try {
+    setIsLoading(true);
+
+    const { data } = await api.getGeneralSounds(type);
+
+    dispatch({
+      type: GET_SOUNDS,
+      data: {
+        type,
+        data: {
+          total: data.total,
+          files: data.files.map(f => ({ name: f.name.toLowerCase().replaceAll('_', " ").replaceAll('-', " "), src: f.src })).sort((a, b) => a.name - b.name)
+        }
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    setMessage({ message: error.response.data.message || error.message, type: 'error' });
+  } finally {
+    setIsLoading(false);
   }
 }

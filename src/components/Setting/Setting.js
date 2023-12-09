@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSetting, modifySetting } from '../../actions/timer';
 
 import Loading from '../../utils/Components/Loading/Loading';
-import Message from '../../utils/Components/Message/Message';
-import NetworkError from '../NetworkError/NetworkError';
 
 import "./style.css";
 
@@ -17,10 +15,9 @@ const SoundSetting = lazy(() => import('./SoundSetting/SoundSetting'));
 const NotificationSetting = lazy(() => import('./NotificationSetting/NotificationSetting'));
 const FocusSetting = lazy(() => import('./FocusSetting/FocusSetting'));
 
-function Setting({ setOpenSetting }) {
+function Setting({ setOpenSetting, setMessage }) {
   const { originalSetting, isLoading } = useSelector(state => state.timer);
 
-  const [message, setMessage] = useState({ type: '', message: "" });
   const [data, setData] = useState(originalSetting);
   const [status, setStatus] = useState('');
   const dispatch = useDispatch();
@@ -106,11 +103,16 @@ function Setting({ setOpenSetting }) {
 
   if (originalSetting === undefined) {
     return (
-      <Loading
-        size="big"
-        color="#ffffff"
-        backgroud="transperent"
-      />
+      <div className="glass-effect setting-loader">
+        <div className='header'>
+          <h2>loading setting...</h2>
+        </div>
+        <Loading
+          size="big"
+          color="#ffffff"
+          backgroud="transperent"
+        />
+      </div>
     )
   }
 
@@ -179,52 +181,43 @@ function Setting({ setOpenSetting }) {
   }
 
   const requiredForEveryStatus = {
-    data: data,
-    setData: setData,
-    handleChange: handleChange,
-    handleBlur: handleBlur,
-    formErrors: formErrors,
-    setFormErrors: setFormErrors,
-    validations: validations,
+    data,
+    setData,
+    handleChange,
+    handleBlur,
+    formErrors,
+    setFormErrors,
+    validations,
+    setMessage,
   }
 
   return (
     <React.Suspense fallback={
-      <Loading
-        size="big"
-        color="#ffffff"
-        backgroud="transparant"
-        className="center-fullpage"
-      />
+      <div className="glass-effect setting-loader">
+        <div className='header'>
+          <h2>loading setting...</h2>
+        </div>
+        <Loading
+          size="big"
+          color="#ffffff"
+          backgroud="transparant"
+          className="center-fullpage"
+        />
+      </div>
     }>
-      {
-        message.message && (
-          <>
-            {(!message.message.includes('Network Error')) ? (
-              <Message {...message} setMessage={setMessage} />
-            ) : (
-              <NetworkError />
-            )}
-          </>
-        )
-      }
-      <form className='glass-effect setting zoom-in' onSubmit={handleSubmit} >
+      <form className='glass-effect setting' onSubmit={handleSubmit} >
         {(originalSetting && isLoading) && (
           <Loading
             size="big"
             color={"var(--main-color)"}
             backgroud="transparant"
             style={{
-              backgroud: "#ffffff73",
+              background: "#ffffff73",
               margin: 0,
-              background: '#ffffff30',
-              borderRadius: 'inherit',
-              border: 'inherit',
             }}
             className="center-fullpage"
           />
-        )
-        }
+        )}
         <SettingHeader
           linkClick={handleSubmit}
           status={status}

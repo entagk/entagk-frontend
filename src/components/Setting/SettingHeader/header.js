@@ -23,7 +23,6 @@ function SettingHeader({
   return (
     <Header
       title={status === '' ? 'Setting' : `${status} setting`}
-      className='setting-header'
       showLeft={status !== ''}
       LeftButton={
         <Button

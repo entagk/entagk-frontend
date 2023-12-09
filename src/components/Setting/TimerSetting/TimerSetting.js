@@ -70,7 +70,7 @@ const TimerSetting = ({
     <>
       {data?.format && (
         <div className='block' style={{ flexDirection: "row" }}>
-          <h3>Timer format</h3>
+          <h3 style={{ width: '100%' }}>Timer format</h3>
           <Suspense fallback={
             <Loading
               size="small"

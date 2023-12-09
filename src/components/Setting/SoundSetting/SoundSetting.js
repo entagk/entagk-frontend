@@ -10,7 +10,18 @@ const SoundSetting = ({
   formErrors,
   data,
   setData,
+  setMessage
 }) => {
+
+  const requiredForEverySound = {
+    handleRepetChange: handleChange,
+    handleBlur,
+    data,
+    setData,
+    formErrors,
+    setMessage,
+  }
+
   return (
     <>
       <div className='block'>
@@ -25,11 +36,7 @@ const SoundSetting = ({
         }>
           <Sound
             type="alarm"
-            handleRepetChange={handleChange}
-            handleBlur={handleBlur}
-            data={data}
-            setData={setData}
-            formErrors={formErrors}
+            {...requiredForEverySound}
           />
         </Suspense>
       </div>
@@ -46,9 +53,7 @@ const SoundSetting = ({
           }>
             <Sound
               type="click"
-              handleChange={handleChange}
-              data={data}
-              setData={setData}
+              {...requiredForEverySound}
             />
           </Suspense>
         </div>
@@ -65,9 +70,7 @@ const SoundSetting = ({
         }>
           <Sound
             type="ticking"
-            handleChange={handleChange}
-            data={data}
-            setData={setData}
+            {...requiredForEverySound}
           />
         </Suspense>
       </div>

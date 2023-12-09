@@ -1,4 +1,4 @@
-import React, { lazy, useEffect, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 
 import Loading from '../../utils/Components/Loading/Loading';
 import Message from '../../utils/Components/Message/Message';
@@ -18,6 +18,7 @@ const NavBar = lazy(() => import('../../components/NavBar/NavBar'));
 const TodoList = lazy(() => import("../Tasks/TodoList"));
 const Setting = lazy(() => import("./../Setting/Setting"));
 const Sidebar = lazy(() => import("./../Sidebar/Sidebar"));
+const Logo = lazy(() => import("../../icons/entagkLogo/logo"));
 
 function Home() {
   const { setting, started } = useSelector(state => state.timer);
@@ -87,12 +88,14 @@ function Home() {
         {(!message.message) ?
           (
             <>
-              <Loading
-                size="verybig"
-                backgroud="transperent"
-                color="#ffffff"
-                className='center-fullpage'
-              />
+              <div className='center-fullpage' style={{ color: "#fff" }}>
+                <div className='home-loading'>
+                  <Suspense fallback={<></>}>
+                    <Logo style={{ fontSize: "12rem" }} />
+                  </Suspense>
+                  <p>loading...</p>
+                </div>
+              </div>
             </>
           ) : (
             <>
@@ -122,14 +125,14 @@ function Home() {
           )}
         </>
       )}
-      <React.Suspense fallback={
-        <Loading
-          size="verybig"
-          backgroud="transperent"
-          color="#ffffff"
-          className="center-fullpage"
-        />
-      }>
+      <React.Suspense
+        fallback={
+          <div className='center-fullpage' style={{ color: "#fff" }}>
+            <div className='home-loading'>
+              <p>loading...</p>
+            </div>
+          </div>
+        }>
         <div className='container'>
           <NavBar setMessage={setMessage} />
           {(setting?.focusMode && started) ? null : (
@@ -146,19 +149,23 @@ function Home() {
         fallback={
           <>
             <div className='glass-container'>
-              <Loading
-                color="white"
-                backgroud="transparent"
-                className="glass-effect setting-loader"
-                size="big"
-              />
+              <div className='glass-effect setting-loader'>
+                <div className='header'>
+                  <h2>loading setting...</h2>
+                </div>
+                <Loading
+                  color="white"
+                  backgroud="transparent"
+                  size="big"
+                />
+              </div>
             </div>
           </>
         }
       >
         {openSetting && (
           <div className="glass-container">
-            <Setting setOpenSetting={setOpenSetting} />
+            <Setting setOpenSetting={setOpenSetting} setMessage={setMessage} />
           </div>
         )}
       </React.Suspense>
@@ -166,12 +173,16 @@ function Home() {
         fallback={
           <>
             <div className='glass-container'>
-              <Loading
-                color="white"
-                backgroud="transparent"
-                className="glass-effect todo-loader"
-                size="big"
-              />
+              <div className='glass-effect todo-loader'>
+                <div className='header'>
+                  <h2>loading tasks...</h2>
+                </div>
+                <Loading
+                  color="white"
+                  backgroud="transparent"
+                  size="big"
+                />
+              </div>
             </div>
           </>
         }
@@ -188,8 +199,6 @@ function Home() {
           </div>
         )}
       </React.Suspense>
-
-      {/* </React.Suspense> */}
     </>
   );
 }
