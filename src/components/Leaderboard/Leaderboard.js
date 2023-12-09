@@ -19,7 +19,6 @@ import Button from '../../utils/Components/Button/Button';
 import { Link } from 'react-router-dom';
 
 const NavBar = lazy(() => import('../NavBar/NavBar'));
-const Logo = lazy(() => import("../../icons/entagkLogo/logo"));
 
 function Achivments() {
   const dispatch = useDispatch();
@@ -61,7 +60,6 @@ function Achivments() {
       <Suspense fallback={
         <div className='center-fullpage' style={{ color: "#fff" }}>
           <div className='home-loading'>
-            <Logo style={{ fontSize: "8em" }} />
             <p>loading...</p>
           </div>
         </div>
