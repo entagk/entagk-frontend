@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSetting, modifySetting } from '../../actions/timer';
 
 import Loading from '../../utils/Components/Loading/Loading';
-import Message from '../../utils/Components/Message/Message';
-import NetworkError from '../NetworkError/NetworkError';
 
 import "./style.css";
 
@@ -17,10 +15,9 @@ const SoundSetting = lazy(() => import('./SoundSetting/SoundSetting'));
 const NotificationSetting = lazy(() => import('./NotificationSetting/NotificationSetting'));
 const FocusSetting = lazy(() => import('./FocusSetting/FocusSetting'));
 
-function Setting({ setOpenSetting }) {
+function Setting({ setOpenSetting, setMessage }) {
   const { originalSetting, isLoading } = useSelector(state => state.timer);
 
-  const [message, setMessage] = useState({ type: '', message: "" });
   const [data, setData] = useState(originalSetting);
   const [status, setStatus] = useState('');
   const dispatch = useDispatch();
@@ -203,17 +200,6 @@ function Setting({ setOpenSetting }) {
         />
       </div>
     }>
-      {
-        message.message && (
-          <>
-            {(!message.message.includes('Network Error')) ? (
-              <Message {...message} setMessage={setMessage} />
-            ) : (
-              <NetworkError />
-            )}
-          </>
-        )
-      }
       <form className='glass-effect setting' onSubmit={handleSubmit} >
         {(originalSetting && isLoading) && (
           <Loading

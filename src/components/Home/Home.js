@@ -163,7 +163,7 @@ function Home() {
       >
         {openSetting && (
           <div className="glass-container">
-            <Setting setOpenSetting={setOpenSetting} />
+            <Setting setOpenSetting={setOpenSetting} setMessage={setMessage} />
           </div>
         )}
       </React.Suspense>
