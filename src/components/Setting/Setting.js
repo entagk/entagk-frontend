@@ -103,11 +103,16 @@ function Setting({ setOpenSetting, setMessage }) {
 
   if (originalSetting === undefined) {
     return (
-      <Loading
-        size="big"
-        color="#ffffff"
-        backgroud="transperent"
-      />
+      <div className="glass-effect setting-loader">
+        <div className='header'>
+          <h2>loading setting...</h2>
+        </div>
+        <Loading
+          size="big"
+          color="#ffffff"
+          backgroud="transperent"
+        />
+      </div>
     )
   }
 
