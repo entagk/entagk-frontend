@@ -18,7 +18,7 @@ const Analytics = ({ setMessage }) => {
 
   return (
     <div className='analytics'>
-      <div className='header'>
+      <div className='analytics-header'>
         <h2>Analytics</h2>
         {(dateType === 'day' || dateType === 'week') && (
           <div style={{

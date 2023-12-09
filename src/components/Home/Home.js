@@ -174,7 +174,7 @@ function Home() {
           <>
             <div className='glass-container'>
               <div className='glass-effect todo-loader'>
-                <div className='header'>
+                <div className='anaheader'>
                   <h2>loading tasks...</h2>
                 </div>
                 <Loading
