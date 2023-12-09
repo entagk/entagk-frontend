@@ -192,12 +192,16 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
         fallback={
           <>
             <div className='glass-container'>
-              <Loading
-                color="white"
-                backgroud="transparent"
-                className="glass-effect todo-loader"
-                size="big"
-              />
+              <div className='glass-effect todo-loader'>
+                <div className='header'>
+                  <h2>loading setting...</h2>
+                </div>
+                <Loading
+                  color="white"
+                  backgroud="transparent"
+                  size="big"
+                />
+              </div>
             </div>
           </>
         }
@@ -208,11 +212,16 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
               <Suspense
                 fallback={
                   <>
-                    <Loading
-                      color="white"
-                      backgroud="transparent"
-                      size="big"
-                    />
+                    <div className='glass-effect todo-loader'>
+                      <div className='header'>
+                        <h2>loading sticky notes...</h2>
+                      </div>
+                      <Loading
+                        color="white"
+                        backgroud="transparent"
+                        size="big"
+                      />
+                    </div>
                   </>
                 }>
                 <Header
