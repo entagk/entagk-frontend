@@ -5,7 +5,6 @@ import 'aos/dist/aos.css'; // You can also use <link> for styles
 
 import Auth from './components/Auth/Auth';
 import Reset from './components/Reset/Reset';
-import Profile from './components/Profile/Profile';
 import Leaderboard from './components/Leaderboard/Leaderboard';
 import ErrorPage from './components/ErrorPage/ErrorPage';
 import Templates from './components/Templates/Templates';
@@ -36,10 +35,6 @@ const router = createBrowserRouter(
       <Route
         path='/reset/:tokenId'
         element={<Reset />}
-      />
-      <Route
-        path="/profile"
-        element={<Profile />}
       />
       <Route
         path="/leaderboard"
