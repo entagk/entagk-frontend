@@ -1,27 +1,27 @@
 .setting-loader {
-  margin-block: 20px;
-  margin-inline: 20px;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  box-shadow: 1px 1px 10px 0px #858585;
-  position: absolute;
-  top: 0px;
-  border-radius: 20px;
-  border: 2px solid;
+	margin-block: 20px;
+	margin-inline: 20px;
+	padding-bottom: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	box-shadow: 1px 1px 10px 0px #858585;
+	position: absolute;
+	top: 0px;
+	border-radius: 20px;
+	border: 2px solid;
 }
 
 .todo-loader {
-  width: 820px;
-  color: rgb(255, 255, 255);
-  margin-bottom: 20px;
-  margin: 20px;
-  position: relative;
-  box-shadow: 1px 1px 10px 0px #858585;
+	width: 820px;
+	color: rgb(255, 255, 255);
+	margin-bottom: 20px;
+	margin: 20px;
+	position: relative;
+	box-shadow: 1px 1px 10px 0px #858585;
 
-  padding: 20px;
-  border-radius: 20px;
-  border: 2px solid;
+	padding-bottom: 20px;
+	border-radius: 20px;
+	border: 2px solid;
 }

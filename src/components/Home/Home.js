@@ -122,14 +122,15 @@ function Home() {
           )}
         </>
       )}
-      <React.Suspense fallback={
-        <Loading
-          size="verybig"
-          backgroud="transperent"
-          color="#ffffff"
-          className="center-fullpage"
-        />
-      }>
+      <React.Suspense
+        fallback={
+          <Loading
+            size="verybig"
+            backgroud="transperent"
+            color="#ffffff"
+            className="center-fullpage"
+          />
+        }>
         <div className='container'>
           <NavBar setMessage={setMessage} />
           {(setting?.focusMode && started) ? null : (
@@ -146,12 +147,16 @@ function Home() {
         fallback={
           <>
             <div className='glass-container'>
-              <Loading
-                color="white"
-                backgroud="transparent"
-                className="glass-effect setting-loader"
-                size="big"
-              />
+              <div className='glass-effect setting-loader'>
+                <div className='header'>
+                  <h2>loading setting...</h2>
+                </div>
+                <Loading
+                  color="white"
+                  backgroud="transparent"
+                  size="big"
+                />
+              </div>
             </div>
           </>
         }
@@ -188,8 +193,6 @@ function Home() {
           </div>
         )}
       </React.Suspense>
-
-      {/* </React.Suspense> */}
     </>
   );
 }

@@ -191,12 +191,17 @@ function Setting({ setOpenSetting }) {
 
   return (
     <React.Suspense fallback={
-      <Loading
-        size="big"
-        color="#ffffff"
-        backgroud="transparant"
-        className="center-fullpage"
-      />
+      <div className="glass-effect setting-loader">
+        <div className='header'>
+          <h2>loading setting...</h2>
+        </div>
+        <Loading
+          size="big"
+          color="#ffffff"
+          backgroud="transparant"
+          className="center-fullpage"
+        />
+      </div>
     }>
       {
         message.message && (
@@ -209,7 +214,7 @@ function Setting({ setOpenSetting }) {
           </>
         )
       }
-      <form className='glass-effect setting zoom-in' onSubmit={handleSubmit} >
+      <form className='glass-effect setting' onSubmit={handleSubmit} >
         {(originalSetting && isLoading) && (
           <Loading
             size="big"
@@ -224,8 +229,7 @@ function Setting({ setOpenSetting }) {
             }}
             className="center-fullpage"
           />
-        )
-        }
+        )}
         <SettingHeader
           linkClick={handleSubmit}
           status={status}
