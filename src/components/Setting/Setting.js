@@ -201,7 +201,6 @@ function Setting({ setOpenSetting, setMessage }) {
           size="big"
           color="#ffffff"
           backgroud="transparant"
-          className="center-fullpage"
         />
       </div>
     }>
