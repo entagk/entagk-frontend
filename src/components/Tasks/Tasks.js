@@ -5,8 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getTasks } from "../../actions/tasks";
 
 import Loading from "../../utils/Components/Loading/Loading";
-import Message from "../../utils/Components/Message/Message";
-import NetworkError from "../NetworkError/NetworkError";
 
 import "./style.css";
 import { onScroll } from "../../utils/helper";
@@ -15,7 +13,7 @@ const TaskForm = lazy(() => import("./TaskForm/TaskForm"));
 const Task = lazy(() => import("./Task/Task"));
 const AddTaskButton = lazy(() => import('./AddTaskButton/AddTaskButton'))
 
-const Tasks = ({ message, setMessage, isLoading, setIsLoading, setActiveTemplate, activeTemplate }) => {
+const Tasks = ({ setMessage, isLoading, setIsLoading, setActiveTemplate, activeTemplate }) => {
   const [openFormForNew, setOpenFormForNew] = useState(false);
   const tasks = useSelector(state => state.tasks);
   const [page, setPage] = useState(1);

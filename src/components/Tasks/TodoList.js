@@ -14,7 +14,7 @@ const Tasks = lazy(() => import("./Tasks"));
 const Template = lazy(() => import("./TodoTemplate"));
 const Header = lazy(() => import('./../../utils/Components/GlassEffectHeader/header'));
 
-const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo }) => {
+const TodoList = ({ setMessage, isLoading, setIsLoading, setOpenTodo }) => {
   const [activeTemplate, setActiveTemplate] = useState(null);
   const tasks = useSelector(state => state.tasks);
 
@@ -83,13 +83,11 @@ const TodoList = ({ message, setMessage, isLoading, setIsLoading, setOpenTodo })
                 todoTemplate={activeTemplate}
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
-                message={message}
                 setMessage={setMessage}
                 setActiveTemplate={setActiveTemplate}
               />
             ) : (
               <Tasks
-                message={message}
                 setMessage={setMessage}
                 todoTemplate={activeTemplate}
                 isLoading={isLoading}
