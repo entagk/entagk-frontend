@@ -207,11 +207,8 @@ function Setting({ setOpenSetting, setMessage }) {
             color={"var(--main-color)"}
             backgroud="transparant"
             style={{
-              backgroud: "#ffffff73",
+              background: "#ffffff73",
               margin: 0,
-              background: '#ffffff30',
-              borderRadius: 'inherit',
-              border: 'inherit',
             }}
             className="center-fullpage"
           />
