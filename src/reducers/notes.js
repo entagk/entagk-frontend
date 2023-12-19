@@ -6,6 +6,8 @@ import {
   ADD_NOTE,
   EDIT_NOTE,
   DELETE_NOTE,
+  OPEN_NOTE,
+  CLOSE_NOTE,
   INIT_NOTE,
   INITIAL_NOTES_STATE
 } from "../actions/notes";
@@ -111,6 +113,26 @@ export default (
         totalOpenedNotes: state.totalOpenedNotes + 1
       };
 
+    case OPEN_NOTE:
+      state.notes.objects[action.data._id].open = true;
+
+      return {
+        ...state,
+        openedNotes: {
+          ids: state.openedNotes.ids.filter(id => id !== action.data._id).concat([action.data._id])
+        }
+      };
+
+    case CLOSE_NOTE:
+      state.notes.objects[action.data._id].open = false;
+
+      return {
+        ...state,
+        openedNotes: {
+          ids: state.openedNotes.ids.filter(id => id !== action.data._id)
+        }
+      };
+
     case EDIT_NOTE:
       state.notes.objects = Object.assign({ [action.data._id]: action.data }, state.notes.objects);
 
@@ -124,12 +146,7 @@ export default (
         notes: {
           objects: state.notes.objects,
           ids: Object.keys(state.notes.objects)
-        },
-        openedNotes: {
-          ids: action.data.open ?
-            state.openedNotes.ids.filter(id => id !== action.data._id).concat([action.data._id]) :
-            state.openedNotes.ids.filter(id => id !== action.data._id)
-        },
+        }
       };
 
     case DELETE_NOTE:

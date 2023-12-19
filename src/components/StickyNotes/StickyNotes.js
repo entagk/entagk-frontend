@@ -87,17 +87,17 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
       if (!webSocket.current || !webSocket.current?.readyState === 1)
         webSocket.current = generateWebsocket();
       function onmessage(ev) {
-        console.log('message');
+        console.log('onmessage');
         console.log(ev);
-        const data = JSON.parse(ev.data);
-        if (!data?.message) {
-          if (!checkNoteId(data?._id)) {
-            dispatch({ type: ADD_NOTE, data });
-          } else {
-            dispatch({ type: EDIT_NOTE, data });
+        const msgData = JSON.parse(ev.data);
+        if (!msgData?.message) {
+          if (msgData.action === 'add') {
+            dispatch({ type: ADD_NOTE, data: msgData.data });
+          } else if (msgData.action === 'edit') {
+            dispatch({ type: EDIT_NOTE, data: msgData.data });
           }
         } else {
-          setMessage({ message: data?.message, type: 'error' })
+          setMessage({ message: msgData?.message, type: 'error' })
         }
       }
       webSocket.current.onmessage = onmessage;
@@ -110,7 +110,8 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
         setTimeout(() => {
           webSocket.current = generateWebsocket();
           webSocket.current.onmessage = onmessage;
-        }, 3000);
+          console.log('reconnect');
+        }, 300);
       }
 
       return () => {
@@ -145,7 +146,7 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
         webSocket.current?.readyState === webSocket.current?.OPEN
         && webSocket.current !== null
       ) {
-
+        console.log('note changed');
         webSocket?.current?.send(
           JSON.stringify(data)
         );
