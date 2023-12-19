@@ -374,10 +374,14 @@ const TaskForm = ({
                   <Button
                     aria-label="add notes button"
                     type="button"
+                    variant="outlined"
                     onClick={() => setOpenNotes(on => !on)}
                     startIcon={
                       <AiOutlinePlus />
                     }
+                    style={{
+                      borderRadius: "8px"
+                    }}
                   >
                     add notes
                   </Button>
