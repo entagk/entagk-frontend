@@ -37,13 +37,13 @@ export const initialSetting = {
   alarmVolume: 50,
   alarmRepet: 0,
   tickingType: {
-    "name": "click 1",
-    "src": "https://res.cloudinary.com/da47rmq7c/video/upload/v1699993234/audio/click/general/click_1.mp3"
+    "name": "ticking low",
+    "src": "https://res.cloudinary.com/da47rmq7c/video/upload/v1699994018/audio/ticking/general/ticking_low.mp3"
   },
   tickingVolume: 50,
   clickType: {
-    "name": "ticking low",
-    "src": "https://res.cloudinary.com/da47rmq7c/video/upload/v1699994018/audio/ticking/general/ticking_low.mp3"
+    "name": "click 1",
+    "src": "https://res.cloudinary.com/da47rmq7c/video/upload/v1699993234/audio/click/general/click_1.mp3"
   },
   clickVolume: 50,
   focusMode: false,

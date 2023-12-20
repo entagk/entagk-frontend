@@ -28,7 +28,6 @@ const initialData = {
   est: 1,
   act: 0,
   notes: "",
-  project: "",
   check: false,
 };
 

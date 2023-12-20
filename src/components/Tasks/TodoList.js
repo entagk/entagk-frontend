@@ -20,21 +20,19 @@ const TodoList = ({ setMessage, isLoading, setIsLoading, setOpenTodo }) => {
 
   return (
     <>
-      <div className="tasks glass-effect">
-        <Suspense fallback={
-          <div className='glass-container'>
-            <div className='glass-effect todo-loader'>
-              <div className='header'>
-                <h2>loading tasks...</h2>
-              </div>
-              <Loading
-                color="white"
-                backgroud="transparent"
-                size="big"
-              />
-            </div>
+      <Suspense fallback={
+        <div className='glass-effect todo-loader'>
+          <div className='header'>
+            <h2>loading tasks...</h2>
           </div>
-        }>
+          <Loading
+            color="white"
+            backgroud="transparent"
+            size="big"
+          />
+        </div>
+      }>
+        <div className="tasks glass-effect">
           <Header
             title={activeTemplate?._id ? activeTemplate?.name : "Tasks"}
             showLeft={true}
@@ -111,8 +109,8 @@ const TodoList = ({ setMessage, isLoading, setIsLoading, setOpenTodo }) => {
               />
             )}
           </Suspense>
-        </Suspense>
-      </div>
+        </div>
+      </Suspense>
     </>
   )
 };

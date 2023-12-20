@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Loading from '../../../utils/Components/Loading/Loading';
 
-import { DELETE_NOTE, deleteNote, getNote } from '../../../actions/notes';
+import { CLOSE_NOTE, DELETE_NOTE, deleteNote, getNote } from '../../../actions/notes';
 
 import './style.css';
 
@@ -175,12 +175,15 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, active, setActive }
         if (JSON.stringify(note) !== JSON.stringify(noteData))
           if ((id.includes('new') && contentLength > 0) || !id.includes('new'))
             onChangeNote({
-              ...noteData,
-              contentLength: {
-                textLength: contentLength,
-                arrayLength: noteData.content.length
-              },
-              id,
+              action: id.includes('new') ? "add" : "edit",
+              data: {
+                ...noteData,
+                contentLength: {
+                  textLength: contentLength,
+                  arrayLength: noteData.content.length
+                },
+                id,
+              }
             });
       }
 
@@ -198,10 +201,21 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, active, setActive }
         dispatch({ type: DELETE_NOTE, data: id });
       }
     } else {
+      dispatch({ type: CLOSE_NOTE, data: { open: false, _id: id } });
+
       if (id.includes('new')) {
-        onChangeNote({ ...noteData, id: 'new', open: false });
+        onChangeNote({
+          action: 'add',
+          data: {
+            ...noteData, id: 'new', open: false
+          }
+        });
       } else {
-        onChangeNote({ ...noteData, id, open: false });
+        onChangeNote({
+          action: 'close', data: {
+            id, open: false
+          }
+        });
       }
     }
   }

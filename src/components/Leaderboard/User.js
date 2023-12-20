@@ -42,7 +42,7 @@ const User = ({ user, number }) => {
         </p>
         <p className='total-hours'>
           <span>
-            {user.totalHours}
+            {user.totalHours.toFixed(2)}
           </span>
           {user.totalHours === 1 ? "Hour" : "Hours"}
         </p>

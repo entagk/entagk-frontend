@@ -91,7 +91,7 @@ function Home() {
               <div className='center-fullpage' style={{ color: "#fff" }}>
                 <div className='home-loading'>
                   <Suspense fallback={<></>}>
-                    <Logo style={{ fontSize: "12rem" }} />
+                    <Logo style={{ fontSize: "8em" }} />
                   </Suspense>
                   <p>loading...</p>
                 </div>
@@ -174,7 +174,7 @@ function Home() {
           <>
             <div className='glass-container'>
               <div className='glass-effect todo-loader'>
-                <div className='header'>
+                <div className='anaheader'>
                   <h2>loading tasks...</h2>
                 </div>
                 <Loading

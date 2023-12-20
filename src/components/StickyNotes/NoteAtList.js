@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { deleteNote, DELETE_NOTE } from '../../actions/notes';
+import { deleteNote, DELETE_NOTE, OPEN_NOTE } from '../../actions/notes';
 
 import TextEditor from '../../utils/Components/RichTextEditor/Editor';
 import Menu from '../../utils/Components/Menu/Menu';
@@ -44,10 +44,12 @@ const NoteAtList = ({ id, onChangeNote, setMessage, setActiveNote }) => {
 
   const openNote = (e) => {
     if (!openedNotes?.ids.includes(id)) {
+      dispatch({ type: OPEN_NOTE, data: { open: true, _id: id } });
+
       if (localStorage.getItem('token'))
-        onChangeNote({ id, open: true });
+        onChangeNote({ action: "open", data: { id, open: true } });
       else
-        onChangeNote({ ...note, open: true });
+        onChangeNote({ data: {...note}, open: true });
 
       setActiveNote(id);
     }

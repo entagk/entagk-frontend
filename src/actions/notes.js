@@ -10,6 +10,8 @@ export const GET_NOTE = 'GET_NOTE';
 export const ADD_NOTE = 'ADD_NOTE';
 export const EDIT_NOTE = 'EDIT_NOTE';
 export const DELETE_NOTE = 'DELETE_NOTE';
+export const OPEN_NOTE = 'OPEN_NOTE';
+export const CLOSE_NOTE = 'CLOSE_NOTE';
 export const INITIAL_NOTES_STATE = 'INITIAL_NOTES_STATE';
 
 export const getNote = (id, setNoteData, setIsLoading, setMessage) => async dispatch => {

@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { addNewTask, modifyTask } from "../../../actions/tasks";
 import { types } from "../../../utils/helper";
 
+import { AiOutlinePlus } from 'react-icons/ai';
 import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from 'react-icons/md';
 
 import "./style.css";
@@ -17,7 +18,6 @@ const initialData = {
   name: "",
   est: 1,
   notes: "",
-  project: "",
   type: {
     name: "Work",
     code: "1F4BC"
@@ -36,7 +36,6 @@ const TaskForm = ({
   const dispatch = useDispatch();
   const [data, setData] = useState(oldData === null ? initialData : oldData);
   const [openNotes, setOpenNotes] = useState(data.notes === "" ? false : true);
-  const [openProject, setOpenProject] = useState(data.project === "" ? false : true);
   const [moreDetails, setMoreDetails] = useState(false);
   const required = oldData?.tasks?.length > 0 ? ['name',] : ['name', 'est'];
   const [formErrors, setFormErrors] = useState({});
@@ -370,29 +369,22 @@ const TaskForm = ({
                   )}
                 </div>
               )}
-              {(openProject) && (
-                <div className="project">
-                  <input name="project" type="text" onChange={handleChange} value={data.project} />
-                </div>
-              )}
               <div className="add-buttons">
                 {!openNotes && (
                   <Button
                     aria-label="add notes button"
                     type="button"
+                    variant="outlined"
                     onClick={() => setOpenNotes(on => !on)}
-                    variant="none"
+                    startIcon={
+                      <AiOutlinePlus />
+                    }
+                    style={{
+                      borderRadius: "8px"
+                    }}
                   >
-                    + add notes
+                    add notes
                   </Button>
-                )}
-                {(!openProject) && (
-                  <Button
-                    aria-label="add project button"
-                    type="button"
-                    onClick={() => setOpenProject(on => !on)}
-                    variant="none"
-                  >+ add project</Button>
                 )}
               </div>
             </div>

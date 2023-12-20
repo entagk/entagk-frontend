@@ -85,12 +85,6 @@ export default (
           tasks: unfinishedTasks.concat(finishedTasks),
           est: action.data.est,
           act: action.data.act,
-          activeId: state?.autoStartNextTask
-            ? action.data.all.filter((t) => !t.check)[0]?._id
-            : null,
-          activeName: state?.autoStartNextTask
-            ? action.data.all.filter((t) => !t.check)[0]?.name
-            : null,
         };
       } else {
         localStorage.setItem('total', total);
@@ -106,13 +100,7 @@ export default (
           tasks: all,
           tempTasks: { ...state.tempTasks, ...tempTasks },
           est: all.length > 0 ? all.reduce((total, task) => total + task.est, 0) : 0,
-          act: all.length > 0 ? all.reduce((total, task) => total + task.act, 0) : 0,
-          activeId: state?.autoStartNextTask
-            ? action.data.all.filter((t) => !t.check)[0]?._id
-            : null,
-          activeName: state?.autoStartNextTask
-            ? action.data.all.filter((t) => !t.check)[0]?.name
-            : null,
+          act: all.length > 0 ? all.reduce((total, task) => total + task.act, 0) : 0
         };
       };
 
