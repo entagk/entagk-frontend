@@ -3,6 +3,9 @@
 	max-height: calc(100% - 40px);
 	margin: 20px;
 	max-width: 520px;
+	display: grid;
+	grid-template-columns: auto;
+	grid-template-rows: 1fr;
 }
 
 .sticky-notes .notes {
@@ -73,7 +76,6 @@
 	width: 100%;
 	position: relative;
 }
-
 
 .sticky-notes .note.orange .upper p.date,
 .sticky-notes .note.green .upper p.date,
