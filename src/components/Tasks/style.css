@@ -16,6 +16,20 @@
 	box-shadow: 1px 1px 10px 0px #858585;
 	border-radius: 20px;
 	border: 2px solid;
+
+	display: grid;
+	grid-template-columns: auto;
+	grid-template-rows: 1fr;
+	grid-template-areas:
+		"header"
+		"main"
+		"footer";
+	max-height: calc(100% - 40px);
+	margin-block: 0px;
+}
+
+.tasks .header {
+	grid-area: header;
 }
 
 .tasks .header .menu-content {
