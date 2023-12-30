@@ -1,4 +1,5 @@
 import './App.css';
+import { Analytics } from '@vercel/analytics/react';
 
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // You can also use <link> for styles
@@ -44,7 +45,7 @@ const router = createBrowserRouter(
         path='/templates/you'
         element={<Templates />}
       />
-      <Route 
+      <Route
         path='/achievements'
         element={<Achievements />}
       />
@@ -54,7 +55,10 @@ const router = createBrowserRouter(
 
 function App() {
   return (
-    <RouterProvider router={router} />
+    <>
+      <Analytics />
+      <RouterProvider router={router} />
+    </>
   )
 }
 
