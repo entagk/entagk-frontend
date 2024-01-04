@@ -26,7 +26,7 @@ const AuthForm = ({ setMessage, setSuccess, localData }) => {
   const [forgetPassword, setForgetPassword] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
 
-  const [formErrors, setFormError] = useState({});
+  const [formErrors, setFormError] = useState({ email: "", password: "" });
   const [validations, setValidations] = useState({
     email: (e) => {
       const validateEmail = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
@@ -96,7 +96,7 @@ const AuthForm = ({ setMessage, setSuccess, localData }) => {
     }
 
     // eslint-disable-next-line
-  }, [isSignUp])
+  }, [isSignUp, forgetPassword])
 
   // eslint-disable-next-line
   const emailPattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$";
@@ -240,7 +240,7 @@ const AuthForm = ({ setMessage, setSuccess, localData }) => {
               aria-label="submit auth data"
               type="submit"
               disabled={
-                isLoading || Object.values(formErrors).filter(fE => fE.length > 0).length > 0
+                isLoading || Object.values(formErrors)?.filter(fE => fE.length > 0)?.length > 0
               }
               style={{ paddingBlock: isLoading && 5, color: '#fff', backgroud: 'var(--main-color)', textTransform: 'uppercase' }}
             >
