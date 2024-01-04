@@ -24,9 +24,10 @@ const AuthForm = ({ setMessage, setSuccess, localData }) => {
   const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
   const [forgetPassword, setForgetPassword] = useState(false);
+  const [disableSubmit, setDisableSubmit] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
 
-  const [formErrors, setFormError] = useState({});
+  const [formErrors, setFormError] = useState({ email: "", password: "" });
   const [validations, setValidations] = useState({
     email: (e) => {
       const validateEmail = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
@@ -80,7 +81,7 @@ const AuthForm = ({ setMessage, setSuccess, localData }) => {
       if (forgetPassword) {
         setRequiredFields(['email']);
         setFormData({ email: formData.email });
-        setFormError({ emali: formErrors.email });
+        setFormError({ email: formErrors.email });
       } else {
         setRequiredFields(pF => pF.filter(f => !signUpRequired.includes(f)));
         signUpRequired.forEach((f) => {
@@ -96,7 +97,15 @@ const AuthForm = ({ setMessage, setSuccess, localData }) => {
     }
 
     // eslint-disable-next-line
-  }, [isSignUp])
+  }, [isSignUp, forgetPassword]);
+
+  useEffect(() => {
+    const errors = Object.values(formErrors);
+    if (errors?.filter(fE => fE.length > 0)?.length > 0)
+      setDisableSubmit(true);
+    else
+      setDisableSubmit(false);
+  }, [formErrors])
 
   // eslint-disable-next-line
   const emailPattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$";
@@ -110,15 +119,18 @@ const AuthForm = ({ setMessage, setSuccess, localData }) => {
       if (v === '' && requiredFields.includes(k)) {
         errors.push([k, 'This is required']);
         setFormError(fep => ({ ...fep, [k]: 'This is required' }));
+        // setDisableSubmit(true);
       }
 
       if (!k.includes('confirm')) {
         if (validations[k](v)) {
           errors.push([k, `invalid ${k}`]);
+          // setDisableSubmit(false);
         }
       } else {
         if (validations[k](v, formData.password)) {
           errors.push([k, `invalid ${k}`]);
+          // setDisableSubmit(false);
         }
       }
     });
@@ -239,9 +251,8 @@ const AuthForm = ({ setMessage, setSuccess, localData }) => {
             <Button
               aria-label="submit auth data"
               type="submit"
-              disabled={
-                isLoading || Object.values(formErrors).filter(fE => fE.length > 0).length > 0
-              }
+              disabled={isLoading || disableSubmit}
+              title={disableSubmit ? "Fill in required fields or fix its errors" : "Submit form"}
               style={{ paddingBlock: isLoading && 5, color: '#fff', backgroud: 'var(--main-color)', textTransform: 'uppercase' }}
             >
               {isLoading ?
