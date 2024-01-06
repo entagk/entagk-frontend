@@ -212,9 +212,12 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, active, setActive }
         });
       } else {
         onChangeNote({
-          action: 'close', data: {
-            id, open: false
-          }
+          action: 'close',
+          data: localStorage.getItem('token') ?
+            {
+              id, open: false
+            } :
+            { ...noteData, id, open: false }
         });
       }
     }
@@ -248,16 +251,16 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, active, setActive }
           background: noteData.color !== 'rose' ? noteData.color : 'mistyrose',
         }}
       >
-        {openDelete && (
-          <div className='delete-popup-container'>
-            <DeletePopupSmaller
-              type={'this note'}
-              onOk={deleteSingleNote}
-              onCancel={() => setOpenDelete(false)}
-            />
-          </div>
-        )}
         <div className='note-content'>
+          {openDelete && (
+            <div className='delete-popup-container'>
+              <DeletePopupSmaller
+                type={'this note'}
+                onOk={deleteSingleNote}
+                onCancel={() => setOpenDelete(false)}
+              />
+            </div>
+          )}
           <Header
             newNote={newNote}
             onMouseDown={moveNote}

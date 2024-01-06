@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useState, useRef, useCallback } from 'react'
+import React, { Suspense, lazy, useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ADD_NOTE, EDIT_NOTE, INIT_NOTE, getNotes } from '../../actions/notes';
@@ -77,22 +77,16 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
     // eslint-disable-next-line
   }, [openSticky]);
 
-  const checkNoteId = useCallback((id) => {
-    return notes.ids.includes(id) && notes?.objects[id]
-  }, [notes]);
-
   // initialize the websocket and connect to it.
   useEffect(() => {
     if (localStorage.getItem('token')) {
       if (!webSocket.current || !webSocket.current?.readyState === 1)
         webSocket.current = generateWebsocket();
       function onmessage(ev) {
-        console.log('onmessage');
-        console.log(ev);
         const msgData = JSON.parse(ev.data);
         if (!msgData?.message) {
           if (msgData.action === 'add') {
-            dispatch({ type: ADD_NOTE, data: msgData.data });
+            dispatch({ type: ADD_NOTE, data: { data: msgData.data, oldId: msgData.oldId } });
           } else if (msgData.action === 'edit') {
             dispatch({ type: EDIT_NOTE, data: msgData.data });
           }
@@ -110,7 +104,6 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
         setTimeout(() => {
           webSocket.current = generateWebsocket();
           webSocket.current.onmessage = onmessage;
-          console.log('reconnect');
         }, 300);
       }
 
@@ -146,21 +139,20 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
         webSocket.current?.readyState === webSocket.current?.OPEN
         && webSocket.current !== null
       ) {
-        console.log('note changed');
         webSocket?.current?.send(
           JSON.stringify(data)
         );
       }
     } else {
-      data.updatedAt = new Date().toJSON();
-      if (!checkNoteId(data?._id) && data?.id?.includes('new')) {
-        data.oldId = data.id;
+      data.data.updatedAt = new Date().toJSON();
+      if (data.action === 'add') {
+        data.data.oldId = data.id;
 
-        const addedNote = await addNew('notes', data);
+        const addedNote = await addNew('notes', data.data);
 
         dispatch({ type: ADD_NOTE, data: addedNote });
       } else {
-        const updatedNote = await updateOne(data, 'notes');
+        const updatedNote = await updateOne(data.data, 'notes');
 
         dispatch({ type: EDIT_NOTE, data: updatedNote });
       }
