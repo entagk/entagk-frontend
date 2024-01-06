@@ -212,9 +212,12 @@ const SingleNote = ({ id, newNote, onChangeNote, setMessage, active, setActive }
         });
       } else {
         onChangeNote({
-          action: 'close', data: {
-            id, open: false
-          }
+          action: 'close',
+          data: localStorage.getItem('token') ?
+            {
+              id, open: false
+            } :
+            { ...noteData, id, open: false }
         });
       }
     }
