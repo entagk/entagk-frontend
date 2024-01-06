@@ -98,16 +98,16 @@ export default (
 
       delete state.notes.objects[newNote?.oldId];
 
-      state.notes.objects[newNote?._id] = newNote;
+      state.notes.objects[newNote.data?._id] = newNote.data;
 
       return {
         ...state,
         notes: {
           objects: state.notes.objects,
-          ids: Object.keys(state.notes.objects).filter(id => id !== newNote._id).concat([newNote?._id])
+          ids: Object.keys(state.notes.objects).filter(id => id !== newNote.data._id).concat([newNote.data?._id])
         },
         openedNotes: {
-          ids: state.openedNotes.ids.filter(id => id !== newNote?.oldId).concat([newNote?._id])
+          ids: state.openedNotes.ids.filter(id => id !== newNote?.oldId).concat([newNote.data?._id])
         },
         total: state.total + 1,
         totalOpenedNotes: state.totalOpenedNotes + 1

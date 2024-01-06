@@ -83,12 +83,10 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
       if (!webSocket.current || !webSocket.current?.readyState === 1)
         webSocket.current = generateWebsocket();
       function onmessage(ev) {
-        console.log('onmessage');
-        console.log(ev);
         const msgData = JSON.parse(ev.data);
         if (!msgData?.message) {
           if (msgData.action === 'add') {
-            dispatch({ type: ADD_NOTE, data: msgData.data });
+            dispatch({ type: ADD_NOTE, data: { data: msgData.data, oldId: msgData.oldId } });
           } else if (msgData.action === 'edit') {
             dispatch({ type: EDIT_NOTE, data: msgData.data });
           }
@@ -106,7 +104,6 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
         setTimeout(() => {
           webSocket.current = generateWebsocket();
           webSocket.current.onmessage = onmessage;
-          console.log('reconnect');
         }, 300);
       }
 
@@ -142,7 +139,6 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
         webSocket.current?.readyState === webSocket.current?.OPEN
         && webSocket.current !== null
       ) {
-        console.log('note changed');
         webSocket?.current?.send(
           JSON.stringify(data)
         );
