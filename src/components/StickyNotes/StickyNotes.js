@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useState, useRef, useCallback } from 'react'
+import React, { Suspense, lazy, useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ADD_NOTE, EDIT_NOTE, INIT_NOTE, getNotes } from '../../actions/notes';
@@ -77,10 +77,6 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
     // eslint-disable-next-line
   }, [openSticky]);
 
-  const checkNoteId = useCallback((id) => {
-    return notes.ids.includes(id) && notes?.objects[id]
-  }, [notes]);
-
   // initialize the websocket and connect to it.
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -152,15 +148,15 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
         );
       }
     } else {
-      data.updatedAt = new Date().toJSON();
-      if (!checkNoteId(data?._id) && data?.id?.includes('new')) {
-        data.oldId = data.id;
+      data.data.updatedAt = new Date().toJSON();
+      if (data.action === 'add') {
+        data.data.oldId = data.id;
 
-        const addedNote = await addNew('notes', data);
+        const addedNote = await addNew('notes', data.data);
 
         dispatch({ type: ADD_NOTE, data: addedNote });
       } else {
-        const updatedNote = await updateOne(data, 'notes');
+        const updatedNote = await updateOne(data.data, 'notes');
 
         dispatch({ type: EDIT_NOTE, data: updatedNote });
       }
