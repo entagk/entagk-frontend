@@ -83,9 +83,10 @@ export const getNotes = (setMessage, page = 1) => async dispatch => {
       const data = await getAll('notes');
 
       dispatch({
-        type: GET_NOTES, data: {
+        type: GET_NOTES,
+        data: {
           total: data.length,
-          notes: data.filter(d => !d.open),
+          notes: data.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)).filter(d => !d.open),
           currentPage: Math.ceil(data.length / 25),
           numberOfPages: Math.ceil(data.length / 25)
         }

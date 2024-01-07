@@ -66,7 +66,7 @@ export const addNew = (storeName, data) => {
       };
 
       request.onsuccess = () => { // Or call this function on success
-        resolve({ ...newData, oldId: data.id })
+        resolve({ data: newData, oldId: data.id })
       };
     });
   })

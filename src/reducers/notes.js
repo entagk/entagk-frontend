@@ -86,10 +86,10 @@ export default (
         ...state,
         notes: {
           objects: state.notes.objects,
-          ids: state.notes.ids.concat([action.data?.id])
+          ids: [action.data?.id].concat(state.notes.ids)
         },
         openedNotes: {
-          ids: state.openedNotes.ids.concat([action.data.id])
+          ids: [action.data.id].concat(state.openedNotes.ids)
         }
       };
 
@@ -104,10 +104,10 @@ export default (
         ...state,
         notes: {
           objects: state.notes.objects,
-          ids: Object.keys(state.notes.objects).filter(id => id !== newNote.data._id).concat([newNote.data?._id])
+          ids: [newNote.data?._id].concat(Object.keys(state.notes.objects).filter(id => id !== newNote.data._id))
         },
         openedNotes: {
-          ids: state.openedNotes.ids.filter(id => id !== newNote?.oldId).concat([newNote.data?._id])
+          ids: [newNote.data?._id].concat(state.openedNotes.ids.filter(id => id !== newNote?.oldId))
         },
         total: state.total + 1,
         totalOpenedNotes: state.totalOpenedNotes + 1
