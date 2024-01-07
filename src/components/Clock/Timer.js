@@ -220,7 +220,7 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
 
     useEffect(() => {
         const handleKeys = (event) => {
-            const inputsItems = ['input', 'textarea'];
+            const inputsItems = ['input', 'textarea', 'textbox'];
             const activeElement = document.activeElement.tagName.toLowerCase();
             if (inputsItems.findIndex(item => item === activeElement || item === event.target.role) === -1) {
                 if (event.code.toLowerCase() === 'space') {
@@ -237,7 +237,11 @@ const Timer = ({ setIsLoadingTask, setMessage, setOpenSetting }) => {
             }
         };
 
-        window.onkeydown = handleKeys;
+        window.addEventListener('keydown', handleKeys);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeys);
+        }
     })
 
     const toggleStart = useCallback(() => {

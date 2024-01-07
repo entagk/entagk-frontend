@@ -150,7 +150,7 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
 
         const addedNote = await addNew('notes', data.data);
 
-        dispatch({ type: ADD_NOTE, data: addedNote });
+        dispatch({ type: ADD_NOTE, data: { data: addedNote.data, oldId: addedNote.oldId } });
       } else {
         const updatedNote = await updateOne(data.data, 'notes');
 
@@ -169,15 +169,16 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
       {openedNotes?.ids?.length > 0 && (
         <>
           {openedNotes?.ids?.map((note) => (
-            <SingleNote
-              key={note}
-              id={note}
-              newNote={newNote}
-              onChangeNote={onChangeNote}
-              setMessage={setMessage}
-              active={activeNote}
-              setActive={setActiveNote}
-            />
+            <Suspense fallback={<></>} key={note}>
+              <SingleNote
+                id={note}
+                newNote={newNote}
+                onChangeNote={onChangeNote}
+                setMessage={setMessage}
+                active={activeNote}
+                setActive={setActiveNote}
+              />
+            </Suspense>
           ))}
         </>
       )}

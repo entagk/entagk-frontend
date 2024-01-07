@@ -74,7 +74,11 @@ function Home() {
       }
     };
 
-    window.onkeydown = handleKeys;
+    window.addEventListener('keydown', handleKeys);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeys);
+    }
   })
 
   if (
