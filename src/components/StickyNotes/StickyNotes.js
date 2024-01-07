@@ -150,7 +150,7 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
 
         const addedNote = await addNew('notes', data.data);
 
-        dispatch({ type: ADD_NOTE, data: addedNote });
+        dispatch({ type: ADD_NOTE, data: { data: addedNote } });
       } else {
         const updatedNote = await updateOne(data.data, 'notes');
 
