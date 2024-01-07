@@ -169,15 +169,17 @@ const StickyNotes = ({ openSticky, setOpenSticky, setMessage }) => {
       {openedNotes?.ids?.length > 0 && (
         <>
           {openedNotes?.ids?.map((note) => (
-            <SingleNote
-              key={note}
-              id={note}
-              newNote={newNote}
-              onChangeNote={onChangeNote}
-              setMessage={setMessage}
-              active={activeNote}
-              setActive={setActiveNote}
-            />
+            <Suspense fallback={<></>}>
+              <SingleNote
+                key={note}
+                id={note}
+                newNote={newNote}
+                onChangeNote={onChangeNote}
+                setMessage={setMessage}
+                active={activeNote}
+                setActive={setActiveNote}
+              />
+            </Suspense>
           ))}
         </>
       )}
