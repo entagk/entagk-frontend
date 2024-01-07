@@ -62,14 +62,20 @@ function SmallWinBtn() {
   }
 
   useEffect(() => {
-    window.onkeydown = (event) => {
-      const inputsItems = ['input', 'textarea'];
+    const handleKeys = (event) => {
+      const inputsItems = ['input', 'textarea', 'textbox'];
       const activeElement = document.activeElement.tagName.toLowerCase();
       if (inputsItems.findIndex(item => item === activeElement || item === event.target.role) === -1) {
         if (event.code.toLowerCase() === 'keye') {
           handleOpenExtInt();
         }
       }
+    }
+
+    window.addEventListener('keydown', handleKeys);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeys);
     }
   })
 
